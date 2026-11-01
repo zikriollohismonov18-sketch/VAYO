@@ -5,411 +5,580 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VAYO — Панели фурӯшанда</title>
-<link rel="stylesheet"
- href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
 <style>
+:root{
+ --orange:#ff6900;--bg:#f6f7fb;--dark:#172033;
+ --muted:#697386;--line:#e5e8ef;--green:#12834b;
+}
 *{box-sizing:border-box}
-body{margin:0;background:#f4f5f7;color:#242424;font-family:Arial,sans-serif}
-header{background:#ff6500;color:white;padding:18px}
-header h1{margin:0;font-size:25px}
-main{max-width:950px;margin:20px auto;padding:0 12px}
-section{background:white;padding:18px;border-radius:12px;margin-bottom:16px}
-h2{font-size:19px}
-input,select,textarea,button{font:inherit;padding:12px;border:1px solid #ddd;border-radius:8px}
-input,select,textarea{width:100%;margin:7px 0 13px}
-button{cursor:pointer;background:#ff6500;color:white;border:0;margin:5px 4px 5px 0}
-button.secondary{background:#374151}
-button:disabled{opacity:.5;cursor:not-allowed}
-label{font-size:13px;font-weight:bold}
-#map{height:300px;border-radius:10px;margin:10px 0}
-.hidden{display:none}
-.status{background:#fff4e7;padding:12px;border-radius:8px;white-space:pre-wrap}
-.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.product{border:1px solid #eee;padding:12px;border-radius:9px;margin:10px 0}
-.product img{width:110px;max-height:120px;object-fit:cover;border-radius:7px}
-small{color:#777}
-@media(max-width:550px){.grid{grid-template-columns:1fr}}
+body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--dark)}
+header{background:white;border-bottom:1px solid var(--line);padding:16px}
+.head{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-size:27px;font-weight:900;color:var(--orange)}
+a{color:var(--orange);text-decoration:none}
+main{max-width:1100px;margin:22px auto;padding:0 14px}
+.card{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:0 3px 12px #17203308}
+h2{font-size:21px;margin:0 0 16px}
+h3{margin:10px 0}
+p{line-height:1.5}
+label{display:block;font-size:14px;font-weight:bold;margin:13px 0 6px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #cdd3df;border-radius:9px;font:inherit;background:white}
+textarea{min-height:90px}
+button{padding:12px 16px;border:0;border-radius:9px;background:var(--orange);color:white;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.55;cursor:wait}
+button.secondary{background:#edf0f6;color:var(--dark)}
+button.danger{background:#d43b3b}
+.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.hidden{display:none!important}
+.small{font-size:13px;color:var(--muted)}
+.notice{padding:12px;border-radius:9px;background:#fff3e7;margin:12px 0;white-space:pre-wrap}
+.notice.ok{background:#e8f7ee;color:#12683b}
+.notice.error{background:#ffebeb;color:#a42222}
+#map{height:290px;border-radius:12px;margin-top:12px}
+.product{border:1px solid var(--line);border-radius:12px;padding:13px;margin:10px 0;display:flex;gap:14px;align-items:center}
+.product img{width:85px;height:85px;object-fit:cover;border-radius:9px;background:#eee}
+.product .details{flex:1;min-width:0;overflow-wrap:anywhere}
+.status{display:inline-block;padding:6px 10px;background:#fff1dc;border-radius:20px;font-size:12px}
+@media(max-width:650px){.grid{grid-template-columns:1fr}.product{align-items:flex-start}}
 </style>
 </head>
 <body>
 <header>
-<h1>VAYO 🏪</h1>
-<div>Панели соҳибони мағозаҳо</div>
+ <div class="head">
+  <div class="logo">VAYO 🛍️</div>
+  <a href="index.html">Бозгашт ба бозор</a>
+ </div>
 </header>
+
 <main>
-
-<section id="configSection">
-<h2>🔗 Пайвастшавӣ ба Supabase</h2>
-<p>Project URL ва Publishable Key-и лоиҳаи VAYO-ро ворид кун.</p>
-<label>Supabase Project URL</label>
-<input id="projectUrl" placeholder="https://xxxx.supabase.co">
-<label>Publishable / anon key</label>
-<input id="projectKey" placeholder="sb_publishable_... ё anon key">
-<button id="saveConfig">Пайваст кардан</button>
-<p><small>Ҳеҷ гоҳ service_role ё secret key-ро ба ин саҳифа нагузор.</small></p>
+<section class="card" id="configSection">
+ <h2>⚙️ Пайвастшавӣ ба Supabase</h2>
+ <p class="small">Project URL ва Publishable / anon key-и лоиҳаи VAYO-ро ворид кун. Secret ё service_role key-ро истифода набар.</p>
+ <label>Supabase Project URL</label>
+ <input id="projectUrl" placeholder="https://xxxx.supabase.co">
+ <label>Publishable / anon key</label>
+ <input id="publicKey" placeholder="sb_publishable_...">
+ <div class="buttons">
+  <button id="connectBtn">Пайваст кардан</button>
+  <button class="secondary" id="changeConfigBtn">Тоза кардани танзимот</button>
+ </div>
 </section>
 
-<section id="authSection" class="hidden">
-<h2>👤 Воридшавии фурӯшанда</h2>
-<label>Email</label>
-<input id="email" type="email" autocomplete="email">
-<label>Парол</label>
-<input id="password" type="password" autocomplete="current-password">
-<button id="signup">Сабти ном</button>
-<button id="login">Воридшавӣ</button>
-<button id="logout" class="secondary hidden">Баромадан</button>
-<p id="authInfo"></p>
+<div id="message" class="notice hidden" role="status"></div>
+
+<section class="card hidden" id="authSection">
+ <h2>👤 Ҳисоби VAYO</h2>
+ <div id="loggedOut">
+  <label>Email</label>
+  <input id="email" type="email" autocomplete="email" placeholder="example@gmail.com">
+  <label>Парол</label>
+  <input id="password" type="password" autocomplete="current-password" placeholder="Камаш 6 аломат">
+  <div class="buttons">
+   <button id="loginBtn">Воридшавӣ</button>
+   <button id="signupBtn">Сабти ном</button>
+  </div>
+  <hr>
+  <h3>📩 Тасдиқи email</h3>
+  <p class="small">Агар пайванди тасдиқ наомада бошад, email-ро дар боло навис ва тугмаи зеринро пахш кун.</p>
+  <button class="secondary" id="resendBtn">Аз нав фиристодани тасдиқ</button>
+  <h3>🔑 Паролро фаромӯш кардед?</h3>
+  <button class="secondary" id="resetBtn">Барқарор кардани парол</button>
+ </div>
+ <div id="loggedIn" class="hidden">
+  <p>Шумо ворид шудед: <strong id="userEmail"></strong></p>
+  <button class="secondary" id="logoutBtn">Баромадан</button>
+ </div>
 </section>
 
-<section id="shopSection" class="hidden">
-<h2>🏪 Мағозаи ман</h2>
-<div id="shopInfo"></div>
-<label>Номи мағоза</label>
-<input id="shopName" placeholder="Масалан: VAYO Fashion">
-<div class="grid">
-<div>
-<label>Шаҳр</label>
-<select id="city">
-<option>Душанбе</option>
-<option>Хуҷанд</option>
-<option>Бохтар</option>
-<option>Кӯлоб</option>
-<option>Ҳисор</option>
-<option>Панҷакент</option>
-<option>Хоруғ</option>
-<option>Дигар</option>
-</select>
-</div>
-<div>
-<label>Ноҳия</label>
-<input id="district" placeholder="Ноҳия">
-</div>
-</div>
-<label>Суроғаи пурра</label>
-<input id="address" placeholder="Кӯча, бино, рақам">
-<label>Телефон</label>
-<input id="phone" type="tel" placeholder="+992...">
-<p>📍 Дар харита ҷои мағозаро интихоб кун.</p>
-<div id="map"></div>
-<button id="locate" class="secondary">📍 Ҷойи маро ёб</button>
-<button id="saveShop">Захира кардани мағоза</button>
+<section class="card hidden" id="newPasswordSection">
+ <h2>🔐 Пароли нав</h2>
+ <label>Пароли нав</label>
+ <input id="newPassword" type="password" autocomplete="new-password" minlength="6">
+ <button id="savePasswordBtn">Нигоҳ доштани парол</button>
 </section>
 
-<section id="productSection" class="hidden">
-<h2>📦 Иловаи маҳсулот</h2>
-<label>Номи маҳсулот</label>
-<input id="productName" placeholder="Масалан: Кроссовка">
-<label>Категория</label>
-<select id="category">
-<option>Либос</option>
-<option>Пойафзол</option>
-<option>Телефон</option>
-<option>Техника</option>
-<option>Хона</option>
-<option>Зебоӣ</option>
-<option>Бачагона</option>
-<option>Варзиш</option>
-<option>Дигар</option>
-</select>
-<label>Тавсиф</label>
-<textarea id="description" rows="3"></textarea>
-<div class="grid">
-<div>
-<label>Нархи фурӯш (сомонӣ)</label>
-<input id="price" type="number" min="0" step=".01">
-</div>
-<div>
-<label>Нархи пешина барои аксия</label>
-<input id="oldPrice" type="number" min="0" step=".01">
-</div>
-<div>
-<label>Миқдори мол</label>
-<input id="stock" type="number" min="0" step="1" value="1">
-</div>
-<div>
-<label>Охири аксия</label>
-<input id="saleEnd" type="datetime-local">
-</div>
-</div>
-<label>URL-и акси маҳсулот</label>
-<input id="imageUrl" type="url" placeholder="https://...">
-<small>Дар ин версия акс бо URL илова мешавад. Боркунии мустақими аксҳоро дар қадами оянда месозем.</small>
-<div>
-<button id="saveProduct">+ Иловаи маҳсулот</button>
-</div>
-<h2>Маҳсулоти ман</h2>
-<div id="productList"></div>
+<section class="card hidden" id="shopSection">
+ <h2>🏪 Мағозаи ман</h2>
+ <div id="shopInfo" class="notice hidden"></div>
+ <form id="shopForm">
+  <label>Номи мағоза</label>
+  <input id="shopName" required maxlength="120">
+  <div class="grid">
+   <div>
+    <label>Шаҳр</label>
+    <input id="shopCity" required placeholder="Душанбе">
+   </div>
+   <div>
+    <label>Ноҳия</label>
+    <input id="shopDistrict" placeholder="Сино">
+   </div>
+  </div>
+  <label>Суроға</label>
+  <input id="shopAddress" required placeholder="Кӯча ва рақами бино">
+  <label>Телефон</label>
+  <input id="shopPhone" type="tel" required placeholder="+992...">
+  <p class="small">Ҷойи мағозаро дар харита интихоб кун.</p>
+  <div id="map"></div>
+  <div class="buttons">
+   <button type="submit" id="saveShopBtn">Нигоҳ доштани мағоза</button>
+  </div>
+ </form>
 </section>
 
-<section>
-<h2>📢 Ҳолати система</h2>
-<div id="message" class="status">Пайвастшавиро оғоз кун.</div>
+<section class="card hidden" id="productSection">
+ <h2>📦 Иловаи маҳсулот</h2>
+ <form id="productForm">
+  <label>Номи маҳсулот</label>
+  <input id="productName" required>
+  <label>Категория</label>
+  <select id="productCategory">
+   <option value="clothes">Либос</option>
+   <option value="shoes">Пойафзол</option>
+   <option value="electronics">Электроника</option>
+   <option value="home">Барои хона</option>
+   <option value="beauty">Зебоӣ</option>
+   <option value="other">Дигар</option>
+  </select>
+  <label>Тавсиф</label>
+  <textarea id="productDescription"></textarea>
+  <div class="grid">
+   <div>
+    <label>Нарх (сомонӣ)</label>
+    <input id="productPrice" type="number" min="0.01" step="0.01" required>
+   </div>
+   <div>
+    <label>Нархи пешина (сомонӣ)</label>
+    <input id="productOldPrice" type="number" min="0" step="0.01">
+   </div>
+  </div>
+  <div class="grid">
+   <div>
+    <label>Миқдор</label>
+    <input id="productStock" type="number" min="0" step="1" value="1" required>
+   </div>
+   <div>
+    <label>Анҷоми тахфиф</label>
+    <input id="productSaleEnd" type="datetime-local">
+   </div>
+  </div>
+  <label>Пайванди акс (HTTPS)</label>
+  <input id="productImage" type="url" placeholder="https://example.com/image.jpg">
+  <div class="buttons">
+   <button type="submit" id="addProductBtn">Илова кардани маҳсулот</button>
+  </div>
+ </form>
+ <h2 style="margin-top:25px">Маҳсулоти ман</h2>
+ <div id="productList"></div>
 </section>
-
 </main>
+
 <script>
-(()=>{
 "use strict";
 
-const $=id=>document.getElementById(id);
-let db=null,user=null,shop=null,map=null,marker=null;
-let lat=38.5598,lng=68.7870;
+const $ = id => document.getElementById(id);
+let db = null;
+let currentUser = null;
+let currentShop = null;
+let map = null;
+let marker = null;
+let selectedLat = 38.5598;
+let selectedLng = 68.7870;
 
-function msg(text){$("message").textContent=text}
-function show(id,yes){$(id).classList.toggle("hidden",!yes)}
-function errorText(e){return e?.message||String(e)}
+function showMessage(text, type = "") {
+ const el = $("message");
+ el.textContent = text;
+ el.className = "notice " + type;
+}
 
-function initMap(){
- if(map)return;
- map=L.map("map").setView([lat,lng],12);
- L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
-  maxZoom:19,
-  attribution:"© OpenStreetMap contributors"
+function hide(id) { $(id).classList.add("hidden"); }
+function show(id) { $(id).classList.remove("hidden"); }
+function value(id) { return $(id).value.trim(); }
+
+function errorText(error) {
+ const msg = error?.message || String(error);
+ if (/rate limit|too many requests/i.test(msg))
+  return "Маҳдудияти фиристодани email пур шудааст. Каме интизор шав ё SMTP-ро дар Supabase танзим кун. " + msg;
+ if (/email not confirmed/i.test(msg))
+  return "Email ҳоло тасдиқ нашудааст. Почта ва Spam-ро санҷ ё пайванди тасдиқро аз нав фирист. ";
+ if (/invalid login credentials/i.test(msg))
+  return "Email ё парол нодуруст аст, ё ҳисоби корбар ҳанӯз фаъол нашудааст.";
+ return msg;
+}
+
+async function busy(button, action) {
+ button.disabled = true;
+ try { await action(); }
+ catch (err) { showMessage(errorText(err), "error"); }
+ finally { button.disabled = false; }
+}
+
+function redirectUrl() {
+ // GitHub Pages: seller.html дар ҳамон репозиторий
+ return new URL("seller.html", location.href).href;
+}
+
+function getCredentials() {
+ const email = value("email");
+ const password = $("password").value;
+ if (!email || !email.includes("@"))
+  throw new Error("Email-и дуруст ворид кун.");
+ return {email, password};
+}
+
+function initMap() {
+ if (map) {
+  setTimeout(() => map.invalidateSize(), 100);
+  return;
+ }
+ map = L.map("map").setView([selectedLat, selectedLng], 12);
+ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  attribution:"&copy; OpenStreetMap contributors",
+  maxZoom:19
  }).addTo(map);
- marker=L.marker([lat,lng],{draggable:true}).addTo(map);
- map.on("click",e=>{
-  lat=e.latlng.lat;lng=e.latlng.lng;
-  marker.setLatLng(e.latlng);
+ marker = L.marker([selectedLat, selectedLng], {draggable:true}).addTo(map);
+ map.on("click", e => setLocation(e.latlng.lat, e.latlng.lng));
+ marker.on("dragend", () => {
+  const p = marker.getLatLng();
+  setLocation(p.lat, p.lng);
  });
- marker.on("dragend",()=>{
-  const p=marker.getLatLng();
-  lat=p.lat;lng=p.lng;
- });
-}
-function moveMarker(a,b){
- lat=a;lng=b;
- if(map){
-  marker.setLatLng([lat,lng]);
-  map.setView([lat,lng],15);
- }
+ setTimeout(() => map.invalidateSize(), 100);
 }
 
-function connect(){
- const url=$("projectUrl").value.trim();
- const key=$("projectKey").value.trim();
- if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)||!key){
-  msg("Project URL ё Key нодуруст аст.");
+function setLocation(lat,lng) {
+ selectedLat = lat;
+ selectedLng = lng;
+ if(marker) marker.setLatLng([lat,lng]);
+}
+
+async function connect() {
+ const url = value("projectUrl").replace(/\/+$/,"");
+ const key = value("publicKey");
+ if (!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url))
+  throw new Error("Supabase Project URL нодуруст аст.");
+ if (!key) throw new Error("Publishable / anon key-ро ворид кун.");
+
+ db = supabase.createClient(url, key, {
+  auth: {
+   persistSession:true,
+   autoRefreshToken:true,
+   detectSessionInUrl:true
+  }
+ });
+
+ const {data,error} = await db.auth.getSession();
+ if(error) throw error;
+
+ sessionStorage.setItem("vayo_url",url);
+ sessionStorage.setItem("vayo_key",key);
+
+ show("authSection");
+ showMessage("Пайвастшавӣ ба Supabase омода аст.", "ok");
+ await updateUser(data.session?.user || null);
+}
+
+async function updateUser(user) {
+ currentUser = user;
+ if (!user) {
+  show("loggedOut");
+  hide("loggedIn");
+  hide("shopSection");
+  hide("productSection");
+  currentShop = null;
   return;
  }
- try{
-  db=window.supabase.createClient(url,key);
-  sessionStorage.setItem("vayo_url",url);
-  sessionStorage.setItem("vayo_key",key);
-  show("authSection",true);
-  msg("Supabase омода аст. Сабти ном ё воридшавиро иҷро кун.");
-  db.auth.getUser().then(({data})=>{
-   if(data?.user)onUser(data.user);
-  });
- }catch(e){msg(errorText(e))}
-}
 
-async function onUser(u){
- user=u;
- show("logout",true);
- show("shopSection",true);
- $("authInfo").textContent="Ворид шуд: "+u.email;
- setTimeout(()=>{
-  initMap();
-  map.invalidateSize();
- },100);
+ hide("loggedOut");
+ show("loggedIn");
+ $("userEmail").textContent = user.email || "";
+ show("shopSection");
+ initMap();
  await loadShop();
 }
 
-async function signup(){
- if(!db)return;
- const email=$("email").value.trim();
- const password=$("password").value;
- if(!email||password.length<8){
-  msg("Email ва пароли камаш 8-аломатиро ворид кун.");
-  return;
- }
- const {data,error}=await db.auth.signUp({email,password});
- if(error){msg(errorText(error));return}
- if(data.session&&data.user)await onUser(data.user);
- else msg("Сабти ном иҷро шуд. Агар тасдиқи email фаъол бошад, почтаро санҷ.");
-}
-
-async function login(){
- if(!db)return;
- const {data,error}=await db.auth.signInWithPassword({
-  email:$("email").value.trim(),
-  password:$("password").value
+async function signup() {
+ const {email,password} = getCredentials();
+ if(password.length < 6)
+  throw new Error("Парол бояд камаш 6 аломат дошта бошад.");
+ const {data,error} = await db.auth.signUp({
+  email,password,
+  options:{emailRedirectTo:redirectUrl()}
  });
- if(error){msg(errorText(error));return}
- await onUser(data.user);
- msg("Ба ҳисоби фурӯшанда ворид шудӣ.");
+ if(error) throw error;
+ if(data.session) {
+  showMessage("Ҳисоб сохта шуд ва шумо ворид шудед.", "ok");
+  await updateUser(data.session.user);
+ } else {
+  showMessage("Дархости сабти ном қабул шуд. Почта ва Spam-ро санҷ. Агар email наояд, тугмаи «Аз нав фиристодан»-ро истифода бар.", "ok");
+ }
 }
 
-async function logout(){
- if(db)await db.auth.signOut();
- user=null;shop=null;
- show("shopSection",false);
- show("productSection",false);
- show("logout",false);
- $("authInfo").textContent="";
- msg("Аз ҳисоб баромадӣ.");
+async function login() {
+ const {email,password} = getCredentials();
+ const {data,error} = await db.auth.signInWithPassword({email,password});
+ if(error) throw error;
+ showMessage("Воридшавӣ муваффақ шуд.", "ok");
+ await updateUser(data.user);
 }
 
-async function loadShop(){
- const {data,error}=await db.from("vayo_shops")
-  .select("*").eq("owner_id",user.id)
-  .order("created_at",{ascending:true}).limit(1);
- if(error){msg(errorText(error));return}
- shop=data?.[0]||null;
- if(shop){
-  $("shopName").value=shop.name||"";
-  $("city").value=shop.city||"Душанбе";
-  $("district").value=shop.district||"";
-  $("address").value=shop.address||"";
-  $("phone").value=shop.phone||"";
-  if(shop.latitude!=null&&shop.longitude!=null)
-   moveMarker(shop.latitude,shop.longitude);
-  $("shopInfo").textContent="Ҳолати мағоза: "+shop.status;
-  show("productSection",true);
+async function resendConfirmation() {
+ const {email} = getCredentials();
+ const {error} = await db.auth.resend({
+  type:"signup",
+  email,
+  options:{emailRedirectTo:redirectUrl()}
+ });
+ if(error) throw error;
+ showMessage("Дархости фиристодани пайванди тасдиқ қабул шуд. Inbox ва Spam-ро санҷ.", "ok");
+}
+
+async function resetPassword() {
+ const {email} = getCredentials();
+ const {error} = await db.auth.resetPasswordForEmail(email, {
+  redirectTo:redirectUrl()
+ });
+ if(error) throw error;
+ showMessage("Агар ин email дар система мавҷуд бошад, пайванди барқароркунии парол фиристода мешавад.", "ok");
+}
+
+async function logout() {
+ const {error} = await db.auth.signOut();
+ if(error) throw error;
+ hide("newPasswordSection");
+ await updateUser(null);
+ showMessage("Аз ҳисоб баромадед.", "ok");
+}
+
+async function saveNewPassword() {
+ const password = $("newPassword").value;
+ if(password.length < 6)
+  throw new Error("Парол бояд камаш 6 аломат дошта бошад.");
+ const {error} = await db.auth.updateUser({password});
+ if(error) throw error;
+ $("newPassword").value = "";
+ hide("newPasswordSection");
+ showMessage("Пароли нав нигоҳ дошта шуд.", "ok");
+}
+
+async function loadShop() {
+ const {data,error} = await db
+  .from("vayo_shops")
+  .select("*")
+  .eq("owner_id",currentUser.id)
+  .order("created_at",{ascending:false})
+  .limit(1)
+  .maybeSingle();
+
+ if(error) throw error;
+ currentShop = data || null;
+
+ if(currentShop) {
+  $("shopName").value = currentShop.name || "";
+  $("shopCity").value = currentShop.city || "";
+  $("shopDistrict").value = currentShop.district || "";
+  $("shopAddress").value = currentShop.address || "";
+  $("shopPhone").value = currentShop.phone || "";
+  const lat = Number(currentShop.lat);
+  const lng = Number(currentShop.lng);
+  if(Number.isFinite(lat) && Number.isFinite(lng)) {
+   setLocation(lat,lng);
+   map.setView([lat,lng],14);
+  }
+  const info = $("shopInfo");
+  info.textContent = "Ҳолати мағоза: " +
+   (currentShop.status === "approved" ? "Тасдиқшуда ✅" :
+    currentShop.status === "rejected" ? "Радшуда" :
+    "Дар интизори тасдиқи администратор");
+  show("shopInfo");
+  show("productSection");
   await loadProducts();
- }else{
-  $("shopInfo").textContent="Аввал мағозаи худро сабт кун.";
-  show("productSection",false);
+ } else {
+  hide("shopInfo");
+  hide("productSection");
  }
 }
 
-async function saveShop(){
- if(!user)return;
- const name=$("shopName").value.trim();
- const address=$("address").value.trim();
- if(!name||!address){
-  msg("Номи мағоза ва суроға ҳатмӣ мебошанд.");
-  return;
- }
- const payload={
-  name,city:$("city").value,
-  district:$("district").value.trim(),
-  address,phone:$("phone").value.trim(),
-  latitude:lat,longitude:lng
+async function saveShop(event) {
+ event.preventDefault();
+ if(!currentUser) throw new Error("Аввал ворид шав.");
+ const payload = {
+  owner_id:currentUser.id,
+  name:value("shopName"),
+  city:value("shopCity"),
+  district:value("shopDistrict"),
+  address:value("shopAddress"),
+  phone:value("shopPhone"),
+  lat:selectedLat,
+  lng:selectedLng
  };
+ if(!payload.name || !payload.city || !payload.address || !payload.phone)
+  throw new Error("Майдонҳои ҳатмиро пур кун.");
+
  let result;
- if(shop){
-  result=await db.from("vayo_shops")
-   .update(payload).eq("id",shop.id).eq("owner_id",user.id)
+ if(currentShop) {
+  const {owner_id,...changes} = payload;
+  result = await db.from("vayo_shops")
+   .update(changes)
+   .eq("id",currentShop.id)
+   .eq("owner_id",currentUser.id)
    .select().single();
- }else{
-  result=await db.from("vayo_shops")
-   .insert({...payload,owner_id:user.id})
-   .select().single();
+ } else {
+  result = await db.from("vayo_shops")
+   .insert(payload).select().single();
  }
- if(result.error){msg(errorText(result.error));return}
- shop=result.data;
- msg("Мағоза захира шуд. Барои нашри оммавӣ тасдиқи администратор лозим аст.");
+ if(result.error) throw result.error;
+ showMessage("Мағоза нигоҳ дошта шуд. Барои намоиш дар бозор тасдиқи администратор лозим аст.", "ok");
  await loadShop();
 }
 
-async function saveProduct(){
- if(!shop)return;
- const name=$("productName").value.trim();
- const price=Number($("price").value);
- const oldRaw=$("oldPrice").value.trim();
- const old=oldRaw===""?null:Number(oldRaw);
- const stock=Number($("stock").value);
- if(!name||$("price").value===""||!Number.isFinite(price)||
-  price<0||!Number.isInteger(stock)||stock<0||
-  (old!==null&&(!Number.isFinite(old)||old<price))){
-  msg("Ном, нарх, нархи аксия ва миқдорро санҷ.");
-  return;
- }
- const url=$("imageUrl").value.trim();
- if(url&&!/^https:\/\//i.test(url)){
-  msg("URL-и акс бояд бо https:// оғоз шавад.");
-  return;
- }
- const end=$("saleEnd").value;
- const payload={
-  shop_id:shop.id,name,
-  description:$("description").value.trim(),
-  category:$("category").value,
-  price,old_price:old,stock,
-  image_url:url||null,
-  sale_ends_at:end?new Date(end).toISOString():null
+async function addProduct(event) {
+ event.preventDefault();
+ if(!currentShop) throw new Error("Аввал мағоза соз.");
+
+ const price = Number(value("productPrice"));
+ const oldPrice = value("productOldPrice") ? Number(value("productOldPrice")) : null;
+ const stock = Number(value("productStock"));
+ const imageUrl = value("productImage");
+
+ if(!Number.isFinite(price) || price <= 0)
+  throw new Error("Нархи дуруст ворид кун.");
+ if(!Number.isInteger(stock) || stock < 0)
+  throw new Error("Миқдор бояд адади бутун бошад.");
+ if(oldPrice !== null && (!Number.isFinite(oldPrice) || oldPrice < 0))
+  throw new Error("Нархи пешина нодуруст аст.");
+ if(imageUrl && !/^https:\/\//i.test(imageUrl))
+  throw new Error("Пайванди акс бояд бо https:// оғоз шавад.");
+
+ const saleValue = value("productSaleEnd");
+ const payload = {
+  shop_id:currentShop.id,
+  name:value("productName"),
+  category:value("productCategory"),
+  description:value("productDescription"),
+  price,
+  old_price:oldPrice,
+  stock,
+  sale_ends_at:saleValue ? new Date(saleValue).toISOString() : null,
+  image_url:imageUrl || null
  };
- const {error}=await db.from("vayo_products").insert(payload);
- if(error){msg(errorText(error));return}
- msg("Маҳсулот илова шуд!");
- $("productName").value="";
- $("description").value="";
- $("price").value="";
- $("oldPrice").value="";
- $("imageUrl").value="";
+
+ const {error} = await db.from("vayo_products").insert(payload);
+ if(error) throw error;
+ $("productForm").reset();
+ $("productStock").value = "1";
+ showMessage("Маҳсулот илова шуд.", "ok");
  await loadProducts();
 }
 
-async function loadProducts(){
- if(!shop)return;
- const {data,error}=await db.from("vayo_products")
-  .select("*").eq("shop_id",shop.id)
+async function loadProducts() {
+ const list = $("productList");
+ list.replaceChildren();
+ if(!currentShop) return;
+
+ const {data,error} = await db.from("vayo_products")
+  .select("*")
+  .eq("shop_id",currentShop.id)
   .order("created_at",{ascending:false});
- if(error){msg(errorText(error));return}
- const root=$("productList");
- root.replaceChildren();
- if(!data.length){
-  root.textContent="Ҳоло маҳсулот нест.";
+
+ if(error) throw error;
+ if(!data?.length) {
+  list.textContent = "Ҳоло маҳсулот надоред.";
   return;
  }
- for(const p of data){
-  const div=document.createElement("div");
-  div.className="product";
-  const h=document.createElement("h3");
-  h.textContent=p.name;
-  div.append(h);
-  if(p.image_url){
-   const img=document.createElement("img");
-   img.src=p.image_url;img.alt=p.name;
-   div.append(img);
+
+ for(const item of data) {
+  const row = document.createElement("div");
+  row.className = "product";
+
+  if(item.image_url) {
+   const img = document.createElement("img");
+   img.src = item.image_url;
+   img.alt = item.name || "";
+   img.loading = "lazy";
+   row.appendChild(img);
   }
-  const info=document.createElement("p");
-  info.textContent=p.price+" сомонӣ | Захира: "+p.stock+
-   (p.old_price?" | Пешина: "+p.old_price:"");
-  div.append(info);
-  const remove=document.createElement("button");
-  remove.className="secondary";
-  remove.textContent="Нест кардани маҳсулот";
-  remove.onclick=async()=>{
-   if(!confirm("Ин маҳсулот нест карда шавад?"))return;
-   const {error}=await db.from("vayo_products")
-    .delete().eq("id",p.id).eq("shop_id",shop.id);
-   if(error)msg(errorText(error));
-   else await loadProducts();
-  };
-  div.append(remove);
-  root.append(div);
+
+  const details = document.createElement("div");
+  details.className = "details";
+  const name = document.createElement("strong");
+  name.textContent = item.name || "Маҳсулот";
+  const desc = document.createElement("p");
+  desc.className = "small";
+  desc.textContent = `${item.price} сомонӣ · Миқдор: ${item.stock}`;
+  details.append(name,desc);
+
+  const del = document.createElement("button");
+  del.className = "danger";
+  del.textContent = "Нест кардан";
+  del.onclick = () => busy(del,async()=>{
+   if(!confirm("Ин маҳсулот нест карда шавад?")) return;
+   const {error} = await db.from("vayo_products")
+    .delete().eq("id",item.id).eq("shop_id",currentShop.id);
+   if(error) throw error;
+   await loadProducts();
+   showMessage("Маҳсулот нест карда шуд.", "ok");
+  });
+
+  row.append(details,del);
+  list.appendChild(row);
  }
 }
 
-$("saveConfig").onclick=connect;
-$("signup").onclick=signup;
-$("login").onclick=login;
-$("logout").onclick=logout;
-$("saveShop").onclick=saveShop;
-$("saveProduct").onclick=saveProduct;
-$("locate").onclick=()=>{
- if(!navigator.geolocation){
-  msg("GPS дастрас нест.");return;
- }
- navigator.geolocation.getCurrentPosition(
-  p=>moveMarker(p.coords.latitude,p.coords.longitude),
-  e=>msg("GPS: "+e.message),
-  {enableHighAccuracy:true,timeout:12000}
- );
+$("connectBtn").onclick = () => busy($("connectBtn"),connect);
+$("changeConfigBtn").onclick = () => {
+ sessionStorage.removeItem("vayo_url");
+ sessionStorage.removeItem("vayo_key");
+ location.reload();
 };
+$("signupBtn").onclick = () => busy($("signupBtn"),signup);
+$("loginBtn").onclick = () => busy($("loginBtn"),login);
+$("resendBtn").onclick = () => busy($("resendBtn"),resendConfirmation);
+$("resetBtn").onclick = () => busy($("resetBtn"),resetPassword);
+$("logoutBtn").onclick = () => busy($("logoutBtn"),logout);
+$("savePasswordBtn").onclick = () => busy($("savePasswordBtn"),saveNewPassword);
+$("shopForm").onsubmit = e => busy($("saveShopBtn"),()=>saveShop(e));
+$("productForm").onsubmit = e => busy($("addProductBtn"),()=>addProduct(e));
 
-const savedUrl=sessionStorage.getItem("vayo_url");
-const savedKey=sessionStorage.getItem("vayo_key");
-if(savedUrl&&savedKey){
- $("projectUrl").value=savedUrl;
- $("projectKey").value=savedKey;
- connect();
-}
+(async function start(){
+ const url = sessionStorage.getItem("vayo_url");
+ const key = sessionStorage.getItem("vayo_key");
+ if(url && key) {
+  $("projectUrl").value = url;
+  $("publicKey").value = key;
+  await busy($("connectBtn"),connect);
+ }
 })();
+
+// Ҳолати бозгашт аз пайванди барқароркунии парол
+// Supabase ин ҳодисаро баъд аз коркарди URL медиҳад.
+function attachAuthListener() {
+ if(!db || db.__vayoListenerAttached) return;
+ db.__vayoListenerAttached = true;
+ db.auth.onAuthStateChange((event,session)=>{
+  if(event === "PASSWORD_RECOVERY") {
+   show("newPasswordSection");
+   showMessage("Пароли нави худро ворид кунед.", "ok");
+  }
+  if(event === "SIGNED_IN" && session?.user) {
+   setTimeout(()=>updateUser(session.user).catch(err=>
+    showMessage(errorText(err),"error")),0);
+  }
+  if(event === "SIGNED_OUT") {
+   setTimeout(()=>updateUser(null),0);
+  }
+ });
+}
+
+// Ҳангоми пайвастшавӣ listener низ фаъол мешавад.
+const originalConnect = connect;
+connect = async function(){
+ await originalConnect();
+ attachAuthListener();
+};
 </script>
 </body>
 </html>
