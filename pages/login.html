@@ -1,0 +1,256 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAYO — Воридшавӣ</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f5f6f8;
+ color:#222;
+}
+header{
+ background:#ff6500;
+ color:white;
+ padding:18px;
+ text-align:center;
+}
+header a{color:white;text-decoration:none}
+main{
+ max-width:430px;
+ margin:35px auto;
+ padding:22px;
+ background:white;
+ border-radius:15px;
+ box-shadow:0 4px 20px #0001;
+}
+h1{margin:0;font-size:28px}
+h2{text-align:center}
+input{
+ width:100%;
+ padding:14px;
+ margin:8px 0;
+ border:1px solid #ddd;
+ border-radius:9px;
+ font-size:15px;
+}
+button{
+ width:100%;
+ padding:14px;
+ margin-top:10px;
+ background:#ff6500;
+ border:0;
+ border-radius:9px;
+ color:white;
+ font-size:15px;
+ font-weight:bold;
+ cursor:pointer;
+}
+button:disabled{opacity:.6}
+.tabs{display:flex;gap:8px}
+.tabs button{
+ background:#eee;
+ color:#333;
+}
+.tabs button.active{
+ background:#ff6500;
+ color:white;
+}
+.link{
+ text-align:center;
+ color:#ff6500;
+ cursor:pointer;
+ margin-top:15px;
+}
+.message{
+ margin-top:14px;
+ padding:12px;
+ border-radius:8px;
+ background:#f4f4f4;
+ display:none;
+ overflow-wrap:anywhere;
+}
+.message.ok{background:#e5f8ec;color:#146b35}
+.message.error{background:#ffe9e9;color:#b42318}
+.hidden{display:none}
+.small{font-size:12px;color:#777}
+</style>
+</head>
+<body>
+
+<header>
+<h1>VAYO</h1>
+<p>Бозори онлайни Тоҷикистон</p>
+<a href="../index.html">← Саҳифаи асосӣ</a>
+</header>
+
+<main>
+<div class="tabs">
+<button id="loginTab" class="active">Воридшавӣ</button>
+<button id="registerTab">Сабти ном</button>
+</div>
+
+<h2 id="formTitle">Воридшавӣ</h2>
+
+<form id="authForm">
+<div id="nameBox" class="hidden">
+<input id="fullName" placeholder="Ному насаб" autocomplete="name">
+</div>
+
+<input id="email" type="email" placeholder="Email"
+ autocomplete="email" required>
+
+<input id="password" type="password"
+ placeholder="Парол (камаш 6 аломат)"
+ minlength="6" autocomplete="current-password" required>
+
+<button id="submitBtn" type="submit">Ворид шудан</button>
+</form>
+
+<p class="link" id="forgotBtn">Паролро фаромӯш кардед?</p>
+
+<div class="message" id="message"></div>
+
+<p class="small">
+Бо сабти ном шумо метавонед ҳамчун харидор
+истифода баред. Барои сохтани мағоза баъдтар
+панели фурӯшанда илова мешавад.
+</p>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+let mode="login";
+
+function message(text,ok=false){
+ const el=$("message");
+ el.style.display="block";
+ el.className="message "+(ok?"ok":"error");
+ el.textContent=text;
+}
+
+function setMode(next){
+ mode=next;
+ $("message").style.display="none";
+ $("nameBox").classList.toggle("hidden",mode!=="register");
+ $("forgotBtn").classList.toggle("hidden",mode==="register");
+ $("loginTab").classList.toggle("active",mode==="login");
+ $("registerTab").classList.toggle("active",mode==="register");
+ $("formTitle").textContent=
+  mode==="login"?"Воридшавӣ":"Сабти ном";
+ $("submitBtn").textContent=
+  mode==="login"?"Ворид шудан":"Сабти ном кардан";
+ $("password").autocomplete=
+  mode==="login"?"current-password":"new-password";
+}
+
+$("loginTab").onclick=()=>setMode("login");
+$("registerTab").onclick=()=>setMode("register");
+
+$("authForm").onsubmit=async(e)=>{
+ e.preventDefault();
+
+ if(!window.vayoDB){
+  message("Пайвасти Supabase танзим нашудааст.");
+  return;
+ }
+
+ const email=$("email").value.trim();
+ const password=$("password").value;
+ const fullName=$("fullName").value.trim();
+
+ if(mode==="register"&&!fullName){
+  message("Ному насабро ворид кунед.");
+  return;
+ }
+
+ $("submitBtn").disabled=true;
+
+ try{
+  if(mode==="register"){
+   const {data,error}=await vayoDB.auth.signUp({
+    email,
+    password,
+    options:{
+     data:{full_name:fullName}
+    }
+   });
+
+   if(error)throw error;
+
+   if(data.session){
+    const {error:profileError}=await vayoDB
+     .from("profiles")
+     .upsert({
+      id:data.user.id,
+      full_name:fullName
+     });
+    if(profileError)throw profileError;
+
+    message("Сабти ном бомуваффақият анҷом ёфт!",true);
+   }else{
+    message(
+     "Сабти ном қабул шуд. Агар тасдиқи email фаъол бошад, почтаи худро санҷед.",
+     true
+    );
+   }
+  }else{
+   const {error}=await vayoDB.auth.signInWithPassword({
+    email,password
+   });
+   if(error)throw error;
+
+   message("Шумо ворид шудед!",true);
+   setTimeout(()=>{
+    location.href="../index.html";
+   },1000);
+  }
+ }catch(err){
+  message(err.message||"Хатогӣ рух дод.");
+ }finally{
+  $("submitBtn").disabled=false;
+ }
+};
+
+$("forgotBtn").onclick=async()=>{
+ if(!window.vayoDB){
+  message("Supabase танзим нашудааст.");
+  return;
+ }
+
+ const email=$("email").value.trim();
+ if(!email){
+  message("Аввал email-ро ворид кунед.");
+  return;
+ }
+
+ try{
+  const redirectTo=new URL(
+   "reset-password.html",location.href
+  ).href;
+
+  const {error}=await vayoDB.auth.resetPasswordForEmail(
+   email,{redirectTo}
+  );
+  if(error)throw error;
+
+  message(
+   "Агар ин email сабт шуда бошад, дастури барқарорсозӣ фиристода мешавад.",
+   true
+  );
+ }catch(err){
+  message(err.message||"Хато ҳангоми фиристодан.");
+ }
+};
+</script>
+</body>
+</html>
