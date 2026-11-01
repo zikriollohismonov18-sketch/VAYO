@@ -1,0 +1,321 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAYO — Фармоиш</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f6f8;color:#222}
+header{background:#ff6500;color:white;padding:18px}
+.top{max-width:850px;margin:auto;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:30px;font-weight:900}
+header a{color:white;text-decoration:none}
+main{max-width:850px;margin:20px auto;padding:0 12px 50px}
+.card{background:white;border-radius:14px;padding:20px;margin-bottom:15px;box-shadow:0 3px 12px #0001}
+h2{margin-top:0}
+label{display:block;font-size:13px;font-weight:bold;margin-top:13px}
+input,select,textarea{width:100%;padding:13px;border:1px solid #ddd;border-radius:9px;margin-top:7px;font:inherit}
+textarea{min-height:80px}
+button{background:#ff6500;color:white;border:0;padding:14px 18px;border-radius:9px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5}
+#map{height:300px;border-radius:10px;margin-top:12px}
+.muted{color:#777;font-size:13px;line-height:1.6}
+.row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #eee;padding:11px 0}
+.total{color:#ff6500;font-size:22px;font-weight:bold}
+.message{padding:13px;border-radius:9px;background:#fff1dc;margin-bottom:15px}
+.error{background:#ffe9e9;color:#a32121}
+.success{background:#e6f7eb;color:#146b35}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<header>
+<div class="top">
+<div class="logo">VAYO</div>
+<a href="cart.html">← Сабад</a>
+</div>
+</header>
+
+<main>
+<h1>📦 Тасдиқи фармоиш</h1>
+<div id="notice" class="message hidden"></div>
+
+<div class="card">
+<h2>Молҳои интихобшуда</h2>
+<div id="orderItems">Боргирӣ...</div>
+<div class="row">
+<strong>Ҷамъи молҳо</strong>
+<strong id="subtotal">0 сомонӣ</strong>
+</div>
+<p class="muted">Нархи расонидан баъд аз муайян шудани суроға ҳисоб карда мешавад.</p>
+</div>
+
+<form id="checkoutForm" class="hidden">
+<div class="card">
+<h2>👤 Маълумоти харидор</h2>
+
+<label for="fullName">Ному насаб</label>
+<input id="fullName" required maxlength="120">
+
+<label for="phone">Рақами телефон</label>
+<input id="phone" type="tel" required placeholder="+992..." maxlength="30">
+
+<label for="city">Шаҳр</label>
+<select id="city" required>
+<option value="">Интихоб кунед</option>
+<option>Душанбе</option>
+<option>Хуҷанд</option>
+<option>Бохтар</option>
+<option>Кӯлоб</option>
+<option>Ҳисор</option>
+<option>Панҷакент</option>
+<option>Хоруғ</option>
+<option>Турсунзода</option>
+<option>Истаравшан</option>
+<option>Дигар</option>
+</select>
+
+<label for="address">Суроғаи пурра</label>
+<textarea id="address" required placeholder="Кӯча, бино, хона, нишона"></textarea>
+
+<label>📍 Ҷойгиршавӣ дар харита</label>
+<p class="muted">Нуқтаи расониданро дар харита пахш кунед.</p>
+<div id="map"></div>
+
+<input id="latitude" type="hidden">
+<input id="longitude" type="hidden">
+
+<label for="notes">Эзоҳ барои курьер</label>
+<textarea id="notes" placeholder="Масалан: даромадгоҳи дуюм"></textarea>
+</div>
+
+<div class="card">
+<h2>💳 Усули пардохт</h2>
+<select id="paymentMethod" required>
+<option value="cash">Пули нақд ҳангоми қабул</option>
+</select>
+<p class="muted">
+Пардохти онлайн баъд аз пайваст кардани
+провайдери пардохт фаъол мешавад.
+</p>
+<button id="orderBtn" type="submit">
+Тасдиқи маълумот
+</button>
+</div>
+</form>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+const CART_KEY="vayo_cart_v1";
+let cart=[];
+let currentUser=null;
+let map=null;
+let marker=null;
+
+function money(n){
+ return Number(n).toFixed(2)+" сомонӣ";
+}
+
+function notice(text,success=false){
+ const el=$("notice");
+ el.className="message "+(success?"success":"error");
+ el.textContent=text;
+ el.classList.remove("hidden");
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function readCart(){
+ try{
+  const data=JSON.parse(localStorage.getItem(CART_KEY)||"[]");
+  return Array.isArray(data)?data:[];
+ }catch{return []}
+}
+
+function initMap(){
+ if(map)return;
+ map=L.map("map").setView([38.5598,68.7870],12);
+ L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {maxZoom:19,attribution:"© OpenStreetMap contributors"}
+ ).addTo(map);
+
+ map.on("click",e=>{
+  const lat=e.latlng.lat;
+  const lng=e.latlng.lng;
+  $("latitude").value=lat;
+  $("longitude").value=lng;
+  if(marker)marker.setLatLng([lat,lng]);
+  else marker=L.marker([lat,lng]).addTo(map);
+ });
+ setTimeout(()=>map.invalidateSize(),200);
+}
+
+async function loadCart(){
+ if(!window.vayoDB){
+  notice("Supabase танзим нашудааст.");
+  return;
+ }
+
+ const {data:{user}}=await vayoDB.auth.getUser();
+ currentUser=user;
+
+ if(!user){
+  notice("Барои фармоиш аввал ворид шавед.");
+  $("orderItems").textContent="Ҳисоб ворид нашудааст.";
+  return;
+ }
+
+ const raw=readCart();
+ const ids=[...new Set(raw.map(x=>x.product_id).filter(Boolean))];
+
+ if(!ids.length){
+  $("orderItems").textContent="Сабад холӣ аст.";
+  return;
+ }
+
+ const {data,error}=await vayoDB.from("products")
+  .select(`
+   id,name,price,stock,active,
+   shops(status),
+   promotions(discount_percent,starts_at,ends_at)
+  `)
+  .in("id",ids);
+
+ if(error){
+  notice("Хато: "+error.message);
+  return;
+ }
+
+ const now=Date.now();
+ const byId=new Map((data||[]).map(p=>[String(p.id),p]));
+
+ cart=raw.flatMap(entry=>{
+  const p=byId.get(String(entry.product_id));
+  if(!p||!p.active||p.shops?.status!=="approved"||
+     Number(p.stock)<=0)return [];
+
+  const qty=Math.min(
+   Math.max(1,Math.floor(Number(entry.quantity)||1)),
+   Number(p.stock)
+  );
+
+  const promo=(p.promotions||[])
+   .filter(x=>
+    new Date(x.starts_at).getTime()<=now &&
+    new Date(x.ends_at).getTime()>now &&
+    Number(x.discount_percent)>0 &&
+    Number(x.discount_percent)<100
+   )
+   .sort((a,b)=>b.discount_percent-a.discount_percent)[0];
+
+  const price=Number(p.price)*
+   (promo?1-Number(promo.discount_percent)/100:1);
+
+  return [{
+   product_id:p.id,
+   name:p.name,
+   quantity:qty,
+   price
+  }];
+ });
+
+ if(!cart.length){
+  $("orderItems").textContent="Маҳсулоти дастрас нест.";
+  return;
+ }
+
+ const root=$("orderItems");
+ root.replaceChildren();
+ let total=0;
+
+ cart.forEach(item=>{
+  const line=document.createElement("div");
+  line.className="row";
+
+  const name=document.createElement("span");
+  name.textContent=item.name+" × "+item.quantity;
+
+  const amount=document.createElement("strong");
+  amount.textContent=money(item.price*item.quantity);
+
+  line.append(name,amount);
+  root.appendChild(line);
+  total+=item.price*item.quantity;
+ });
+
+ $("subtotal").textContent=money(total);
+ $("checkoutForm").classList.remove("hidden");
+ initMap();
+}
+
+$("checkoutForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+
+ if(!currentUser||!cart.length){
+  notice("Барои фармоиш ворид шавед ва мол интихоб кунед.");
+  return;
+ }
+
+ if(!$("latitude").value||!$("longitude").value){
+  notice("Нуқтаи расониданро дар харита интихоб кунед.");
+  return;
+ }
+
+ const orderRequest={
+  customer_id:currentUser.id,
+  customer_name:$("fullName").value.trim(),
+  customer_phone:$("phone").value.trim(),
+  city:$("city").value,
+  address:$("address").value.trim(),
+  latitude:Number($("latitude").value),
+  longitude:Number($("longitude").value),
+  notes:$("notes").value.trim(),
+  payment_method:$("paymentMethod").value,
+  items:cart.map(item=>({
+   product_id:item.product_id,
+   quantity:item.quantity
+  }))
+ };
+
+ $("orderBtn").disabled=true;
+
+ try{
+  // Secure server-side order RPC is added in a later step.
+  // Do not insert order totals from the browser.
+  if(typeof window.vayoSubmitOrder!=="function"){
+   notice(
+    "Маълумоти фармоиш омода аст. " +
+    "Барои сабти воқеӣ бояд системаи бехатари фармоиш пайваст шавад."
+   );
+   return;
+  }
+
+  const result=await window.vayoSubmitOrder(orderRequest);
+  if(!result||!result.ok)throw new Error(
+   result?.error||"Фармоиш сабт нашуд."
+  );
+
+  localStorage.removeItem(CART_KEY);
+  notice("Фармоиш бомуваффақият сабт шуд!",true);
+  $("checkoutForm").classList.add("hidden");
+
+ }catch(err){
+  notice("Хато: "+(err.message||String(err)));
+ }finally{
+  $("orderBtn").disabled=false;
+ }
+});
+
+loadCart();
+</script>
+</body>
+</html>
