@@ -1,0 +1,474 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ff6500">
+<title>VAYO — Бозори онлайни Тоҷикистон</title>
+<style>
+:root{
+ --orange:#ff6500;
+ --dark:#222;
+ --gray:#777;
+ --bg:#f5f6f8;
+ --border:#eee;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--dark)}
+header{background:var(--orange);color:#fff;padding:15px 12px}
+.header-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.logo{font-size:29px;font-weight:900;letter-spacing:1px}
+.location{font-size:13px;cursor:pointer}
+.search{display:flex;gap:7px;margin-top:14px}
+.search input{width:100%;padding:13px;border:0;border-radius:9px;font-size:15px}
+.search button{border:0;border-radius:9px;background:#222;color:#fff;padding:0 15px}
+main{max-width:1100px;margin:auto;padding:12px 12px 85px}
+.banner{background:linear-gradient(125deg,#ff6b00,#ffb100);color:white;padding:25px 18px;border-radius:15px;text-align:center;margin-bottom:16px}
+.banner h1{font-size:28px;margin:0 0 10px}
+.banner p{font-size:15px}
+.banner button{background:white;color:#f60;border:0;padding:12px 20px;border-radius:25px;font-weight:bold}
+.section{background:white;border-radius:12px;padding:14px;margin-bottom:14px}
+.section h2{font-size:19px;margin:0 0 13px}
+.categories{display:flex;overflow-x:auto;gap:13px;padding:4px 0}
+.category{flex:0 0 85px;text-align:center;cursor:pointer}
+.category .emoji{background:#fff3e9;border-radius:50%;height:65px;display:grid;place-items:center;font-size:32px}
+.category span{display:block;margin-top:7px;font-size:12px}
+.flash-head{display:flex;align-items:center;justify-content:space-between}
+.timer{background:#222;color:white;padding:7px;border-radius:6px;font-size:13px}
+.products{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.product{border:1px solid var(--border);border-radius:11px;overflow:hidden;background:white;position:relative}
+.product img{width:100%;height:175px;object-fit:cover;background:#eee}
+.product-body{padding:10px}
+.product h3{font-size:13px;line-height:1.4;min-height:36px;margin:0 0 8px}
+.price{color:#f60;font-size:19px;font-weight:bold}
+.old{color:#999;text-decoration:line-through;font-size:12px}
+.discount{position:absolute;top:8px;left:8px;background:#ff263b;color:white;font-weight:bold;border-radius:6px;padding:5px;font-size:12px}
+.shop{color:#777;font-size:11px;margin:7px 0}
+.add{background:var(--orange);color:#fff;border:0;border-radius:8px;width:100%;padding:10px;font-weight:bold;cursor:pointer}
+.empty{text-align:center;padding:25px;color:#777}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;border-top:1px solid #ddd;padding:9px 0;z-index:10}
+nav button{background:none;border:0;font-size:12px;color:#555;cursor:pointer}
+nav button span{display:block;font-size:23px;margin-bottom:3px}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:20}
+.modal.show{display:flex}
+.modal-box{background:#fff;border-radius:18px 18px 0 0;padding:20px;width:100%;max-width:600px;max-height:85vh;overflow:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center}
+.close{border:0;background:#eee;padding:9px 13px;border-radius:8px}
+.field{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:7px 0}
+.cart-row{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #eee}
+.cart-row button{border:0;border-radius:5px;padding:5px 9px}
+.primary{background:var(--orange);color:#fff;border:0;border-radius:8px;padding:13px;width:100%;margin-top:12px;font-weight:bold}
+.small{font-size:12px;color:#777}
+@media(min-width:650px){
+ .products{grid-template-columns:repeat(4,1fr)}
+ .product img{height:210px}
+ .banner h1{font-size:36px}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="header-top">
+ <div class="logo">VAYO</div>
+ <div class="location" id="locationBtn">📍 <span id="cityName">Душанбе</span> ▾</div>
+</div>
+<div class="search">
+ <input id="searchInput" placeholder="Ҷустуҷӯи маҳсулот...">
+ <button id="searchBtn">🔍</button>
+</div>
+</header>
+
+<main>
+<section class="banner">
+<h1>🔥 АКСИЯҲОИ БУЗУРГ!</h1>
+<p>Маҳсулоти мағозаҳои Тоҷикистон бо нархҳои беҳтарин</p>
+<button id="saleBtn">Аксияҳоро бинед</button>
+</section>
+
+<section class="section">
+<h2>🛍️ Категорияҳо</h2>
+<div class="categories" id="categories"></div>
+</section>
+
+<section class="section">
+<div class="flash-head">
+<h2>⚡ Flash Sale</h2>
+<div class="timer" id="timer">00:00:00</div>
+</div>
+<div class="products" id="flashProducts"></div>
+</section>
+
+<section class="section">
+<h2>🔥 Аксияҳои имрӯз</h2>
+<div class="products" id="saleProducts"></div>
+</section>
+
+<section class="section">
+<h2>🏪 Ҳамаи маҳсулот</h2>
+<div class="products" id="allProducts"></div>
+</section>
+</main>
+
+<nav>
+<button id="homeBtn"><span>🏠</span>Асосӣ</button>
+<button id="categoryBtn"><span>🛍️</span>Категория</button>
+<button id="cartBtn"><span>🛒</span>Сабад <b id="cartCount">0</b></button>
+<button id="sellerBtn"><span>🏪</span>Фурӯшанда</button>
+<button id="accountBtn"><span>👤</span>Ҳисоб</button>
+</nav>
+
+<div class="modal" id="modal">
+<div class="modal-box">
+<div class="modal-head">
+<h2 id="modalTitle"></h2>
+<button class="close" id="closeModal">✕</button>
+</div>
+<div id="modalContent"></div>
+</div>
+</div>
+
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+
+const categories=[
+ ["Ҳама","🛍️"],
+ ["Либос","👕"],
+ ["Пойафзол","👟"],
+ ["Телефон","📱"],
+ ["Техника","💻"],
+ ["Хона","🏠"],
+ ["Зебоӣ","💄"],
+ ["Бачагона","🧸"],
+ ["Варзиш","⚽"]
+];
+
+const products=[
+ {id:1,name:"Кроссовкаи варзишӣ",category:"Пойафзол",price:150,old:220,shop:"VAYO Shoes",city:"Душанбе",image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500"},
+ {id:2,name:"Соати дастии мардона",category:"Техника",price:190,old:280,shop:"Time Market",city:"Душанбе",image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500"},
+ {id:3,name:"Гӯшмонаки бесим",category:"Телефон",price:95,old:150,shop:"Mobile TJ",city:"Хуҷанд",image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500"},
+ {id:4,name:"Сумкаи занона",category:"Либос",price:120,old:200,shop:"Fashion TJ",city:"Душанбе",image:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=500"},
+ {id:5,name:"Телефони смартфон",category:"Телефон",price:1200,old:1450,shop:"Mobile TJ",city:"Хуҷанд",image:"https://images.unsplash.com/photo-1511707171634-5f897ff02d00?w=500"},
+ {id:6,name:"Айнаки офтобӣ",category:"Зебоӣ",price:55,old:90,shop:"Style Shop",city:"Бохтар",image:"https://images.unsplash.com/photo-1511499767150-a48a237f0088?w=500"},
+ {id:7,name:"Кафши занона",category:"Пойафзол",price:180,old:250,shop:"Fashion TJ",city:"Душанбе",image:"https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500"},
+ {id:8,name:"Ноутбук барои кор",category:"Техника",price:3500,old:3900,shop:"Tech Market",city:"Душанбе",image:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500"}
+];
+
+let activeCategory="Ҳама";
+let selectedCity="Ҳамаи Тоҷикистон";
+let cart=[];
+
+try{
+ const saved=JSON.parse(localStorage.getItem("vayo_cart")||"[]");
+ if(Array.isArray(saved))cart=saved.filter(x=>products.some(p=>p.id===x.id));
+}catch(e){cart=[]}
+
+function money(n){
+ return Number(n).toLocaleString("ru-RU")+" сомонӣ";
+}
+
+function discount(p){
+ return p.old>p.price?
+ Math.round((p.old-p.price)/p.old*100):0;
+}
+
+function saveCart(){
+ localStorage.setItem("vayo_cart",JSON.stringify(cart));
+ $("cartCount").textContent=cart.reduce((s,x)=>s+x.qty,0);
+}
+
+function createCard(p){
+ const card=document.createElement("div");
+ card.className="product";
+
+ if(discount(p)>0){
+  const badge=document.createElement("div");
+  badge.className="discount";
+  badge.textContent="-"+discount(p)+"%";
+  card.appendChild(badge);
+ }
+
+ const img=document.createElement("img");
+ img.src=p.image;
+ img.alt=p.name;
+ img.loading="lazy";
+ card.appendChild(img);
+
+ const body=document.createElement("div");
+ body.className="product-body";
+
+ const title=document.createElement("h3");
+ title.textContent=p.name;
+ body.appendChild(title);
+
+ const price=document.createElement("div");
+ price.className="price";
+ price.textContent=money(p.price);
+ body.appendChild(price);
+
+ if(p.old>p.price){
+  const old=document.createElement("div");
+  old.className="old";
+  old.textContent=money(p.old);
+  body.appendChild(old);
+ }
+
+ const shop=document.createElement("div");
+ shop.className="shop";
+ shop.textContent="🏪 "+p.shop+" · "+p.city;
+ body.appendChild(shop);
+
+ const btn=document.createElement("button");
+ btn.className="add";
+ btn.textContent="Ба сабад +";
+ btn.onclick=()=>addToCart(p.id);
+ body.appendChild(btn);
+
+ card.appendChild(body);
+ return card;
+}
+
+function renderInto(id,items){
+ const root=$(id);
+ root.replaceChildren();
+ if(!items.length){
+  const empty=document.createElement("p");
+  empty.className="empty";
+  empty.textContent="Маҳсулот ёфт нашуд";
+  root.appendChild(empty);
+  return;
+ }
+ items.forEach(p=>root.appendChild(createCard(p)));
+}
+
+function filtered(){
+ const query=$("searchInput").value.toLowerCase().trim();
+ return products.filter(p=>{
+  const categoryOK=activeCategory==="Ҳама"||p.category===activeCategory;
+  const cityOK=selectedCity==="Ҳамаи Тоҷикистон"||p.city===selectedCity;
+  const searchOK=(p.name+" "+p.shop+" "+p.category).toLowerCase().includes(query);
+  return categoryOK&&cityOK&&searchOK;
+ });
+}
+
+function renderProducts(){
+ const list=filtered();
+ renderInto("allProducts",list);
+ renderInto("saleProducts",list.filter(p=>discount(p)>0).sort((a,b)=>discount(b)-discount(a)));
+ renderInto("flashProducts",list.filter(p=>discount(p)>=25).slice(0,4));
+}
+
+function renderCategories(){
+ const root=$("categories");
+ root.replaceChildren();
+ categories.forEach(([name,emoji])=>{
+  const item=document.createElement("div");
+  item.className="category";
+  const pic=document.createElement("div");
+  pic.className="emoji";
+  pic.textContent=emoji;
+  const label=document.createElement("span");
+  label.textContent=name;
+  item.append(pic,label);
+  item.onclick=()=>{
+   activeCategory=name;
+   renderProducts();
+   document.getElementById("allProducts").scrollIntoView({behavior:"smooth"});
+  };
+  root.appendChild(item);
+ });
+}
+
+function addToCart(id){
+ const found=cart.find(x=>x.id===id);
+ if(found)found.qty++;
+ else cart.push({id,qty:1});
+ saveCart();
+ alert("Маҳсулот ба сабад илова шуд!");
+}
+
+function openModal(title){
+ $("modalTitle").textContent=title;
+ $("modalContent").replaceChildren();
+ $("modal").classList.add("show");
+}
+
+function closeModal(){
+ $("modal").classList.remove("show");
+}
+
+function cartTotal(){
+ return cart.reduce((sum,x)=>{
+  const p=products.find(p=>p.id===x.id);
+  return sum+(p?p.price*x.qty:0);
+ },0);
+}
+
+function showCart(){
+ openModal("🛒 Сабади ман");
+ const root=$("modalContent");
+
+ if(!cart.length){
+  const p=document.createElement("p");
+  p.className="empty";
+  p.textContent="Сабади шумо холӣ аст.";
+  root.appendChild(p);
+  return;
+ }
+
+ cart.forEach(item=>{
+  const p=products.find(x=>x.id===item.id);
+  if(!p)return;
+  const row=document.createElement("div");
+  row.className="cart-row";
+  const info=document.createElement("div");
+  info.textContent=p.name+" — "+money(p.price*item.qty);
+
+  const controls=document.createElement("div");
+  const minus=document.createElement("button");
+  minus.textContent="−";
+  minus.onclick=()=>changeQty(p.id,-1);
+  const qty=document.createElement("span");
+  qty.textContent=" "+item.qty+" ";
+  const plus=document.createElement("button");
+  plus.textContent="+";
+  plus.onclick=()=>changeQty(p.id,1);
+  controls.append(minus,qty,plus);
+  row.append(info,controls);
+  root.appendChild(row);
+ });
+
+ const total=document.createElement("h3");
+ total.textContent="Ҳамагӣ: "+money(cartTotal());
+ root.appendChild(total);
+
+ const btn=document.createElement("button");
+ btn.className="primary";
+ btn.textContent="Ба фармоиш гузаред";
+ btn.onclick=checkout;
+ root.appendChild(btn);
+}
+
+function changeQty(id,diff){
+ const item=cart.find(x=>x.id===id);
+ if(!item)return;
+ item.qty+=diff;
+ if(item.qty<=0)cart=cart.filter(x=>x.id!==id);
+ saveCart();
+ showCart();
+}
+
+function field(placeholder,type="text"){
+ const input=document.createElement("input");
+ input.className="field";
+ input.type=type;
+ input.placeholder=placeholder;
+ return input;
+}
+
+function checkout(){
+ openModal("📦 Оформкунии фармоиш");
+ const root=$("modalContent");
+ const name=field("Ному насаб");
+ const phone=field("Рақами телефон");
+ const address=field("Шаҳр, кӯча, хона");
+ const note=document.createElement("p");
+ note.className="small";
+ note.textContent="Ин версияи намоишӣ аст. Фармоиш ҳоло ба сервер фиристода намешавад.";
+ const btn=document.createElement("button");
+ btn.className="primary";
+ btn.textContent="Санҷиши маълумот";
+ btn.onclick=()=>{
+  if(!name.value.trim()||!phone.value.trim()||!address.value.trim()){
+   alert("Ҳамаи маълумотро ворид кунед.");
+   return;
+  }
+  alert("Маълумот дуруст ворид шуд. Барои қабули фармоишҳо пайвасти Supabase лозим аст.");
+ };
+ root.append(name,phone,address,note,btn);
+}
+
+function showSeller(){
+ openModal("🏪 Панели фурӯшанда");
+ const root=$("modalContent");
+ const p=document.createElement("p");
+ p.textContent="Дар қадами навбатӣ фурӯшанда метавонад сабти ном кунад, мағоза созад, суроғаи худро дар харита интихоб кунад ва маҳсулот бо аксия илова намояд.";
+ root.appendChild(p);
+
+ const fields=[
+  field("Номи мағоза"),
+  field("Шаҳр"),
+  field("Суроғаи мағоза"),
+  field("Телефони мағоза","tel")
+ ];
+ fields.forEach(x=>root.appendChild(x));
+
+ const note=document.createElement("p");
+ note.className="small";
+ note.textContent="Ин ҳоло шакли намунавӣ аст. Сабти мағоза баъди пайваст кардани Supabase фаъол мешавад.";
+ root.appendChild(note);
+}
+
+function showAccount(){
+ openModal("👤 Ҳисоби ман");
+ const p=document.createElement("p");
+ p.textContent="Дар қадами оянда сабти ном, воридшавӣ ва таърихи фармоишҳоро бо Supabase Auth месозем.";
+ $("modalContent").appendChild(p);
+}
+
+function showCities(){
+ openModal("📍 Интихоби шаҳр");
+ const cities=["Ҳамаи Тоҷикистон","Душанбе","Хуҷанд","Бохтар","Кӯлоб","Ҳисор","Панҷакент","Хоруғ"];
+ cities.forEach(city=>{
+  const btn=document.createElement("button");
+  btn.className="field";
+  btn.textContent=city;
+  btn.onclick=()=>{
+   selectedCity=city;
+   $("cityName").textContent=city;
+   renderProducts();
+   closeModal();
+  };
+  $("modalContent").appendChild(btn);
+ });
+}
+
+const flashEnds=Date.now()+6*60*60*1000;
+
+function updateTimer(){
+ const remaining=Math.max(0,flashEnds-Date.now());
+ const h=Math.floor(remaining/3600000);
+ const m=Math.floor(remaining%3600000/60000);
+ const s=Math.floor(remaining%60000/1000);
+ $("timer").textContent=[h,m,s].map(x=>String(x).padStart(2,"0")).join(":");
+}
+
+$("searchInput").addEventListener("input",renderProducts);
+$("searchBtn").onclick=renderProducts;
+$("locationBtn").onclick=showCities;
+$("saleBtn").onclick=()=>{
+ $("saleProducts").scrollIntoView({behavior:"smooth"});
+};
+$("homeBtn").onclick=()=>window.scrollTo({top:0,behavior:"smooth"});
+$("categoryBtn").onclick=()=>{
+ $("categories").scrollIntoView({behavior:"smooth"});
+};
+$("cartBtn").onclick=showCart;
+$("sellerBtn").onclick=showSeller;
+$("accountBtn").onclick=showAccount;
+$("closeModal").onclick=closeModal;
+$("modal").onclick=e=>{
+ if(e.target===$("modal"))closeModal();
+};
+
+renderCategories();
+renderProducts();
+saveCart();
+updateTimer();
+setInterval(updateTimer,1000);
+</script>
+</body>
+</html>
