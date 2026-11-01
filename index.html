@@ -8,43 +8,245 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--orange:#ff6900;--dark:#202124;--muted:#737b86;--bg:#f6f7f9}
+:root{
+ --orange:#ff6900;
+ --dark:#202124;
+ --muted:#737b86;
+ --bg:#f6f7f9
+}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--dark);font-family:Inter,"Noto Sans",sans-serif}
+body{
+ margin:0;
+ background:var(--bg);
+ color:var(--dark);
+ font-family:Inter,"Noto Sans",sans-serif
+}
 button,input{font:inherit}
 button{cursor:pointer}
-header{background:#fff;position:sticky;top:0;z-index:10;border-bottom:1px solid #eee}
-.top{max-width:1250px;margin:auto;padding:14px 16px;display:flex;align-items:center;gap:18px}
-.logo{font-size:30px;font-weight:900;color:var(--orange);text-decoration:none;letter-spacing:-1.5px}
-.search{flex:1;display:flex;border:2px solid var(--orange);border-radius:30px;overflow:hidden}
-.search input{flex:1;min-width:0;padding:13px 18px;border:0;outline:0}
-.search button{background:var(--orange);color:#fff;border:0;padding:0 23px;font-weight:800}
-.navbtn{color:var(--dark);text-decoration:none;font-size:13px;font-weight:800;white-space:nowrap;background:none;border:0}
-.categories{max-width:1250px;margin:auto;padding:0 16px 12px;display:flex;gap:10px;overflow-x:auto}
-.cat{white-space:nowrap;border:1px solid #e5e5e5;border-radius:20px;padding:9px 15px;background:#fff;font-size:13px;font-weight:700}
-.cat.active{background:var(--orange);border-color:var(--orange);color:#fff}
-main{max-width:1250px;margin:auto;padding:18px 16px 45px}
-.hero{background:linear-gradient(110deg,#ff6900,#ff9b37);color:#fff;border-radius:22px;padding:32px;margin-bottom:25px}
-.hero h1{font-size:clamp(25px,4vw,43px);margin:0 0 10px;font-weight:900}
+header{
+ background:#fff;
+ position:sticky;
+ top:0;
+ z-index:10;
+ border-bottom:1px solid #eee
+}
+.top{
+ max-width:1250px;
+ margin:auto;
+ padding:14px 16px;
+ display:flex;
+ align-items:center;
+ gap:18px
+}
+.logo{
+ font-size:30px;
+ font-weight:900;
+ color:var(--orange);
+ text-decoration:none;
+ letter-spacing:-1.5px
+}
+.search{
+ flex:1;
+ display:flex;
+ border:2px solid var(--orange);
+ border-radius:30px;
+ overflow:hidden
+}
+.search input{
+ flex:1;
+ min-width:0;
+ padding:13px 18px;
+ border:0;
+ outline:0
+}
+.search button{
+ background:var(--orange);
+ color:#fff;
+ border:0;
+ padding:0 23px;
+ font-weight:800
+}
+.navbtn{
+ color:var(--dark);
+ text-decoration:none;
+ font-size:13px;
+ font-weight:800;
+ white-space:nowrap;
+ background:none;
+ border:0
+}
+.categories{
+ max-width:1250px;
+ margin:auto;
+ padding:0 16px 12px;
+ display:flex;
+ gap:10px;
+ overflow-x:auto
+}
+.cat{
+ white-space:nowrap;
+ border:1px solid #e5e5e5;
+ border-radius:20px;
+ padding:9px 15px;
+ background:#fff;
+ font-size:13px;
+ font-weight:700
+}
+.cat.active{
+ background:var(--orange);
+ border-color:var(--orange);
+ color:#fff
+}
+main{
+ max-width:1250px;
+ margin:auto;
+ padding:18px 16px 45px
+}
+.hero{
+ background:linear-gradient(110deg,#ff6900,#ff9b37);
+ color:#fff;
+ border-radius:22px;
+ padding:32px;
+ margin-bottom:25px
+}
+.hero h1{
+ font-size:clamp(25px,4vw,43px);
+ margin:0 0 10px;
+ font-weight:900
+}
 .hero p{margin:0;font-size:15px}
-.section-title{font-size:22px;font-weight:900;margin:0 0 18px}
-.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:15px}
-.product{background:#fff;border-radius:15px;overflow:hidden;border:1px solid #eee}
-.product img{width:100%;aspect-ratio:1;object-fit:cover;background:#f1f1f1}
+.section-title{
+ font-size:22px;
+ font-weight:900;
+ margin:0 0 18px
+}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(5,minmax(0,1fr));
+ gap:15px
+}
+.product{
+ background:#fff;
+ border-radius:15px;
+ overflow:hidden;
+ border:1px solid #eee
+}
+.product img{
+ width:100%;
+ aspect-ratio:1;
+ object-fit:cover;
+ background:#f1f1f1
+}
 .info{padding:13px}
-.name{font-size:13px;font-weight:700;line-height:1.5;min-height:40px}
-.price{font-size:20px;font-weight:900;color:var(--orange);margin:8px 0}
-.buy{width:100%;background:var(--orange);color:#fff;border:0;padding:11px;border-radius:9px;font-weight:800}
-.empty{grid-column:1/-1;text-align:center;padding:35px;color:var(--muted)}
-.cartpanel{position:fixed;right:0;top:0;bottom:0;width:min(420px,100%);background:#fff;z-index:30;box-shadow:-8px 0 35px #0002;padding:20px;overflow-y:auto}
-.carthead{display:flex;justify-content:space-between;align-items:center}
-.cartrow{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid #eee;font-size:13px}
-.cartrow button{border:0;background:#fff0e8;color:var(--orange);border-radius:8px;padding:8px}
-.overlay{position:fixed;inset:0;background:#0007;z-index:20}
+.name{
+ font-size:13px;
+ font-weight:700;
+ line-height:1.5;
+ min-height:40px
+}
+.price{
+ font-size:20px;
+ font-weight:900;
+ color:var(--orange);
+ margin:8px 0
+}
+.old-price{
+ color:#888;
+ font-size:13px;
+ text-decoration:line-through
+}
+.discount{
+ display:inline-block;
+ color:#b42b00;
+ background:#fff0e7;
+ padding:4px 7px;
+ border-radius:6px;
+ font-size:12px;
+ font-weight:800
+}
+.buy{
+ width:100%;
+ background:var(--orange);
+ color:#fff;
+ border:0;
+ padding:11px;
+ border-radius:9px;
+ font-weight:800
+}
+.buy:disabled{opacity:.5}
+.empty{
+ grid-column:1/-1;
+ text-align:center;
+ padding:35px;
+ color:var(--muted)
+}
+.cartpanel{
+ position:fixed;
+ right:0;
+ top:0;
+ bottom:0;
+ width:min(420px,100%);
+ background:#fff;
+ z-index:30;
+ box-shadow:-8px 0 35px #0002;
+ padding:20px;
+ overflow-y:auto
+}
+.carthead{
+ display:flex;
+ justify-content:space-between;
+ align-items:center
+}
+.cartrow{
+ display:flex;
+ justify-content:space-between;
+ gap:12px;
+ padding:13px 0;
+ border-bottom:1px solid #eee;
+ font-size:13px
+}
+.cartrow button{
+ border:0;
+ background:#fff0e8;
+ color:var(--orange);
+ border-radius:8px;
+ padding:8px
+}
+.checkout{
+ display:block;
+ text-align:center;
+ background:var(--orange);
+ color:#fff;
+ text-decoration:none;
+ padding:14px;
+ border-radius:10px;
+ font-weight:800;
+ margin-top:16px
+}
+.overlay{
+ position:fixed;
+ inset:0;
+ background:#0007;
+ z-index:20
+}
 .hidden{display:none!important}
-footer{text-align:center;color:var(--muted);padding:25px;font-size:13px}
-@media(max-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
-@media(max-width:700px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.top{gap:9px;flex-wrap:wrap}.logo{font-size:25px}.search{order:3;flex-basis:100%}.hero{padding:23px}.navbtn{font-size:12px}}
+footer{
+ text-align:center;
+ color:var(--muted);
+ padding:25px;
+ font-size:13px
+}
+@media(max-width:1000px){
+ .grid{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:700px){
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .top{gap:9px;flex-wrap:wrap}
+ .logo{font-size:25px}
+ .search{order:3;flex-basis:100%}
+ .hero{padding:23px}
+ .navbtn{font-size:12px}
+}
 </style>
 </head>
 <body>
@@ -52,14 +254,29 @@ footer{text-align:center;color:var(--muted);padding:25px;font-size:13px}
 <header>
 <div class="top">
 <a href="./index.html" class="logo">VAYO</a>
+
 <div class="search">
 <input id="search" placeholder="Ҷустуҷӯи маҳсулот...">
 <button id="searchBtn">Ҷустуҷӯ</button>
 </div>
-<a class="navbtn" id="accountLink" href="./login.html">👤 Воридшавӣ</a>
-<button class="navbtn" id="cartBtn">🛒 Сабад (<span id="count">0</span>)</button>
-<a class="navbtn" href="./seller.html">🏪 Фурӯшанда</a>
+
+<a class="navbtn" id="accountLink" href="./pages/login.html">
+👤 Воридшавӣ
+</a>
+
+<a class="navbtn" href="./pages/orders.html">
+📦 Фармоишҳои ман
+</a>
+
+<button class="navbtn" id="cartBtn">
+🛒 Сабад (<span id="count">0</span>)
+</button>
+
+<a class="navbtn" href="./pages/seller.html">
+🏪 Фурӯшанда
+</a>
 </div>
+
 <nav class="categories" id="categories">
 <button class="cat active" data-category="all">Ҳама</button>
 <button class="cat" data-category="Либос">Либос</button>
@@ -67,6 +284,10 @@ footer{text-align:center;color:var(--muted);padding:25px;font-size:13px}
 <button class="cat" data-category="Электроника">Электроника</button>
 <button class="cat" data-category="Хона">Барои хона</button>
 <button class="cat" data-category="Зебоӣ">Зебоӣ</button>
+<a class="cat" href="./pages/promotions.html"
+style="text-decoration:none;color:#ff6900">
+🔥 Аксияҳо
+</a>
 </nav>
 </header>
 
@@ -75,23 +296,33 @@ footer{text-align:center;color:var(--muted);padding:25px;font-size:13px}
 <h1>Хуш омадед ба VAYO!</h1>
 <p>Маҳсулоти гуногун, нархҳои дастрас ва хариди осон.</p>
 </section>
+
 <h2 class="section-title">Маҳсулоти VAYO</h2>
+
 <div class="grid" id="products">
 <div class="empty">Маҳсулот бор шуда истодааст...</div>
 </div>
 </main>
 
 <div class="overlay hidden" id="overlay"></div>
+
 <aside class="cartpanel hidden" id="cartPanel">
 <div class="carthead">
 <h2>🛒 Сабади шумо</h2>
 <button id="closeCart">✕</button>
 </div>
+
 <div id="cartItems"></div>
 <h3 id="total">Ҳамагӣ: 0 сомонӣ</h3>
+
 <p style="color:#737b86;font-size:13px">
-Фармоишдиҳӣ дар қадами навбатӣ пайваст мешавад.
+Нархи ниҳоии маҳсулот ҳангоми фармоиш
+дар сервер ҳисоб карда мешавад.
 </p>
+
+<a class="checkout" href="./pages/checkout.html">
+📦 Гузаштан ба фармоиш
+</a>
 </aside>
 
 <footer>© 2026 VAYO — Мағозаи онлайн</footer>
@@ -104,155 +335,225 @@ const SB_KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
 const db=window.supabase.createClient(SB_URL,SB_KEY);
 
 const $=id=>document.getElementById(id);
+const CART_KEY="vayo_cart_v1";
+
 let products=[];
 let category="all";
 let cart=[];
 
-try {
-  const saved=JSON.parse(localStorage.getItem("vayo_cart")||"[]");
-  if(Array.isArray(saved)) cart=saved;
-} catch(e) { cart=[]; }
+function readCart(){
+ try{
+  const saved=JSON.parse(localStorage.getItem(CART_KEY)||"[]");
+  return Array.isArray(saved)?saved:[];
+ }catch{
+  return [];
+ }
+}
+
+cart=readCart();
 
 function saveCart(){
-  localStorage.setItem("vayo_cart",JSON.stringify(cart));
-  $("count").textContent=cart.reduce((s,x)=>s+x.qty,0);
+ localStorage.setItem(CART_KEY,JSON.stringify(cart));
+ $("count").textContent=cart.reduce(
+  (sum,item)=>sum+Number(item.quantity||0),0
+ );
 }
 
 function escapeHTML(value){
-  return String(value??"").replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",
-    '"':"&quot;","'":"&#39;"
-  }[c]));
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ }[c]));
 }
 
 function imageOf(p){
-  const candidates=[
-    p.image_url,p.image,
-    Array.isArray(p.images)?p.images[0]:null
-  ];
-  return candidates.find(x=>typeof x==="string"&&/^https:\/\//i.test(x))||"";
+ const url=p.image_url;
+ return typeof url==="string"&&/^https:\/\//i.test(url)
+  ?url:"";
+}
+
+function money(value){
+ return Number(value||0).toFixed(2)+" сомонӣ";
 }
 
 function render(){
-  const query=$("search").value.trim().toLowerCase();
-  const filtered=products.filter(p=>{
-    const title=String(p.name||p.title||"").toLowerCase();
-    const cat=String(p.category||"");
-    return (category==="all"||cat===category)&&title.includes(query);
-  });
+ const query=$("search").value.trim().toLowerCase();
 
-  $("products").replaceChildren();
+ const filtered=products.filter(p=>{
+  const title=String(p.name||"").toLowerCase();
+  const cat=String(p.category||"");
+  return (category==="all"||cat===category)&&title.includes(query);
+ });
 
-  if(!filtered.length){
-    $("products").innerHTML='<div class="empty">Ҳоло маҳсулот ёфт нашуд.</div>';
-    return;
-  }
+ $("products").replaceChildren();
 
-  filtered.forEach(p=>{
-    const card=document.createElement("article");
-    card.className="product";
+ if(!filtered.length){
+  $("products").innerHTML=
+   '<div class="empty">Ҳоло маҳсулот ёфт нашуд.</div>';
+  return;
+ }
 
-    const img=imageOf(p);
-    const name=p.name||p.title||"Маҳсулот";
-    const price=Number(p.price)||0;
+ filtered.forEach(p=>{
+  const card=document.createElement("article");
+  card.className="product";
 
-    card.innerHTML=`
-      ${img?`<img src="${escapeHTML(img)}" alt="${escapeHTML(name)}" loading="lazy">`:
-      '<div style="aspect-ratio:1;background:#f2f2f2;display:grid;place-items:center">🛍️</div>'}
-      <div class="info">
-        <div class="name">${escapeHTML(name)}</div>
-        <div class="price">${price.toFixed(2)} сомонӣ</div>
-        <button class="buy">Ба сабад</button>
-      </div>
-    `;
+  const img=imageOf(p);
+  const name=p.name||"Маҳсулот";
+  const price=Number(p.current_price)||0;
+  const regular=Number(p.regular_price)||price;
+  const stock=Number(p.stock)||0;
+  const discount=Number(p.discount_percent)||0;
 
-    card.querySelector(".buy").addEventListener("click",()=>addCart(p));
-    $("products").appendChild(card);
-  });
+  card.innerHTML=`
+   ${img
+    ?`<img src="${escapeHTML(img)}" alt="${escapeHTML(name)}" loading="lazy">`
+    :'<div style="aspect-ratio:1;background:#f2f2f2;display:grid;place-items:center">🛍️</div>'
+   }
+   <div class="info">
+    <div class="name">${escapeHTML(name)}</div>
+    ${discount>0
+     ?`<div class="old-price">${money(regular)}</div>
+       <span class="discount">-${discount}%</span>`
+     :""
+    }
+    <div class="price">${money(price)}</div>
+    <button class="buy" ${stock<=0?"disabled":""}>
+     ${stock>0?"Ба сабад":"Тамом шудааст"}
+    </button>
+   </div>
+  `;
+
+  card.querySelector(".buy").addEventListener("click",()=>addCart(p));
+  $("products").appendChild(card);
+ });
 }
 
 function addCart(p){
-  const id=String(p.id);
-  const existing=cart.find(x=>x.id===id);
-  if(existing) existing.qty++;
-  else cart.push({
-    id,name:p.name||p.title||"Маҳсулот",
-    price:Number(p.price)||0,qty:1
-  });
-  saveCart();
-  alert("Маҳсулот ба сабад илова шуд!");
+ const id=String(p.id);
+ const existing=cart.find(x=>String(x.product_id)===id);
+ const stock=Number(p.stock)||0;
+
+ if(stock<=0){
+  alert("Ин маҳсулот ҳоло дар анбор нест.");
+  return;
+ }
+
+ if(existing){
+  if(existing.quantity>=stock){
+   alert("Миқдори бештар дар анбор нест.");
+   return;
+  }
+  existing.quantity++;
+ }else{
+  cart.push({product_id:id,quantity:1});
+ }
+
+ saveCart();
+ alert("Маҳсулот ба сабад илова шуд!");
 }
 
 function renderCart(){
-  const target=$("cartItems");
-  target.replaceChildren();
+ const target=$("cartItems");
+ target.replaceChildren();
 
-  if(!cart.length){
-    target.textContent="Сабад холӣ аст.";
-  }
+ if(!cart.length){
+  target.textContent="Сабад холӣ аст.";
+ }
 
-  cart.forEach(item=>{
-    const row=document.createElement("div");
-    row.className="cartrow";
+ let total=0;
 
-    const label=document.createElement("span");
-    label.textContent=`${item.name} × ${item.qty}`;
+ cart.forEach(item=>{
+  const product=products.find(
+   p=>String(p.id)===String(item.product_id)
+  );
 
-    const remove=document.createElement("button");
-    remove.textContent="Нест кардан";
-    remove.addEventListener("click",()=>{
-      cart=cart.filter(x=>x.id!==item.id);
-      saveCart();
-      renderCart();
-    });
+  const quantity=Number(item.quantity)||0;
+  const name=product?.name||"Маҳсулот";
+  const price=Number(product?.current_price)||0;
 
-    row.append(label,remove);
-    target.appendChild(row);
+  const row=document.createElement("div");
+  row.className="cartrow";
+
+  const label=document.createElement("span");
+  label.textContent=name+" × "+quantity;
+
+  const remove=document.createElement("button");
+  remove.textContent="Нест кардан";
+
+  remove.addEventListener("click",()=>{
+   cart=cart.filter(
+    x=>String(x.product_id)!==String(item.product_id)
+   );
+   saveCart();
+   renderCart();
   });
 
-  const total=cart.reduce((s,x)=>s+x.price*x.qty,0);
-  $("total").textContent=`Ҳамагӣ: ${total.toFixed(2)} сомонӣ`;
+  row.append(label,remove);
+  target.appendChild(row);
+
+  total+=price*quantity;
+ });
+
+ $("total").textContent="Ҳамагӣ: "+money(total);
 }
 
 function toggleCart(open){
-  $("cartPanel").classList.toggle("hidden",!open);
-  $("overlay").classList.toggle("hidden",!open);
-  if(open)renderCart();
+ $("cartPanel").classList.toggle("hidden",!open);
+ $("overlay").classList.toggle("hidden",!open);
+ if(open)renderCart();
 }
 
 $("cartBtn").onclick=()=>toggleCart(true);
 $("closeCart").onclick=()=>toggleCart(false);
 $("overlay").onclick=()=>toggleCart(false);
+
 $("search").addEventListener("input",render);
 $("searchBtn").onclick=render;
 
-document.querySelectorAll(".cat").forEach(btn=>{
-  btn.onclick=()=>{
-    category=btn.dataset.category;
-    document.querySelectorAll(".cat").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    render();
-  };
+document.querySelectorAll(".cat[data-category]").forEach(btn=>{
+ btn.onclick=()=>{
+  category=btn.dataset.category;
+
+  document.querySelectorAll(".cat[data-category]").forEach(
+   b=>b.classList.remove("active")
+  );
+
+  btn.classList.add("active");
+  render();
+ };
 });
 
 async function loadProducts(){
-  try{
-    const {data,error}=await db.from("vayo_products").select("*").limit(100);
-    if(error)throw error;
-    products=data||[];
-    render();
-  }catch(error){
-    $("products").innerHTML=
-      '<div class="empty">Маҳсулот бор нашуд. Танзимоти ҷадвал ва RLS-ро санҷед.</div>';
-    console.error(error);
-  }
+ try{
+  const {data,error}=await db
+   .from("vayo_public_deals")
+   .select("*")
+   .limit(100);
+
+  if(error)throw error;
+
+  products=data||[];
+  render();
+
+ }catch(error){
+  $("products").innerHTML=
+   '<div class="empty">Маҳсулот бор нашуд. Танзимоти ҷадвал ва RLS-ро санҷед.</div>';
+  console.error(error);
+ }
 }
 
 async function loadAccount(){
+ try{
   const {data}=await db.auth.getUser();
   if(data?.user){
-    $("accountLink").textContent="👤 Ҳисоби ман";
+   $("accountLink").textContent="👤 Ҳисоби ман";
   }
+ }catch(error){
+  console.error(error);
+ }
 }
 
 saveCart();
