@@ -95,6 +95,11 @@ h1{font-size:25px}
  border-bottom:1px solid var(--border);
 }
 .row:last-child{border-bottom:0}
+.row>span:first-child{min-width:0}
+.row>strong:last-child{
+ text-align:right;
+ white-space:nowrap;
+}
 .total{
  font-size:20px;
  font-weight:bold;
@@ -124,6 +129,44 @@ button:disabled{opacity:.5}
  margin-bottom:15px;
  overflow-wrap:anywhere;
 }
+.shop-box{
+ border:1px solid var(--border);
+ border-radius:12px;
+ padding:14px;
+ margin-top:14px;
+ background:#fafafa;
+}
+.shop-title{
+ font-size:16px;
+ font-weight:bold;
+ margin-bottom:8px;
+}
+.delivery-type{
+ font-size:13px;
+ font-weight:bold;
+ color:#d45500;
+ margin:8px 0;
+}
+.delivery-note{
+ font-size:13px;
+ color:#666;
+ line-height:1.6;
+ white-space:pre-line;
+}
+.summary{
+ border-top:2px solid var(--border);
+ margin-top:18px;
+ padding-top:8px;
+}
+.warning{
+ background:#fff6e8;
+ border:1px solid #ffe1b0;
+ border-radius:9px;
+ padding:12px;
+ font-size:13px;
+ line-height:1.6;
+ margin-top:12px;
+}
 .hidden{display:none}
 @media(max-width:480px){
  .logo{font-size:25px}
@@ -135,45 +178,45 @@ button:disabled{opacity:.5}
 <body>
 
 <header>
- <div class="top">
-  <div class="logo">VAYO</div>
-  <a href="../index.html">← Асосӣ</a>
- </div>
+<div class="top">
+<div class="logo">VAYO</div>
+<a href="../index.html">← Асосӣ</a>
+</div>
 </header>
 
 <main>
- <h1>📦 Фармоишҳои ман</h1>
- <p class="muted">
-  Дар ин ҷо ҳамаи фармоишҳои ҳисоби шумо нишон дода мешаванд.
- </p>
+<h1>📦 Фармоишҳои ман</h1>
+<p class="muted">
+Дар ин ҷо ҳамаи фармоишҳои ҳисоби шумо нишон дода мешаванд.
+</p>
 
- <div id="error" class="error hidden" role="alert"></div>
+<div id="error" class="error hidden" role="alert"></div>
 
- <div id="loading" class="card">
-  Фармоишҳо боргирӣ мешаванд...
- </div>
+<div id="loading" class="card">
+Фармоишҳо боргирӣ мешаванд...
+</div>
 
- <div id="orders"></div>
+<div id="orders"></div>
 
- <div id="empty" class="card empty hidden">
-  <h2>📭 Ҳоло фармоиш надоред</h2>
-  <p class="muted">
-   Маҳсулоти дилхоҳатонро интихоб карда, фармоиш диҳед.
-  </p>
-  <a class="btn" href="../index.html">Ба мағоза</a>
- </div>
+<div id="empty" class="card empty hidden">
+<h2>📭 Ҳоло фармоиш надоред</h2>
+<p class="muted">
+Маҳсулоти дилхоҳатонро интихоб карда, фармоиш диҳед.
+</p>
+<a class="btn" href="../index.html">Ба мағоза</a>
+</div>
 
- <div id="loginRequired" class="card empty hidden">
-  <h2>🔐 Ба ҳисоб ворид шавед</h2>
-  <p class="muted">
-   Барои дидани фармоишҳо ба ҳисоби худ ворид шавед.
-  </p>
-  <a class="btn" href="login.html">Воридшавӣ</a>
- </div>
+<div id="loginRequired" class="card empty hidden">
+<h2>🔐 Ба ҳисоб ворид шавед</h2>
+<p class="muted">
+Барои дидани фармоишҳо ба ҳисоби худ ворид шавед.
+</p>
+<a class="btn" href="login.html">Воридшавӣ</a>
+</div>
 
- <button id="refreshBtn" class="hidden" type="button">
-  🔄 Навсозии фармоишҳо
- </button>
+<button id="refreshBtn" class="hidden" type="button">
+🔄 Навсозии фармоишҳо
+</button>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -202,7 +245,7 @@ function dateText(value){
 }
 
 function statusInfo(status){
- const states = {
+ const states={
   pending:["Дар интизорӣ","pending"],
   confirmed:["Тасдиқ шуд","confirmed"],
   accepted:["Қабул шуд","confirmed"],
@@ -216,6 +259,13 @@ function statusInfo(status){
   canceled:["Бекор шуд","cancelled"]
  };
  return states[status]||[status||"Номаълум",""];
+}
+
+function deliveryLabel(type){
+ if(type==="own")return "🚚 Расонидани худи мағоза";
+ if(type==="external")return "📦 Карго ё почта";
+ if(type==="pickup")return "🏪 Гирифтан аз мағоза";
+ return "Расонидан муайян нашудааст";
 }
 
 function el(tag,className,text){
@@ -273,7 +323,26 @@ function renderOrder(order,items){
 
  card.appendChild(info);
 
- const title=el("h3","","Маҳсулот");
+ const groups=new Map();
+ let subtotal=0;
+ let deliveryTotal=0;
+ let hasExternal=false;
+ let hasDeliveryData=false;
+
+ for(const item of items){
+  subtotal+=Number(item.subtotal)||0;
+
+  const key=item.shop_id||
+   "legacy-"+String(item.product_id);
+
+  if(!groups.has(key)){
+   groups.set(key,[]);
+  }
+
+  groups.get(key).push(item);
+ }
+
+ const title=el("h3","","Маҳсулот ва мағозаҳо");
  title.style.marginBottom="5px";
  card.appendChild(title);
 
@@ -283,31 +352,105 @@ function renderOrder(order,items){
   );
  }
 
- for(const item of items){
-  const line=el("div","row");
-  const productName=item.vayo_products?.name||
-   "Маҳсулот";
+ for(const group of groups.values()){
+  const box=el("div","shop-box");
 
-  line.appendChild(
-   el("span","",productName+" × "+item.quantity)
-  );
-  line.appendChild(
-   el("strong","",money(item.subtotal))
+  const first=group[0];
+  const shopName=first.vayo_shops?.name||
+   "Мағоза";
+
+  box.appendChild(
+   el("div","shop-title","🏪 "+shopName)
   );
 
-  card.appendChild(line);
+  for(const item of group){
+   const line=el("div","row");
+
+   const productName=item.vayo_products?.name||
+    "Маҳсулот";
+
+   line.appendChild(
+    el("span","",productName+" × "+item.quantity)
+   );
+   line.appendChild(
+    el("strong","",money(item.subtotal))
+   );
+
+   box.appendChild(line);
+  }
+
+  if(first.delivery_type){
+   hasDeliveryData=true;
+
+   box.appendChild(
+    el("div","delivery-type",
+     deliveryLabel(first.delivery_type))
+   );
+
+   const fee=first.delivery_type==="own"
+    ?Number(first.delivery_fee)||0
+    :0;
+
+   if(first.delivery_type==="own"){
+    deliveryTotal+=fee;
+
+    box.appendChild(
+     el("div","muted",
+      "Нархи расонидан: "+money(fee))
+    );
+   }
+
+   if(first.delivery_type==="external"){
+    hasExternal=true;
+   }
+
+   if(first.delivery_note){
+    box.appendChild(
+     el("p","delivery-note",first.delivery_note)
+    );
+   }
+  }
+
+  card.appendChild(box);
+ }
+
+ const summary=el("div","summary");
+
+ const subtotalRow=el("div","row");
+ subtotalRow.append(
+  el("strong","","Ҷамъи молҳо"),
+  el("strong","",money(subtotal))
+ );
+ summary.appendChild(subtotalRow);
+
+ if(hasDeliveryData){
+  const deliveryRow=el("div","row");
+  deliveryRow.append(
+   el("strong","","Ҳаққи расонидани мағозаҳо"),
+   el("strong","",money(deliveryTotal))
+  );
+  summary.appendChild(deliveryRow);
  }
 
  const totalRow=el("div","row");
  totalRow.style.alignItems="center";
- totalRow.style.marginTop="10px";
 
- totalRow.appendChild(el("strong","","Ҳамагӣ"));
- totalRow.appendChild(
+ totalRow.append(
+  el("strong","","Ҳамагӣ"),
   el("span","total",money(order.total_amount))
  );
+ summary.appendChild(totalRow);
 
- card.appendChild(totalRow);
+ card.appendChild(summary);
+
+ if(hasExternal){
+  card.appendChild(
+   el("div","warning",
+    "📦 Хароҷоти карго ё почта ба маблағи фармоиш дохил нест. "+
+    "Онро харидор алоҳида пардохт мекунад.")
+  );
+ }
+
  return card;
 }
 
@@ -330,7 +473,6 @@ async function loadOrders(){
   const user=authData?.user;
 
   if(!user){
-   $("loading").classList.add("hidden");
    $("loginRequired").classList.remove("hidden");
    return;
   }
@@ -356,7 +498,6 @@ async function loadOrders(){
   if(ordersError)throw ordersError;
 
   if(!orders||orders.length===0){
-   $("loading").classList.add("hidden");
    $("empty").classList.remove("hidden");
    $("refreshBtn").classList.remove("hidden");
    return;
@@ -371,10 +512,17 @@ async function loadOrders(){
      id,
      order_id,
      product_id,
+     shop_id,
      quantity,
      unit_price,
      subtotal,
+     delivery_type,
+     delivery_fee,
+     delivery_note,
      vayo_products (
+      name
+     ),
+     vayo_shops (
       name
      )
     `)
