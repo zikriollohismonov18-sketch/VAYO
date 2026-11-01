@@ -37,6 +37,7 @@ input,select{border:1px solid #ddd;border-radius:9px;padding:13px;font:inherit;b
 .add:disabled{background:#aaa;cursor:not-allowed}
 .empty{text-align:center;padding:35px;color:#777;grid-column:1/-1}
 .status{background:white;padding:15px;border-radius:10px;margin-bottom:15px}
+.status.error{color:#b42318;background:#fff1f0}
 </style>
 </head>
 <body>
@@ -89,23 +90,26 @@ input,select{border:1px solid #ddd;border-radius:9px;padding:13px;font:inherit;b
 
 const $ = id => document.getElementById(id);
 const CART_KEY = "vayo_cart_v1";
+
 let offers = [];
+let loadingFailed = false;
 
 function money(value){
  return Number(value).toFixed(2)+" сомонӣ";
 }
 
 function remaining(endsAt){
- const diff=new Date(endsAt).getTime()-Date.now();
- if(!Number.isFinite(diff)||diff<=0)
+ const diff = new Date(endsAt).getTime()-Date.now();
+
+ if(!Number.isFinite(diff)||diff<=0){
   return "Аксия анҷом ёфт";
+ }
 
- const days=Math.floor(diff/86400000);
- const hours=Math.floor(diff%86400000/3600000);
- const minutes=Math.floor(diff%3600000/60000);
- const seconds=Math.floor(diff%60000/1000);
-
- const pad=n=>String(n).padStart(2,"0");
+ const days = Math.floor(diff/86400000);
+ const hours = Math.floor(diff%86400000/3600000);
+ const minutes = Math.floor(diff%3600000/60000);
+ const seconds = Math.floor(diff%60000/1000);
+ const pad = n => String(n).padStart(2,"0");
 
  return days>0
   ? `${days} рӯз ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
@@ -113,18 +117,26 @@ function remaining(endsAt){
 }
 
 function activeOffer(item){
- const now=Date.now();
- return new Date(item.startsAt).getTime()<=now &&
-        new Date(item.endsAt).getTime()>now;
+ const now = Date.now();
+
+ return (
+  new Date(item.startsAt).getTime()<=now &&
+  new Date(item.endsAt).getTime()>now
+ );
 }
 
 function addToCart(item){
  try{
-  const raw=JSON.parse(localStorage.getItem(CART_KEY)||"[]");
-  const cart=Array.isArray(raw)?raw:[];
+  if(!activeOffer(item)){
+   alert("Муҳлати аксия анҷом ёфтааст. Нархро аз нав санҷед.");
+   return;
+  }
 
-  const existing=cart.find(x=>x.product_id===item.id);
-  const current=Number(existing?.quantity||0);
+  const raw = JSON.parse(localStorage.getItem(CART_KEY)||"[]");
+  const cart = Array.isArray(raw)?raw:[];
+
+  const existing = cart.find(x=>x.product_id===item.id);
+  const current = Number(existing?.quantity||0);
 
   if(current>=item.stock){
    alert("Миқдори дастрас кофӣ нест.");
@@ -134,7 +146,10 @@ function addToCart(item){
   if(existing){
    existing.quantity=current+1;
   }else{
-   cart.push({product_id:item.id,quantity:1});
+   cart.push({
+    product_id:item.id,
+    quantity:1
+   });
   }
 
   localStorage.setItem(CART_KEY,JSON.stringify(cart));
@@ -145,27 +160,34 @@ function addToCart(item){
 }
 
 function render(){
- const q=$("search").value.trim().toLowerCase();
- const sort=$("sort").value;
- const type=$("type").value;
- const root=$("products");
+ if(loadingFailed)return;
+
+ const q = $("search").value.trim().toLowerCase();
+ const sort = $("sort").value;
+ const type = $("type").value;
+ const root = $("products");
 
  root.replaceChildren();
 
- let list=offers.filter(x=>
+ let list = offers.filter(x=>
   activeOffer(x) &&
-  (x.name.toLowerCase().includes(q) ||
-   x.shopName.toLowerCase().includes(q)) &&
-  (type==="all" ||
+  (
+   x.name.toLowerCase().includes(q) ||
+   x.shopName.toLowerCase().includes(q)
+  ) &&
+  (
+   type==="all" ||
    (type==="flash" && x.isFlash) ||
-   (type==="regular" && !x.isFlash))
+   (type==="regular" && !x.isFlash)
+  )
  );
 
  list.sort((a,b)=>{
   if(sort==="cheap")return a.finalPrice-b.finalPrice;
   if(sort==="expensive")return b.finalPrice-a.finalPrice;
-  if(sort==="ending")
+  if(sort==="ending"){
    return new Date(a.endsAt)-new Date(b.endsAt);
+  }
   return b.discount-a.discount;
  });
 
@@ -173,76 +195,78 @@ function render(){
   list.length+" маҳсулот бо тахфиф ёфт шуд.";
 
  if(!list.length){
-  const empty=document.createElement("p");
-  empty.className="empty";
-  empty.textContent="Ҳоло аксияи мувофиқ нест.";
+  const empty = document.createElement("p");
+  empty.className = "empty";
+  empty.textContent = "Ҳоло аксияи мувофиқ нест.";
   root.appendChild(empty);
   return;
  }
 
  list.forEach(item=>{
-  const card=document.createElement("article");
-  card.className="card";
+  const card = document.createElement("article");
+  card.className = "card";
 
-  const photo=document.createElement("div");
-  photo.className="photo";
+  const photo = document.createElement("div");
+  photo.className = "photo";
 
   if(item.image){
-   const img=document.createElement("img");
-   img.src=item.image;
-   img.alt=item.name;
-   img.loading="lazy";
+   const img = document.createElement("img");
+   img.src = item.image;
+   img.alt = item.name;
+   img.loading = "lazy";
    photo.appendChild(img);
   }else{
-   photo.textContent="📦";
+   photo.textContent = "📦";
   }
 
-  const badge=document.createElement("span");
-  badge.className="discount";
-  badge.textContent="-"+item.discount+"%";
+  const badge = document.createElement("span");
+  badge.className = "discount";
+  badge.textContent = "-"+item.discount+"%";
   photo.appendChild(badge);
 
   if(item.isFlash){
-   const flash=document.createElement("span");
-   flash.className="flashbadge";
-   flash.textContent="⚡ FLASH SALE";
+   const flash = document.createElement("span");
+   flash.className = "flashbadge";
+   flash.textContent = "⚡ FLASH SALE";
    photo.appendChild(flash);
   }
 
-  const info=document.createElement("div");
-  info.className="info";
+  const info = document.createElement("div");
+  info.className = "info";
 
-  const name=document.createElement("div");
-  name.className="name";
-  name.textContent=item.name;
+  const name = document.createElement("div");
+  name.className = "name";
+  name.textContent = item.name;
 
-  const shop=document.createElement("div");
-  shop.className="shop";
-  shop.textContent="🏪 "+item.shopName;
+  const shop = document.createElement("div");
+  shop.className = "shop";
+  shop.textContent = "🏪 "+item.shopName;
 
-  const old=document.createElement("div");
-  old.className="old";
-  old.textContent=money(item.price);
+  const old = document.createElement("div");
+  old.className = "old";
+  old.textContent = money(item.price);
 
-  const price=document.createElement("div");
-  price.className="price";
-  price.textContent=money(item.finalPrice);
+  const price = document.createElement("div");
+  price.className = "price";
+  price.textContent = money(item.finalPrice);
 
-  const timer=document.createElement("div");
-  timer.className="timer";
-  timer.dataset.ends=item.endsAt;
-  timer.textContent="⏳ "+remaining(item.endsAt);
+  const timer = document.createElement("div");
+  timer.className = "timer";
+  timer.dataset.ends = item.endsAt;
+  timer.textContent = "⏳ "+remaining(item.endsAt);
 
-  const stock=document.createElement("div");
-  stock.className="stock";
-  stock.textContent="Дар анбор: "+item.stock;
+  const stock = document.createElement("div");
+  stock.className = "stock";
+  stock.textContent = "Дар анбор: "+item.stock;
 
-  const add=document.createElement("button");
-  add.className="add";
-  add.textContent=item.stock>0
+  const add = document.createElement("button");
+  add.className = "add";
+
+  add.textContent = item.stock>0
    ? "🛒 Ба сабад илова кардан"
    : "Маҳсулот тамом шудааст";
-  add.disabled=item.stock<=0;
+
+  add.disabled = item.stock<=0;
   add.addEventListener("click",()=>addToCart(item));
 
   info.append(name,shop,old,price,timer,stock,add);
@@ -254,82 +278,100 @@ function render(){
 function updateTimers(){
  document.querySelectorAll(".timer[data-ends]")
   .forEach(el=>{
-   el.textContent="⏳ "+remaining(el.dataset.ends);
+   el.textContent = "⏳ "+remaining(el.dataset.ends);
   });
 
- const flashes=offers.filter(x=>x.isFlash&&activeOffer(x));
+ const flashes = offers.filter(x=>x.isFlash&&activeOffer(x));
+
  if(flashes.length){
-  const next=flashes.reduce((a,b)=>
+  const next = flashes.reduce((a,b)=>
    new Date(a.endsAt)<new Date(b.endsAt)?a:b
   );
-  $("flashCountdown").textContent=
+
+  $("flashCountdown").textContent =
    "То анҷоми наздиктарин: "+remaining(next.endsAt);
  }else{
-  $("flashCountdown").textContent=
+  $("flashCountdown").textContent =
    "Ҳоло Flash Sale фаъол нест";
  }
 
  if(offers.some(x=>
-   new Date(x.endsAt).getTime()<=Date.now()
-  )){
-  offers=offers.filter(activeOffer);
+  new Date(x.endsAt).getTime()<=Date.now()
+ )){
+  offers = offers.filter(activeOffer);
   render();
  }
 }
 
 async function loadOffers(){
  if(!window.vayoDB){
-  $("status").textContent="Supabase танзим нашудааст.";
+  loadingFailed = true;
+  $("status").classList.add("error");
+  $("status").textContent = "Supabase танзим нашудааст.";
   return;
  }
 
- const {data,error}=await window.vayoDB
-  .from("vayo_public_deals")
-  .select("*")
-  .gt("discount_percent",0)
-  .gt("stock",0)
-  .order("discount_percent",{ascending:false})
-  .limit(100);
+ try{
+  const {data,error} = await window.vayoDB
+   .from("vayo_public_deals")
+   .select("*")
+   .gt("discount_percent",0)
+   .gt("stock",0)
+   .order("discount_percent",{ascending:false})
+   .limit(100);
 
- if(error){
-  $("status").textContent="Хато: "+error.message;
-  return;
+  if(error)throw error;
+
+  const now = Date.now();
+
+  offers = (data||[]).flatMap(p=>{
+   const start = new Date(p.sale_starts_at).getTime();
+   const end = new Date(p.sale_ends_at).getTime();
+   const regular = Number(p.regular_price);
+   const final = Number(p.current_price);
+   const discount = Number(p.discount_percent);
+   const stock = Number(p.stock);
+
+   if(
+    !Number.isFinite(start) ||
+    !Number.isFinite(end) ||
+    start>now ||
+    end<=now ||
+    !Number.isFinite(regular) ||
+    !Number.isFinite(final) ||
+    !Number.isFinite(discount) ||
+    !Number.isFinite(stock) ||
+    discount<=0 ||
+    stock<=0
+   ){
+    return [];
+   }
+
+   return [{
+    id:p.id,
+    name:p.name||"Маҳсулот",
+    shopName:p.shop_name||"Мағозаи VAYO",
+    price:regular,
+    finalPrice:final,
+    discount,
+    image:p.image_url||"",
+    stock,
+    startsAt:p.sale_starts_at,
+    endsAt:p.sale_ends_at,
+    isFlash:p.is_flash_sale===true
+   }];
+  });
+
+  loadingFailed = false;
+  $("status").classList.remove("error");
+  render();
+  updateTimers();
+
+ }catch(err){
+  loadingFailed = true;
+  $("status").classList.add("error");
+  $("status").textContent = "Хатои боргирии аксияҳо: "+err.message;
  }
-
- const now=Date.now();
-
- offers=(data||[]).flatMap(p=>{
-  const start=new Date(p.sale_starts_at).getTime();
-  const end=new Date(p.sale_ends_at).getTime();
-  const regular=Number(p.regular_price);
-  const final=Number(p.current_price);
-  const discount=Number(p.discount_percent);
-
-  if(!Number.isFinite(start)||
-     !Number.isFinite(end)||
-     start>now||end<=now||
-     !Number.isFinite(regular)||
-     !Number.isFinite(final)||
-     !Number.isFinite(discount)||
-     discount<=0)return [];
-
-  return [{
-   id:p.id,
-   name:p.name||"Маҳсулот",
-   shopName:"Мағозаи VAYO",
-   price:regular,
-   finalPrice:final,
-   discount,
-   image:p.image_url||"",
-   stock:Number(p.stock)||0,
-   startsAt:p.sale_starts_at,
-   endsAt:p.sale_ends_at,
-   isFlash:p.is_flash_sale===true
-  }];
- });
-
- render();
- updateTimers();
 }
 
 $("search").addEventListener("input",render);
