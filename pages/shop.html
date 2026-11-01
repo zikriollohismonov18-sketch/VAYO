@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAYO — Мағозаҳо</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f6f8;color:#222}
+header{background:#ff6500;color:white;padding:17px}
+.top{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-size:30px;font-weight:900}
+header a{color:white;text-decoration:none}
+main{max-width:1100px;margin:20px auto;padding:0 12px 50px}
+.hero{background:linear-gradient(120deg,#ff6500,#ff9d30);color:white;padding:25px;border-radius:15px}
+.hero h1{margin:0 0 8px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+input,select{padding:13px;border:1px solid #ddd;border-radius:9px;font:inherit;background:white;flex:1;min-width:160px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.card{background:white;border-radius:13px;padding:17px;box-shadow:0 3px 12px #0001}
+.card h3{margin:0 0 10px}
+.muted{color:#777;font-size:13px;line-height:1.6}
+button{border:0;background:#ff6500;color:white;padding:12px 16px;border-radius:8px;cursor:pointer;font-weight:bold}
+button:disabled{opacity:.5}
+.status{background:white;padding:14px;border-radius:10px;margin:15px 0}
+.back{margin-bottom:15px}
+.product{padding:0;overflow:hidden}
+.photo{height:190px;background:#eee;display:flex;align-items:center;justify-content:center;font-size:38px}
+.photo img{width:100%;height:100%;object-fit:cover}
+.details{padding:14px}
+.price{font-size:20px;color:#ff6500;font-weight:bold}
+.old{text-decoration:line-through;color:#999;font-size:13px}
+.badge{display:inline-block;background:#ffe6d2;color:#b34d00;border-radius:7px;padding:5px 8px;font-size:12px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<header>
+<div class="top">
+<div class="logo">VAYO</div>
+<a href="../index.html">← Асосӣ</a>
+</div>
+</header>
+
+<main>
+<section class="hero">
+<h1>🏪 Мағозаҳои VAYO</h1>
+<p>Мағозаҳо ва маҳсулоти Тоҷикистонро пайдо кунед.</p>
+</section>
+
+<section id="shopsSection">
+<div class="filters">
+<input id="searchShop" placeholder="Номи мағоза...">
+<select id="cityFilter">
+<option value="">Ҳамаи шаҳрҳо</option>
+<option>Душанбе</option>
+<option>Хуҷанд</option>
+<option>Бохтар</option>
+<option>Кӯлоб</option>
+<option>Ҳисор</option>
+<option>Панҷакент</option>
+<option>Хоруғ</option>
+<option>Турсунзода</option>
+<option>Истаравшан</option>
+</select>
+</div>
+<div class="status" id="shopStatus">Мағозаҳо боргирӣ мешаванд...</div>
+<div class="grid" id="shopsGrid"></div>
+</section>
+
+<section id="productsSection" class="hidden">
+<button class="back" id="backBtn">← Ҳамаи мағозаҳо</button>
+<div class="card" id="selectedShop"></div>
+<h2>Маҳсулоти мағоза</h2>
+<div class="status" id="productStatus">Боргирӣ...</div>
+<div class="grid" id="productsGrid"></div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+let shops=[];
+let products=[];
+let selectedShopId=null;
+
+function money(n){
+ return Number(n).toFixed(2)+" сомонӣ";
+}
+
+function el(tag,className,text){
+ const node=document.createElement(tag);
+ if(className)node.className=className;
+ if(text!==undefined)node.textContent=text;
+ return node;
+}
+
+function renderShops(){
+ const q=$("searchShop").value.trim().toLowerCase();
+ const city=$("cityFilter").value;
+
+ const list=shops.filter(s=>
+  (!city||s.city===city) &&
+  (s.name.toLowerCase().includes(q)||
+   (s.address||"").toLowerCase().includes(q))
+ );
+
+ $("shopStatus").textContent=list.length+" мағоза ёфт шуд.";
+ const root=$("shopsGrid");
+ root.replaceChildren();
+
+ list.forEach(s=>{
+  const card=el("article","card");
+  card.appendChild(el("h3","", "🏪 "+s.name));
+  card.appendChild(el("p","muted","📍 "+s.city+", "+s.address));
+
+  if(s.description){
+   card.appendChild(el("p","muted",s.description));
+  }
+
+  const btn=el("button","","Дидани маҳсулот");
+  btn.onclick=()=>openShop(s.id);
+  card.appendChild(btn);
+  root.appendChild(card);
+ });
+}
+
+function showShops(){
+ selectedShopId=null;
+ $("shopsSection").classList.remove("hidden");
+ $("productsSection").classList.add("hidden");
+ history.replaceState(null,"",location.pathname);
+}
+
+async function openShop(id){
+ const shop=shops.find(s=>s.id===id);
+ if(!shop)return;
+
+ selectedShopId=id;
+ $("shopsSection").classList.add("hidden");
+ $("productsSection").classList.remove("hidden");
+ $("selectedShop").replaceChildren(
+  el("h2","","🏪 "+shop.name),
+  el("p","muted","📍 "+shop.city+", "+shop.address),
+  el("p","muted",shop.description||"")
+ );
+
+ history.replaceState(null,"","?shop="+encodeURIComponent(id));
+ $("productStatus").textContent="Маҳсулот боргирӣ мешавад...";
+ $("productsGrid").replaceChildren();
+
+ const {data,error}=await vayoDB
+  .from("products")
+  .select(`
+   id,name,description,price,stock,active,
+   product_images(image_url,position),
+   promotions(discount_percent,starts_at,ends_at)
+  `)
+  .eq("shop_id",id)
+  .eq("active",true)
+  .order("created_at",{ascending:false})
+  .limit(100);
+
+ if(selectedShopId!==id)return;
+
+ if(error){
+  $("productStatus").textContent="Хато: "+error.message;
+  return;
+ }
+
+ products=data||[];
+ renderProducts();
+}
+
+function renderProducts(){
+ const root=$("productsGrid");
+ root.replaceChildren();
+ const now=Date.now();
+
+ const available=products.filter(p=>Number(p.stock)>0);
+ $("productStatus").textContent=
+  available.length+" маҳсулот ёфт шуд.";
+
+ available.forEach(p=>{
+  const card=el("article","card product");
+  const photo=el("div","photo");
+
+  const images=(p.product_images||[])
+   .slice().sort((a,b)=>a.position-b.position);
+
+  if(images.length){
+   const img=el("img");
+   img.src=images[0].image_url;
+   img.alt=p.name;
+   img.loading="lazy";
+   photo.appendChild(img);
+  }else{
+   photo.textContent="📦";
+  }
+
+  const details=el("div","details");
+  details.appendChild(el("h3","",p.name));
+
+  const price=Number(p.price);
+  const promotion=(p.promotions||[])
+   .filter(x=>
+    new Date(x.starts_at).getTime()<=now &&
+    new Date(x.ends_at).getTime()>now &&
+    Number(x.discount_percent)>0 &&
+    Number(x.discount_percent)<100
+   )
+   .sort((a,b)=>b.discount_percent-a.discount_percent)[0];
+
+  if(promotion){
+   const discount=Number(promotion.discount_percent);
+   details.appendChild(el("div","old",money(price)));
+   details.appendChild(el("div","price",
+    money(price*(1-discount/100))));
+   details.appendChild(el("span","badge","-"+discount+"%"));
+  }else{
+   details.appendChild(el("div","price",money(price)));
+  }
+
+  details.appendChild(el("p","muted",
+   (p.description||"").slice(0,150)));
+  details.appendChild(el("p","muted",
+   "Дар анбор: "+p.stock));
+
+  card.append(photo,details);
+  root.appendChild(card);
+ });
+}
+
+async function loadShops(){
+ if(!window.vayoDB){
+  $("shopStatus").textContent="Supabase танзим нашудааст.";
+  return;
+ }
+
+ const {data,error}=await vayoDB
+  .from("shops")
+  .select("id,name,description,city,address")
+  .eq("status","approved")
+  .order("created_at",{ascending:false})
+  .limit(100);
+
+ if(error){
+  $("shopStatus").textContent="Хато: "+error.message;
+  return;
+ }
+
+ shops=data||[];
+ renderShops();
+
+ const requested=new URLSearchParams(location.search).get("shop");
+ if(requested&&shops.some(s=>s.id===requested)){
+  await openShop(requested);
+ }
+}
+
+$("searchShop").addEventListener("input",renderShops);
+$("cityFilter").addEventListener("change",renderShops);
+$("backBtn").addEventListener("click",showShops);
+window.addEventListener("popstate",()=>{
+ const id=new URLSearchParams(location.search).get("shop");
+ if(id&&shops.some(s=>s.id===id))openShop(id);
+ else showShops();
+});
+
+loadShops();
+</script>
+</body>
+</html>
