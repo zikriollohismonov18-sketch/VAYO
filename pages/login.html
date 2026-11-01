@@ -7,77 +7,24 @@
 <title>VAYO — Воридшавӣ</title>
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#f5f6f8;
- color:#222;
-}
-header{
- background:#ff6500;
- color:white;
- padding:18px;
- text-align:center;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f6f8;color:#222}
+header{background:#ff6500;color:white;padding:18px;text-align:center}
 header a{color:white;text-decoration:none}
-main{
- max-width:430px;
- margin:35px auto;
- padding:22px;
- background:white;
- border-radius:15px;
- box-shadow:0 4px 20px #0001;
-}
+main{max-width:430px;margin:35px auto;padding:22px;background:white;border-radius:15px;box-shadow:0 4px 20px #0001}
 h1{margin:0;font-size:28px}
 h2{text-align:center}
-input{
- width:100%;
- padding:14px;
- margin:8px 0;
- border:1px solid #ddd;
- border-radius:9px;
- font-size:15px;
-}
-button{
- width:100%;
- padding:14px;
- margin-top:10px;
- background:#ff6500;
- border:0;
- border-radius:9px;
- color:white;
- font-size:15px;
- font-weight:bold;
- cursor:pointer;
-}
+input{width:100%;padding:14px;margin:8px 0;border:1px solid #ddd;border-radius:9px;font-size:15px}
+button{width:100%;padding:14px;margin-top:10px;background:#ff6500;border:0;border-radius:9px;color:white;font-size:15px;font-weight:bold;cursor:pointer}
 button:disabled{opacity:.6}
 .tabs{display:flex;gap:8px}
-.tabs button{
- background:#eee;
- color:#333;
-}
-.tabs button.active{
- background:#ff6500;
- color:white;
-}
-.link{
- text-align:center;
- color:#ff6500;
- cursor:pointer;
- margin-top:15px;
-}
-.message{
- margin-top:14px;
- padding:12px;
- border-radius:8px;
- background:#f4f4f4;
- display:none;
- overflow-wrap:anywhere;
-}
+.tabs button{background:#eee;color:#333}
+.tabs button.active{background:#ff6500;color:white}
+.link{text-align:center;color:#ff6500;cursor:pointer;margin-top:15px}
+.message{margin-top:14px;padding:12px;border-radius:8px;background:#f4f4f4;display:none;overflow-wrap:anywhere}
 .message.ok{background:#e5f8ec;color:#146b35}
 .message.error{background:#ffe9e9;color:#b42318}
 .hidden{display:none}
-.small{font-size:12px;color:#777}
+.small{font-size:12px;color:#777;line-height:1.6}
 </style>
 </head>
 <body>
@@ -90,8 +37,8 @@ button:disabled{opacity:.6}
 
 <main>
 <div class="tabs">
-<button id="loginTab" class="active">Воридшавӣ</button>
-<button id="registerTab">Сабти ном</button>
+<button id="loginTab" type="button" class="active">Воридшавӣ</button>
+<button id="registerTab" type="button">Сабти ном</button>
 </div>
 
 <h2 id="formTitle">Воридшавӣ</h2>
@@ -113,12 +60,12 @@ button:disabled{opacity:.6}
 
 <p class="link" id="forgotBtn">Паролро фаромӯш кардед?</p>
 
-<div class="message" id="message"></div>
+<div class="message" id="message" role="status"></div>
 
 <p class="small">
 Бо сабти ном шумо метавонед ҳамчун харидор
-истифода баред. Барои сохтани мағоза баъдтар
-панели фурӯшанда илова мешавад.
+истифода баред. Барои кушодани мағоза
+ба панели фурӯшанда ворид шавед.
 </p>
 </main>
 
@@ -128,14 +75,37 @@ button:disabled{opacity:.6}
 <script>
 "use strict";
 
-const $=id=>document.getElementById(id);
-let mode="login";
+const $ = id => document.getElementById(id);
+let mode = "login";
+
+const SUPABASE_URL =
+ "https://rgminzzmlktkliliiupt.supabase.co";
+
+const SUPABASE_KEY =
+ "sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+
+function getDB(){
+ if(window.vayoDB){
+  return window.vayoDB;
+ }
+
+ if(window.supabase &&
+    typeof window.supabase.createClient==="function"){
+  window.vayoDB = window.supabase.createClient(
+   SUPABASE_URL,
+   SUPABASE_KEY
+  );
+  return window.vayoDB;
+ }
+
+ return null;
+}
 
 function message(text,ok=false){
- const el=$("message");
- el.style.display="block";
- el.className="message "+(ok?"ok":"error");
- el.textContent=text;
+ const box=$("message");
+ box.style.display="block";
+ box.className="message "+(ok?"ok":"error");
+ box.textContent=text;
 }
 
 function setMode(next){
@@ -156,11 +126,15 @@ function setMode(next){
 $("loginTab").onclick=()=>setMode("login");
 $("registerTab").onclick=()=>setMode("register");
 
-$("authForm").onsubmit=async(e)=>{
+$("authForm").onsubmit=async e=>{
  e.preventDefault();
 
- if(!window.vayoDB){
-  message("Пайвасти Supabase танзим нашудааст.");
+ const db=getDB();
+
+ if(!db){
+  message(
+   "Supabase боргирӣ нашуд. Интернет ва файли config.js-ро санҷед."
+  );
   return;
  }
 
@@ -177,7 +151,7 @@ $("authForm").onsubmit=async(e)=>{
 
  try{
   if(mode==="register"){
-   const {data,error}=await vayoDB.auth.signUp({
+   const {data,error}=await db.auth.signUp({
     email,
     password,
     options:{
@@ -188,15 +162,11 @@ $("authForm").onsubmit=async(e)=>{
    if(error)throw error;
 
    if(data.session){
-    const {error:profileError}=await vayoDB
-     .from("profiles")
-     .upsert({
-      id:data.user.id,
-      full_name:fullName
-     });
-    if(profileError)throw profileError;
-
     message("Сабти ном бомуваффақият анҷом ёфт!",true);
+
+    setTimeout(()=>{
+     location.href="seller.html";
+    },1200);
    }else{
     message(
      "Сабти ном қабул шуд. Агар тасдиқи email фаъол бошад, почтаи худро санҷед.",
@@ -204,14 +174,17 @@ $("authForm").onsubmit=async(e)=>{
     );
    }
   }else{
-   const {error}=await vayoDB.auth.signInWithPassword({
-    email,password
+   const {error}=await db.auth.signInWithPassword({
+    email,
+    password
    });
+
    if(error)throw error;
 
    message("Шумо ворид шудед!",true);
+
    setTimeout(()=>{
-    location.href="../index.html";
+    location.href="seller.html";
    },1000);
   }
  }catch(err){
@@ -222,12 +195,15 @@ $("authForm").onsubmit=async(e)=>{
 };
 
 $("forgotBtn").onclick=async()=>{
- if(!window.vayoDB){
+ const db=getDB();
+
+ if(!db){
   message("Supabase танзим нашудааст.");
   return;
  }
 
  const email=$("email").value.trim();
+
  if(!email){
   message("Аввал email-ро ворид кунед.");
   return;
@@ -238,9 +214,10 @@ $("forgotBtn").onclick=async()=>{
    "reset-password.html",location.href
   ).href;
 
-  const {error}=await vayoDB.auth.resetPasswordForEmail(
+  const {error}=await db.auth.resetPasswordForEmail(
    email,{redirectTo}
   );
+
   if(error)throw error;
 
   message(
@@ -251,6 +228,12 @@ $("forgotBtn").onclick=async()=>{
   message(err.message||"Хато ҳангоми фиристодан.");
  }
 };
+
+if(!getDB()){
+ message(
+  "Пайвасти Supabase ҳоло дастрас нест. Боргирии китобхонаи Supabase-ро санҷед."
+ );
+}
 </script>
 </body>
 </html>
