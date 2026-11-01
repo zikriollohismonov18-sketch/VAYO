@@ -16,6 +16,7 @@ header a{color:white;text-decoration:none}
 main{max-width:850px;margin:20px auto;padding:0 12px 50px}
 .card{background:white;border-radius:14px;padding:20px;margin-bottom:15px;box-shadow:0 3px 12px #0001}
 h2{margin-top:0}
+h3{margin:18px 0 8px;font-size:16px}
 label{display:block;font-size:13px;font-weight:bold;margin-top:13px}
 input,select,textarea{width:100%;padding:13px;border:1px solid #ddd;border-radius:9px;margin-top:7px;font:inherit}
 textarea{min-height:80px}
@@ -24,12 +25,20 @@ button:disabled{opacity:.5;cursor:not-allowed}
 #map{height:300px;border-radius:10px;margin-top:12px}
 .muted{color:#777;font-size:13px;line-height:1.6}
 .row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #eee;padding:11px 0}
+.row>span:first-child{min-width:0}
+.row>strong:last-child{text-align:right;white-space:nowrap}
 .total{color:#ff6500;font-size:22px;font-weight:bold}
-.message{padding:13px;border-radius:9px;background:#fff1dc;margin-bottom:15px;overflow-wrap:anywhere}
+.message{padding:13px;border-radius:9px;background:#fff1dc;margin-bottom:15px;overflow-wrap:anywhere;white-space:pre-line}
 .error{background:#ffe9e9;color:#a32121}
 .success{background:#e6f7eb;color:#146b35}
-.hidden{display:none}
+.hidden{display:none!important}
 .order-id{font-weight:bold;overflow-wrap:anywhere}
+.shop-delivery{border:1px solid #eee;border-radius:12px;padding:14px;margin-top:12px;background:#fafafa}
+.shop-delivery strong{display:block;margin-bottom:8px}
+.delivery-tag{font-size:13px;font-weight:bold;color:#d45500}
+.delivery-detail{font-size:13px;color:#666;line-height:1.6;margin:7px 0}
+.summary{border-top:2px solid #eee;margin-top:14px;padding-top:8px}
+.warning{background:#fff6e8;border:1px solid #ffe1b0;border-radius:9px;padding:12px;font-size:13px;line-height:1.6}
 </style>
 </head>
 <body>
@@ -48,15 +57,37 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <div class="card">
 <h2>Молҳои интихобшуда</h2>
 <div id="orderItems">Боргирӣ...</div>
+
+<div class="summary">
 <div class="row">
 <strong>Ҷамъи молҳо</strong>
-<strong id="subtotal" class="total">0 сомонӣ</strong>
+<strong id="subtotal">0 сомонӣ</strong>
 </div>
+<div class="row">
+<strong>Ҳаққи расонидани мағозаҳо</strong>
+<strong id="deliveryTotal">0 сомонӣ</strong>
+</div>
+<div class="row">
+<strong>Маблағи умумии пешакӣ</strong>
+<strong id="grandTotal" class="total">0 сомонӣ</strong>
+</div>
+</div>
+
 <p class="muted">
-Маблағи молҳо дар вақти тасдиқи фармоиш
-дар сервер аз нав ҳисоб карда мешавад.
-Нархи расонидан ҳоло ба маблағи фармоиш дохил нест.
+Нарх ва захираи маҳсулот ҳангоми сабти фармоиш
+дар сервер аз нав санҷида мешаванд.
+Маблағи ниҳоиро сервер ҳисоб мекунад.
 </p>
+</div>
+
+<div class="card">
+<h2>🚚 Расонидан аз мағозаҳо</h2>
+<div id="deliveryList">Боргирӣ...</div>
+<div id="externalWarning" class="warning hidden">
+📦 Барои карго ё почта хароҷоти расонидан
+ба маблағи боло дохил нест.
+Харидор онро алоҳида пардохт мекунад.
+</div>
 </div>
 
 <form id="checkoutForm" class="hidden">
@@ -85,6 +116,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <option>Дигар</option>
 </select>
 
+<div id="addressSection">
 <label for="address">Суроғаи пурра</label>
 <textarea id="address" required placeholder="Кӯча, бино, хона, нишона"></textarea>
 
@@ -98,9 +130,14 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <label for="notes">Эзоҳ барои курьер</label>
 <textarea id="notes" placeholder="Масалан: даромадгоҳи дуюм"></textarea>
 <p class="muted">
-Эзоҳро дар ин марҳила ба суроға илова мекунем,
-то дар фармоиш нигоҳ дошта шавад.
+Эзоҳ ба суроға илова шуда, дар фармоиш нигоҳ дошта мешавад.
 </p>
+</div>
+
+<div id="pickupInfo" class="warning hidden">
+🏪 Ҳамаи маҳсулот аз мағоза гирифта мешаванд.
+Суроғаи мағозаҳоро дар қисми расонидан бинед.
+</div>
 </div>
 
 <div class="card">
@@ -112,6 +149,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 Пардохти онлайн баъд аз пайваст кардани
 провайдери пардохт фаъол мешавад.
 </p>
+
 <button id="orderBtn" type="submit">
 📦 Фармоиш додан
 </button>
@@ -131,10 +169,12 @@ const $ = id => document.getElementById(id);
 const CART_KEY = "vayo_cart_v1";
 
 let cart = [];
+let shops = new Map();
 let currentUser = null;
 let map = null;
 let marker = null;
 let submitting = false;
+let needsAddress = true;
 
 function money(n){
  return Number(n).toFixed(2)+" сомонӣ";
@@ -216,6 +256,75 @@ function normalizeCart(raw){
  }));
 }
 
+function deliveryLabel(type){
+ if(type==="own")return "🚚 Расонидани худи мағоза";
+ if(type==="pickup")return "🏪 Гирифтан аз мағоза";
+ return "📦 Карго ё почта";
+}
+
+function renderDelivery(){
+ const root = $("deliveryList");
+ root.replaceChildren();
+
+ let deliveryTotal = 0;
+ let hasExternal = false;
+
+ for(const shop of shops.values()){
+  const box = document.createElement("div");
+  box.className = "shop-delivery";
+
+  const name = document.createElement("strong");
+  name.textContent = shop.name||"Мағоза";
+
+  const type = document.createElement("div");
+  type.className = "delivery-tag";
+  type.textContent = deliveryLabel(shop.delivery_type);
+
+  const detail = document.createElement("p");
+  detail.className = "delivery-detail";
+
+  if(shop.delivery_type==="own"){
+   const fee = Number(shop.delivery_fee)||0;
+   deliveryTotal += fee;
+   detail.textContent = "Нархи расонидан: "+money(fee);
+  }else if(shop.delivery_type==="pickup"){
+   detail.textContent =
+    "Аз ин суроға гиред: "+
+    (shop.address||"Суроға нишон дода нашудааст");
+  }else{
+   hasExternal = true;
+   detail.textContent =
+    "Мағоза маҳсулотро мефиристад. "+
+    "Хароҷоти карго ё почтаро харидор алоҳида пардохт мекунад.";
+  }
+
+  box.append(name,type,detail);
+  root.appendChild(box);
+ }
+
+ $("deliveryTotal").textContent = money(deliveryTotal);
+ $("externalWarning").classList.toggle("hidden",!hasExternal);
+
+ const subtotal = cart.reduce(
+  (sum,item)=>sum+item.price*item.quantity,0
+ );
+
+ $("subtotal").textContent = money(subtotal);
+ $("grandTotal").textContent = money(subtotal+deliveryTotal);
+
+ needsAddress = [...shops.values()].some(
+  s=>s.delivery_type!=="pickup"
+ );
+
+ $("addressSection").classList.toggle("hidden",!needsAddress);
+ $("pickupInfo").classList.toggle("hidden",needsAddress);
+ $("address").required = needsAddress;
+
+ if(needsAddress){
+  initMap();
+ }
+}
+
 async function loadCart(){
  if(!window.vayoDB){
   notice("Supabase танзим нашудааст.");
@@ -242,6 +351,7 @@ async function loadCart(){
 
   if(!ids.length){
    $("orderItems").textContent = "Сабад холӣ аст.";
+   $("deliveryList").textContent = "Мағоза интихоб нашудааст.";
    return;
   }
 
@@ -256,8 +366,14 @@ async function loadCart(){
     regular_price,
     sale_starts_at,
     sale_ends_at,
+    shop_id,
     vayo_shops!inner (
-     status
+     id,
+     name,
+     status,
+     address,
+     delivery_type,
+     delivery_fee
     )
    `)
    .in("id",ids)
@@ -271,12 +387,13 @@ async function loadCart(){
    (data||[]).map(p=>[String(p.id),p])
   );
 
-  cart = raw.flatMap(entry=>{
+  cart = [];
+  shops.clear();
+
+  for(const entry of raw){
    const p = byId.get(String(entry.product_id));
 
-   if(!p||Number(p.stock)<=0){
-    return [];
-   }
+   if(!p||Number(p.stock)<=0)continue;
 
    const quantity = Math.min(
     entry.quantity,
@@ -284,7 +401,7 @@ async function loadCart(){
     100
    );
 
-   if(quantity<=0)return [];
+   if(quantity<=0)continue;
 
    const regular = Number(p.regular_price ?? p.price);
    const sale = Number(p.price);
@@ -306,27 +423,39 @@ async function loadCart(){
 
    const price = saleActive ? sale : regular;
 
-   if(!Number.isFinite(price)||price<0){
-    return [];
-   }
+   if(!Number.isFinite(price)||price<0)continue;
 
-   return [{
+   const shop = p.vayo_shops;
+
+   if(!shop)continue;
+
+   cart.push({
     product_id:p.id,
     name:p.name,
     quantity,
-    price
-   }];
-  });
+    price,
+    shop_id:p.shop_id
+   });
+
+   if(!shops.has(p.shop_id)){
+    shops.set(p.shop_id,{
+     id:shop.id,
+     name:shop.name,
+     address:shop.address,
+     delivery_type:shop.delivery_type||"external",
+     delivery_fee:shop.delivery_fee
+    });
+   }
+  }
 
   if(!cart.length){
    $("orderItems").textContent = "Маҳсулоти дастрас нест.";
+   $("deliveryList").textContent = "Мағоза интихоб нашудааст.";
    return;
   }
 
   const root = $("orderItems");
   root.replaceChildren();
-
-  let total = 0;
 
   for(const item of cart){
    const line = document.createElement("div");
@@ -340,17 +469,19 @@ async function loadCart(){
 
    line.append(name,amount);
    root.appendChild(line);
-
-   total += item.price*item.quantity;
   }
 
-  $("subtotal").textContent = money(total);
+  renderDelivery();
   $("checkoutForm").classList.remove("hidden");
-  initMap();
+
+  if(needsAddress&&map){
+   setTimeout(()=>map.invalidateSize(),200);
+  }
 
  }catch(err){
   notice("Хатои боргирии сабад: "+(err.message||String(err)));
   $("orderItems").textContent = "Боргирӣ номуваффақ шуд.";
+  $("deliveryList").textContent = "Боргирӣ номуваффақ шуд.";
  }
 }
 
@@ -384,7 +515,7 @@ $("checkoutForm").addEventListener("submit",async e=>{
   return;
  }
 
- if(!$("latitude").value||!$("longitude").value){
+ if(needsAddress&&(!$("latitude").value||!$("longitude").value)){
   notice("Нуқтаи расониданро дар харита интихоб кунед.");
   return;
  }
@@ -395,22 +526,24 @@ $("checkoutForm").addEventListener("submit",async e=>{
  const address = $("address").value.trim();
  const notes = $("notes").value.trim();
 
- if(!fullName||!phone||!city||!address){
+ if(!fullName||!phone||!city||(needsAddress&&!address)){
   notice("Ҳамаи маълумоти заруриро пур кунед.");
   return;
  }
 
- const fullAddress = notes
-  ? address+"\nЭзоҳ барои курьер: "+notes
-  : address;
+ const fullAddress = needsAddress
+  ? (notes
+     ? address+"\nЭзоҳ барои курьер: "+notes
+     : address)
+  : "Гирифтан аз мағоза (pickup)";
 
  const request = {
   customer_name:fullName,
   customer_phone:phone,
   city,
   delivery_address:fullAddress,
-  latitude:Number($("latitude").value),
-  longitude:Number($("longitude").value),
+  latitude:needsAddress?Number($("latitude").value):null,
+  longitude:needsAddress?Number($("longitude").value):null,
   items:cart.map(item=>({
    product_id:item.product_id,
    quantity:item.quantity
@@ -434,7 +567,10 @@ $("checkoutForm").addEventListener("submit",async e=>{
 
   $("checkoutForm").classList.add("hidden");
   $("orderItems").textContent = "Фармоиш қабул шуд.";
+  $("deliveryList").textContent = "Фармоиш қабул шуд.";
   $("subtotal").textContent = "—";
+  $("deliveryTotal").textContent = "—";
+  $("grandTotal").textContent = "—";
 
  }catch(err){
   notice("Хатои фармоиш: "+(err.message||String(err)));
