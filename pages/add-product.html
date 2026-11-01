@@ -1,0 +1,388 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAYO — Илова кардани маҳсулот</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f5f6f8;font-family:Arial,sans-serif;color:#222}
+header{background:#ff6500;color:white;padding:18px;text-align:center}
+header h1{margin:0;font-size:30px}
+header a{color:white;text-decoration:none}
+main{max-width:700px;margin:20px auto;padding:0 12px 45px}
+.card{background:white;border-radius:14px;padding:20px;margin-bottom:14px;box-shadow:0 3px 14px #0001}
+h2{font-size:21px;margin-top:0}
+label{display:block;font-weight:bold;font-size:13px;margin-top:13px}
+input,select,textarea{width:100%;padding:13px;border:1px solid #ddd;border-radius:8px;margin-top:7px;font:inherit}
+textarea{min-height:110px;resize:vertical}
+button{background:#ff6500;color:white;border:0;padding:13px 18px;border-radius:8px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5}
+.muted{color:#777;font-size:13px;line-height:1.6}
+.hidden{display:none}
+.message{padding:13px;border-radius:8px;margin:12px 0;background:#f1f1f1;overflow-wrap:anywhere}
+.success{background:#e5f8ec;color:#146b35}
+.error{background:#ffe9e9;color:#b42318}
+.preview{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:12px}
+.preview img{width:100%;height:110px;object-fit:cover;border-radius:8px}
+.price-preview{background:#fff3e8;padding:15px;border-radius:9px;margin-top:12px}
+.price-preview strong{color:#ff6500;font-size:23px}
+</style>
+</head>
+<body>
+<header>
+<h1>VAYO</h1>
+<p>Илова кардани маҳсулот</p>
+<a href="seller.html">← Панели фурӯшанда</a>
+</header>
+
+<main>
+<div class="card">
+<h2>📦 Маҳсулоти нав</h2>
+<p id="shopInfo" class="muted">Мағоза санҷида мешавад...</p>
+<div id="notice" class="message hidden"></div>
+</div>
+
+<form id="productForm" class="hidden">
+<div class="card">
+<h2>🛍️ Маълумоти маҳсулот</h2>
+
+<label for="name">Номи маҳсулот</label>
+<input id="name" required maxlength="160"
+ placeholder="Масалан: Кроссовкаи мардона">
+
+<label for="description">Тавсиф</label>
+<textarea id="description"
+ placeholder="Ранг, андоза, сифат ва маълумоти дигар"></textarea>
+
+<label for="category">Категория</label>
+<select id="category" required>
+<option value="">Интихоб кунед</option>
+<option>Либос</option>
+<option>Пойафзол</option>
+<option>Телефон</option>
+<option>Техника</option>
+<option>Хона</option>
+<option>Зебоӣ</option>
+<option>Бачагона</option>
+<option>Варзиш</option>
+<option>Дигар</option>
+</select>
+
+<label for="price">Нарх (сомонӣ)</label>
+<input id="price" type="number" min="0.01" step="0.01"
+ required placeholder="150">
+
+<label for="stock">Миқдор дар анбор</label>
+<input id="stock" type="number" min="0" step="1"
+ required value="1">
+</div>
+
+<div class="card">
+<h2>📷 Аксҳои маҳсулот</h2>
+<p class="muted">
+То 10 акс интихоб кунед. Ҳар акс бояд JPG, PNG
+ё WebP бошад ва аз 5 MB зиёд набошад.
+</p>
+<input id="images" type="file" accept="image/jpeg,image/png,image/webp"
+ multiple>
+<div class="preview" id="preview"></div>
+<p class="muted" id="imageCount">0 акс интихоб шуд</p>
+</div>
+
+<div class="card">
+<h2>🔥 Аксия ва тахфиф</h2>
+<label for="discount">Фоизи тахфиф</label>
+<input id="discount" type="number" min="0" max="99"
+ step="1" value="0">
+
+<label for="startDate">Оғози аксия</label>
+<input id="startDate" type="datetime-local">
+
+<label for="endDate">Анҷоми аксия</label>
+<input id="endDate" type="datetime-local">
+
+<div class="price-preview">
+<p>Нархи баъди тахфиф:</p>
+<strong id="finalPrice">0 сомонӣ</strong>
+</div>
+</div>
+
+<div class="card">
+<button id="saveBtn" type="submit">➕ Нигоҳ доштани маҳсулот</button>
+<p class="muted">
+Маҳсулот танҳо баъди тасдиқи мағоза дар бозор
+ба харидорон нишон дода мешавад.
+</p>
+</div>
+</form>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+const params=new URLSearchParams(location.search);
+const shopId=params.get("shop");
+
+let currentUser=null;
+let selectedFiles=[];
+let previewURLs=[];
+
+function notice(text,success=false){
+ const el=$("notice");
+ el.className="message "+(success?"success":"error");
+ el.textContent=text;
+ el.classList.remove("hidden");
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function calculatePrice(){
+ const price=Number($("price").value)||0;
+ const discount=Number($("discount").value)||0;
+ const final=price*(1-discount/100);
+ $("finalPrice").textContent=
+  final.toFixed(2)+" сомонӣ";
+}
+
+$("price").addEventListener("input",calculatePrice);
+$("discount").addEventListener("input",calculatePrice);
+
+function clearPreviews(){
+ previewURLs.forEach(url=>URL.revokeObjectURL(url));
+ previewURLs=[];
+ $("preview").replaceChildren();
+}
+
+$("images").addEventListener("change",()=>{
+ clearPreviews();
+ selectedFiles=Array.from($("images").files);
+
+ if(selectedFiles.length>10){
+  notice("Аз 10 акс зиёд интихоб накунед.");
+  selectedFiles=[];
+  $("images").value="";
+  return;
+ }
+
+ const allowed=["image/jpeg","image/png","image/webp"];
+
+ for(const file of selectedFiles){
+  if(!allowed.includes(file.type)||file.size>5*1024*1024){
+   notice("Акс бояд JPG, PNG ё WebP ва то 5 MB бошад.");
+   selectedFiles=[];
+   $("images").value="";
+   return;
+  }
+ }
+
+ selectedFiles.forEach(file=>{
+  const url=URL.createObjectURL(file);
+  previewURLs.push(url);
+  const img=document.createElement("img");
+  img.src=url;
+  img.alt="Акси маҳсулот";
+  $("preview").appendChild(img);
+ });
+
+ $("imageCount").textContent=
+  selectedFiles.length+" акс интихоб шуд";
+});
+
+async function initialize(){
+ if(!window.vayoDB){
+  notice("Пайвасти Supabase танзим нашудааст.");
+  return;
+ }
+
+ if(!shopId){
+  notice("Мағоза интихоб нашудааст. Аз панели фурӯшанда ворид шавед.");
+  return;
+ }
+
+ const {data:{user},error:userError}=
+  await vayoDB.auth.getUser();
+
+ if(userError||!user){
+  notice("Аввал ба ҳисоби худ ворид шавед.");
+  return;
+ }
+
+ currentUser=user;
+
+ const {data:shop,error}=await vayoDB
+  .from("shops")
+  .select("id,name,status,owner_id")
+  .eq("id",shopId)
+  .eq("owner_id",user.id)
+  .single();
+
+ if(error||!shop){
+  notice("Мағоза ёфт нашуд ё шумо соҳиби он нестед.");
+  return;
+ }
+
+ $("shopInfo").textContent=
+  "🏪 "+shop.name+" — "+(
+   shop.status==="approved"?"Тасдиқ шудааст":
+   shop.status==="pending"?"Интизори тасдиқ":
+   shop.status
+  );
+
+ $("productForm").classList.remove("hidden");
+}
+
+$("productForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+
+ if(!currentUser||!shopId){
+  notice("Ҳисоб ё мағоза муайян нест.");
+  return;
+ }
+
+ const name=$("name").value.trim();
+ const description=$("description").value.trim();
+ const category=$("category").value;
+ const price=Number($("price").value);
+ const stock=Number($("stock").value);
+ const discount=Number($("discount").value)||0;
+
+ if(!name||!category||!Number.isFinite(price)||price<=0||
+    !Number.isInteger(stock)||stock<0){
+  notice("Маълумоти маҳсулотро дуруст ворид кунед.");
+  return;
+ }
+
+ if(!Number.isInteger(discount)||discount<0||discount>99){
+  notice("Фоизи тахфиф бояд аз 0 то 99 бошад.");
+  return;
+ }
+
+ if(selectedFiles.length===0){
+  notice("Камаш як акси маҳсулотро интихоб кунед.");
+  return;
+ }
+
+ let start=null;
+ let end=null;
+
+ if(discount>0){
+  if(!$("startDate").value||!$("endDate").value){
+   notice("Санаи оғоз ва анҷоми аксияро ворид кунед.");
+   return;
+  }
+  start=new Date($("startDate").value);
+  end=new Date($("endDate").value);
+
+  if(!Number.isFinite(start.getTime())||
+     !Number.isFinite(end.getTime())||
+     end<=start){
+   notice("Санаҳои аксия нодурустанд.");
+   return;
+  }
+ }
+
+ $("saveBtn").disabled=true;
+ $("saveBtn").textContent="Нигоҳдорӣ...";
+
+ let createdProductId=null;
+ const uploadedPaths=[];
+
+ try{
+  const {data:product,error:productError}=
+   await vayoDB.from("products")
+   .insert({
+    shop_id:shopId,
+    name,
+    description,
+    category,
+    price,
+    stock,
+    active:true
+   })
+   .select("id")
+   .single();
+
+  if(productError)throw productError;
+  createdProductId=product.id;
+
+  for(let i=0;i<selectedFiles.length;i++){
+   const file=selectedFiles[i];
+   const extension=file.type==="image/png"?"png":
+    file.type==="image/webp"?"webp":"jpg";
+
+   const path=shopId+"/"+createdProductId+"/"+
+    crypto.randomUUID()+"."+extension;
+
+   const {error:uploadError}=
+    await vayoDB.storage
+    .from("product-images")
+    .upload(path,file,{
+     contentType:file.type,
+     upsert:false
+    });
+
+   if(uploadError)throw uploadError;
+   uploadedPaths.push(path);
+
+   const {data:urlData}=vayoDB.storage
+    .from("product-images")
+    .getPublicUrl(path);
+
+   const {error:imageError}=
+    await vayoDB.from("product_images")
+    .insert({
+     product_id:createdProductId,
+     image_url:urlData.publicUrl,
+     position:i
+    });
+
+   if(imageError)throw imageError;
+  }
+
+  if(discount>0){
+   const {error:promoError}=
+    await vayoDB.from("promotions").insert({
+     product_id:createdProductId,
+     discount_percent:discount,
+     starts_at:start.toISOString(),
+     ends_at:end.toISOString()
+    });
+   if(promoError)throw promoError;
+  }
+
+  notice("Маҳсулот ва аксҳо бомуваффақият сабт шуданд!",true);
+  $("productForm").reset();
+  selectedFiles=[];
+  clearPreviews();
+  $("imageCount").textContent="0 акс интихоб шуд";
+  calculatePrice();
+
+ }catch(err){
+  // Агар дар ягон қадам хато шавад,
+  // маҳсулоти нопурраро нест мекунем.
+  if(createdProductId){
+   if(uploadedPaths.length){
+    await vayoDB.storage
+     .from("product-images")
+     .remove(uploadedPaths);
+   }
+   await vayoDB.from("products")
+    .delete().eq("id",createdProductId);
+  }
+
+  notice("Хато: "+(err.message||String(err)));
+ }finally{
+  $("saveBtn").disabled=false;
+  $("saveBtn").textContent="➕ Нигоҳ доштани маҳсулот";
+ }
+});
+
+initialize();
+calculatePrice();
+</script>
+</body>
+</html>
