@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAYO — Сабади харид</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f6f8;color:#222}
+header{background:#ff6500;color:white;padding:18px}
+.top{max-width:1050px;margin:auto;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:30px;font-weight:900}
+header a{color:white;text-decoration:none}
+main{max-width:1050px;margin:20px auto;padding:0 12px 50px}
+h1{font-size:25px}
+.card{background:white;padding:17px;border-radius:13px;margin-bottom:12px;box-shadow:0 3px 12px #0001}
+.item{display:flex;gap:15px;align-items:center}
+.photo{width:95px;height:95px;object-fit:cover;border-radius:9px;background:#eee}
+.info{flex:1;min-width:0}
+.name{font-weight:bold}
+.muted{font-size:13px;color:#777}
+.price{font-weight:bold;color:#ff6500;font-size:19px}
+.controls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:10px}
+button{background:#ff6500;color:white;border:0;border-radius:8px;padding:10px 14px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5}
+.remove{background:#555}
+.summary{max-width:400px;margin-left:auto}
+.line{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #eee}
+.total{font-size:22px;font-weight:bold;color:#ff6500}
+.checkout{display:block;text-align:center;background:#ff6500;color:white;text-decoration:none;padding:14px;border-radius:9px;margin-top:15px;font-weight:bold}
+.empty{text-align:center;padding:35px}
+.warning{background:#fff2dd;color:#8a4a00;padding:12px;border-radius:8px;margin-bottom:12px}
+@media(max-width:520px){.item{align-items:flex-start}.photo{width:75px;height:75px}}
+</style>
+</head>
+<body>
+<header>
+<div class="top">
+<div class="logo">VAYO</div>
+<a href="../index.html">← Асосӣ</a>
+</div>
+</header>
+
+<main>
+<h1>🛒 Сабади харид</h1>
+<div id="notice" class="warning" hidden></div>
+<div id="items"></div>
+
+<div id="summary" class="card summary" hidden>
+<h2>Ҳисоби фармоиш</h2>
+<div class="line">
+<span>Миқдори маҳсулот</span>
+<strong id="count">0</strong>
+</div>
+<div class="line">
+<span>Ҷамъи молҳо</span>
+<strong id="subtotal">0 сомонӣ</strong>
+</div>
+<div class="line">
+<span>Расонидан</span>
+<span>Ҳангоми фармоиш ҳисоб мешавад</span>
+</div>
+<div class="line">
+<span>Маблағи молҳо</span>
+<span class="total" id="total">0 сомонӣ</span>
+</div>
+<a class="checkout" href="checkout.html">
+Давом додани фармоиш
+</a>
+<p class="muted">
+Нарх ва мавҷудияти мол пеш аз пардохт
+дар сервер аз нав санҷида мешаванд.
+</p>
+</div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script>
+"use strict";
+
+const CART_KEY="vayo_cart_v1";
+const $=id=>document.getElementById(id);
+
+let cart=[];
+
+function money(n){
+ return Number(n).toFixed(2)+" сомонӣ";
+}
+
+function warn(text){
+ $("notice").textContent=text;
+ $("notice").hidden=!text;
+}
+
+function readCart(){
+ try{
+  const data=JSON.parse(localStorage.getItem(CART_KEY)||"[]");
+  return Array.isArray(data)?data:[];
+ }catch{
+  return [];
+ }
+}
+
+function saveCart(){
+ localStorage.setItem(CART_KEY,JSON.stringify(cart));
+}
+
+function create(tag,className,text){
+ const el=document.createElement(tag);
+ if(className)el.className=className;
+ if(text!==undefined)el.textContent=text;
+ return el;
+}
+
+async function refreshCart(){
+ const raw=readCart();
+ const ids=[...new Set(raw.map(x=>String(x.product_id||""))
+  .filter(Boolean))];
+
+ if(!ids.length){
+  cart=[];
+  render();
+  return;
+ }
+
+ if(!window.vayoDB){
+  warn("Supabase танзим нашудааст.");
+  return;
+ }
+
+ const {data,error}=await vayoDB.from("products")
+  .select(`
+   id,name,price,stock,active,
+   shops(name,status),
+   product_images(image_url,position),
+   promotions(discount_percent,starts_at,ends_at)
+  `)
+  .in("id",ids);
+
+ if(error){
+  warn("Хато ҳангоми хондани маҳсулот: "+error.message);
+  return;
+ }
+
+ const byId=new Map((data||[]).map(p=>[String(p.id),p]));
+ const now=Date.now();
+ let changed=false;
+
+ cart=raw.flatMap(entry=>{
+  const p=byId.get(String(entry.product_id));
+  if(!p||!p.active||p.shops?.status!=="approved"||
+     Number(p.stock)<=0){
+   changed=true;
+   return [];
+  }
+
+  const quantity=Math.min(
+   Math.max(1,Math.floor(Number(entry.quantity)||1)),
+   Number(p.stock)
+  );
+
+  if(quantity!==entry.quantity)changed=true;
+
+  const promo=(p.promotions||[])
+   .filter(x=>
+    new Date(x.starts_at).getTime()<=now &&
+    new Date(x.ends_at).getTime()>now &&
+    Number(x.discount_percent)>0 &&
+    Number(x.discount_percent)<100
+   )
+   .sort((a,b)=>b.discount_percent-a.discount_percent)[0];
+
+  const price=Number(p.price)*
+   (promo?(1-Number(promo.discount_percent)/100):1);
+
+  const image=(p.product_images||[])
+   .slice().sort((a,b)=>a.position-b.position)[0];
+
+  return [{
+   product_id:String(p.id),
+   name:p.name,
+   shop_name:p.shops.name,
+   quantity,
+   max_stock:Number(p.stock),
+   price,
+   image:image?.image_url||""
+  }];
+ });
+
+ if(changed)warn("Баъзе молҳо ё миқдори онҳо нав карда шуданд.");
+ saveCart();
+ render();
+}
+
+function updateQuantity(id,delta){
+ const item=cart.find(x=>x.product_id===id);
+ if(!item)return;
+ item.quantity=Math.min(item.max_stock,
+  Math.max(1,item.quantity+delta));
+ saveCart();
+ render();
+}
+
+function removeItem(id){
+ cart=cart.filter(x=>x.product_id!==id);
+ saveCart();
+ render();
+}
+
+function render(){
+ const root=$("items");
+ root.replaceChildren();
+
+ if(!cart.length){
+  root.appendChild(create("div","card empty",
+   "Сабади шумо холӣ аст."));
+  $("summary").hidden=true;
+  return;
+ }
+
+ let subtotal=0;
+ let count=0;
+
+ cart.forEach(item=>{
+  const card=create("div","card item");
+  const img=create("img","photo");
+  img.src=item.image||"";
+  img.alt=item.name;
+
+  const info=create("div","info");
+  info.appendChild(create("div","name",item.name));
+  info.appendChild(create("p","muted","🏪 "+item.shop_name));
+  info.appendChild(create("div","price",money(item.price)));
+
+  const controls=create("div","controls");
+  const minus=create("button","","−");
+  minus.onclick=()=>updateQuantity(item.product_id,-1);
+
+  const qty=create("strong","",String(item.quantity));
+
+  const plus=create("button","","+");
+  plus.disabled=item.quantity>=item.max_stock;
+  plus.onclick=()=>updateQuantity(item.product_id,1);
+
+  const remove=create("button","remove","Нест кардан");
+  remove.onclick=()=>removeItem(item.product_id);
+
+  controls.append(minus,qty,plus,remove);
+  info.appendChild(controls);
+  card.append(img,info);
+  root.appendChild(card);
+
+  subtotal+=item.price*item.quantity;
+  count+=item.quantity;
+ });
+
+ $("count").textContent=count;
+ $("subtotal").textContent=money(subtotal);
+ $("total").textContent=money(subtotal);
+ $("summary").hidden=false;
+}
+
+refreshCart();
+</script>
+</body>
+</html>
