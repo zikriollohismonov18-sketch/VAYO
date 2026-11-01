@@ -1,0 +1,274 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAYO — Панели фурӯшанда</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--orange:#ff6900;--dark:#22252b;--muted:#7b8290;--line:#e8eaf0}
+*{box-sizing:border-box}
+body{margin:0;background:#f7f8fb;color:var(--dark);font-family:Inter,"Noto Sans",sans-serif}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+header{background:#fff;border-bottom:1px solid var(--line);padding:15px 5%;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{color:var(--orange);font-size:28px;font-weight:900;text-decoration:none}
+nav{display:flex;align-items:center;gap:14px}
+nav a{color:var(--dark);text-decoration:none;font-size:13px;font-weight:700}
+main{max-width:1050px;margin:25px auto;padding:0 16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:18px}
+h1{font-size:25px;font-weight:900;margin:0 0 10px}
+h2{font-size:19px;font-weight:900;margin:0 0 18px}
+p{color:var(--muted);line-height:1.7}
+label{display:block;font-size:13px;font-weight:800;margin:14px 0 7px}
+input,textarea{width:100%;padding:13px;border:1.5px solid var(--line);border-radius:10px;outline:none}
+input:focus,textarea:focus{border-color:var(--orange)}
+textarea{min-height:90px;resize:vertical}
+.btn{background:var(--orange);color:#fff;border:0;border-radius:10px;padding:13px 18px;font-weight:800;margin-top:15px}
+.btn.secondary{background:#f1f2f5;color:var(--dark)}
+.btn:disabled{opacity:.6}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.product{border:1px solid var(--line);border-radius:13px;overflow:hidden}
+.product img{width:100%;aspect-ratio:1;object-fit:cover}
+.product-body{padding:13px}
+.product strong{display:block;margin-bottom:7px}
+.price{font-weight:900;color:var(--orange)}
+.msg{display:none;padding:13px;border-radius:10px;margin-bottom:15px;font-size:13px}
+.msg.success{display:block;background:#e9f8ee;color:#166534}
+.msg.error{display:block;background:#fff0ee;color:#b42318}
+.hidden{display:none!important}
+@media(max-width:700px){.grid,.products{grid-template-columns:1fr}.card{padding:18px}nav{gap:8px}}
+</style>
+</head>
+<body>
+<header>
+<a href="./index.html" class="logo">VAYO</a>
+<nav>
+<a href="./index.html">Мағоза</a>
+<a href="./login.html">Ҳисоб</a>
+<button id="logout" class="btn secondary" style="margin:0">Баромадан</button>
+</nav>
+</header>
+
+<main>
+<section class="card">
+<h1>🏪 Панели фурӯшандаи VAYO</h1>
+<p id="userInfo">Ҳисоб санҷида мешавад...</p>
+<div id="message" class="msg"></div>
+</section>
+
+<section class="card hidden" id="shopSection">
+<h2>Мағозаи ман</h2>
+<form id="shopForm">
+<label for="shopName">Номи мағоза</label>
+<input id="shopName" required placeholder="Масалан: VAYO Fashion">
+<label for="shopDescription">Тавсифи мағоза</label>
+<textarea id="shopDescription" placeholder="Дар бораи мағозаи худ нависед"></textarea>
+<button class="btn" type="submit">Нигоҳ доштани мағоза</button>
+</form>
+</section>
+
+<section class="card hidden" id="productSection">
+<h2>Илова кардани маҳсулот</h2>
+<form id="productForm">
+<label for="productName">Номи маҳсулот</label>
+<input id="productName" required placeholder="Масалан: Красовка">
+<div class="grid">
+<div>
+<label for="productPrice">Нарх (сомонӣ)</label>
+<input id="productPrice" type="number" min="0.01" step="0.01" required>
+</div>
+<div>
+<label for="productCategory">Категория</label>
+<input id="productCategory" placeholder="Пойафзол">
+</div>
+</div>
+<label for="productImage">Суроғаи акси маҳсулот (HTTPS)</label>
+<input id="productImage" type="url" placeholder="https://example.com/photo.jpg">
+<label for="productDescription">Тавсиф</label>
+<textarea id="productDescription"></textarea>
+<button class="btn" type="submit">Илова кардани маҳсулот</button>
+</form>
+</section>
+
+<section class="card hidden" id="listSection">
+<h2>Маҳсулоти ман</h2>
+<div class="products" id="productList"></div>
+</section>
+</main>
+
+<script>
+"use strict";
+
+const SB_URL="https://rgminzzmlktkliliiupt.supabase.co";
+const SB_KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+const db=window.supabase.createClient(SB_URL,SB_KEY);
+const $=id=>document.getElementById(id);
+
+let user=null;
+let shop=null;
+
+// Ин номҳои сутунҳо бояд бо ҷадвалҳои Supabase мувофиқ бошанд.
+const SHOP_OWNER_COLUMN="owner_id";
+const PRODUCT_SHOP_COLUMN="shop_id";
+
+function notify(text,type="error"){
+  $("message").textContent=text;
+  $("message").className="msg "+type;
+}
+
+function show(id){$(id).classList.remove("hidden");}
+
+async function init(){
+  const {data,error}=await db.auth.getUser();
+  if(error||!data.user){
+    location.replace("./login.html");
+    return;
+  }
+  user=data.user;
+  $("userInfo").textContent="Ҳисоб: "+user.email;
+
+  const {data:shops,error:shopError}=await db
+    .from("vayo_shops")
+    .select("*")
+    .eq(SHOP_OWNER_COLUMN,user.id)
+    .limit(1);
+
+  if(shopError){
+    notify("Мағоза хонда нашуд: "+shopError.message);
+    return;
+  }
+
+  shop=shops?.[0]||null;
+  if(shop){
+    $("shopName").value=shop.name||"";
+    $("shopDescription").value=shop.description||"";
+    show("productSection");
+    show("listSection");
+    await loadProducts();
+  }
+  show("shopSection");
+}
+
+$("shopForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(!user)return;
+
+  const payload={
+    name:$("shopName").value.trim(),
+    description:$("shopDescription").value.trim()
+  };
+
+  let result;
+  if(shop){
+    result=await db.from("vayo_shops")
+      .update(payload)
+      .eq("id",shop.id)
+      .eq(SHOP_OWNER_COLUMN,user.id)
+      .select()
+      .single();
+  }else{
+    result=await db.from("vayo_shops")
+      .insert({...payload,[SHOP_OWNER_COLUMN]:user.id})
+      .select()
+      .single();
+  }
+
+  if(result.error){
+    notify("Мағоза нигоҳ дошта нашуд: "+result.error.message);
+    return;
+  }
+
+  shop=result.data;
+  notify("Мағоза нигоҳ дошта шуд!","success");
+  show("productSection");
+  show("listSection");
+  await loadProducts();
+});
+
+$("productForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(!shop)return;
+
+  const payload={
+    name:$("productName").value.trim(),
+    price:Number($("productPrice").value),
+    category:$("productCategory").value.trim(),
+    description:$("productDescription").value.trim(),
+    image_url:$("productImage").value.trim()||null,
+    [PRODUCT_SHOP_COLUMN]:shop.id
+  };
+
+  const {error}=await db.from("vayo_products").insert(payload);
+
+  if(error){
+    notify("Маҳсулот илова нашуд: "+error.message);
+    return;
+  }
+
+  notify("Маҳсулот илова шуд!","success");
+  $("productForm").reset();
+  await loadProducts();
+});
+
+async function loadProducts(){
+  if(!shop)return;
+
+  const {data,error}=await db.from("vayo_products")
+    .select("*")
+    .eq(PRODUCT_SHOP_COLUMN,shop.id)
+    .limit(100);
+
+  if(error){
+    notify("Маҳсулот хонда нашуд: "+error.message);
+    return;
+  }
+
+  const target=$("productList");
+  target.replaceChildren();
+
+  if(!data?.length){
+    target.textContent="Ҳоло маҳсулот надоред.";
+    return;
+  }
+
+  data.forEach(p=>{
+    const card=document.createElement("article");
+    card.className="product";
+
+    if(p.image_url&&/^https:\/\//i.test(p.image_url)){
+      const img=document.createElement("img");
+      img.src=p.image_url;
+      img.alt=p.name||"Маҳсулот";
+      img.loading="lazy";
+      card.appendChild(img);
+    }
+
+    const body=document.createElement("div");
+    body.className="product-body";
+
+    const title=document.createElement("strong");
+    title.textContent=p.name||"Маҳсулот";
+
+    const price=document.createElement("div");
+    price.className="price";
+    price.textContent=(Number(p.price)||0).toFixed(2)+" сомонӣ";
+
+    body.append(title,price);
+    card.appendChild(body);
+    target.appendChild(card);
+  });
+}
+
+$("logout").onclick=async()=>{
+  await db.auth.signOut();
+  location.replace("./login.html");
+};
+
+init().catch(e=>notify(e.message));
+</script>
+</body>
+</html>
