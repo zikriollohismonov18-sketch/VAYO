@@ -3,653 +3,261 @@
 <html lang="tg">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#ff6900">
-<title>VAYO | Воридшавӣ ва сабти ном</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAYO — Мағозаи онлайн</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-:root {
-  --orange: #ff6900;
-  --orange-dark: #e95c00;
-  --text: #1e2229;
-  --muted: #77808c;
-  --line: #e9ebef;
-  --bg: #f7f8fb;
-}
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  font-family: "Inter", "Noto Sans", sans-serif;
-  -webkit-font-smoothing: antialiased;
-}
-
-button, input {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
-
-header {
-  background: #fff;
-  border-bottom: 1px solid var(--line);
-  padding: 16px 6%;
-}
-
-.logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 11px;
-  text-decoration: none;
-  color: var(--orange);
-  font-size: 30px;
-  font-weight: 900;
-  letter-spacing: -1.4px;
-}
-
-.logo-mark {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  background: var(--orange);
-  color: #fff;
-  border-radius: 13px;
-  font-size: 25px;
-}
-
-main {
-  min-height: calc(100vh - 80px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 30px 15px;
-}
-
-.card {
-  width: 100%;
-  max-width: 445px;
-  background: white;
-  padding: 35px;
-  border-radius: 24px;
-  box-shadow: 0 16px 55px rgba(22,30,45,.075);
-}
-
-.welcome {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-.welcome h1 {
-  margin: 0 0 9px;
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: -.6px;
-  line-height: 1.3;
-}
-
-.welcome p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 14px;
-  line-height: 1.8;
-}
-
-.tabs {
-  display: flex;
-  gap: 6px;
-  background: #f4f5f7;
-  padding: 5px;
-  border-radius: 13px;
-  margin-bottom: 24px;
-}
-
-.tab {
-  flex: 1;
-  border: 0;
-  background: transparent;
-  color: var(--muted);
-  padding: 12px 8px;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 800;
-}
-
-.tab.active {
-  color: var(--orange);
-  background: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,.06);
-}
-
-.field {
-  margin-bottom: 19px;
-}
-
-.field label {
-  display: block;
-  font-size: 13px;
-  font-weight: 800;
-  margin-bottom: 9px;
-}
-
-.field input {
-  width: 100%;
-  border: 1.5px solid var(--line);
-  border-radius: 12px;
-  padding: 15px 16px;
-  background: white;
-  color: var(--text);
-  outline: none;
-  font-size: 14px;
-  transition: .2s;
-}
-
-.field input:focus {
-  border-color: var(--orange);
-  box-shadow: 0 0 0 4px rgba(255,105,0,.09);
-}
-
-.field input::placeholder {
-  color: #a3aab4;
-}
-
-.password-wrap {
-  position: relative;
-}
-
-.password-wrap input {
-  padding-right: 65px;
-}
-
-.show-password {
-  position: absolute;
-  right: 11px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: 0;
-  color: var(--orange);
-  font-size: 12px;
-  font-weight: 800;
-  padding: 7px;
-}
-
-.forgot-row {
-  display: flex;
-  justify-content: flex-end;
-  margin: -5px 0 20px;
-}
-
-.text-button {
-  background: none;
-  border: 0;
-  color: var(--orange);
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.primary {
-  width: 100%;
-  border: 0;
-  border-radius: 12px;
-  padding: 16px;
-  background: var(--orange);
-  color: white;
-  font-size: 15px;
-  font-weight: 900;
-  transition: .2s;
-}
-
-.primary:hover {
-  background: var(--orange-dark);
-}
-
-.primary:disabled {
-  opacity: .55;
-  cursor: wait;
-}
-
-.message {
-  display: none;
-  padding: 14px;
-  margin-bottom: 20px;
-  border-radius: 11px;
-  font-size: 13px;
-  line-height: 1.7;
-  overflow-wrap: anywhere;
-}
-
-.message.success {
-  display: block;
-  color: #166534;
-  background: #e9f8ed;
-}
-
-.message.error {
-  display: block;
-  color: #b42318;
-  background: #fff0ee;
-}
-
-.note {
-  margin: 24px 0 0;
-  text-align: center;
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.9;
-}
-
-.note strong {
-  color: var(--orange);
-}
-
-.hidden {
-  display: none !important;
-}
-
-@media (max-width: 480px) {
-  header { padding: 13px 20px; }
-  main { align-items: flex-start; padding: 25px 12px; }
-  .card { padding: 26px 20px; border-radius: 20px; }
-  .welcome h1 { font-size: 25px; }
-}
+:root{--orange:#ff6900;--dark:#202124;--muted:#737b86;--bg:#f6f7f9}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--dark);font-family:Inter,"Noto Sans",sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+header{background:#fff;position:sticky;top:0;z-index:10;border-bottom:1px solid #eee}
+.top{max-width:1250px;margin:auto;padding:14px 16px;display:flex;align-items:center;gap:18px}
+.logo{font-size:30px;font-weight:900;color:var(--orange);text-decoration:none;letter-spacing:-1.5px}
+.search{flex:1;display:flex;border:2px solid var(--orange);border-radius:30px;overflow:hidden}
+.search input{flex:1;min-width:0;padding:13px 18px;border:0;outline:0}
+.search button{background:var(--orange);color:#fff;border:0;padding:0 23px;font-weight:800}
+.navbtn{color:var(--dark);text-decoration:none;font-size:13px;font-weight:800;white-space:nowrap;background:none;border:0}
+.categories{max-width:1250px;margin:auto;padding:0 16px 12px;display:flex;gap:10px;overflow-x:auto}
+.cat{white-space:nowrap;border:1px solid #e5e5e5;border-radius:20px;padding:9px 15px;background:#fff;font-size:13px;font-weight:700}
+.cat.active{background:var(--orange);border-color:var(--orange);color:#fff}
+main{max-width:1250px;margin:auto;padding:18px 16px 45px}
+.hero{background:linear-gradient(110deg,#ff6900,#ff9b37);color:#fff;border-radius:22px;padding:32px;margin-bottom:25px}
+.hero h1{font-size:clamp(25px,4vw,43px);margin:0 0 10px;font-weight:900}
+.hero p{margin:0;font-size:15px}
+.section-title{font-size:22px;font-weight:900;margin:0 0 18px}
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:15px}
+.product{background:#fff;border-radius:15px;overflow:hidden;border:1px solid #eee}
+.product img{width:100%;aspect-ratio:1;object-fit:cover;background:#f1f1f1}
+.info{padding:13px}
+.name{font-size:13px;font-weight:700;line-height:1.5;min-height:40px}
+.price{font-size:20px;font-weight:900;color:var(--orange);margin:8px 0}
+.buy{width:100%;background:var(--orange);color:#fff;border:0;padding:11px;border-radius:9px;font-weight:800}
+.empty{grid-column:1/-1;text-align:center;padding:35px;color:var(--muted)}
+.cartpanel{position:fixed;right:0;top:0;bottom:0;width:min(420px,100%);background:#fff;z-index:30;box-shadow:-8px 0 35px #0002;padding:20px;overflow-y:auto}
+.carthead{display:flex;justify-content:space-between;align-items:center}
+.cartrow{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid #eee;font-size:13px}
+.cartrow button{border:0;background:#fff0e8;color:var(--orange);border-radius:8px;padding:8px}
+.overlay{position:fixed;inset:0;background:#0007;z-index:20}
+.hidden{display:none!important}
+footer{text-align:center;color:var(--muted);padding:25px;font-size:13px}
+@media(max-width:1000px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:700px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.top{gap:9px;flex-wrap:wrap}.logo{font-size:25px}.search{order:3;flex-basis:100%}.hero{padding:23px}.navbtn{font-size:12px}}
 </style>
 </head>
-
 <body>
 
 <header>
-  <a href="./index.html" class="logo">
-    <span class="logo-mark">V</span>
-    VAYO
-  </a>
+<div class="top">
+<a href="./index.html" class="logo">VAYO</a>
+<div class="search">
+<input id="search" placeholder="Ҷустуҷӯи маҳсулот...">
+<button id="searchBtn">Ҷустуҷӯ</button>
+</div>
+<a class="navbtn" id="accountLink" href="./login.html">👤 Воридшавӣ</a>
+<button class="navbtn" id="cartBtn">🛒 Сабад (<span id="count">0</span>)</button>
+<a class="navbtn" href="./seller.html">🏪 Фурӯшанда</a>
+</div>
+<nav class="categories" id="categories">
+<button class="cat active" data-category="all">Ҳама</button>
+<button class="cat" data-category="Либос">Либос</button>
+<button class="cat" data-category="Пойафзол">Пойафзол</button>
+<button class="cat" data-category="Электроника">Электроника</button>
+<button class="cat" data-category="Хона">Барои хона</button>
+<button class="cat" data-category="Зебоӣ">Зебоӣ</button>
+</nav>
 </header>
 
 <main>
-<section class="card">
-
-  <div class="welcome">
-    <h1 id="heading">Хуш омадед!</h1>
-    <p id="subtitle">
-      Ба ҳисоби худ ворид шавед ва харидро оғоз кунед.
-    </p>
-  </div>
-
-  <div class="tabs" id="tabs">
-    <button class="tab active" id="loginTab" type="button">
-      Воридшавӣ
-    </button>
-    <button class="tab" id="registerTab" type="button">
-      Сабти ном
-    </button>
-  </div>
-
-  <div class="message" id="message" role="status" aria-live="polite"></div>
-
-  <form id="authForm">
-
-    <div class="field">
-      <label for="email">Почтаи электронӣ</label>
-      <input
-        id="email"
-        type="email"
-        placeholder="example@gmail.com"
-        autocomplete="email"
-        required
-      >
-    </div>
-
-    <div class="field" id="passwordField">
-      <label for="password" id="passwordLabel">Парол</label>
-
-      <div class="password-wrap">
-        <input
-          id="password"
-          type="password"
-          placeholder="Пароли худро ворид кунед"
-          autocomplete="current-password"
-          minlength="6"
-          required
-        >
-        <button
-          type="button"
-          class="show-password"
-          id="showPassword"
-        >
-          Намоиш
-        </button>
-      </div>
-    </div>
-
-    <div class="forgot-row" id="forgotRow">
-      <button type="button" class="text-button" id="forgotBtn">
-        Паролро фаромӯш кардед?
-      </button>
-    </div>
-
-    <button class="primary" id="submitBtn" type="submit">
-      Ворид шудан
-    </button>
-
-  </form>
-
-  <button
-    type="button"
-    class="text-button hidden"
-    id="backBtn"
-    style="display:block;margin:22px auto 0"
-  >
-    Бозгашт ба воридшавӣ
-  </button>
-
-  <p class="note">
-    VAYO — Хариди осон, нархҳои беҳтарин.
-    <br>
-    <strong>Ҷаҳони харид дар дасти шумо</strong>
-  </p>
-
+<section class="hero">
+<h1>Хуш омадед ба VAYO!</h1>
+<p>Маҳсулоти гуногун, нархҳои дастрас ва хариди осон.</p>
 </section>
+<h2 class="section-title">Маҳсулоти VAYO</h2>
+<div class="grid" id="products">
+<div class="empty">Маҳсулот бор шуда истодааст...</div>
+</div>
 </main>
+
+<div class="overlay hidden" id="overlay"></div>
+<aside class="cartpanel hidden" id="cartPanel">
+<div class="carthead">
+<h2>🛒 Сабади шумо</h2>
+<button id="closeCart">✕</button>
+</div>
+<div id="cartItems"></div>
+<h3 id="total">Ҳамагӣ: 0 сомонӣ</h3>
+<p style="color:#737b86;font-size:13px">
+Фармоишдиҳӣ дар қадами навбатӣ пайваст мешавад.
+</p>
+</aside>
+
+<footer>© 2026 VAYO — Мағозаи онлайн</footer>
 
 <script>
 "use strict";
 
-/* ==============================
-   VAYO SUPABASE CONFIGURATION
-============================== */
+const SB_URL="https://rgminzzmlktkliliiupt.supabase.co";
+const SB_KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+const db=window.supabase.createClient(SB_URL,SB_KEY);
 
-const SUPABASE_URL =
-  "https://rgminzzmlktkliliiupt.supabase.co";
+const $=id=>document.getElementById(id);
+let products=[];
+let category="all";
+let cart=[];
 
-const SUPABASE_KEY =
-  "sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+try {
+  const saved=JSON.parse(localStorage.getItem("vayo_cart")||"[]");
+  if(Array.isArray(saved)) cart=saved;
+} catch(e) { cart=[]; }
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true
-    }
+function saveCart(){
+  localStorage.setItem("vayo_cart",JSON.stringify(cart));
+  $("count").textContent=cart.reduce((s,x)=>s+x.qty,0);
+}
+
+function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",
+    '"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function imageOf(p){
+  const candidates=[
+    p.image_url,p.image,
+    Array.isArray(p.images)?p.images[0]:null
+  ];
+  return candidates.find(x=>typeof x==="string"&&/^https:\/\//i.test(x))||"";
+}
+
+function render(){
+  const query=$("search").value.trim().toLowerCase();
+  const filtered=products.filter(p=>{
+    const title=String(p.name||p.title||"").toLowerCase();
+    const cat=String(p.category||"");
+    return (category==="all"||cat===category)&&title.includes(query);
+  });
+
+  $("products").replaceChildren();
+
+  if(!filtered.length){
+    $("products").innerHTML='<div class="empty">Ҳоло маҳсулот ёфт нашуд.</div>';
+    return;
   }
-);
 
-const LOGIN_URL =
-  new URL("./login.html", location.href).href;
+  filtered.forEach(p=>{
+    const card=document.createElement("article");
+    card.className="product";
 
-const SELLER_URL =
-  new URL("./seller.html", location.href).href;
+    const img=imageOf(p);
+    const name=p.name||p.title||"Маҳсулот";
+    const price=Number(p.price)||0;
 
-const HOME_URL =
-  new URL("./index.html", location.href).href;
+    card.innerHTML=`
+      ${img?`<img src="${escapeHTML(img)}" alt="${escapeHTML(name)}" loading="lazy">`:
+      '<div style="aspect-ratio:1;background:#f2f2f2;display:grid;place-items:center">🛍️</div>'}
+      <div class="info">
+        <div class="name">${escapeHTML(name)}</div>
+        <div class="price">${price.toFixed(2)} сомонӣ</div>
+        <button class="buy">Ба сабад</button>
+      </div>
+    `;
 
-const $ = id => document.getElementById(id);
-
-let mode = "login";
-let busy = false;
-
-/* ==============================
-   UI FUNCTIONS
-============================== */
-
-function showMessage(text, type = "error") {
-  const element = $("message");
-  element.textContent = text;
-  element.className = "message " + type;
+    card.querySelector(".buy").addEventListener("click",()=>addCart(p));
+    $("products").appendChild(card);
+  });
 }
 
-function clearMessage() {
-  $("message").textContent = "";
-  $("message").className = "message";
+function addCart(p){
+  const id=String(p.id);
+  const existing=cart.find(x=>x.id===id);
+  if(existing) existing.qty++;
+  else cart.push({
+    id,name:p.name||p.title||"Маҳсулот",
+    price:Number(p.price)||0,qty:1
+  });
+  saveCart();
+  alert("Маҳсулот ба сабад илова шуд!");
 }
 
-function setBusy(value) {
-  busy = value;
-  $("submitBtn").disabled = value;
-  $("submitBtn").textContent = value
-    ? "Лутфан интизор шавед..."
-    : buttonLabel();
-}
+function renderCart(){
+  const target=$("cartItems");
+  target.replaceChildren();
 
-function buttonLabel() {
-  if (mode === "register") return "Ҳисоб сохтан";
-  if (mode === "reset") return "Фиристодани пайванд";
-  if (mode === "update") return "Нигоҳ доштани парол";
-  return "Ворид шудан";
-}
-
-function setMode(nextMode) {
-  mode = nextMode;
-  clearMessage();
-
-  const login = mode === "login";
-  const register = mode === "register";
-  const reset = mode === "reset";
-  const update = mode === "update";
-
-  $("tabs").classList.toggle("hidden", reset || update);
-  $("loginTab").classList.toggle("active", login);
-  $("registerTab").classList.toggle("active", register);
-
-  $("forgotRow").classList.toggle("hidden", !login);
-  $("backBtn").classList.toggle("hidden", !(reset || update));
-
-  $("passwordField").classList.toggle("hidden", reset);
-  $("password").required = !reset;
-  $("password").autocomplete = login
-    ? "current-password"
-    : "new-password";
-
-  $("passwordLabel").textContent =
-    update ? "Пароли нав" : "Парол";
-
-  $("heading").textContent =
-    login ? "Хуш омадед!" :
-    register ? "Ба VAYO ҳамроҳ шавед" :
-    reset ? "Барқароркунии парол" :
-    "Пароли нав гузоред";
-
-  $("subtitle").textContent =
-    login
-      ? "Ба ҳисоби худ ворид шавед ва харидро оғоз кунед."
-    : register
-      ? "Ҳисоби ройгон созед ва аз имкониятҳои VAYO истифода баред."
-    : reset
-      ? "Почтаи электронии худро ворид кунед."
-      : "Барои ҳисоби худ пароли нав интихоб кунед.";
-
-  $("submitBtn").textContent = buttonLabel();
-}
-
-/* ==============================
-   AUTHENTICATION
-============================== */
-
-async function handleSubmit(event) {
-  event.preventDefault();
-
-  if (busy) return;
-
-  clearMessage();
-  setBusy(true);
-
-  const email = $("email").value.trim();
-  const password = $("password").value;
-
-  try {
-
-    if (mode === "register") {
-
-      const { data, error } =
-        await supabaseClient.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: LOGIN_URL
-          }
-        });
-
-      if (error) throw error;
-
-      if (data.session) {
-        showMessage(
-          "Ҳисоби шумо бомуваффақият сохта шуд!",
-          "success"
-        );
-        location.assign(SELLER_URL);
-        return;
-      }
-
-      showMessage(
-        "Сабти ном қабул шуд. Email-и худро кушоед ва пайванди тасдиқро пахш кунед.",
-        "success"
-      );
-
-    } else if (mode === "login") {
-
-      const { error } =
-        await supabaseClient.auth.signInWithPassword({
-          email,
-          password
-        });
-
-      if (error) throw error;
-
-      location.assign(SELLER_URL);
-      return;
-
-    } else if (mode === "reset") {
-
-      const { error } =
-        await supabaseClient.auth.resetPasswordForEmail(
-          email,
-          { redirectTo: LOGIN_URL }
-        );
-
-      if (error) throw error;
-
-      showMessage(
-        "Агар ин email сабт шуда бошад, пайванди барқароркунии парол фиристода мешавад.",
-        "success"
-      );
-
-    } else if (mode === "update") {
-
-      const { error } =
-        await supabaseClient.auth.updateUser({
-          password
-        });
-
-      if (error) throw error;
-
-      await supabaseClient.auth.signOut();
-
-      setMode("login");
-
-      showMessage(
-        "Пароли шумо нав карда шуд. Акнун ворид шавед.",
-        "success"
-      );
-    }
-
-  } catch (error) {
-    showMessage(
-      error.message || "Хатогӣ рух дод. Боз кӯшиш кунед."
-    );
-  } finally {
-    setBusy(false);
+  if(!cart.length){
+    target.textContent="Сабад холӣ аст.";
   }
-}
 
-/* ==============================
-   BUTTON EVENTS
-============================== */
+  cart.forEach(item=>{
+    const row=document.createElement("div");
+    row.className="cartrow";
 
-$("loginTab").addEventListener("click", () => {
-  setMode("login");
-});
+    const label=document.createElement("span");
+    label.textContent=`${item.name} × ${item.qty}`;
 
-$("registerTab").addEventListener("click", () => {
-  setMode("register");
-});
-
-$("forgotBtn").addEventListener("click", () => {
-  setMode("reset");
-});
-
-$("backBtn").addEventListener("click", () => {
-  setMode("login");
-});
-
-$("showPassword").addEventListener("click", () => {
-  const input = $("password");
-  const showing = input.type === "password";
-
-  input.type = showing ? "text" : "password";
-
-  $("showPassword").textContent =
-    showing ? "Пинҳон" : "Намоиш";
-});
-
-$("authForm").addEventListener("submit", handleSubmit);
-
-/* ==============================
-   SESSION AND EMAIL CALLBACK
-============================== */
-
-async function initialize() {
-  try {
-    supabaseClient.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY") {
-        setMode("update");
-      }
+    const remove=document.createElement("button");
+    remove.textContent="Нест кардан";
+    remove.addEventListener("click",()=>{
+      cart=cart.filter(x=>x.id!==item.id);
+      saveCart();
+      renderCart();
     });
 
-    const params = new URLSearchParams(location.search);
-    const hash = new URLSearchParams(location.hash.slice(1));
+    row.append(label,remove);
+    target.appendChild(row);
+  });
 
-    if (
-      params.get("type") === "recovery" ||
-      hash.get("type") === "recovery"
-    ) {
-      setMode("update");
-    }
+  const total=cart.reduce((s,x)=>s+x.price*x.qty,0);
+  $("total").textContent=`Ҳамагӣ: ${total.toFixed(2)} сомонӣ`;
+}
 
-    const { data, error } =
-      await supabaseClient.auth.getSession();
+function toggleCart(open){
+  $("cartPanel").classList.toggle("hidden",!open);
+  $("overlay").classList.toggle("hidden",!open);
+  if(open)renderCart();
+}
 
-    if (error) throw error;
+$("cartBtn").onclick=()=>toggleCart(true);
+$("closeCart").onclick=()=>toggleCart(false);
+$("overlay").onclick=()=>toggleCart(false);
+$("search").addEventListener("input",render);
+$("searchBtn").onclick=render;
 
-    if (data.session && mode === "login") {
-      showMessage(
-        "Шумо аллакай ворид шудаед. Барои идома тугмаи «Ворид шудан»-ро истифода баред.",
-        "success"
-      );
-    }
+document.querySelectorAll(".cat").forEach(btn=>{
+  btn.onclick=()=>{
+    category=btn.dataset.category;
+    document.querySelectorAll(".cat").forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    render();
+  };
+});
 
-  } catch (error) {
-    showMessage(
-      error.message || "Пайвастшавӣ муваффақ нашуд."
-    );
+async function loadProducts(){
+  try{
+    const {data,error}=await db.from("vayo_products").select("*").limit(100);
+    if(error)throw error;
+    products=data||[];
+    render();
+  }catch(error){
+    $("products").innerHTML=
+      '<div class="empty">Маҳсулот бор нашуд. Танзимоти ҷадвал ва RLS-ро санҷед.</div>';
+    console.error(error);
   }
 }
 
-initialize();
+async function loadAccount(){
+  const {data}=await db.auth.getUser();
+  if(data?.user){
+    $("accountLink").textContent="👤 Ҳисоби ман";
+  }
+}
 
+saveCart();
+loadProducts();
+loadAccount();
 </script>
 </body>
 </html>
