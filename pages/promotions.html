@@ -4,17 +4,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VAYO — Аксияҳо ва тахфифҳо</title>
+<title>VAYO — Аксияҳо ва Flash Sale</title>
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Arial,sans-serif;background:#f5f6f8;color:#222}
-header{background:#ff6500;color:white;padding:20px}
+header{background:#ff6500;color:#fff;padding:18px}
 .top{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:10px}
 .logo{font-size:30px;font-weight:900}
 header a{color:white;text-decoration:none}
 main{max-width:1100px;margin:20px auto;padding:0 12px 40px}
-.hero{background:linear-gradient(120deg,#ff6500,#ff9c28);color:white;border-radius:16px;padding:26px}
+.hero{background:linear-gradient(120deg,#ff6500,#ff9c28);color:white;border-radius:16px;padding:25px}
 .hero h1{margin:0 0 8px}
+.hero p{margin-bottom:0}
+.flashbar{margin-top:18px;background:#222;color:white;padding:16px;border-radius:12px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.flashbar strong{font-size:20px}
 .filters{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
 input,select{border:1px solid #ddd;border-radius:9px;padding:13px;font:inherit;background:white;flex:1;min-width:150px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
@@ -22,21 +25,30 @@ input,select{border:1px solid #ddd;border-radius:9px;padding:13px;font:inherit;b
 .photo{height:180px;background:#f0f0f0;display:flex;align-items:center;justify-content:center;position:relative}
 .photo img{width:100%;height:100%;object-fit:cover}
 .discount{position:absolute;top:10px;left:10px;background:#e62d2d;color:white;border-radius:7px;padding:6px 9px;font-weight:bold}
+.flashbadge{position:absolute;bottom:10px;left:10px;background:#222;color:#fff;border-radius:7px;padding:6px 9px;font-size:12px}
 .info{padding:13px}
 .name{font-weight:bold;min-height:40px}
 .shop{font-size:12px;color:#777;margin-top:5px}
-.old{color:#999;text-decoration:line-through;font-size:13px}
-.price{color:#ff6500;font-size:21px;font-weight:bold}
+.old{color:#999;text-decoration:line-through;font-size:13px;margin-top:8px}
+.price{color:#ff6500;font-size:21px;font-weight:bold;margin-top:4px}
 .timer{font-size:12px;color:#a54a00;margin-top:8px}
-.empty{text-align:center;padding:35px;color:#777}
+.stock{font-size:12px;color:#666;margin-top:6px}
+.add{width:100%;border:0;border-radius:9px;background:#ff6500;color:white;padding:11px;font-weight:bold;margin-top:12px;cursor:pointer}
+.add:disabled{background:#aaa;cursor:not-allowed}
+.empty{text-align:center;padding:35px;color:#777;grid-column:1/-1}
 .status{background:white;padding:15px;border-radius:10px;margin-bottom:15px}
 </style>
 </head>
 <body>
+
 <header>
 <div class="top">
 <div class="logo">VAYO</div>
-<a href="../index.html">← Саҳифаи асосӣ</a>
+<div>
+<a href="../index.html">← Асосӣ</a>
+&nbsp; | &nbsp;
+<a href="cart.html">🛒 Сабад</a>
+</div>
 </div>
 </header>
 
@@ -46,6 +58,11 @@ input,select{border:1px solid #ddd;border-radius:9px;padding:13px;font:inherit;b
 <p>Маҳсулоти арзонтарро аз мағозаҳои VAYO пайдо кунед.</p>
 </section>
 
+<div class="flashbar">
+<strong>⚡ Flash Sale — Аксияҳои фаврӣ</strong>
+<span id="flashCountdown">Аксияҳоро интизор шавед</span>
+</div>
+
 <div class="filters">
 <input id="search" placeholder="Ҷустуҷӯи маҳсулот...">
 <select id="sort">
@@ -53,6 +70,11 @@ input,select{border:1px solid #ddd;border-radius:9px;padding:13px;font:inherit;b
 <option value="cheap">Нархи арзонтарин</option>
 <option value="expensive">Нархи баландтарин</option>
 <option value="ending">Аксияҳои наздик ба анҷом</option>
+</select>
+<select id="type">
+<option value="all">Ҳамаи аксияҳо</option>
+<option value="flash">Танҳо Flash Sale</option>
+<option value="regular">Аксияҳои оддӣ</option>
 </select>
 </div>
 
@@ -65,8 +87,9 @@ input,select{border:1px solid #ddd;border-radius:9px;padding:13px;font:inherit;b
 <script>
 "use strict";
 
-const $=id=>document.getElementById(id);
-let offers=[];
+const $ = id => document.getElementById(id);
+const CART_KEY = "vayo_cart_v1";
+let offers = [];
 
 function money(value){
  return Number(value).toFixed(2)+" сомонӣ";
@@ -74,35 +97,80 @@ function money(value){
 
 function remaining(endsAt){
  const diff=new Date(endsAt).getTime()-Date.now();
- if(diff<=0)return "Аксия анҷом ёфт";
+ if(!Number.isFinite(diff)||diff<=0)
+  return "Аксия анҷом ёфт";
+
  const days=Math.floor(diff/86400000);
  const hours=Math.floor(diff%86400000/3600000);
  const minutes=Math.floor(diff%3600000/60000);
+ const seconds=Math.floor(diff%60000/1000);
+
+ const pad=n=>String(n).padStart(2,"0");
+
  return days>0
-  ? "То анҷом: "+days+" рӯз "+hours+" соат"
-  : "То анҷом: "+hours+" соат "+minutes+" дақиқа";
+  ? `${days} рӯз ${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
+  : `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+}
+
+function activeOffer(item){
+ const now=Date.now();
+ return new Date(item.startsAt).getTime()<=now &&
+        new Date(item.endsAt).getTime()>now;
+}
+
+function addToCart(item){
+ try{
+  const raw=JSON.parse(localStorage.getItem(CART_KEY)||"[]");
+  const cart=Array.isArray(raw)?raw:[];
+
+  const existing=cart.find(x=>x.product_id===item.id);
+  const current=Number(existing?.quantity||0);
+
+  if(current>=item.stock){
+   alert("Миқдори дастрас кофӣ нест.");
+   return;
+  }
+
+  if(existing){
+   existing.quantity=current+1;
+  }else{
+   cart.push({product_id:item.id,quantity:1});
+  }
+
+  localStorage.setItem(CART_KEY,JSON.stringify(cart));
+  alert("Маҳсулот ба сабад илова шуд!");
+ }catch(err){
+  alert("Хатои сабад: "+err.message);
+ }
 }
 
 function render(){
  const q=$("search").value.trim().toLowerCase();
  const sort=$("sort").value;
+ const type=$("type").value;
  const root=$("products");
+
  root.replaceChildren();
 
  let list=offers.filter(x=>
-  x.name.toLowerCase().includes(q) ||
-  x.shopName.toLowerCase().includes(q)
+  activeOffer(x) &&
+  (x.name.toLowerCase().includes(q) ||
+   x.shopName.toLowerCase().includes(q)) &&
+  (type==="all" ||
+   (type==="flash" && x.isFlash) ||
+   (type==="regular" && !x.isFlash))
  );
 
  list.sort((a,b)=>{
   if(sort==="cheap")return a.finalPrice-b.finalPrice;
   if(sort==="expensive")return b.finalPrice-a.finalPrice;
-  if(sort==="ending")return new Date(a.endsAt)-new Date(b.endsAt);
+  if(sort==="ending")
+   return new Date(a.endsAt)-new Date(b.endsAt);
   return b.discount-a.discount;
  });
 
- $("status").textContent=list.length+
-  " маҳсулот бо тахфиф ёфт шуд.";
+ $("status").textContent=
+  list.length+" маҳсулот бо тахфиф ёфт шуд.";
 
  if(!list.length){
   const empty=document.createElement("p");
@@ -134,6 +202,13 @@ function render(){
   badge.textContent="-"+item.discount+"%";
   photo.appendChild(badge);
 
+  if(item.isFlash){
+   const flash=document.createElement("span");
+   flash.className="flashbadge";
+   flash.textContent="⚡ FLASH SALE";
+   photo.appendChild(flash);
+  }
+
   const info=document.createElement("div");
   info.className="info";
 
@@ -155,12 +230,51 @@ function render(){
 
   const timer=document.createElement("div");
   timer.className="timer";
-  timer.textContent=remaining(item.endsAt);
+  timer.dataset.ends=item.endsAt;
+  timer.textContent="⏳ "+remaining(item.endsAt);
 
-  info.append(name,shop,old,price,timer);
+  const stock=document.createElement("div");
+  stock.className="stock";
+  stock.textContent="Дар анбор: "+item.stock;
+
+  const add=document.createElement("button");
+  add.className="add";
+  add.textContent=item.stock>0
+   ? "🛒 Ба сабад илова кардан"
+   : "Маҳсулот тамом шудааст";
+  add.disabled=item.stock<=0;
+  add.addEventListener("click",()=>addToCart(item));
+
+  info.append(name,shop,old,price,timer,stock,add);
   card.append(photo,info);
   root.appendChild(card);
  });
+}
+
+function updateTimers(){
+ document.querySelectorAll(".timer[data-ends]")
+  .forEach(el=>{
+   el.textContent="⏳ "+remaining(el.dataset.ends);
+  });
+
+ const flashes=offers.filter(x=>x.isFlash&&activeOffer(x));
+ if(flashes.length){
+  const next=flashes.reduce((a,b)=>
+   new Date(a.endsAt)<new Date(b.endsAt)?a:b
+  );
+  $("flashCountdown").textContent=
+   "То анҷоми наздиктарин: "+remaining(next.endsAt);
+ }else{
+  $("flashCountdown").textContent=
+   "Ҳоло Flash Sale фаъол нест";
+ }
+
+ if(offers.some(x=>
+   new Date(x.endsAt).getTime()<=Date.now()
+  )){
+  offers=offers.filter(activeOffer);
+  render();
+ }
 }
 
 async function loadOffers(){
@@ -169,33 +283,11 @@ async function loadOffers(){
   return;
  }
 
- const now=new Date().toISOString();
-
- const {data,error}=await vayoDB
-  .from("promotions")
-  .select(`
-   id,
-   discount_percent,
-   starts_at,
-   ends_at,
-   products (
-    id,
-    name,
-    price,
-    active,
-    shops (
-     name,
-     status
-    ),
-    product_images (
-     image_url,
-     position
-    )
-   )
-  `)
-  .lte("starts_at",now)
-  .gt("ends_at",now)
+ const {data,error}=await window.vayoDB
+  .from("vayo_public_deals")
+  .select("*")
   .gt("discount_percent",0)
+  .gt("stock",0)
   .order("discount_percent",{ascending:false})
   .limit(100);
 
@@ -204,41 +296,48 @@ async function loadOffers(){
   return;
  }
 
+ const now=Date.now();
+
  offers=(data||[]).flatMap(p=>{
-  const product=p.products;
-  if(!product||!product.active||
-     product.shops?.status!=="approved")return [];
-
-  const images=(product.product_images||[])
-   .slice()
-   .sort((a,b)=>a.position-b.position);
-
-  const price=Number(product.price);
+  const start=new Date(p.sale_starts_at).getTime();
+  const end=new Date(p.sale_ends_at).getTime();
+  const regular=Number(p.regular_price);
+  const final=Number(p.current_price);
   const discount=Number(p.discount_percent);
 
-  if(!Number.isFinite(price)||price<=0||
-     !Number.isFinite(discount)||discount<=0||
-     discount>=100)return [];
+  if(!Number.isFinite(start)||
+     !Number.isFinite(end)||
+     start>now||end<=now||
+     !Number.isFinite(regular)||
+     !Number.isFinite(final)||
+     !Number.isFinite(discount)||
+     discount<=0)return [];
 
   return [{
-   id:product.id,
-   name:product.name,
-   shopName:product.shops.name,
-   price,
+   id:p.id,
+   name:p.name||"Маҳсулот",
+   shopName:"Мағозаи VAYO",
+   price:regular,
+   finalPrice:final,
    discount,
-   finalPrice:price*(1-discount/100),
-   image:images[0]?.image_url||"",
-   endsAt:p.ends_at
+   image:p.image_url||"",
+   stock:Number(p.stock)||0,
+   startsAt:p.sale_starts_at,
+   endsAt:p.sale_ends_at,
+   isFlash:p.is_flash_sale===true
   }];
  });
 
  render();
+ updateTimers();
 }
 
 $("search").addEventListener("input",render);
 $("sort").addEventListener("change",render);
+$("type").addEventListener("change",render);
 
 loadOffers();
+setInterval(updateTimers,1000);
 </script>
 </body>
 </html>
