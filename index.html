@@ -4,7 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>VAYO — Воридшавӣ ва сабти ном</title>
+<meta name="theme-color" content="#ff6900">
+<title>VAYO | Воридшавӣ ва сабти ном</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,11 +16,11 @@
 <style>
 :root {
   --orange: #ff6900;
-  --orange-dark: #e95600;
-  --text: #202124;
-  --muted: #737780;
-  --border: #e8e9ed;
-  --background: #f7f8fb;
+  --orange-dark: #e95c00;
+  --text: #1e2229;
+  --muted: #77808c;
+  --line: #e9ebef;
+  --bg: #f7f8fb;
 }
 
 * { box-sizing: border-box; }
@@ -27,203 +28,242 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: var(--background);
+  background: var(--bg);
   color: var(--text);
-  font-family: 'Inter', 'Noto Sans', sans-serif;
+  font-family: "Inter", "Noto Sans", sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
+button, input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
 header {
-  background: white;
-  padding: 17px 6%;
-  border-bottom: 1px solid var(--border);
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  padding: 16px 6%;
 }
 
 .logo {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  color: var(--orange);
+  gap: 11px;
   text-decoration: none;
+  color: var(--orange);
   font-size: 30px;
   font-weight: 900;
-  letter-spacing: -1.5px;
+  letter-spacing: -1.4px;
 }
 
-.logo-icon {
+.logo-mark {
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
-  width: 43px;
-  height: 43px;
-  border-radius: 13px;
-  color: white;
   background: var(--orange);
-  font-size: 24px;
+  color: #fff;
+  border-radius: 13px;
+  font-size: 25px;
 }
 
 main {
   min-height: calc(100vh - 80px);
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 32px 16px;
+  justify-content: center;
+  padding: 30px 15px;
 }
 
-.auth-card {
+.card {
   width: 100%;
-  max-width: 440px;
-  padding: 35px;
+  max-width: 445px;
   background: white;
+  padding: 35px;
   border-radius: 24px;
-  box-shadow: 0 15px 55px rgba(20,25,40,.07);
+  box-shadow: 0 16px 55px rgba(22,30,45,.075);
 }
 
-h1 {
+.welcome {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.welcome h1 {
   margin: 0 0 9px;
-  font-size: 27px;
+  font-size: 28px;
   font-weight: 900;
-  letter-spacing: -.7px;
+  letter-spacing: -.6px;
   line-height: 1.3;
 }
 
-.subtitle {
-  margin: 0 0 25px;
-  font-size: 14px;
-  line-height: 1.7;
+.welcome p {
+  margin: 0;
   color: var(--muted);
+  font-size: 14px;
+  line-height: 1.8;
 }
 
 .tabs {
   display: flex;
-  gap: 8px;
-  padding: 5px;
-  margin-bottom: 25px;
-  border-radius: 13px;
+  gap: 6px;
   background: #f4f5f7;
+  padding: 5px;
+  border-radius: 13px;
+  margin-bottom: 24px;
 }
 
 .tab {
   flex: 1;
-  padding: 12px 8px;
-  border: none;
-  border-radius: 10px;
+  border: 0;
   background: transparent;
-  color: #737780;
-  font: inherit;
+  color: var(--muted);
+  padding: 12px 8px;
+  border-radius: 10px;
   font-size: 14px;
-  font-weight: 700;
-  cursor: pointer;
+  font-weight: 800;
 }
 
 .tab.active {
-  background: white;
   color: var(--orange);
+  background: white;
   box-shadow: 0 2px 10px rgba(0,0,0,.06);
 }
 
 .field {
-  margin-bottom: 18px;
+  margin-bottom: 19px;
 }
 
-label {
+.field label {
   display: block;
-  margin-bottom: 8px;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 800;
+  margin-bottom: 9px;
 }
 
-input {
+.field input {
   width: 100%;
-  padding: 15px 16px;
-  border: 1.5px solid var(--border);
+  border: 1.5px solid var(--line);
   border-radius: 12px;
-  outline: none;
+  padding: 15px 16px;
   background: white;
   color: var(--text);
-  font: inherit;
+  outline: none;
   font-size: 14px;
   transition: .2s;
 }
 
-input:focus {
+.field input:focus {
   border-color: var(--orange);
-  box-shadow: 0 0 0 3px rgba(255,105,0,.09);
+  box-shadow: 0 0 0 4px rgba(255,105,0,.09);
 }
 
-input::placeholder { color: #a0a4ad; }
+.field input::placeholder {
+  color: #a3aab4;
+}
 
-.primary-btn {
-  width: 100%;
-  padding: 15px;
-  border: none;
-  border-radius: 12px;
-  background: var(--orange);
-  color: white;
-  font: inherit;
-  font-size: 15px;
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap input {
+  padding-right: 65px;
+}
+
+.show-password {
+  position: absolute;
+  right: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  color: var(--orange);
+  font-size: 12px;
   font-weight: 800;
-  cursor: pointer;
-  transition: .2s;
+  padding: 7px;
 }
 
-.primary-btn:hover { background: var(--orange-dark); }
-.primary-btn:disabled { opacity: .55; cursor: wait; }
-
-.links {
+.forgot-row {
   display: flex;
   justify-content: flex-end;
   margin: -5px 0 20px;
 }
 
-.link-btn {
-  border: none;
+.text-button {
   background: none;
+  border: 0;
   color: var(--orange);
-  font: inherit;
   font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
+  font-weight: 800;
+}
+
+.primary {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 16px;
+  background: var(--orange);
+  color: white;
+  font-size: 15px;
+  font-weight: 900;
+  transition: .2s;
+}
+
+.primary:hover {
+  background: var(--orange-dark);
+}
+
+.primary:disabled {
+  opacity: .55;
+  cursor: wait;
 }
 
 .message {
   display: none;
-  padding: 13px;
-  margin-bottom: 17px;
-  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 20px;
+  border-radius: 11px;
   font-size: 13px;
-  line-height: 1.6;
+  line-height: 1.7;
   overflow-wrap: anywhere;
 }
 
 .message.success {
   display: block;
-  background: #eaf8ee;
   color: #166534;
+  background: #e9f8ed;
 }
 
 .message.error {
   display: block;
-  background: #fff0ef;
   color: #b42318;
+  background: #fff0ee;
 }
 
-.footer-note {
-  margin-top: 23px;
+.note {
+  margin: 24px 0 0;
   text-align: center;
-  color: var(--muted);
   font-size: 12px;
-  line-height: 1.8;
+  color: var(--muted);
+  line-height: 1.9;
 }
 
-.footer-note strong { color: var(--orange); }
+.note strong {
+  color: var(--orange);
+}
 
-.hidden { display: none !important; }
+.hidden {
+  display: none !important;
+}
 
-@media(max-width:480px) {
+@media (max-width: 480px) {
   header { padding: 13px 20px; }
   main { align-items: flex-start; padding: 25px 12px; }
-  .auth-card { padding: 26px 20px; border-radius: 19px; }
-  h1 { font-size: 24px; }
+  .card { padding: 26px 20px; border-radius: 20px; }
+  .welcome h1 { font-size: 25px; }
 }
 </style>
 </head>
@@ -231,48 +271,50 @@ input::placeholder { color: #a0a4ad; }
 <body>
 
 <header>
-  <a class="logo" href="./index.html">
-    <span class="logo-icon">V</span>
+  <a href="./index.html" class="logo">
+    <span class="logo-mark">V</span>
     VAYO
   </a>
 </header>
 
 <main>
-  <section class="auth-card">
+<section class="card">
 
+  <div class="welcome">
     <h1 id="heading">Хуш омадед!</h1>
-    <p class="subtitle" id="subtitle">
-      Ба ҳисоби VAYO ворид шавед ва харидро оғоз кунед.
+    <p id="subtitle">
+      Ба ҳисоби худ ворид шавед ва харидро оғоз кунед.
     </p>
+  </div>
 
-    <div class="tabs" id="tabs">
-      <button class="tab active" id="loginTab" type="button">
-        Воридшавӣ
-      </button>
-      <button class="tab" id="registerTab" type="button">
-        Сабти ном
-      </button>
+  <div class="tabs" id="tabs">
+    <button class="tab active" id="loginTab" type="button">
+      Воридшавӣ
+    </button>
+    <button class="tab" id="registerTab" type="button">
+      Сабти ном
+    </button>
+  </div>
+
+  <div class="message" id="message" role="status" aria-live="polite"></div>
+
+  <form id="authForm">
+
+    <div class="field">
+      <label for="email">Почтаи электронӣ</label>
+      <input
+        id="email"
+        type="email"
+        placeholder="example@gmail.com"
+        autocomplete="email"
+        required
+      >
     </div>
 
-    <div id="message" class="message" role="status" aria-live="polite"></div>
+    <div class="field" id="passwordField">
+      <label for="password" id="passwordLabel">Парол</label>
 
-    <form id="authForm">
-
-      <div class="field">
-        <label for="email">Почтаи электронӣ</label>
-        <input
-          id="email"
-          type="email"
-          placeholder="example@gmail.com"
-          autocomplete="email"
-          required
-        >
-      </div>
-
-      <div class="field">
-        <label for="password" id="passwordLabel">
-          Парол
-        </label>
+      <div class="password-wrap">
         <input
           id="password"
           type="password"
@@ -281,63 +323,93 @@ input::placeholder { color: #a0a4ad; }
           minlength="6"
           required
         >
-      </div>
-
-      <div class="links" id="forgotBox">
-        <button class="link-btn" id="forgotBtn" type="button">
-          Паролро фаромӯш кардед?
+        <button
+          type="button"
+          class="show-password"
+          id="showPassword"
+        >
+          Намоиш
         </button>
       </div>
+    </div>
 
-      <button class="primary-btn" id="submitBtn" type="submit">
-        Ворид шудан
+    <div class="forgot-row" id="forgotRow">
+      <button type="button" class="text-button" id="forgotBtn">
+        Паролро фаромӯш кардед?
       </button>
+    </div>
 
-    </form>
-
-    <button
-      class="link-btn hidden"
-      id="backBtn"
-      type="button"
-      style="margin-top:20px;width:100%;text-align:center"
-    >
-      Бозгашт ба воридшавӣ
+    <button class="primary" id="submitBtn" type="submit">
+      Ворид шудан
     </button>
 
-    <p class="footer-note">
-      Бо истифода аз VAYO шумо шартҳои хизматрасонии
-      платформаро қабул мекунед.
-      <br>
-      <strong>VAYO — Ҷаҳони харид дар дасти шумо</strong>
-    </p>
+  </form>
 
-  </section>
+  <button
+    type="button"
+    class="text-button hidden"
+    id="backBtn"
+    style="display:block;margin:22px auto 0"
+  >
+    Бозгашт ба воридшавӣ
+  </button>
+
+  <p class="note">
+    VAYO — Хариди осон, нархҳои беҳтарин.
+    <br>
+    <strong>Ҷаҳони харид дар дасти шумо</strong>
+  </p>
+
+</section>
 </main>
 
 <script>
 "use strict";
 
-// Танҳо Publishable / anon key истифода шавад.
+/* ==============================
+   VAYO SUPABASE CONFIGURATION
+============================== */
+
 const SUPABASE_URL =
   "https://rgminzzmlktkliliiupt.supabase.co";
 
-// Калиди publishable-и лоиҳаи худро дар ин ҷо гузоред.
-const SUPABASE_KEY = "PASTE_YOUR_PUBLISHABLE_KEY_HERE";
+const SUPABASE_KEY =
+  "sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
 
-const LOGIN_URL = new URL("./login.html", location.href).href;
-const SELLER_URL = new URL("./seller.html", location.href).href;
-const HOME_URL = new URL("./index.html", location.href).href;
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true
+    }
+  }
+);
+
+const LOGIN_URL =
+  new URL("./login.html", location.href).href;
+
+const SELLER_URL =
+  new URL("./seller.html", location.href).href;
+
+const HOME_URL =
+  new URL("./index.html", location.href).href;
 
 const $ = id => document.getElementById(id);
 
 let mode = "login";
 let busy = false;
-let client = null;
+
+/* ==============================
+   UI FUNCTIONS
+============================== */
 
 function showMessage(text, type = "error") {
-  const el = $("message");
-  el.textContent = text;
-  el.className = "message " + type;
+  const element = $("message");
+  element.textContent = text;
+  element.className = "message " + type;
 }
 
 function clearMessage() {
@@ -348,109 +420,109 @@ function clearMessage() {
 function setBusy(value) {
   busy = value;
   $("submitBtn").disabled = value;
+  $("submitBtn").textContent = value
+    ? "Лутфан интизор шавед..."
+    : buttonLabel();
+}
+
+function buttonLabel() {
+  if (mode === "register") return "Ҳисоб сохтан";
+  if (mode === "reset") return "Фиристодани пайванд";
+  if (mode === "update") return "Нигоҳ доштани парол";
+  return "Ворид шудан";
 }
 
 function setMode(nextMode) {
   mode = nextMode;
   clearMessage();
 
-  const isLogin = mode === "login";
-  const isRegister = mode === "register";
-  const isReset = mode === "reset";
-  const isUpdate = mode === "update";
+  const login = mode === "login";
+  const register = mode === "register";
+  const reset = mode === "reset";
+  const update = mode === "update";
 
-  $("tabs").classList.toggle("hidden", isReset || isUpdate);
-  $("loginTab").classList.toggle("active", isLogin);
-  $("registerTab").classList.toggle("active", isRegister);
+  $("tabs").classList.toggle("hidden", reset || update);
+  $("loginTab").classList.toggle("active", login);
+  $("registerTab").classList.toggle("active", register);
 
-  $("forgotBox").classList.toggle("hidden", !isLogin);
-  $("backBtn").classList.toggle("hidden", !(isReset || isUpdate));
+  $("forgotRow").classList.toggle("hidden", !login);
+  $("backBtn").classList.toggle("hidden", !(reset || update));
 
-  $("password").parentElement.classList.toggle("hidden", isReset);
-  $("password").required = !isReset;
+  $("passwordField").classList.toggle("hidden", reset);
+  $("password").required = !reset;
+  $("password").autocomplete = login
+    ? "current-password"
+    : "new-password";
 
   $("passwordLabel").textContent =
-    isUpdate ? "Пароли нав" : "Парол";
-
-  $("password").autocomplete =
-    isLogin ? "current-password" : "new-password";
+    update ? "Пароли нав" : "Парол";
 
   $("heading").textContent =
-    isLogin ? "Хуш омадед!" :
-    isRegister ? "Ҳисоб созед" :
-    isReset ? "Барқароркунии парол" :
+    login ? "Хуш омадед!" :
+    register ? "Ба VAYO ҳамроҳ шавед" :
+    reset ? "Барқароркунии парол" :
     "Пароли нав гузоред";
 
   $("subtitle").textContent =
-    isLogin ? "Ба ҳисоби VAYO ворид шавед." :
-    isRegister ? "Дар VAYO ройгон сабти ном кунед." :
-    isReset ? "Ба email-и шумо пайванди барқароркунӣ мефиристем." :
-    "Пароли нави ҳисоби худро ворид кунед.";
+    login
+      ? "Ба ҳисоби худ ворид шавед ва харидро оғоз кунед."
+    : register
+      ? "Ҳисоби ройгон созед ва аз имкониятҳои VAYO истифода баред."
+    : reset
+      ? "Почтаи электронии худро ворид кунед."
+      : "Барои ҳисоби худ пароли нав интихоб кунед.";
 
-  $("submitBtn").textContent =
-    isLogin ? "Ворид шудан" :
-    isRegister ? "Сабти ном кардан" :
-    isReset ? "Фиристодани пайванд" :
-    "Нигоҳ доштани парол";
+  $("submitBtn").textContent = buttonLabel();
 }
 
-function getClient() {
-  if (!client) {
-    if (
-      !SUPABASE_KEY ||
-      SUPABASE_KEY.includes("PASTE_YOUR")
-    ) {
-      throw new Error(
-        "Калиди Publishable дар login.html ҳанӯз гузошта нашудааст."
-      );
-    }
+/* ==============================
+   AUTHENTICATION
+============================== */
 
-    client = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
-  }
-  return client;
-}
-
-async function handleAuth(event) {
+async function handleSubmit(event) {
   event.preventDefault();
+
   if (busy) return;
 
   clearMessage();
   setBusy(true);
 
+  const email = $("email").value.trim();
+  const password = $("password").value;
+
   try {
-    const supabase = getClient();
-    const email = $("email").value.trim();
-    const password = $("password").value;
 
     if (mode === "register") {
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: LOGIN_URL
-        }
-      });
+
+      const { data, error } =
+        await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: LOGIN_URL
+          }
+        });
 
       if (error) throw error;
 
       if (data.session) {
-        showMessage("Ҳисоб сохта шуд!", "success");
-        setTimeout(() => {
-          location.assign(SELLER_URL);
-        }, 800);
-      } else {
         showMessage(
-          "Сабти ном қабул шуд. Email-и худро кушоед ва пайванди тасдиқро пахш кунед.",
+          "Ҳисоби шумо бомуваффақият сохта шуд!",
           "success"
         );
+        location.assign(SELLER_URL);
+        return;
       }
 
+      showMessage(
+        "Сабти ном қабул шуд. Email-и худро кушоед ва пайванди тасдиқро пахш кунед.",
+        "success"
+      );
+
     } else if (mode === "login") {
+
       const { error } =
-        await supabase.auth.signInWithPassword({
+        await supabaseClient.auth.signInWithPassword({
           email,
           password
         });
@@ -458,12 +530,15 @@ async function handleAuth(event) {
       if (error) throw error;
 
       location.assign(SELLER_URL);
+      return;
 
     } else if (mode === "reset") {
+
       const { error } =
-        await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: LOGIN_URL
-        });
+        await supabaseClient.auth.resetPasswordForEmail(
+          email,
+          { redirectTo: LOGIN_URL }
+        );
 
       if (error) throw error;
 
@@ -473,64 +548,108 @@ async function handleAuth(event) {
       );
 
     } else if (mode === "update") {
+
       const { error } =
-        await supabase.auth.updateUser({
+        await supabaseClient.auth.updateUser({
           password
         });
 
       if (error) throw error;
 
-      showMessage("Парол нав карда шуд.", "success");
+      await supabaseClient.auth.signOut();
+
       setMode("login");
+
       showMessage(
-        "Парол нав карда шуд. Акнун ворид шавед.",
+        "Пароли шумо нав карда шуд. Акнун ворид шавед.",
         "success"
       );
     }
 
   } catch (error) {
-    showMessage(error.message || "Хатогӣ рух дод.");
+    showMessage(
+      error.message || "Хатогӣ рух дод. Боз кӯшиш кунед."
+    );
   } finally {
     setBusy(false);
   }
 }
 
-$("loginTab").addEventListener("click", () => setMode("login"));
-$("registerTab").addEventListener("click", () => setMode("register"));
-$("forgotBtn").addEventListener("click", () => setMode("reset"));
-$("backBtn").addEventListener("click", () => setMode("login"));
-$("authForm").addEventListener("submit", handleAuth);
+/* ==============================
+   BUTTON EVENTS
+============================== */
+
+$("loginTab").addEventListener("click", () => {
+  setMode("login");
+});
+
+$("registerTab").addEventListener("click", () => {
+  setMode("register");
+});
+
+$("forgotBtn").addEventListener("click", () => {
+  setMode("reset");
+});
+
+$("backBtn").addEventListener("click", () => {
+  setMode("login");
+});
+
+$("showPassword").addEventListener("click", () => {
+  const input = $("password");
+  const showing = input.type === "password";
+
+  input.type = showing ? "text" : "password";
+
+  $("showPassword").textContent =
+    showing ? "Пинҳон" : "Намоиш";
+});
+
+$("authForm").addEventListener("submit", handleSubmit);
+
+/* ==============================
+   SESSION AND EMAIL CALLBACK
+============================== */
 
 async function initialize() {
   try {
-    const supabase = getClient();
-
-    supabase.auth.onAuthStateChange((event) => {
+    supabaseClient.auth.onAuthStateChange((event) => {
       if (event === "PASSWORD_RECOVERY") {
         setMode("update");
       }
     });
 
+    const params = new URLSearchParams(location.search);
     const hash = new URLSearchParams(location.hash.slice(1));
-    if (hash.get("type") === "recovery") {
+
+    if (
+      params.get("type") === "recovery" ||
+      hash.get("type") === "recovery"
+    ) {
       setMode("update");
     }
 
-    const { data } = await supabase.auth.getSession();
+    const { data, error } =
+      await supabaseClient.auth.getSession();
+
+    if (error) throw error;
 
     if (data.session && mode === "login") {
       showMessage(
-        "Шумо аллакай ворид шудаед. Метавонед ба панели VAYO гузаред.",
+        "Шумо аллакай ворид шудаед. Барои идома тугмаи «Ворид шудан»-ро истифода баред.",
         "success"
       );
     }
+
   } catch (error) {
-    showMessage(error.message);
+    showMessage(
+      error.message || "Пайвастшавӣ муваффақ нашуд."
+    );
   }
 }
 
 initialize();
-</script>
 
+</script>
 </body>
 </html>
