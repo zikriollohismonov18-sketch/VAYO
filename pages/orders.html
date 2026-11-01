@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAYO — Фармоишҳои ман</title>
+<style>
+:root{
+ --orange:#ff6500;
+ --bg:#f5f6f8;
+ --text:#222;
+ --muted:#777;
+ --border:#e8e8e8;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:var(--bg);
+ color:var(--text);
+}
+header{
+ background:var(--orange);
+ color:#fff;
+ padding:16px;
+}
+.top{
+ max-width:950px;
+ margin:auto;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+}
+.logo{
+ font-size:30px;
+ font-weight:900;
+}
+header a{
+ color:white;
+ text-decoration:none;
+ font-weight:bold;
+}
+main{
+ max-width:950px;
+ margin:24px auto;
+ padding:0 14px 60px;
+}
+h1{font-size:25px}
+.card{
+ background:white;
+ padding:20px;
+ border-radius:14px;
+ margin-bottom:16px;
+ box-shadow:0 3px 12px #0000000c;
+}
+.order-head{
+ display:flex;
+ justify-content:space-between;
+ gap:12px;
+ flex-wrap:wrap;
+ align-items:center;
+}
+.order-id{
+ font-weight:bold;
+ overflow-wrap:anywhere;
+ font-size:14px;
+}
+.muted{
+ color:var(--muted);
+ font-size:13px;
+ line-height:1.6;
+}
+.badge{
+ display:inline-block;
+ padding:7px 12px;
+ border-radius:30px;
+ font-size:12px;
+ font-weight:bold;
+ background:#eee;
+}
+.pending{background:#fff0d6;color:#975400}
+.confirmed{background:#dff0ff;color:#155f9d}
+.preparing{background:#e8e4ff;color:#573ba6}
+.ready{background:#dff4f5;color:#16747b}
+.delivering{background:#e0f0ff;color:#175d9c}
+.delivered{background:#dff7e7;color:#18753c}
+.cancelled{background:#ffe2e2;color:#a52525}
+.row{
+ display:flex;
+ justify-content:space-between;
+ gap:12px;
+ padding:11px 0;
+ border-bottom:1px solid var(--border);
+}
+.row:last-child{border-bottom:0}
+.total{
+ font-size:20px;
+ font-weight:bold;
+ color:var(--orange);
+}
+button,.btn{
+ display:inline-block;
+ border:0;
+ background:var(--orange);
+ color:white;
+ padding:12px 17px;
+ border-radius:9px;
+ cursor:pointer;
+ font-weight:bold;
+ text-decoration:none;
+}
+button:disabled{opacity:.5}
+.empty{
+ text-align:center;
+ padding:35px 15px;
+}
+.error{
+ background:#ffe9e9;
+ color:#a32121;
+ padding:14px;
+ border-radius:10px;
+ margin-bottom:15px;
+ overflow-wrap:anywhere;
+}
+.hidden{display:none}
+@media(max-width:480px){
+ .logo{font-size:25px}
+ .card{padding:15px}
+ h1{font-size:22px}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="top">
+  <div class="logo">VAYO</div>
+  <a href="../index.html">← Асосӣ</a>
+ </div>
+</header>
+
+<main>
+ <h1>📦 Фармоишҳои ман</h1>
+ <p class="muted">
+  Дар ин ҷо ҳамаи фармоишҳои ҳисоби шумо нишон дода мешаванд.
+ </p>
+
+ <div id="error" class="error hidden" role="alert"></div>
+
+ <div id="loading" class="card">
+  Фармоишҳо боргирӣ мешаванд...
+ </div>
+
+ <div id="orders"></div>
+
+ <div id="empty" class="card empty hidden">
+  <h2>📭 Ҳоло фармоиш надоред</h2>
+  <p class="muted">
+   Маҳсулоти дилхоҳатонро интихоб карда, фармоиш диҳед.
+  </p>
+  <a class="btn" href="../index.html">Ба мағоза</a>
+ </div>
+
+ <div id="loginRequired" class="card empty hidden">
+  <h2>🔐 Ба ҳисоб ворид шавед</h2>
+  <p class="muted">
+   Барои дидани фармоишҳо ба ҳисоби худ ворид шавед.
+  </p>
+  <a class="btn" href="login.html">Воридшавӣ</a>
+ </div>
+
+ <button id="refreshBtn" class="hidden" type="button">
+  🔄 Навсозии фармоишҳо
+ </button>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+
+<script>
+"use strict";
+
+const $ = id => document.getElementById(id);
+
+function money(value){
+ return Number(value||0).toFixed(2)+" сомонӣ";
+}
+
+function dateText(value){
+ if(!value)return "—";
+ const d = new Date(value);
+ if(Number.isNaN(d.getTime()))return "—";
+ return d.toLocaleString("tg-TJ",{
+  year:"numeric",
+  month:"2-digit",
+  day:"2-digit",
+  hour:"2-digit",
+  minute:"2-digit"
+ });
+}
+
+function statusInfo(status){
+ const states = {
+  pending:["Дар интизорӣ","pending"],
+  confirmed:["Тасдиқ шуд","confirmed"],
+  accepted:["Қабул шуд","confirmed"],
+  preparing:["Омода мешавад","preparing"],
+  ready:["Омода аст","ready"],
+  delivering:["Дар роҳ","delivering"],
+  on_the_way:["Дар роҳ","delivering"],
+  delivered:["Расонида шуд","delivered"],
+  completed:["Анҷом ёфт","delivered"],
+  cancelled:["Бекор шуд","cancelled"],
+  canceled:["Бекор шуд","cancelled"]
+ };
+ return states[status]||[status||"Номаълум",""];
+}
+
+function el(tag,className,text){
+ const node=document.createElement(tag);
+ if(className)node.className=className;
+ if(text!==undefined)node.textContent=String(text);
+ return node;
+}
+
+function showError(message){
+ $("error").textContent=message;
+ $("error").classList.remove("hidden");
+}
+
+function clearState(){
+ $("error").classList.add("hidden");
+ $("orders").replaceChildren();
+ $("empty").classList.add("hidden");
+ $("loginRequired").classList.add("hidden");
+ $("refreshBtn").classList.add("hidden");
+}
+
+function renderOrder(order,items){
+ const card=el("article","card");
+
+ const head=el("div","order-head");
+ const headLeft=el("div");
+
+ headLeft.appendChild(
+  el("div","order-id","Фармоиш № "+order.id)
+ );
+ headLeft.appendChild(
+  el("div","muted",dateText(order.created_at))
+ );
+
+ const [statusLabel,statusClass]=statusInfo(order.status);
+ const badge=el("span","badge "+statusClass,statusLabel);
+
+ head.append(headLeft,badge);
+ card.appendChild(head);
+
+ const info=el("div");
+ info.style.marginTop="15px";
+
+ info.appendChild(
+  el("div","muted","Шаҳр: "+(order.city||"—"))
+ );
+ info.appendChild(
+  el("div","muted","Суроға: "+(order.delivery_address||"—"))
+ );
+ info.appendChild(
+  el("div","muted","Пардохт: "+
+   (order.payment_method==="cash"?"Нақдӣ":"Дигар"))
+ );
+
+ card.appendChild(info);
+
+ const title=el("h3","","Маҳсулот");
+ title.style.marginBottom="5px";
+ card.appendChild(title);
+
+ if(!items.length){
+  card.appendChild(
+   el("p","muted","Маълумоти маҳсулот дастрас нест.")
+  );
+ }
+
+ for(const item of items){
+  const line=el("div","row");
+  const productName=item.vayo_products?.name||
+   "Маҳсулот";
+
+  line.appendChild(
+   el("span","",productName+" × "+item.quantity)
+  );
+  line.appendChild(
+   el("strong","",money(item.subtotal))
+  );
+
+  card.appendChild(line);
+ }
+
+ const totalRow=el("div","row");
+ totalRow.style.alignItems="center";
+ totalRow.style.marginTop="10px";
+
+ totalRow.appendChild(el("strong","","Ҳамагӣ"));
+ totalRow.appendChild(
+  el("span","total",money(order.total_amount))
+ );
+
+ card.appendChild(totalRow);
+ return card;
+}
+
+async function loadOrders(){
+ clearState();
+ $("loading").classList.remove("hidden");
+
+ if(!window.vayoDB){
+  $("loading").classList.add("hidden");
+  showError("Пайвастшавӣ ба Supabase танзим нашудааст.");
+  return;
+ }
+
+ try{
+  const {data:authData,error:authError}=
+   await window.vayoDB.auth.getUser();
+
+  if(authError)throw authError;
+
+  const user=authData?.user;
+
+  if(!user){
+   $("loading").classList.add("hidden");
+   $("loginRequired").classList.remove("hidden");
+   return;
+  }
+
+  const {data:orders,error:ordersError}=
+   await window.vayoDB
+    .from("vayo_orders")
+    .select(`
+     id,
+     customer_id,
+     customer_name,
+     city,
+     delivery_address,
+     payment_method,
+     total_amount,
+     status,
+     created_at
+    `)
+    .eq("customer_id",user.id)
+    .order("created_at",{ascending:false})
+    .limit(100);
+
+  if(ordersError)throw ordersError;
+
+  if(!orders||orders.length===0){
+   $("loading").classList.add("hidden");
+   $("empty").classList.remove("hidden");
+   $("refreshBtn").classList.remove("hidden");
+   return;
+  }
+
+  const ids=orders.map(o=>o.id);
+
+  const {data:items,error:itemsError}=
+   await window.vayoDB
+    .from("vayo_order_items")
+    .select(`
+     id,
+     order_id,
+     product_id,
+     quantity,
+     unit_price,
+     subtotal,
+     vayo_products (
+      name
+     )
+    `)
+    .in("order_id",ids);
+
+  if(itemsError)throw itemsError;
+
+  const grouped=new Map();
+
+  for(const item of items||[]){
+   const key=String(item.order_id);
+   if(!grouped.has(key))grouped.set(key,[]);
+   grouped.get(key).push(item);
+  }
+
+  const root=$("orders");
+  const fragment=document.createDocumentFragment();
+
+  for(const order of orders){
+   fragment.appendChild(
+    renderOrder(
+     order,
+     grouped.get(String(order.id))||[]
+    )
+   );
+  }
+
+  root.appendChild(fragment);
+  $("refreshBtn").classList.remove("hidden");
+
+ }catch(err){
+  showError(
+   "Хатои боргирии фармоишҳо: "+
+   (err.message||String(err))
+  );
+  $("refreshBtn").classList.remove("hidden");
+ }finally{
+  $("loading").classList.add("hidden");
+ }
+}
+
+$("refreshBtn").addEventListener("click",loadOrders);
+
+loadOrders();
+</script>
+</body>
+</html>
