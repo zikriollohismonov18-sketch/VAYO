@@ -1,0 +1,317 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAYO — Панели фурӯшанда</title>
+<link rel="stylesheet"
+ href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f6f8;color:#222}
+header{background:#ff6500;color:white;padding:18px}
+.top{max-width:950px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-size:28px;font-weight:900}
+header a{color:white;text-decoration:none;font-size:13px}
+main{max-width:950px;margin:20px auto;padding:0 12px 50px}
+.card{background:white;border-radius:14px;padding:20px;margin-bottom:15px;box-shadow:0 3px 14px #0001}
+h2{margin-top:0;font-size:21px}
+input,textarea,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:7px 0;font:inherit}
+textarea{min-height:85px;resize:vertical}
+label{font-size:13px;font-weight:bold}
+button{border:0;background:#ff6500;color:white;padding:12px 17px;border-radius:8px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6}
+.secondary{background:#333}
+.muted{color:#777;font-size:13px;line-height:1.5}
+#map{height:300px;border-radius:10px;margin:10px 0;z-index:1}
+.hidden{display:none}
+.message{padding:12px;border-radius:8px;margin:10px 0;background:#f1f1f1;overflow-wrap:anywhere}
+.success{background:#e5f8ec;color:#146b35}
+.error{background:#ffe9e9;color:#b42318}
+.shop{border:1px solid #eee;border-radius:10px;padding:15px;margin:10px 0}
+.status{display:inline-block;padding:5px 9px;border-radius:20px;background:#fff1dd;font-size:12px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+a.action{display:inline-block;background:#ff6500;color:white;text-decoration:none;padding:11px 14px;border-radius:8px;font-size:13px}
+</style>
+</head>
+<body>
+<header>
+<div class="top">
+ <div class="logo">VAYO</div>
+ <a href="../index.html">← Саҳифаи асосӣ</a>
+</div>
+</header>
+
+<main>
+<section class="card">
+<h2>🏪 Панели фурӯшанда</h2>
+<p class="muted" id="welcome">Ҳисоб санҷида мешавад...</p>
+<div id="authActions" class="hidden">
+<a class="action" href="login.html">Ворид шудан / Сабти ном</a>
+</div>
+<div id="signedActions" class="hidden">
+<button class="secondary" id="logoutBtn">Баромадан аз ҳисоб</button>
+</div>
+<div id="notice" class="message hidden"></div>
+</section>
+
+<section id="sellerContent" class="hidden">
+<div class="card">
+<h2>📋 Мағозаҳои ман</h2>
+<div id="shopsList"></div>
+</div>
+
+<div class="card">
+<h2>➕ Сохтани мағозаи нав</h2>
+<form id="shopForm">
+<label for="shopName">Номи мағоза</label>
+<input id="shopName" required maxlength="120"
+ placeholder="Масалан: VAYO Fashion">
+
+<label for="description">Маълумот дар бораи мағоза</label>
+<textarea id="description" placeholder="Маҳсулоти мағоза..."></textarea>
+
+<label for="phone">Рақами телефон</label>
+<input id="phone" type="tel" placeholder="+992 ...">
+
+<label for="city">Шаҳр</label>
+<select id="city" required>
+<option value="">Шаҳрро интихоб кунед</option>
+<option>Душанбе</option>
+<option>Хуҷанд</option>
+<option>Бохтар</option>
+<option>Кӯлоб</option>
+<option>Ҳисор</option>
+<option>Панҷакент</option>
+<option>Хоруғ</option>
+<option>Турсунзода</option>
+<option>Истаравшан</option>
+<option>Дигар</option>
+</select>
+
+<label for="district">Ноҳия</label>
+<input id="district" placeholder="Номи ноҳия">
+
+<label for="address">Суроғаи пурра</label>
+<input id="address" required
+ placeholder="Кӯча, рақами бино, нишона">
+
+<label>📍 Ҷойгиршавӣ дар харита</label>
+<p class="muted">
+Дар харита ҷои мағозаро пахш кунед.
+Координатаҳо худкор сабт мешаванд.
+</p>
+<div id="map"></div>
+
+<input id="latitude" type="number" step="any"
+ placeholder="Latitude" readonly>
+<input id="longitude" type="number" step="any"
+ placeholder="Longitude" readonly>
+
+<button id="saveBtn" type="submit">Сабти мағоза</button>
+</form>
+</div>
+</section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+let currentUser=null;
+let map=null;
+let marker=null;
+
+function notice(text,success=false){
+ const el=$("notice");
+ el.classList.remove("hidden");
+ el.className="message "+(success?"success":"error");
+ el.textContent=text;
+}
+
+function setPoint(lat,lng){
+ $("latitude").value=lat.toFixed(6);
+ $("longitude").value=lng.toFixed(6);
+
+ if(marker){
+  marker.setLatLng([lat,lng]);
+ }else{
+  marker=L.marker([lat,lng]).addTo(map);
+ }
+}
+
+function initMap(){
+ if(map)return;
+ map=L.map("map").setView([38.5598,68.7870],12);
+
+ L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {
+   maxZoom:19,
+   attribution:"© OpenStreetMap contributors"
+  }
+ ).addTo(map);
+
+ map.on("click",e=>{
+  setPoint(e.latlng.lat,e.latlng.lng);
+ });
+
+ setTimeout(()=>map.invalidateSize(),150);
+}
+
+function statusText(status){
+ return ({
+  pending:"⏳ Интизори тасдиқ",
+  approved:"✅ Тасдиқ шудааст",
+  rejected:"❌ Рад шудааст",
+  suspended:"⛔ Боздошта шудааст"
+ })[status]||status;
+}
+
+async function loadShops(){
+ const root=$("shopsList");
+ root.textContent="Боргирӣ...";
+
+ const {data,error}=await vayoDB
+  .from("shops")
+  .select("id,name,city,address,status,created_at")
+  .eq("owner_id",currentUser.id)
+  .order("created_at",{ascending:false});
+
+ if(error){
+  root.textContent="Хато: "+error.message;
+  return;
+ }
+
+ root.replaceChildren();
+
+ if(!data.length){
+  root.textContent="Шумо ҳоло мағоза надоред.";
+  return;
+ }
+
+ data.forEach(shop=>{
+  const card=document.createElement("div");
+  card.className="shop";
+
+  const title=document.createElement("h3");
+  title.textContent=shop.name;
+
+  const address=document.createElement("p");
+  address.className="muted";
+  address.textContent="📍 "+shop.city+", "+shop.address;
+
+  const status=document.createElement("span");
+  status.className="status";
+  status.textContent=statusText(shop.status);
+
+  const actions=document.createElement("div");
+  actions.className="actions";
+
+  const products=document.createElement("a");
+  products.className="action";
+  products.href="add-product.html?shop="+encodeURIComponent(shop.id);
+  products.textContent="➕ Иловаи маҳсулот";
+
+  actions.appendChild(products);
+  card.append(title,address,status,actions);
+  root.appendChild(card);
+ });
+}
+
+async function init(){
+ if(!window.vayoDB){
+  $("welcome").textContent="Пайвасти Supabase танзим нашудааст.";
+  $("authActions").classList.remove("hidden");
+  return;
+ }
+
+ const {data,error}=await vayoDB.auth.getUser();
+
+ if(error||!data.user){
+  $("welcome").textContent="Барои сохтани мағоза ворид шавед.";
+  $("authActions").classList.remove("hidden");
+  return;
+ }
+
+ currentUser=data.user;
+ $("welcome").textContent="Хуш омадед: "+(currentUser.email||"Фурӯшанда");
+ $("signedActions").classList.remove("hidden");
+ $("sellerContent").classList.remove("hidden");
+
+ initMap();
+ await loadShops();
+}
+
+$("shopForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+
+ if(!currentUser){
+  notice("Аввал ворид шавед.");
+  return;
+ }
+
+ const name=$("shopName").value.trim();
+ const city=$("city").value;
+ const address=$("address").value.trim();
+
+ if(!name||!city||!address){
+  notice("Ном, шаҳр ва суроғаро пур кунед.");
+  return;
+ }
+
+ const lat=$("latitude").value;
+ const lng=$("longitude").value;
+
+ if(!lat||!lng){
+  notice("Ҷойгиршавии мағозаро дар харита интихоб кунед.");
+  return;
+ }
+
+ $("saveBtn").disabled=true;
+
+ try{
+  const {error}=await vayoDB.from("shops").insert({
+   owner_id:currentUser.id,
+   name,
+   description:$("description").value.trim(),
+   phone:$("phone").value.trim(),
+   city,
+   district:$("district").value.trim(),
+   address,
+   latitude:Number(lat),
+   longitude:Number(lng),
+   status:"pending"
+  });
+
+  if(error)throw error;
+
+  notice("Мағоза сабт шуд ва интизори тасдиқ аст.",true);
+  $("shopForm").reset();
+
+  if(marker){
+   map.removeLayer(marker);
+   marker=null;
+  }
+
+  await loadShops();
+ }catch(err){
+  notice("Хато: "+(err.message||String(err)));
+ }finally{
+  $("saveBtn").disabled=false;
+ }
+});
+
+$("logoutBtn").onclick=async()=>{
+ await vayoDB.auth.signOut();
+ location.href="login.html";
+};
+
+init();
+</script>
+</body>
+</html>
