@@ -52,6 +52,8 @@ th{background:#f8fafc;color:#64748b}
 .charts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
 .chartbox{position:relative;height:320px}
 .chartbox canvas{width:100%!important;height:100%!important}
+.online{border-left:5px solid #16a34a}
+.online strong{color:#15803d}
 @media(max-width:850px){
  .charts{grid-template-columns:1fr}
  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -79,21 +81,30 @@ th{background:#f8fafc;color:#64748b}
  <div id="message" role="status"></div>
 
  <div id="dashboard">
+
   <div class="stats">
+   <div class="stat online">
+    <small>Корбарони фаъол (5 дақиқа)</small>
+    <strong id="onlineCount">—</strong>
+    <small>Танҳо корбарони воридшуда</small>
+   </div>
    <div class="stat"><small>Ҳамаи корбарон</small><strong id="usersCount">—</strong></div>
    <div class="stat"><small>Ҳамаи маҳсулот</small><strong id="productsCount">—</strong></div>
    <div class="stat"><small>Ҳамаи фармоишҳо</small><strong id="ordersCount">—</strong></div>
+  </div>
+
+  <div class="stats">
    <div class="stat">
     <small>Маблағи фармоишҳо</small>
     <strong id="salesAmount">—</strong>
     <small>сомонӣ · фармоишҳои бекорнашуда</small>
    </div>
-  </div>
-
-  <div class="stats">
    <div class="stat"><small>Ҳамаи мағозаҳо</small><strong id="total">0</strong></div>
    <div class="stat"><small>Интизори тасдиқ</small><strong id="pendingCount">0</strong></div>
    <div class="stat"><small>Тасдиқшуда</small><strong id="approvedCount">0</strong></div>
+  </div>
+
+  <div class="stats">
    <div class="stat"><small>Радшуда</small><strong id="rejectedCount">0</strong></div>
   </div>
 
@@ -137,13 +148,15 @@ th{background:#f8fafc;color:#64748b}
   </div>
 
   <section class="panel">
-   <h2>Таҳлил ва графикҳо</h2>
+   <h2>Маълумот дар бораи онлайн</h2>
    <p class="muted">
-    Графикҳо аз фармоишҳои воқеии Supabase ҳисоб мешаванд.
-    Маблағи фармоишҳо маънои пардохти тасдиқшударо надорад.
-    Омори корбарони онлайн дар қадами навбатӣ илова мешавад.
+    Ҳисоб корбарони воридшударо дар бар мегирад, ки дар
+    5 дақиқаи охир фаъолияти онҳо сабт шудааст.
+    Барои ҳисоб кардани харидорон ва фурӯшандагон низ
+    бояд сабти фаъолият ба саҳифаҳои онҳо илова шавад.
    </p>
   </section>
+
  </div>
 </main>
 
@@ -160,6 +173,8 @@ let shops=[];
 let busy=false;
 let dailyChart=null;
 let monthlyChart=null;
+let presenceTimer=null;
+let onlineTimer=null;
 
 function notify(text,success=false){
  const el=$("message");
@@ -205,6 +220,37 @@ async function loadAdminStats(){
  $("productsCount").textContent=numberText(data?.products);
  $("ordersCount").textContent=numberText(data?.orders);
  $("salesAmount").textContent=moneyText(data?.sales);
+}
+
+async function loadOnlineCount(){
+ const {data,error}=await db.rpc("vayo_admin_online_count");
+ if(error){
+  $("onlineCount").textContent="Хато";
+  console.error("Online count:",error);
+  return;
+ }
+ $("onlineCount").textContent=numberText(data);
+}
+
+async function touchPresence(){
+ if(!db||document.visibilityState!=="visible")return;
+ const {error}=await db.rpc("vayo_touch_presence");
+ if(error)console.error("Presence:",error);
+}
+
+function startPresence(){
+ touchPresence();
+ loadOnlineCount();
+
+ presenceTimer=setInterval(()=>{
+  touchPresence();
+ },60000);
+
+ onlineTimer=setInterval(()=>{
+  if(document.visibilityState==="visible"){
+   loadOnlineCount();
+  }
+ },30000);
 }
 
 function addCell(tr,text){
@@ -315,18 +361,14 @@ async function loadShops(){
 function drawChart(canvasId,oldChart,rows,labelKey,type){
  if(oldChart)oldChart.destroy();
 
- const labels=rows.map(x=>x[labelKey]);
- const sales=rows.map(x=>Number(x.sales||0));
- const orders=rows.map(x=>Number(x.orders||0));
-
  return new Chart($(canvasId),{
   type,
   data:{
-   labels,
+   labels:rows.map(x=>x[labelKey]),
    datasets:[
     {
      label:"Маблағи фармоишҳо (сомонӣ)",
-     data:sales,
+     data:rows.map(x=>Number(x.sales||0)),
      borderColor:"#ff6900",
      backgroundColor:type==="bar"?"#ff6900":"rgba(255,105,0,.12)",
      borderWidth:2,
@@ -336,7 +378,7 @@ function drawChart(canvasId,oldChart,rows,labelKey,type){
     },
     {
      label:"Шумораи фармоишҳо",
-     data:orders,
+     data:rows.map(x=>Number(x.orders||0)),
      borderColor:"#2563eb",
      backgroundColor:"rgba(37,99,235,.15)",
      borderWidth:2,
@@ -388,7 +430,8 @@ async function refreshAll(){
  const results=await Promise.allSettled([
   loadShops(),
   loadAdminStats(),
-  loadSalesCharts()
+  loadSalesCharts(),
+  loadOnlineCount()
  ]);
 
  const errors=results.filter(x=>x.status==="rejected")
@@ -427,7 +470,10 @@ async function init(){
   $("dashboard").style.display="block";
   $("logoutBtn").style.display="inline-block";
 
+  await touchPresence();
   await refreshAll();
+  startPresence();
+
  }catch(err){
   notify(err.message||"Хато ҳангоми кушодани панел.");
  }
@@ -440,6 +486,7 @@ $("refreshBtn").addEventListener("click",async()=>{
  if(busy)return;
  busy=true;
  try{
+  await touchPresence();
   await refreshAll();
   notify("Маълумот навсозӣ шуд.",true);
  }catch(err){
@@ -449,8 +496,20 @@ $("refreshBtn").addEventListener("click",async()=>{
  }
 });
 
+document.addEventListener("visibilitychange",()=>{
+ if(document.visibilityState==="visible"&&db&&
+    $("dashboard").style.display==="block"){
+  touchPresence();
+  loadOnlineCount();
+ }
+});
+
 $("logoutBtn").addEventListener("click",async()=>{
  if(!db)return;
+
+ if(presenceTimer)clearInterval(presenceTimer);
+ if(onlineTimer)clearInterval(onlineTimer);
+
  const {error}=await db.auth.signOut();
  if(error){
   notify(error.message);
