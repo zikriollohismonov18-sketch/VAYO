@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ff6500">
+<title>VAYO — Комиссияҳо</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root{
+  --orange:#ff6500;
+  --bg:#f6f7fb;
+  --ink:#1c2434;
+  --muted:#697386;
+  --line:#e6e9f0;
+  --green:#13834b;
+  --red:#d83c3c;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+}
+header{
+  background:var(--orange);
+  color:white;
+  padding:20px 16px;
+}
+.wrap{max-width:1100px;margin:auto}
+nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  padding:14px 0;
+}
+nav a{color:white;text-decoration:none;font-weight:bold}
+main{padding:20px 14px 60px}
+.panel,.commission{
+  background:white;
+  border:1px solid var(--line);
+  border-radius:15px;
+  padding:18px;
+  margin-bottom:15px;
+}
+h1{margin:0 0 8px}
+h2{margin-top:0}
+small,.muted{color:var(--muted)}
+input,select,button{
+  font:inherit;
+  padding:11px;
+  border-radius:9px;
+}
+input,select{
+  border:1px solid #cdd3dd;
+  width:100%;
+  margin:6px 0;
+}
+button{
+  border:0;
+  background:var(--orange);
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  margin:5px 5px 5px 0;
+}
+button:disabled{opacity:.5;cursor:not-allowed}
+.secondary{background:#344054}
+.danger{background:var(--red)}
+.hidden{display:none!important}
+.status{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  background:#edf0f5;
+  font-size:13px;
+  font-weight:bold;
+}
+.paid{background:#ddf8e9;color:var(--green)}
+.overdue{background:#ffe4e4;color:var(--red)}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:12px;
+}
+.stat{
+  background:#fff6ef;
+  padding:15px;
+  border-radius:12px;
+}
+.stat strong{display:block;font-size:23px;margin-top:6px}
+.notice{
+  padding:12px;
+  border-radius:9px;
+  background:#eef3ff;
+  margin:12px 0;
+  white-space:pre-wrap;
+}
+.error{background:#ffe9e9;color:#a32222}
+.success{background:#e4f8eb;color:#116b3c}
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:8px 0;
+}
+.formbox{
+  padding:12px;
+  background:#f7f8fb;
+  border-radius:10px;
+  margin-top:12px;
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="wrap">
+    <h1>VAYO — Комиссияҳо</h1>
+    <div>Комиссияи платформа: 2%</div>
+    <nav>
+      <a href="./index.html">Бозор</a>
+      <a href="./payments.html">Пардохтҳо</a>
+      <a href="./super-admin.html">Суперадмин</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section class="panel" id="loginPanel">
+  <h2>Воридшавӣ</h2>
+  <input id="email" type="email"
+    placeholder="Email" autocomplete="email">
+  <input id="password" type="password"
+    placeholder="Парол" autocomplete="current-password">
+  <button id="loginBtn">Ворид шудан</button>
+</section>
+
+<section class="panel hidden" id="accountPanel">
+  <div class="row">
+    <div>
+      <b id="userEmail"></b>
+      <p class="muted">Ҳисоби VAYO</p>
+    </div>
+    <div>
+      <button id="refreshBtn">Навсозӣ</button>
+      <button id="logoutBtn" class="secondary">
+        Баромадан
+      </button>
+    </div>
+  </div>
+</section>
+
+<div id="message" class="notice hidden"></div>
+
+<section id="sellerPanel" class="hidden">
+  <div class="panel">
+    <h2>Комиссияҳои ман</h2>
+    <div class="grid">
+      <div class="stat">
+        Қарзи пардохтнашуда
+        <strong id="pendingTotal">0 сомонӣ</strong>
+      </div>
+      <div class="stat">
+        Қарзи муҳлатгузашта
+        <strong id="overdueTotal">0 сомонӣ</strong>
+      </div>
+      <div class="stat">
+        Комиссияи пардохтшуда
+        <strong id="paidTotal">0 сомонӣ</strong>
+      </div>
+    </div>
+    <p id="blockedMessage"></p>
+  </div>
+  <div id="sellerList"></div>
+</section>
+
+<section id="adminPanel" class="hidden">
+  <div class="panel">
+    <h2>Панели суперадмин</h2>
+    <p>Тасдиқи комиссия танҳо баъди
+    санҷидани ворид шудани маблағ.</p>
+    <button id="adminRefreshBtn">Навсозии комиссияҳо</button>
+  </div>
+  <div id="adminList"></div>
+</section>
+
+</main>
+
+<script>
+const SUPABASE_URL =
+  "https://rgminzzmlktkliliiupt.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const $ = id => document.getElementById(id);
+let currentUser = null;
+let isAdmin = false;
+
+function money(value){
+  return Number(value || 0).toLocaleString("tg-TJ",{
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  }) + " сомонӣ";
+}
+
+function dateText(value){
+  if(!value) return "—";
+  return new Date(value).toLocaleString("tg-TJ");
+}
+
+function escapeHtml(value){
+  return String(value ?? "").replace(
+    /[&<>"']/g,
+    ch => ({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#39;"
+    })[ch]
+  );
+}
+
+function notify(text,type=""){
+  const el=$("message");
+  el.textContent=text;
+  el.className="notice "+type;
+  el.classList.remove("hidden");
+}
+
+function clearMessage(){
+  $("message").classList.add("hidden");
+}
+
+function statusText(c){
+  if(c.status==="paid") return "Пардохтшуда";
+  if(c.payment_status==="reported")
+    return "Интизори тасдиқи админ";
+  if(c.payment_status==="rejected")
+    return "Пардохт рад шудааст";
+  if(new Date(c.due_at)<=new Date())
+    return "Муҳлат гузаштааст";
+  return "Интизори пардохт";
+}
+
+function isOverdue(c){
+  return c.status==="pending" &&
+    new Date(c.due_at)<=new Date();
+}
+
+function commissionCard(c,admin=false){
+  const paid=c.status==="paid";
+  const overdue=isOverdue(c);
+
+  const statusClass=paid?"paid":overdue?"overdue":"";
+  const canReport=!admin &&
+    c.status==="pending" &&
+    ["unreported","rejected"].includes(c.payment_status);
+
+  const canConfirm=admin &&
+    c.status==="pending" &&
+    c.payment_status==="reported";
+
+  const card=document.createElement("article");
+  card.className="commission";
+
+  card.innerHTML=`
+    <div class="row">
+      <b>${escapeHtml(c.service_name)}</b>
+      <span class="status ${statusClass}">
+        ${statusText(c)}
+      </span>
+    </div>
+    <div class="row">
+      <span>Маблағи фармоиш</span>
+      <b>${money(c.order_amount)}</b>
+    </div>
+    <div class="row">
+      <span>Комиссия</span>
+      <b>${money(c.commission_amount)}</b>
+    </div>
+    <div class="row">
+      <span>Муҳлат</span>
+      <b>${dateText(c.due_at)}</b>
+    </div>
+    <div class="row">
+      <span>Фармоиш</span>
+      <small>${escapeHtml(c.order_id)}</small>
+    </div>
+    ${admin?`
+      <div class="row">
+        <span>Фурӯшанда</span>
+        <small>${escapeHtml(c.provider_id)}</small>
+      </div>`:""}
+    ${c.transaction_reference?`
+      <div class="row">
+        <span>Рақами амалиёт</span>
+        <b>${escapeHtml(c.transaction_reference)}</b>
+      </div>`:""}
+    ${c.payment_method?`
+      <div class="row">
+        <span>Усули пардохт</span>
+        <b>${escapeHtml(c.payment_method)}</b>
+      </div>`:""}
+  `;
+
+  if(canReport){
+    const form=document.createElement("div");
+    form.className="formbox";
+
+    const method=document.createElement("select");
+    [
+      ["","Усули пардохтро интихоб кунед"],
+      ["alif","Alif"],
+      ["dushanbe_city","Душанбе Сити"],
+      ["bank_transfer","Интиқоли бонкӣ"],
+      ["cash","Нақд"]
+    ].forEach(([value,label])=>{
+      const option=document.createElement("option");
+      option.value=value;
+      option.textContent=label;
+      method.append(option);
+    });
+
+    const reference=document.createElement("input");
+    reference.placeholder="Рақами амалиёт ё квитансия";
+    reference.maxLength=200;
+
+    const btn=document.createElement("button");
+    btn.textContent="Пардохт кардам";
+
+    btn.onclick=async()=>{
+      if(!method.value || reference.value.trim().length<3){
+        notify("Усули пардохт ва рақами амалиётро ворид кунед","error");
+        return;
+      }
+
+      if(!confirm("Оё шумо воқеан комиссияро пардохт кардед?"))
+        return;
+
+      btn.disabled=true;
+      try{
+        const {error}=await db.rpc(
+          "vayo_report_commission_payment",{
+            p_commission_id:c.id,
+            p_payment_method:method.value,
+            p_transaction_reference:reference.value.trim()
+          }
+        );
+        if(error) throw error;
+        notify("Хабар дода шуд. Тасдиқи админро интизор шавед.","success");
+        await loadData();
+      }catch(err){
+        notify(err.message,"error");
+      }finally{
+        btn.disabled=false;
+      }
+    };
+
+    form.append(method,reference,btn);
+    card.append(form);
+  }
+
+  if(canConfirm){
+    const btn=document.createElement("button");
+    btn.textContent="Тасдиқи гирифтани комиссия";
+
+    btn.onclick=async()=>{
+      if(!confirm(
+        "Оё маблағ воқеан ба ҳисоби VAYO ворид шудааст?"+
+        " Танҳо баъди санҷиш тасдиқ кунед."
+      )) return;
+
+      btn.disabled=true;
+      try{
+        const {error}=await db.rpc(
+          "vayo_admin_confirm_commission",{
+            p_commission_id:c.id
+          }
+        );
+        if(error) throw error;
+        notify("Комиссия тасдиқ шуд.","success");
+        await loadData();
+      }catch(err){
+        notify(err.message,"error");
+      }finally{
+        btn.disabled=false;
+      }
+    };
+
+    card.append(btn);
+  }
+
+  return card;
+}
+
+async function loadSeller(){
+  const {data,error}=await db.rpc("vayo_my_commissions");
+  if(error) throw error;
+
+  const rows=data||[];
+  const pending=rows
+    .filter(c=>c.status==="pending")
+    .reduce((sum,c)=>sum+Number(c.commission_amount||0),0);
+
+  const overdue=rows
+    .filter(isOverdue)
+    .reduce((sum,c)=>sum+Number(c.commission_amount||0),0);
+
+  const paid=rows
+    .filter(c=>c.status==="paid")
+    .reduce((sum,c)=>sum+Number(c.commission_amount||0),0);
+
+  $("pendingTotal").textContent=money(pending);
+  $("overdueTotal").textContent=money(overdue);
+  $("paidTotal").textContent=money(paid);
+
+  $("blockedMessage").textContent=overdue>0
+    ? "Диққат: комиссияи муҳлатгузашта доред. Фурӯши нав маҳдуд шудааст."
+    : "Ҳоло аз сабаби комиссияи муҳлатгузашта маҳдудият нест.";
+
+  const list=$("sellerList");
+  list.replaceChildren();
+
+  if(!rows.length){
+    list.textContent="Ҳоло комиссия вуҷуд надорад.";
+    return;
+  }
+
+  rows.forEach(c=>list.append(commissionCard(c)));
+}
+
+async function loadAdmin(){
+  const {data,error}=await db.rpc("vayo_admin_commissions");
+  if(error) throw error;
+
+  const list=$("adminList");
+  list.replaceChildren();
+
+  if(!data?.length){
+    list.textContent="Ҳоло комиссия вуҷуд надорад.";
+    return;
+  }
+
+  data.forEach(c=>list.append(commissionCard(c,true)));
+}
+
+async function loadData(){
+  if(!currentUser) return;
+
+  try{
+    await loadSeller();
+    if(isAdmin) await loadAdmin();
+  }catch(err){
+    notify(err.message,"error");
+  }
+}
+
+async function showSession(){
+  const {data:{user},error}=await db.auth.getUser();
+
+  if(error || !user){
+    currentUser=null;
+    $("loginPanel").classList.remove("hidden");
+    $("accountPanel").classList.add("hidden");
+    $("sellerPanel").classList.add("hidden");
+    $("adminPanel").classList.add("hidden");
+    return;
+  }
+
+  currentUser=user;
+  $("userEmail").textContent=user.email||user.id;
+
+  $("loginPanel").classList.add("hidden");
+  $("accountPanel").classList.remove("hidden");
+  $("sellerPanel").classList.remove("hidden");
+
+  const adminResult=await db.rpc("vayo_is_admin");
+  isAdmin=adminResult.error?false:adminResult.data===true;
+
+  $("adminPanel").classList.toggle("hidden",!isAdmin);
+  await loadData();
+}
+
+$("loginBtn").onclick=async()=>{
+  const email=$("email").value.trim();
+  const password=$("password").value;
+
+  if(!email || !password){
+    notify("Email ва паролро ворид кунед","error");
+    return;
+  }
+
+  $("loginBtn").disabled=true;
+
+  try{
+    const {error}=await db.auth.signInWithPassword({
+      email,password
+    });
+    if(error) throw error;
+    clearMessage();
+    await showSession();
+  }catch(err){
+    notify(err.message,"error");
+  }finally{
+    $("loginBtn").disabled=false;
+  }
+};
+
+$("logoutBtn").onclick=async()=>{
+  await db.auth.signOut();
+  location.reload();
+};
+
+$("refreshBtn").onclick=loadData;
+$("adminRefreshBtn").onclick=loadData;
+
+showSession();
+</script>
+</body>
+</html>
