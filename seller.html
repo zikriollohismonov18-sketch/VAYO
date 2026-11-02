@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ff6900">
 <title>VAYO — Панели фурӯшанда</title>
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -18,7 +19,10 @@
  --line:#e8eaf0
 }
 *{box-sizing:border-box}
-body{margin:0;background:#f7f8fb;color:var(--dark);font-family:Arial,sans-serif}
+body{
+ margin:0;background:#f7f8fb;color:var(--dark);
+ font-family:Arial,sans-serif
+}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
 header{
@@ -26,9 +30,15 @@ header{
  padding:15px 5%;display:flex;align-items:center;
  justify-content:space-between;gap:12px
 }
-.logo{color:var(--orange);font-size:28px;font-weight:900;text-decoration:none}
+.logo{
+ color:var(--orange);font-size:28px;
+ font-weight:900;text-decoration:none
+}
 nav{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-nav a{color:var(--dark);text-decoration:none;font-size:13px;font-weight:700}
+nav a{
+ color:var(--dark);text-decoration:none;
+ font-size:13px;font-weight:700
+}
 main{max-width:1050px;margin:25px auto;padding:0 16px 50px}
 .card{
  background:#fff;border:1px solid var(--line);
@@ -37,22 +47,39 @@ main{max-width:1050px;margin:25px auto;padding:0 16px 50px}
 h1{font-size:25px;margin:0 0 10px}
 h2{font-size:19px;margin:0 0 18px}
 p{color:var(--muted);line-height:1.6}
-label{display:block;font-size:13px;font-weight:bold;margin:14px 0 7px}
+label{
+ display:block;font-size:13px;
+ font-weight:bold;margin:14px 0 7px
+}
 input,textarea,select{
  width:100%;padding:13px;border:1.5px solid var(--line);
  border-radius:10px;background:#fff
 }
 textarea{min-height:90px;resize:vertical}
 .btn{
- background:var(--orange);color:#fff;border:0;border-radius:10px;
- padding:13px 18px;font-weight:bold;margin-top:15px
+ background:var(--orange);color:#fff;border:0;
+ border-radius:10px;padding:13px 18px;
+ font-weight:bold;margin-top:15px
 }
 .btn.secondary{background:#f1f2f5;color:var(--dark)}
 .btn:disabled{opacity:.6}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
-.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.product{border:1px solid var(--line);border-radius:13px;overflow:hidden}
-.product img{width:100%;aspect-ratio:1;object-fit:cover}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:15px
+}
+.products{
+ display:grid;
+ grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:14px
+}
+.product{
+ border:1px solid var(--line);
+ border-radius:13px;overflow:hidden
+}
+.product img{
+ width:100%;aspect-ratio:1;object-fit:cover
+}
 .product-body{padding:13px}
 .product strong{display:block;margin-bottom:7px}
 .price{font-weight:bold;color:var(--orange)}
@@ -60,25 +87,50 @@ textarea{min-height:90px;resize:vertical}
  display:none;padding:13px;border-radius:10px;
  margin-bottom:15px;overflow-wrap:anywhere
 }
-.msg.success{display:block;background:#e9f8ee;color:#166534}
-.msg.error{display:block;background:#fff0ee;color:#b42318}
+.msg.success{
+ display:block;background:#e9f8ee;color:#166534
+}
+.msg.error{
+ display:block;background:#fff0ee;color:#b42318
+}
 .delivery-box{
  background:#fff8f3;border:1px solid #ffddc7;
  padding:17px;border-radius:13px;margin-top:18px
 }
 .delivery-note{font-size:13px;color:#79543e}
 .status{
- display:inline-block;background:#f1f2f5;border-radius:8px;
- padding:7px 10px;font-size:12px;font-weight:bold
+ display:inline-block;background:#f1f2f5;
+ border-radius:8px;padding:7px 10px;
+ font-size:12px;font-weight:bold
 }
 .shop-card{
- border:1px solid var(--line);border-radius:12px;
- padding:15px;margin-bottom:12px
+ border:1px solid var(--line);
+ border-radius:12px;padding:15px;margin-bottom:12px
 }
 #map{height:300px;border-radius:12px;margin:12px 0;z-index:1}
 .hidden{display:none!important}
+.activity-grid{
+ display:grid;grid-template-columns:repeat(2,1fr);
+ gap:14px;margin:15px 0
+}
+.activity-stat{
+ background:#fff8f3;border:1px solid #ffddc7;
+ border-radius:13px;padding:18px
+}
+.activity-number{
+ font-size:29px;font-weight:900;
+ color:var(--orange);overflow-wrap:anywhere
+}
+.activity-label{font-size:13px;color:var(--muted);margin-top:7px}
+.activity-status{
+ padding:12px;border-radius:10px;
+ background:#f1f2f5;overflow-wrap:anywhere
+}
+.activity-status.ok{background:#e9f8ee;color:#166534}
+.activity-status.error{background:#fff0ee;color:#b42318}
+.activity-status.paused{background:#fff4e5;color:#925300}
 @media(max-width:700px){
- .grid,.products{grid-template-columns:1fr}
+ .grid,.products,.activity-grid{grid-template-columns:1fr}
  .card{padding:18px}
  nav{gap:8px}
 }
@@ -91,15 +143,47 @@ textarea{min-height:90px;resize:vertical}
 <nav>
 <a href="../index.html">Мағоза</a>
 <a href="./login.html">Ҳисоб</a>
-<button id="logout" class="btn secondary" style="margin:0">Баромадан</button>
+<button id="logout" class="btn secondary" style="margin:0">
+Баромадан
+</button>
 </nav>
 </header>
 
 <main>
+
 <section class="card">
 <h1>🏪 Панели фурӯшандаи VAYO</h1>
 <p id="userInfo">Ҳисоб санҷида мешавад...</p>
 <div id="message" class="msg"></div>
+</section>
+
+<section class="card hidden" id="activitySection">
+<h2>⏱ Фаъолияти ман дар VAYO Market</h2>
+
+<div class="activity-grid">
+<div class="activity-stat">
+<div id="activeTime" class="activity-number">00:00:00</div>
+<div class="activity-label">Вақти фаъолияти имрӯз</div>
+</div>
+<div class="activity-stat">
+<div id="entryCount" class="activity-number">0</div>
+<div class="activity-label">Шумораи воридшавӣ имрӯз</div>
+</div>
+</div>
+
+<div id="activityStatus" class="activity-status">
+Санҷиши пайвастшавӣ...
+</div>
+
+<p>
+Танҳо фаъолияти фурӯшанда ҳисоб мешавад.
+Вақти ғайрифаъол ва саҳифаи пӯшида ҳисоб намешавад.
+Ин маълумот барои ҳисоботи идоракунии VAYO истифода мешавад.
+</p>
+
+<button id="testHeartbeat" type="button" class="btn secondary">
+🔄 Санҷиши пайвастшавии фаъолият
+</button>
 </section>
 
 <section class="card hidden" id="shopsSection">
@@ -112,7 +196,8 @@ textarea{min-height:90px;resize:vertical}
 
 <form id="shopForm">
 <label for="shopName">Номи мағоза</label>
-<input id="shopName" maxlength="120" required placeholder="Масалан: VAYO Fashion">
+<input id="shopName" maxlength="120" required
+placeholder="Масалан: VAYO Fashion">
 
 <div class="grid">
 <div>
@@ -138,7 +223,8 @@ textarea{min-height:90px;resize:vertical}
 </div>
 
 <label for="shopAddress">Суроғаи мағоза</label>
-<input id="shopAddress" required placeholder="Кӯча, бино, рақами мағоза">
+<input id="shopAddress" required
+placeholder="Кӯча, бино, рақами мағоза">
 
 <label for="shopPhone">Рақами телефон</label>
 <input id="shopPhone" type="tel" placeholder="+992...">
@@ -170,14 +256,18 @@ textarea{min-height:90px;resize:vertical}
 
 <div id="deliveryFeeBox" class="hidden">
 <label for="deliveryFee">Нархи расонидан (сомонӣ)</label>
-<input id="deliveryFee" type="number" min="0" step="0.01" value="0">
+<input id="deliveryFee" type="number"
+min="0" step="0.01" value="0">
 </div>
 
 <p id="deliveryNote" class="delivery-note"></p>
 </div>
 
-<button class="btn" type="submit" id="saveShopBtn">Сабти мағоза</button>
-<button class="btn secondary hidden" type="button" id="cancelEditBtn">
+<button class="btn" type="submit" id="saveShopBtn">
+Сабти мағоза
+</button>
+<button class="btn secondary hidden"
+type="button" id="cancelEditBtn">
 Бекор кардани таҳрир
 </button>
 </form>
@@ -187,16 +277,19 @@ textarea{min-height:90px;resize:vertical}
 <section class="card hidden" id="productSection">
 <h2>➕ Илова кардани маҳсулот</h2>
 <form id="productForm">
+
 <label for="productShop">Мағоза</label>
 <select id="productShop" required></select>
 
 <label for="productName">Номи маҳсулот</label>
-<input id="productName" required placeholder="Масалан: Красовка">
+<input id="productName" required
+placeholder="Масалан: Красовка">
 
 <div class="grid">
 <div>
 <label for="productPrice">Нарх (сомонӣ)</label>
-<input id="productPrice" type="number" min="0.01" step="0.01" required>
+<input id="productPrice" type="number"
+min="0.01" step="0.01" required>
 </div>
 <div>
 <label for="productCategory">Категория</label>
@@ -205,10 +298,14 @@ textarea{min-height:90px;resize:vertical}
 </div>
 
 <label for="productStock">Миқдор дар анбор</label>
-<input id="productStock" type="number" min="0" step="1" value="1" required>
+<input id="productStock" type="number"
+min="0" step="1" value="1" required>
 
-<label for="productImage">Суроғаи акси маҳсулот (HTTPS)</label>
-<input id="productImage" type="url" placeholder="https://example.com/photo.jpg">
+<label for="productImage">
+Суроғаи акси маҳсулот (HTTPS)
+</label>
+<input id="productImage" type="url"
+placeholder="https://example.com/photo.jpg">
 
 <label for="productDescription">Тавсиф</label>
 <textarea id="productDescription"></textarea>
@@ -223,6 +320,7 @@ textarea{min-height:90px;resize:vertical}
 <h2>Маҳсулоти ман</h2>
 <div class="products" id="productList"></div>
 </section>
+
 </main>
 
 <script>
@@ -238,6 +336,8 @@ let shops=[];
 let editingShop=null;
 let map=null;
 let marker=null;
+
+/* УМУМӢ */
 
 function notify(message,type="error"){
  const el=$("message");
@@ -263,6 +363,8 @@ function statusText(status){
  })[status]||status;
 }
 
+/* РАСОНИДАН */
+
 function deliveryUI(){
  const type=$("deliveryType").value;
  $("deliveryFeeBox").classList.toggle("hidden",type!=="own");
@@ -280,6 +382,8 @@ function deliveryUI(){
 }
 
 $("deliveryType").addEventListener("change",deliveryUI);
+
+/* ХАРИТА */
 
 function setPoint(lat,lng){
  $("latitude").value=lat.toFixed(6);
@@ -372,6 +476,8 @@ function fillShop(s){
 
 $("cancelEditBtn").onclick=resetShopForm;
 
+/* МАҒОЗАҲО */
+
 function createShopCard(s){
  const card=document.createElement("div");
  card.className="shop-card";
@@ -392,7 +498,8 @@ function createShopCard(s){
   external:"📦 Карго ё почта",
   pickup:"🏪 Гирифтан аз мағоза"
  };
- delivery.textContent=deliveryLabels[s.delivery_type]||"Расонидан муайян нашудааст";
+ delivery.textContent=
+  deliveryLabels[s.delivery_type]||"Расонидан муайян нашудааст";
 
  const edit=document.createElement("button");
  edit.type="button";
@@ -464,6 +571,203 @@ async function loadShops(){
  }
 }
 
+/* ҲИСОБКУНИИ ФАЪОЛИЯТ */
+
+const ACTIVITY_IDLE_MS=60000;
+const ACTIVITY_HEARTBEAT_MS=30000;
+
+let lastActivity=Date.now();
+let heartbeatBusy=false;
+let heartbeatTimer=null;
+let reportTimer=null;
+let activityReady=false;
+
+function markActivity(){
+ lastActivity=Date.now();
+}
+
+["pointerdown","keydown","touchstart","scroll"].forEach(name=>{
+ document.addEventListener(name,markActivity,{passive:true});
+});
+
+function setActivityStatus(message,type=""){
+ const el=$("activityStatus");
+ el.textContent=message;
+ el.className="activity-status "+type;
+}
+
+function canTrackActivity(){
+ return Boolean(
+  db&&user&&shops.length>0&&
+  document.visibilityState==="visible"&&
+  Date.now()-lastActivity<ACTIVITY_IDLE_MS
+ );
+}
+
+async function sendHeartbeat(force=false){
+ if(!db||!user||!shops.length)return;
+ if(heartbeatBusy)return;
+
+ if(!force&&!canTrackActivity()){
+  setActivityStatus("⏸ Панел ғайрифаъол аст","paused");
+  return;
+ }
+
+ heartbeatBusy=true;
+
+ try{
+  const {error}=await db.rpc("vayo_seller_heartbeat");
+
+  if(error)throw error;
+
+  activityReady=true;
+  setActivityStatus("🟢 Фаъолият ба Supabase сабт шуд","ok");
+  await updateActivityReport();
+
+ }catch(err){
+  activityReady=false;
+  setActivityStatus(
+   "❌ Хатои Supabase: "+(err.message||String(err)),
+   "error"
+  );
+  console.error("VAYO heartbeat:",err);
+ }finally{
+  heartbeatBusy=false;
+ }
+}
+
+function dushanbeDayBounds(){
+ const parts=new Intl.DateTimeFormat("en-CA",{
+  timeZone:"Asia/Dushanbe",
+  year:"numeric",
+  month:"2-digit",
+  day:"2-digit"
+ }).formatToParts(new Date());
+
+ const part=k=>parts.find(x=>x.type===k)?.value;
+ const date=part("year")+"-"+part("month")+"-"+part("day");
+ const start=new Date(date+"T00:00:00+05:00");
+
+ return {
+  start:start.toISOString(),
+  end:new Date(start.getTime()+86400000).toISOString()
+ };
+}
+
+function formatDuration(seconds){
+ const hh=String(Math.floor(seconds/3600)).padStart(2,"0");
+ const mm=String(Math.floor(seconds%3600/60)).padStart(2,"0");
+ const ss=String(seconds%60).padStart(2,"0");
+ return hh+":"+mm+":"+ss;
+}
+
+async function updateActivityReport(){
+ if(!db||!user||!shops.length)return;
+
+ const bounds=dushanbeDayBounds();
+
+ const {data,error}=await db
+  .from("vayo_activity_sessions")
+  .select("started_at,last_seen_at")
+  .eq("user_id",user.id)
+  .eq("service_name","market")
+  .gte("started_at",bounds.start)
+  .lt("started_at",bounds.end)
+  .order("started_at");
+
+ if(error){
+  setActivityStatus(
+   "❌ Хатои ҳисобот: "+error.message,
+   "error"
+  );
+  return;
+ }
+
+ const sessions=data||[];
+ $("entryCount").textContent=String(sessions.length);
+
+ const ranges=sessions.map(s=>[
+  new Date(s.started_at).getTime(),
+  new Date(s.last_seen_at).getTime()
+ ]).filter(([a,b])=>
+  Number.isFinite(a)&&Number.isFinite(b)&&b>a
+ ).sort((a,b)=>a[0]-b[0]);
+
+ let total=0;
+ let start=null;
+ let end=null;
+
+ for(const [a,b] of ranges){
+  if(start===null){
+   start=a;
+   end=b;
+  }else if(a<=end){
+   end=Math.max(end,b);
+  }else{
+   total+=end-start;
+   start=a;
+   end=b;
+  }
+ }
+
+ if(start!==null)total+=end-start;
+
+ $("activeTime").textContent=
+  formatDuration(Math.floor(total/1000));
+}
+
+function startActivityTracking(){
+ if(!shops.length){
+  hide("activitySection");
+  return;
+ }
+
+ show("activitySection");
+
+ if(heartbeatTimer)return;
+
+ heartbeatTimer=setInterval(
+  ()=>sendHeartbeat(),
+  ACTIVITY_HEARTBEAT_MS
+ );
+
+ reportTimer=setInterval(
+  ()=>updateActivityReport(),
+  15000
+ );
+
+ sendHeartbeat();
+ updateActivityReport();
+}
+
+function stopActivityTracking(){
+ if(heartbeatTimer)clearInterval(heartbeatTimer);
+ if(reportTimer)clearInterval(reportTimer);
+ heartbeatTimer=null;
+ reportTimer=null;
+}
+
+document.addEventListener("visibilitychange",()=>{
+ if(document.visibilityState==="visible"){
+  markActivity();
+  if(user&&shops.length){
+   sendHeartbeat();
+   updateActivityReport();
+  }
+ }else if(user&&shops.length){
+  setActivityStatus("⏸ Панел ғайрифаъол аст","paused");
+ }
+});
+
+$("testHeartbeat").addEventListener("click",()=>{
+ markActivity();
+ sendHeartbeat(true);
+});
+
+window.addEventListener("pagehide",stopActivityTracking);
+
+/* ВОРИДШАВӢ */
+
 async function init(){
  if(!window.supabase||
     typeof window.supabase.createClient!=="function"){
@@ -478,22 +782,28 @@ async function init(){
  const {data,error}=await db.auth.getUser();
 
  if(error||!data?.user){
-  $("userInfo").textContent="Барои сохтани мағоза ворид шавед.";
+  $("userInfo").textContent=
+   "Барои сохтани мағоза ворид шавед.";
   notify("Аввал ба ҳисоби VAYO ворид шавед.");
   setTimeout(()=>location.replace("./login.html"),1500);
   return;
  }
 
  user=data.user;
- $("userInfo").textContent="Ҳисоб: "+(user.email||"Фурӯшанда");
+ $("userInfo").textContent=
+  "Ҳисоб: "+(user.email||"Фурӯшанда");
 
  show("shopsSection");
  show("shopSection");
+
  initMap();
  deliveryUI();
 
  await loadShops();
+ startActivityTracking();
 }
+
+/* НИГОҲ ДОШТАНИ МАҒОЗА */
 
 $("shopForm").addEventListener("submit",async e=>{
  e.preventDefault();
@@ -562,13 +872,19 @@ $("shopForm").addEventListener("submit",async e=>{
 
   resetShopForm();
   await loadShops();
+  startActivityTracking();
 
  }catch(err){
-  notify("Мағоза нигоҳ дошта нашуд: "+(err.message||String(err)));
+  notify(
+   "Мағоза нигоҳ дошта нашуд: "+
+   (err.message||String(err))
+  );
  }finally{
   btn.disabled=false;
  }
 });
+
+/* МАҲСУЛОТ */
 
 $("productShop").addEventListener("change",loadProducts);
 
@@ -627,7 +943,10 @@ $("productForm").addEventListener("submit",async e=>{
   await loadProducts();
 
  }catch(err){
-  notify("Маҳсулот илова нашуд: "+(err.message||String(err)));
+  notify(
+   "Маҳсулот илова нашуд: "+
+   (err.message||String(err))
+  );
  }finally{
   btn.disabled=false;
  }
@@ -682,13 +1001,15 @@ async function loadProducts(){
 
   const price=document.createElement("div");
   price.className="price";
-  price.textContent=(Number(p.price)||0).toFixed(2)+" сомонӣ";
+  price.textContent=
+   (Number(p.price)||0).toFixed(2)+" сомонӣ";
 
   const stock=document.createElement("div");
   stock.textContent="Анбор: "+(p.stock??0);
 
   const status=document.createElement("div");
-  status.textContent=p.active===false?"Ғайрифаъол":"Фаъол";
+  status.textContent=
+   p.active===false?"Ғайрифаъол":"Фаъол";
 
   body.append(title,price,stock,status);
   card.appendChild(body);
@@ -696,7 +1017,10 @@ async function loadProducts(){
  });
 }
 
+/* БАРОМАДАН */
+
 $("logout").onclick=async()=>{
+ stopActivityTracking();
  if(db)await db.auth.signOut();
  location.replace("./login.html");
 };
@@ -704,7 +1028,8 @@ $("logout").onclick=async()=>{
 deliveryUI();
 
 init().catch(err=>{
- $("userInfo").textContent="Хато ҳангоми боргирии панел.";
+ $("userInfo").textContent=
+  "Хато ҳангоми боргирии панел.";
  notify(err.message||String(err));
 });
 </script>
