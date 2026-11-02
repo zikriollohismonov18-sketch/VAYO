@@ -3,292 +3,136 @@
 <html lang="tg">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VAYO — Панели фурӯшанда</title>
-
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#f5f6f8;
-  color:#222;
-}
-header{
-  background:#ff6500;
-  color:white;
-  padding:18px;
-}
-.top{
-  max-width:950px;
-  margin:auto;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f6f8;color:#222}
+header{background:#ff6500;color:white;padding:18px}
+.top{max-width:950px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .logo{font-size:28px;font-weight:900}
 header a{color:white;text-decoration:none;font-size:13px}
 main{max-width:950px;margin:20px auto;padding:0 12px 50px}
-.card{
-  background:white;
-  border-radius:14px;
-  padding:20px;
-  margin-bottom:15px;
-  box-shadow:0 3px 14px #0001;
-}
+.card{background:white;border-radius:14px;padding:20px;margin-bottom:15px;box-shadow:0 3px 14px #0001}
 h2{margin-top:0;font-size:21px}
-input,textarea,select{
-  width:100%;
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:8px;
-  margin:7px 0;
-  font:inherit;
-}
+input,textarea,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:7px 0;font:inherit}
 textarea{min-height:85px;resize:vertical}
-label{
-  display:block;
-  font-size:13px;
-  font-weight:bold;
-  margin-top:10px;
-}
-button{
-  border:0;
-  background:#ff6500;
-  color:white;
-  padding:12px 17px;
-  border-radius:8px;
-  font-weight:bold;
-  cursor:pointer;
-}
+label{display:block;font-size:13px;font-weight:bold;margin-top:10px}
+button{border:0;background:#ff6500;color:white;padding:12px 17px;border-radius:8px;font-weight:bold;cursor:pointer}
 button:disabled{opacity:.6;cursor:not-allowed}
 .secondary{background:#333}
 .muted{color:#777;font-size:13px;line-height:1.5}
-#map{
-  height:300px;
-  border-radius:10px;
-  margin:10px 0;
-  z-index:1;
-}
+#map{height:300px;border-radius:10px;margin:10px 0;z-index:1}
 .hidden{display:none!important}
-.message{
-  padding:12px;
-  border-radius:8px;
-  margin:10px 0;
-  background:#f1f1f1;
-  overflow-wrap:anywhere;
-}
+.message{padding:12px;border-radius:8px;margin:10px 0;background:#f1f1f1;overflow-wrap:anywhere}
 .success{background:#e5f8ec;color:#146b35}
 .error{background:#ffe9e9;color:#b42318}
-.shop{
-  border:1px solid #eee;
-  border-radius:10px;
-  padding:15px;
-  margin:10px 0;
-}
-.status{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:20px;
-  background:#fff1dd;
-  font-size:12px;
-}
-.actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:12px;
-}
-a.action{
-  display:inline-block;
-  background:#ff6500;
-  color:white;
-  text-decoration:none;
-  padding:11px 14px;
-  border-radius:8px;
-  font-size:13px;
-}
-.payment-panel{
-  border:1px solid #e7e7e7;
-  border-radius:12px;
-  padding:15px;
-  margin-top:14px;
-  background:#fffaf6;
-}
+.shop{border:1px solid #eee;border-radius:10px;padding:15px;margin:10px 0}
+.status{display:inline-block;padding:5px 9px;border-radius:20px;background:#fff1dd;font-size:12px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+a.action{display:inline-block;background:#ff6500;color:white;text-decoration:none;padding:11px 14px;border-radius:8px;font-size:13px}
+.payment-panel{border:1px solid #e7e7e7;border-radius:12px;padding:15px;margin-top:14px;background:#fffaf6}
 .payment-panel h4{margin:0 0 10px}
-.payment-entry{
-  padding:12px;
-  margin:10px 0;
-  border:1px solid #eee;
-  border-radius:10px;
-  background:white;
-}
-.payment-entry p{
-  margin:7px 0;
-  overflow-wrap:anywhere;
-}
+.payment-entry{padding:12px;margin:10px 0;border:1px solid #eee;border-radius:10px;background:white}
+.payment-entry p{margin:7px 0;overflow-wrap:anywhere}
 .payment-confirm{background:#148447}
 .payment-reject{background:#b42318}
 .payment-panel button{margin-top:8px}
+.activity-number{font-size:29px;font-weight:900;color:#ff6500}
 </style>
 </head>
-
 <body>
 
 <header>
-  <div class="top">
-    <div class="logo">VAYO</div>
-    <a href="../index.html">← Саҳифаи асосӣ</a>
-  </div>
+<div class="top">
+<div class="logo">VAYO</div>
+<a href="../index.html">← Саҳифаи асосӣ</a>
+</div>
 </header>
 
 <main>
-
 <section class="card">
-  <h2>🏪 Панели фурӯшанда</h2>
-
-  <p class="muted" id="welcome">
-    Ҳисоб санҷида мешавад...
-  </p>
-
-  <div id="authActions" class="hidden">
-    <a class="action" href="login.html">
-      Ворид шудан / Сабти ном
-    </a>
-  </div>
-
-  <div id="signedActions" class="hidden">
-    <button class="secondary" id="logoutBtn">
-      Баромадан аз ҳисоб
-    </button>
-  </div>
-
-  <div id="notice" class="message hidden"></div>
+<h2>🏪 Панели фурӯшанда</h2>
+<p class="muted" id="welcome">Ҳисоб санҷида мешавад...</p>
+<div id="authActions" class="hidden">
+<a class="action" href="login.html">Ворид шудан / Сабти ном</a>
+</div>
+<div id="signedActions" class="hidden">
+<button class="secondary" id="logoutBtn">Баромадан аз ҳисоб</button>
+</div>
+<div id="notice" class="message hidden"></div>
 </section>
 
 <section id="sellerContent" class="hidden">
 
-  <div class="card">
-    <h2>📋 Мағозаҳои ман</h2>
-    <div id="shopsList"></div>
-  </div>
+<div class="card">
+<h2>⏱ Фаъолияти ман дар VAYO Market</h2>
+<div class="activity-number" id="activeTime">00:00:00</div>
+<p class="muted" id="activityStatus">Санҷиши фаъолият...</p>
+<p class="muted">Танҳо вақти фаъоли истифодаи панел ҳисоб мешавад. Вақти бекорӣ ва саҳифаи пӯшида ҳисоб намешавад.</p>
+</div>
 
-  <div class="card">
-    <h2>➕ Сохтани мағозаи нав</h2>
+<div class="card">
+<h2>📋 Мағозаҳои ман</h2>
+<div id="shopsList"></div>
+</div>
 
-    <form id="shopForm">
+<div class="card">
+<h2>➕ Сохтани мағозаи нав</h2>
+<form id="shopForm">
+<label for="shopName">Номи мағоза</label>
+<input id="shopName" required maxlength="120" placeholder="Масалан: VAYO Fashion">
 
-      <label for="shopName">Номи мағоза</label>
-      <input
-        id="shopName"
-        required
-        maxlength="120"
-        placeholder="Масалан: VAYO Fashion"
-      >
+<label for="description">Маълумот дар бораи мағоза</label>
+<textarea id="description" placeholder="Маҳсулоти мағоза..."></textarea>
+<p class="muted">Маълумоти тавсифӣ ҳоло нигоҳ дошта намешавад, зеро дар ҷадвали мағозаҳо сутуни алоҳида надорад.</p>
 
-      <label for="description">
-        Маълумот дар бораи мағоза
-      </label>
-      <textarea
-        id="description"
-        placeholder="Маҳсулоти мағоза..."
-      ></textarea>
+<label for="phone">Рақами телефон</label>
+<input id="phone" type="tel" placeholder="+992 ...">
 
-      <p class="muted">
-        Маълумоти тавсифӣ ҳоло нигоҳ дошта намешавад,
-        зеро дар ҷадвали мағозаҳо сутуни алоҳида надорад.
-      </p>
+<label for="city">Шаҳр</label>
+<select id="city" required>
+<option value="">Шаҳрро интихоб кунед</option>
+<option>Душанбе</option>
+<option>Хуҷанд</option>
+<option>Бохтар</option>
+<option>Кӯлоб</option>
+<option>Ҳисор</option>
+<option>Панҷакент</option>
+<option>Хоруғ</option>
+<option>Турсунзода</option>
+<option>Истаравшан</option>
+<option>Дигар</option>
+</select>
 
-      <label for="phone">Рақами телефон</label>
-      <input
-        id="phone"
-        type="tel"
-        placeholder="+992 ..."
-      >
+<label for="district">Ноҳия</label>
+<input id="district" placeholder="Номи ноҳия">
 
-      <label for="city">Шаҳр</label>
-      <select id="city" required>
-        <option value="">Шаҳрро интихоб кунед</option>
-        <option>Душанбе</option>
-        <option>Хуҷанд</option>
-        <option>Бохтар</option>
-        <option>Кӯлоб</option>
-        <option>Ҳисор</option>
-        <option>Панҷакент</option>
-        <option>Хоруғ</option>
-        <option>Турсунзода</option>
-        <option>Истаравшан</option>
-        <option>Дигар</option>
-      </select>
+<label for="address">Суроғаи пурра</label>
+<input id="address" required placeholder="Кӯча, рақами бино, нишона">
 
-      <label for="district">Ноҳия</label>
-      <input id="district" placeholder="Номи ноҳия">
+<label for="deliveryType">🚚 Тарзи расонидан</label>
+<select id="deliveryType" required>
+<option value="external">Карго ё ширкати расонидан</option>
+<option value="own">Расонидан аз тарафи мағоза</option>
+<option value="pickup">Харидор худаш мегирад</option>
+</select>
 
-      <label for="address">Суроғаи пурра</label>
-      <input
-        id="address"
-        required
-        placeholder="Кӯча, рақами бино, нишона"
-      >
+<div id="deliveryFeeBox" class="hidden">
+<label for="deliveryFee">Нархи расонидани мағоза (сомонӣ)</label>
+<input id="deliveryFee" type="number" min="0" step="0.01" value="0">
+</div>
+<p id="deliveryHint" class="muted">Расонидан тавассути карго анҷом мешавад.</p>
 
-      <label for="deliveryType">🚚 Тарзи расонидан</label>
-      <select id="deliveryType" required>
-        <option value="external">Карго ё ширкати расонидан</option>
-        <option value="own">Расонидан аз тарафи мағоза</option>
-        <option value="pickup">Харидор худаш мегирад</option>
-      </select>
-
-      <div id="deliveryFeeBox" class="hidden">
-        <label for="deliveryFee">
-          Нархи расонидани мағоза (сомонӣ)
-        </label>
-        <input
-          id="deliveryFee"
-          type="number"
-          min="0"
-          step="0.01"
-          value="0"
-        >
-      </div>
-
-      <p id="deliveryHint" class="muted">
-        Расонидан тавассути карго анҷом мешавад.
-      </p>
-
-      <label>📍 Ҷойгиршавӣ дар харита</label>
-      <p class="muted">
-        Дар харита ҷои мағозаро пахш кунед.
-        Координатаҳо худкор сабт мешаванд.
-      </p>
-
-      <div id="map"></div>
-
-      <input
-        id="latitude"
-        type="number"
-        step="any"
-        placeholder="Latitude"
-        readonly
-      >
-
-      <input
-        id="longitude"
-        type="number"
-        step="any"
-        placeholder="Longitude"
-        readonly
-      >
-
-      <button id="saveBtn" type="submit">
-        Сабти мағоза
-      </button>
-
-    </form>
-  </div>
-
+<label>📍 Ҷойгиршавӣ дар харита</label>
+<p class="muted">Дар харита ҷои мағозаро пахш кунед. Координатаҳо худкор сабт мешаванд.</p>
+<div id="map"></div>
+<input id="latitude" type="number" step="any" placeholder="Latitude" readonly>
+<input id="longitude" type="number" step="any" placeholder="Longitude" readonly>
+<button id="saveBtn" type="submit">Сабти мағоза</button>
+</form>
+</div>
 </section>
 </main>
 
@@ -298,755 +142,602 @@ a.action{
 <script>
 "use strict";
 
-const SB_URL =
-  "https://rgminzzmlktkliliiupt.supabase.co";
+const SB_URL="https://rgminzzmlktkliliiupt.supabase.co";
+const SB_KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+const $=id=>document.getElementById(id);
 
-const SB_KEY =
-  "sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+let db=null,currentUser=null,map=null,marker=null;
+let sellerHasShop=false;
 
-const $ = id => document.getElementById(id);
-
-let db = null;
-let currentUser = null;
-let map = null;
-let marker = null;
-
-const PAYMENT_TYPES = {
-  alif:"Alif",
-  dushanbe_city:"Dushanbe City",
-  visa:"Visa"
+const PAYMENT_TYPES={
+ alif:"Alif",
+ dushanbe_city:"Dushanbe City",
+ visa:"Visa"
 };
 
-function notice(text, success=false){
-  const el = $("notice");
-  el.className =
-    "message " + (success ? "success" : "error");
-  el.textContent = text;
+function notice(text,success=false){
+ const el=$("notice");
+ el.className="message "+(success?"success":"error");
+ el.textContent=text;
 }
 
-function makeElement(tag, text="", className=""){
-  const el = document.createElement(tag);
-  if(text) el.textContent = text;
-  if(className) el.className = className;
-  return el;
+function makeElement(tag,text="",className=""){
+ const el=document.createElement(tag);
+ if(text)el.textContent=text;
+ if(className)el.className=className;
+ return el;
 }
 
-function makeButton(text, handler, className=""){
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.textContent = text;
-  if(className) btn.className = className;
-  btn.addEventListener("click", handler);
-  return btn;
+function makeButton(text,handler,className=""){
+ const btn=document.createElement("button");
+ btn.type="button";
+ btn.textContent=text;
+ if(className)btn.className=className;
+ btn.addEventListener("click",handler);
+ return btn;
 }
 
-function paymentMessage(element, text, success=false){
-  element.className =
-    "message " + (success ? "success" : "error");
-  element.textContent = text;
+function paymentMessage(el,text,success=false){
+ el.className="message "+(success?"success":"error");
+ el.textContent=text;
 }
 
-/* ===== ХАРИТА ===== */
+/* ХАРИТА */
 
 function setPoint(lat,lng){
-  $("latitude").value = lat.toFixed(6);
-  $("longitude").value = lng.toFixed(6);
-
-  if(marker){
-    marker.setLatLng([lat,lng]);
-  }else{
-    marker = L.marker([lat,lng]).addTo(map);
-  }
+ $("latitude").value=lat.toFixed(6);
+ $("longitude").value=lng.toFixed(6);
+ if(marker)marker.setLatLng([lat,lng]);
+ else marker=L.marker([lat,lng]).addTo(map);
 }
 
 function initMap(){
-  if(map) return;
-
-  if(!window.L){
-    notice("Харита боргирӣ нашуд.");
-    return;
-  }
-
-  map = L.map("map").setView([38.5598,68.7870],12);
-
-  L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    {
-      maxZoom:19,
-      attribution:"© OpenStreetMap contributors"
-    }
-  ).addTo(map);
-
-  map.on("click", e=>{
-    setPoint(e.latlng.lat,e.latlng.lng);
-  });
-
-  setTimeout(()=>map.invalidateSize(),200);
+ if(map)return;
+ if(!window.L){
+  notice("Харита боргирӣ нашуд.");
+  return;
+ }
+ map=L.map("map").setView([38.5598,68.7870],12);
+ L.tileLayer(
+  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {maxZoom:19,attribution:"© OpenStreetMap contributors"}
+ ).addTo(map);
+ map.on("click",e=>setPoint(e.latlng.lat,e.latlng.lng));
+ setTimeout(()=>map.invalidateSize(),200);
 }
 
 function statusText(status){
-  return ({
-    pending:"⏳ Интизори тасдиқ",
-    approved:"✅ Тасдиқ шудааст",
-    rejected:"❌ Рад шудааст",
-    suspended:"⛔ Боздошта шудааст"
-  })[status] || status;
+ return ({
+  pending:"⏳ Интизори тасдиқ",
+  approved:"✅ Тасдиқ шудааст",
+  rejected:"❌ Рад шудааст",
+  suspended:"⛔ Боздошта шудааст"
+ })[status]||status;
 }
-
-/* ===== РАСОНИДАН ===== */
 
 function updateDeliveryUI(){
-  const type = $("deliveryType").value;
-
-  $("deliveryFeeBox").classList.toggle(
-    "hidden",type !== "own"
-  );
-
-  if(type === "own"){
-    $("deliveryHint").textContent =
-      "Мағоза маҳсулотро худаш мерасонад. Нархи расонидан барои ҳар мағоза як бор ҳисоб мешавад.";
-  }else if(type === "pickup"){
-    $("deliveryHint").textContent =
-      "Харидор маҳсулотро аз мағоза худаш мегирад.";
-  }else{
-    $("deliveryHint").textContent =
-      "Расонидан тавассути карго анҷом мешавад. Хароҷоти карго алоҳида ҳисоб мешавад.";
-  }
+ const type=$("deliveryType").value;
+ $("deliveryFeeBox").classList.toggle("hidden",type!=="own");
+ $("deliveryHint").textContent=
+ type==="own"?
+ "Мағоза маҳсулотро худаш мерасонад. Нархи расонидан барои ҳар мағоза як бор ҳисоб мешавад.":
+ type==="pickup"?
+ "Харидор маҳсулотро аз мағоза худаш мегирад.":
+ "Расонидан тавассути карго анҷом мешавад. Хароҷоти карго алоҳида ҳисоб мешавад.";
 }
 
-/* ===== ҲИСОБҲОИ ПАРДОХТ ===== */
+/* ҲИСОБҲОИ ПАРДОХТ */
 
-async function loadPaymentAccounts(shopId, container){
-  container.replaceChildren(
-    makeElement("p","Рақамҳо боргирӣ мешаванд...","muted")
+async function loadPaymentAccounts(shopId,container){
+ container.replaceChildren(makeElement("p","Рақамҳо боргирӣ мешаванд...","muted"));
+ const {data,error}=await db.from("vayo_shop_payment_accounts")
+ .select("id,payment_type,account_number,account_name,active")
+ .eq("shop_id",shopId).order("payment_type");
+
+ if(error){
+  paymentMessage(container,"Хато: "+error.message);
+  return;
+ }
+ container.replaceChildren();
+
+ if(!data?.length){
+  container.appendChild(makeElement("p","Ҳоло рақами пардохт сабт нашудааст.","muted"));
+  return;
+ }
+
+ for(const account of data){
+  const item=makeElement("div","","payment-entry");
+  item.appendChild(makeElement("strong",PAYMENT_TYPES[account.payment_type]||account.payment_type));
+  item.appendChild(makeElement("p","Рақам: "+account.account_number));
+  item.appendChild(makeElement("p","Қабулкунанда: "+(account.account_name||"Нишон дода нашудааст")));
+  item.appendChild(makeElement("p",account.active?"✅ Фаъол":"⛔ Ғайрифаъол","muted"));
+
+  const toggle=makeButton(
+   account.active?"Ғайрифаъол кардан":"Фаъол кардан",
+   async()=>{
+    toggle.disabled=true;
+    const {error:err}=await db.from("vayo_shop_payment_accounts")
+    .update({active:!account.active})
+    .eq("id",account.id).eq("shop_id",shopId);
+    if(err)alert("Хато: "+err.message);
+    await loadPaymentAccounts(shopId,container);
+   },"secondary"
   );
-
-  const {data,error} = await db
-    .from("vayo_shop_payment_accounts")
-    .select("id,payment_type,account_number,account_name,active")
-    .eq("shop_id",shopId)
-    .order("payment_type");
-
-  if(error){
-    paymentMessage(container,"Хато: "+error.message);
-    return;
-  }
-
-  container.replaceChildren();
-
-  if(!data?.length){
-    container.appendChild(
-      makeElement(
-        "p",
-        "Ҳоло рақами пардохт сабт нашудааст.",
-        "muted"
-      )
-    );
-    return;
-  }
-
-  for(const account of data){
-    const item = makeElement("div","","payment-entry");
-
-    item.appendChild(
-      makeElement(
-        "strong",
-        PAYMENT_TYPES[account.payment_type] ||
-        account.payment_type
-      )
-    );
-
-    item.appendChild(
-      makeElement("p","Рақам: "+account.account_number)
-    );
-
-    item.appendChild(
-      makeElement(
-        "p",
-        "Қабулкунанда: "+
-        (account.account_name || "Нишон дода нашудааст")
-      )
-    );
-
-    item.appendChild(
-      makeElement(
-        "p",
-        account.active ? "✅ Фаъол" : "⛔ Ғайрифаъол",
-        "muted"
-      )
-    );
-
-    const toggle = makeButton(
-      account.active
-        ? "Ғайрифаъол кардан"
-        : "Фаъол кардан",
-      async ()=>{
-        toggle.disabled = true;
-
-        const {error:err} = await db
-          .from("vayo_shop_payment_accounts")
-          .update({active:!account.active})
-          .eq("id",account.id)
-          .eq("shop_id",shopId);
-
-        if(err) alert("Хато: "+err.message);
-
-        await loadPaymentAccounts(shopId,container);
-      },
-      "secondary"
-    );
-
-    item.appendChild(toggle);
-    container.appendChild(item);
-  }
+  item.appendChild(toggle);
+  container.appendChild(item);
+ }
 }
 
 function createPaymentSettings(shop){
-  const panel = makeElement("div","","payment-panel");
+ const panel=makeElement("div","","payment-panel");
+ panel.appendChild(makeElement("h4","💳 Рақамҳои қабули пардохт"));
+ panel.appendChild(makeElement("p","Alif, Dushanbe City ё Visa-и худро сабт кунед.","muted"));
 
-  panel.appendChild(
-    makeElement("h4","💳 Рақамҳои қабули пардохт")
-  );
+ const form=document.createElement("form");
+ const typeLabel=makeElement("label","Навъи пардохт");
+ const type=document.createElement("select");
+ for(const [value,name] of Object.entries(PAYMENT_TYPES)){
+  type.add(new Option(name,value));
+ }
 
-  panel.appendChild(
-    makeElement(
-      "p",
-      "Alif, Dushanbe City ё Visa-и худро сабт кунед.",
-      "muted"
-    )
-  );
+ const numberLabel=makeElement("label","Рақами қабул кардани пул");
+ const number=document.createElement("input");
+ number.required=true;
+ number.maxLength=64;
+ number.placeholder="Рақами корт ё ҳамён";
 
-  const form = document.createElement("form");
+ const nameLabel=makeElement("label","Номи қабулкунанда");
+ const name=document.createElement("input");
+ name.maxLength=120;
+ name.placeholder="Номи соҳиби ҳисоб";
 
-  const typeLabel = makeElement("label","Навъи пардохт");
-  const type = document.createElement("select");
+ const save=document.createElement("button");
+ save.type="submit";
+ save.textContent="💾 Нигоҳ доштан";
 
-  for(const [value,name] of Object.entries(PAYMENT_TYPES)){
-    type.add(new Option(name,value));
+ const feedback=makeElement("div");
+ const list=makeElement("div");
+ form.append(typeLabel,type,numberLabel,number,nameLabel,name,save);
+
+ form.addEventListener("submit",async event=>{
+  event.preventDefault();
+  if(!currentUser||!db)return;
+
+  const accountNumber=number.value.trim();
+  const accountName=name.value.trim();
+
+  if(!accountNumber||accountNumber.length>64){
+   paymentMessage(feedback,"Рақами дуруст ворид кунед.");
+   return;
   }
+  save.disabled=true;
 
-  const numberLabel =
-    makeElement("label","Рақами қабул кардани пул");
+  try{
+   const {data:existing,error:findError}=await db
+   .from("vayo_shop_payment_accounts")
+   .select("id").eq("shop_id",shop.id)
+   .eq("payment_type",type.value).maybeSingle();
 
-  const number = document.createElement("input");
-  number.required = true;
-  number.maxLength = 64;
-  number.placeholder = "Рақами корт ё ҳамён";
+   if(findError)throw findError;
 
-  const nameLabel =
-    makeElement("label","Номи қабулкунанда");
+   const payload={
+    account_number:accountNumber,
+    account_name:accountName||null,
+    active:true
+   };
 
-  const name = document.createElement("input");
-  name.maxLength = 120;
-  name.placeholder = "Номи соҳиби ҳисоб";
+   let result;
+   if(existing){
+    result=await db.from("vayo_shop_payment_accounts")
+    .update(payload).eq("id",existing.id)
+    .eq("shop_id",shop.id).select("id").single();
+   }else{
+    result=await db.from("vayo_shop_payment_accounts")
+    .insert({
+     shop_id:shop.id,
+     payment_type:type.value,
+     ...payload
+    }).select("id").single();
+   }
 
-  const save = document.createElement("button");
-  save.type = "submit";
-  save.textContent = "💾 Нигоҳ доштан";
+   if(result.error)throw result.error;
+   paymentMessage(feedback,"Рақами пардохт нигоҳ дошта шуд.",true);
+   form.reset();
+   await loadPaymentAccounts(shop.id,list);
+  }catch(err){
+   paymentMessage(feedback,"Хато: "+(err.message||String(err)));
+  }finally{
+   save.disabled=false;
+  }
+ });
 
-  const feedback = makeElement("div");
-  const list = makeElement("div");
-
-  form.append(
-    typeLabel,type,
-    numberLabel,number,
-    nameLabel,name,
-    save
-  );
-
-  form.addEventListener("submit",async event=>{
-    event.preventDefault();
-
-    if(!currentUser || !db) return;
-
-    const accountNumber = number.value.trim();
-    const accountName = name.value.trim();
-
-    if(!accountNumber || accountNumber.length > 64){
-      paymentMessage(
-        feedback,"Рақами дуруст ворид кунед."
-      );
-      return;
-    }
-
-    save.disabled = true;
-
-    try{
-      const {data:existing,error:findError} = await db
-        .from("vayo_shop_payment_accounts")
-        .select("id")
-        .eq("shop_id",shop.id)
-        .eq("payment_type",type.value)
-        .maybeSingle();
-
-      if(findError) throw findError;
-
-      const payload = {
-        account_number:accountNumber,
-        account_name:accountName || null,
-        active:true
-      };
-
-      let result;
-
-      if(existing){
-        result = await db
-          .from("vayo_shop_payment_accounts")
-          .update(payload)
-          .eq("id",existing.id)
-          .eq("shop_id",shop.id)
-          .select("id")
-          .single();
-      }else{
-        result = await db
-          .from("vayo_shop_payment_accounts")
-          .insert({
-            shop_id:shop.id,
-            payment_type:type.value,
-            ...payload
-          })
-          .select("id")
-          .single();
-      }
-
-      if(result.error) throw result.error;
-
-      paymentMessage(
-        feedback,
-        "Рақами пардохт нигоҳ дошта шуд.",
-        true
-      );
-
-      form.reset();
-      await loadPaymentAccounts(shop.id,list);
-
-    }catch(err){
-      paymentMessage(
-        feedback,
-        "Хато: "+(err.message || String(err))
-      );
-    }finally{
-      save.disabled = false;
-    }
-  });
-
-  panel.append(form,feedback,list);
-
-  loadPaymentAccounts(shop.id,list);
-
-  return panel;
+ panel.append(form,feedback,list);
+ loadPaymentAccounts(shop.id,list);
+ return panel;
 }
 
-/* ===== ТАСДИҚИ ПАРДОХТ ===== */
+/* ТАСДИҚИ ПАРДОХТ */
 
 async function loadSellerPayments(shopId,container){
-  container.replaceChildren(
-    makeElement("p","Пардохтҳо боргирӣ мешаванд...","muted")
-  );
+ container.replaceChildren(makeElement("p","Пардохтҳо боргирӣ мешаванд...","muted"));
 
-  const {data,error} = await db
-    .from("vayo_payments")
-    .select(
-      "id,order_id,amount,payment_method,status,"+
-      "transaction_reference,reported_at,confirmed_at"
-    )
-    .eq("shop_id",shopId)
-    .order("created_at",{ascending:false})
-    .limit(50);
+ const {data,error}=await db.from("vayo_payments")
+ .select("id,order_id,amount,payment_method,status,transaction_reference,reported_at,confirmed_at")
+ .eq("shop_id",shopId)
+ .order("created_at",{ascending:false})
+ .limit(50);
 
-  if(error){
-    paymentMessage(container,"Хато: "+error.message);
-    return;
+ if(error){
+  paymentMessage(container,"Хато: "+error.message);
+  return;
+ }
+
+ container.replaceChildren();
+ if(!data?.length){
+  container.appendChild(makeElement("p","Ҳоло пардохте барои тасдиқ нест.","muted"));
+  return;
+ }
+
+ const statuses={
+  pending:"⏳ Интизори пардохт",
+  reported:"🔔 Харидор пардохтро хабар дод",
+  paid:"✅ Пардохт тасдиқ шудааст",
+  rejected:"❌ Пардохт рад шудааст"
+ };
+
+ for(const payment of data){
+  const item=makeElement("div","","payment-entry");
+  item.appendChild(makeElement("strong","Фармоиш: "+payment.order_id));
+  item.appendChild(makeElement("p","Маблағ: "+Number(payment.amount).toFixed(2)+" сомонӣ"));
+  item.appendChild(makeElement("p","Усул: "+(
+   PAYMENT_TYPES[payment.payment_method]||
+   (payment.payment_method==="cash"?"Нақдӣ":payment.payment_method)
+  )));
+  item.appendChild(makeElement("p",statuses[payment.status]||payment.status));
+
+  if(payment.transaction_reference){
+   item.appendChild(makeElement("p","Рақами амалиёт: "+payment.transaction_reference));
   }
 
-  container.replaceChildren();
+  if(payment.status==="reported"){
+   const actions=makeElement("div","","actions");
 
-  if(!data?.length){
-    container.appendChild(
-      makeElement(
-        "p",
-        "Ҳоло пардохте барои тасдиқ нест.",
-        "muted"
-      )
+   const confirm=makeButton("✅ Тасдиқи пардохт",async()=>{
+    if(!window.confirm(
+     "Оё "+Number(payment.amount).toFixed(2)+
+     " сомонӣ воқеан ба ҳисоби шумо ворид шудааст?\n\n"+
+     "Танҳо баъди санҷидани маблағ тасдиқ кунед."
+    ))return;
+
+    confirm.disabled=true;
+    const {error:rpcError}=await db.rpc(
+     "vayo_confirm_payment",{p_payment_id:payment.id}
     );
-    return;
+    if(rpcError)alert("Хато: "+rpcError.message);
+    await loadSellerPayments(shopId,container);
+   },"payment-confirm");
+
+   const reject=makeButton("❌ Рад кардан",async()=>{
+    if(!window.confirm("Ин пардохтро рад мекунед?"))return;
+    reject.disabled=true;
+    const {error:rpcError}=await db.rpc(
+     "vayo_reject_payment",{p_payment_id:payment.id}
+    );
+    if(rpcError)alert("Хато: "+rpcError.message);
+    await loadSellerPayments(shopId,container);
+   },"payment-reject");
+
+   actions.append(confirm,reject);
+   item.appendChild(actions);
   }
-
-  const statuses = {
-    pending:"⏳ Интизори пардохт",
-    reported:"🔔 Харидор пардохтро хабар дод",
-    paid:"✅ Пардохт тасдиқ шудааст",
-    rejected:"❌ Пардохт рад шудааст"
-  };
-
-  for(const payment of data){
-    const item = makeElement("div","","payment-entry");
-
-    item.appendChild(
-      makeElement(
-        "strong",
-        "Фармоиш: "+payment.order_id
-      )
-    );
-
-    item.appendChild(
-      makeElement(
-        "p",
-        "Маблағ: "+
-        Number(payment.amount).toFixed(2)+
-        " сомонӣ"
-      )
-    );
-
-    item.appendChild(
-      makeElement(
-        "p",
-        "Усул: "+
-        (PAYMENT_TYPES[payment.payment_method] ||
-        (payment.payment_method === "cash"
-          ? "Нақдӣ"
-          : payment.payment_method))
-      )
-    );
-
-    item.appendChild(
-      makeElement(
-        "p",
-        statuses[payment.status] || payment.status
-      )
-    );
-
-    if(payment.transaction_reference){
-      item.appendChild(
-        makeElement(
-          "p",
-          "Рақами амалиёт: "+
-          payment.transaction_reference
-        )
-      );
-    }
-
-    if(payment.status === "reported"){
-      const actions = makeElement("div","","actions");
-
-      const confirm = makeButton(
-        "✅ Тасдиқи пардохт",
-        async ()=>{
-          const ok = window.confirm(
-            "Оё "+
-            Number(payment.amount).toFixed(2)+
-            " сомонӣ воқеан ба ҳисоби шумо ворид шудааст?\n\n"+
-            "Танҳо баъди санҷидани маблағ тасдиқ кунед."
-          );
-
-          if(!ok) return;
-
-          confirm.disabled = true;
-
-          const {error:rpcError} = await db.rpc(
-            "vayo_confirm_payment",
-            {p_payment_id:payment.id}
-          );
-
-          if(rpcError){
-            alert("Хато: "+rpcError.message);
-          }
-
-          await loadSellerPayments(shopId,container);
-        },
-        "payment-confirm"
-      );
-
-      const reject = makeButton(
-        "❌ Рад кардан",
-        async ()=>{
-          if(!window.confirm(
-            "Ин пардохтро рад мекунед?"
-          )) return;
-
-          reject.disabled = true;
-
-          const {error:rpcError} = await db.rpc(
-            "vayo_reject_payment",
-            {p_payment_id:payment.id}
-          );
-
-          if(rpcError){
-            alert("Хато: "+rpcError.message);
-          }
-
-          await loadSellerPayments(shopId,container);
-        },
-        "payment-reject"
-      );
-
-      actions.append(confirm,reject);
-      item.appendChild(actions);
-    }
-
-    container.appendChild(item);
-  }
+  container.appendChild(item);
+ }
 }
 
 function createPaymentOrders(shop){
-  const panel = makeElement("div","","payment-panel");
-
-  panel.appendChild(
-    makeElement("h4","📥 Пардохтҳои харидорон")
-  );
-
-  const list = makeElement("div");
-
-  const refresh = makeButton(
-    "🔄 Нав кардани пардохтҳо",
-    ()=>loadSellerPayments(shop.id,list),
-    "secondary"
-  );
-
-  panel.append(refresh,list);
-
-  loadSellerPayments(shop.id,list);
-
-  return panel;
+ const panel=makeElement("div","","payment-panel");
+ panel.appendChild(makeElement("h4","📥 Пардохтҳои харидорон"));
+ const list=makeElement("div");
+ const refresh=makeButton(
+  "🔄 Нав кардани пардохтҳо",
+  ()=>loadSellerPayments(shop.id,list),
+  "secondary"
+ );
+ panel.append(refresh,list);
+ loadSellerPayments(shop.id,list);
+ return panel;
 }
 
-/* ===== МАҒОЗАҲОИ МАН ===== */
+/* МАҒОЗАҲОИ МАН */
 
 async function loadShops(){
-  const root = $("shopsList");
-  root.textContent = "Боргирӣ...";
+ const root=$("shopsList");
+ root.textContent="Боргирӣ...";
 
-  const {data,error} = await db
-    .from("vayo_shops")
-    .select(
-      "id,name,city,address,status,created_at,"+
-      "delivery_type,delivery_fee"
-    )
-    .eq("owner_id",currentUser.id)
-    .order("created_at",{ascending:false});
+ const {data,error}=await db.from("vayo_shops")
+ .select("id,name,city,address,status,created_at,delivery_type,delivery_fee")
+ .eq("owner_id",currentUser.id)
+ .order("created_at",{ascending:false});
 
-  if(error){
-    root.textContent = "Хато: "+error.message;
-    return;
-  }
+ if(error){
+  root.textContent="Хато: "+error.message;
+  return;
+ }
 
-  root.replaceChildren();
+ root.replaceChildren();
+ sellerHasShop=Boolean(data?.length);
 
-  if(!data?.length){
-    root.textContent = "Шумо ҳоло мағоза надоред.";
-    return;
-  }
+ if(!data?.length){
+  root.textContent="Шумо ҳоло мағоза надоред.";
+  return;
+ }
 
-  for(const shop of data){
-    const card = makeElement("div","","shop");
+ for(const shop of data){
+  const card=makeElement("div","","shop");
+  card.appendChild(makeElement("h3",shop.name));
+  card.appendChild(makeElement("p","📍 "+shop.city+", "+shop.address,"muted"));
+  card.appendChild(makeElement("span",statusText(shop.status),"status"));
 
-    card.appendChild(
-      makeElement("h3",shop.name)
-    );
+  const deliveryText=
+   shop.delivery_type==="own"?
+   "🚚 Расонидани мағоза: "+Number(shop.delivery_fee||0).toFixed(2)+" сомонӣ":
+   shop.delivery_type==="pickup"?
+   "🏪 Гирифтан аз мағоза":
+   "📦 Расонидан тавассути карго";
 
-    card.appendChild(
-      makeElement(
-        "p",
-        "📍 "+shop.city+", "+shop.address,
-        "muted"
-      )
-    );
+  card.appendChild(makeElement("p",deliveryText,"muted"));
 
-    card.appendChild(
-      makeElement(
-        "span",
-        statusText(shop.status),
-        "status"
-      )
-    );
+  const actions=makeElement("div","","actions");
+  const products=document.createElement("a");
+  products.className="action";
+  products.href="add-product.html?shop="+encodeURIComponent(shop.id);
+  products.textContent="➕ Иловаи маҳсулот";
+  actions.appendChild(products);
+  card.appendChild(actions);
 
-    let deliveryText;
-
-    if(shop.delivery_type === "own"){
-      deliveryText =
-        "🚚 Расонидани мағоза: "+
-        Number(shop.delivery_fee || 0).toFixed(2)+
-        " сомонӣ";
-    }else if(shop.delivery_type === "pickup"){
-      deliveryText = "🏪 Гирифтан аз мағоза";
-    }else{
-      deliveryText = "📦 Расонидан тавассути карго";
-    }
-
-    card.appendChild(
-      makeElement("p",deliveryText,"muted")
-    );
-
-    const actions = makeElement("div","","actions");
-
-    const products = document.createElement("a");
-    products.className = "action";
-    products.href =
-      "add-product.html?shop="+
-      encodeURIComponent(shop.id);
-    products.textContent = "➕ Иловаи маҳсулот";
-
-    actions.appendChild(products);
-    card.appendChild(actions);
-
-    // Қисмҳои нави пардохт
-    card.appendChild(createPaymentSettings(shop));
-    card.appendChild(createPaymentOrders(shop));
-
-    root.appendChild(card);
-  }
+  card.appendChild(createPaymentSettings(shop));
+  card.appendChild(createPaymentOrders(shop));
+  root.appendChild(card);
+ }
 }
 
-/* ===== ВОРИДШАВӢ ===== */
+/* ҲИСОБКУНИИ ВАҚТИ ФАЪОЛ */
+
+const IDLE_MS=60000;
+const HEARTBEAT_MS=30000;
+let lastActivity=Date.now();
+let activitySending=false;
+let activityTimer=null;
+let displayTimer=null;
+
+function markActivity(){
+ lastActivity=Date.now();
+}
+
+["pointerdown","keydown","touchstart","scroll"].forEach(name=>{
+ document.addEventListener(name,markActivity,{passive:true});
+});
+
+function isActive(){
+ return Boolean(
+  currentUser&&db&&sellerHasShop&&
+  document.visibilityState==="visible"&&
+  Date.now()-lastActivity<IDLE_MS
+ );
+}
+
+async function sendHeartbeat(){
+ if(!isActive()||activitySending)return;
+ activitySending=true;
+ try{
+  const {error}=await db.rpc("vayo_seller_heartbeat");
+  if(error)console.warn("VAYO activity:",error.message);
+ }catch(err){
+  console.warn("VAYO activity:",err);
+ }finally{
+  activitySending=false;
+ }
+}
+
+async function updateActivityDisplay(){
+ if(!db||!currentUser||!sellerHasShop){
+  $("activeTime").textContent="00:00:00";
+  $("activityStatus").textContent="Ҳисобкунии вақт баъди сабти мағоза фаъол мешавад.";
+  return;
+ }
+
+ $("activityStatus").textContent=isActive()?
+ "🟢 Панел фаъол аст":
+ "⏸ Панел ғайрифаъол аст";
+
+ // Танҳо сабтҳои имрӯз бо вақти Душанбе
+ const parts=new Intl.DateTimeFormat("en-CA",{
+  timeZone:"Asia/Dushanbe",
+  year:"numeric",month:"2-digit",day:"2-digit"
+ }).formatToParts(new Date());
+ const part=k=>parts.find(x=>x.type===k)?.value;
+ const dateStr=part("year")+"-"+part("month")+"-"+part("day");
+ const dayStart=new Date(dateStr+"T00:00:00+05:00");
+ const nextDay=new Date(dayStart.getTime()+86400000);
+
+ const {data,error}=await db.from("vayo_activity_sessions")
+ .select("started_at,last_seen_at")
+ .eq("user_id",currentUser.id)
+ .eq("service_name","market")
+ .gte("started_at",dayStart.toISOString())
+ .lt("started_at",nextDay.toISOString())
+ .order("started_at");
+
+ if(error){
+  $("activityStatus").textContent="Хатои ҳисобот: "+error.message;
+  return;
+ }
+
+ // Ҷамъ кардани фосилаҳо бе такрори ҳамзамон
+ const ranges=(data||[]).map(s=>[
+  new Date(s.started_at).getTime(),
+  new Date(s.last_seen_at).getTime()
+ ]).filter(([a,b])=>Number.isFinite(a)&&Number.isFinite(b)&&b>a)
+ .sort((a,b)=>a[0]-b[0]);
+
+ let total=0,start=null,end=null;
+ for(const [a,b] of ranges){
+  if(start===null){start=a;end=b;}
+  else if(a<=end){end=Math.max(end,b);}
+  else{total+=end-start;start=a;end=b;}
+ }
+ if(start!==null)total+=end-start;
+
+ const seconds=Math.floor(total/1000);
+ const hh=String(Math.floor(seconds/3600)).padStart(2,"0");
+ const mm=String(Math.floor(seconds%3600/60)).padStart(2,"0");
+ const ss=String(seconds%60).padStart(2,"0");
+ $("activeTime").textContent=hh+":"+mm+":"+ss;
+}
+
+function startActivity(){
+ if(activityTimer)return;
+ activityTimer=setInterval(sendHeartbeat,HEARTBEAT_MS);
+ displayTimer=setInterval(updateActivityDisplay,15000);
+ sendHeartbeat();
+ updateActivityDisplay();
+}
+
+function stopActivity(){
+ clearInterval(activityTimer);
+ clearInterval(displayTimer);
+ activityTimer=null;
+ displayTimer=null;
+}
+
+document.addEventListener("visibilitychange",()=>{
+ if(document.visibilityState==="visible"){
+  markActivity();
+  sendHeartbeat();
+  updateActivityDisplay();
+ }
+});
+
+/* ВОРИДШАВӢ */
 
 async function init(){
-  if(
-    !window.supabase ||
-    typeof window.supabase.createClient !== "function"
-  ){
-    $("welcome").textContent =
-      "Китобхонаи Supabase боргирӣ нашуд.";
-    $("authActions").classList.remove("hidden");
-    return;
+ if(!window.supabase||
+ typeof window.supabase.createClient!=="function"){
+  $("welcome").textContent="Китобхонаи Supabase боргирӣ нашуд.";
+  $("authActions").classList.remove("hidden");
+  return;
+ }
+
+ db=window.supabase.createClient(SB_URL,SB_KEY);
+ window.vayoDB=db;
+
+ try{
+  const {data,error}=await db.auth.getUser();
+  if(error||!data?.user){
+   $("welcome").textContent="Барои сохтани мағоза ворид шавед.";
+   $("authActions").classList.remove("hidden");
+   return;
   }
 
-  db = window.supabase.createClient(SB_URL,SB_KEY);
-  window.vayoDB = db;
+  currentUser=data.user;
+  $("welcome").textContent="Хуш омадед: "+(currentUser.email||"Фурӯшанда");
+  $("signedActions").classList.remove("hidden");
+  $("sellerContent").classList.remove("hidden");
 
-  try{
-    const {data,error} = await db.auth.getUser();
+  initMap();
+  await loadShops();
+  startActivity();
 
-    if(error || !data?.user){
-      $("welcome").textContent =
-        "Барои сохтани мағоза ворид шавед.";
-      $("authActions").classList.remove("hidden");
-      return;
-    }
-
-    currentUser = data.user;
-
-    $("welcome").textContent =
-      "Хуш омадед: "+
-      (currentUser.email || "Фурӯшанда");
-
-    $("signedActions").classList.remove("hidden");
-    $("sellerContent").classList.remove("hidden");
-
-    initMap();
-    await loadShops();
-
-  }catch(err){
-    $("welcome").textContent =
-      "Хато ҳангоми пайвастшавӣ.";
-    notice(err.message || String(err));
-  }
+ }catch(err){
+  $("welcome").textContent="Хато ҳангоми пайвастшавӣ.";
+  notice(err.message||String(err));
+ }
 }
 
-/* ===== СОХТАНИ МАҒОЗА ===== */
+/* СОХТАНИ МАҒОЗА */
 
-$("deliveryType").addEventListener(
-  "change",
-  updateDeliveryUI
-);
+$("deliveryType").addEventListener("change",updateDeliveryUI);
 
 $("shopForm").addEventListener("submit",async e=>{
-  e.preventDefault();
+ e.preventDefault();
+ if(!currentUser||!db){
+  notice("Аввал ворид шавед.");
+  return;
+ }
 
-  if(!currentUser || !db){
-    notice("Аввал ворид шавед.");
-    return;
+ const name=$("shopName").value.trim();
+ const city=$("city").value;
+ const address=$("address").value.trim();
+
+ if(!name||!city||!address){
+  notice("Ном, шаҳр ва суроғаро пур кунед.");
+  return;
+ }
+
+ const lat=$("latitude").value;
+ const lng=$("longitude").value;
+ if(!lat||!lng){
+  notice("Ҷойгиршавии мағозаро дар харита интихоб кунед.");
+  return;
+ }
+
+ const deliveryType=$("deliveryType").value;
+ const deliveryFee=deliveryType==="own"?
+ Number($("deliveryFee").value):0;
+
+ if(!Number.isFinite(deliveryFee)||deliveryFee<0){
+  notice("Нархи расонидан бояд рақами дуруст бошад.");
+  return;
+ }
+
+ $("saveBtn").disabled=true;
+ try{
+  const {error}=await db.from("vayo_shops").insert({
+   owner_id:currentUser.id,
+   name,
+   phone:$("phone").value.trim()||null,
+   city,
+   district:$("district").value.trim()||null,
+   address,
+   latitude:Number(lat),
+   longitude:Number(lng),
+   delivery_type:deliveryType,
+   delivery_fee:deliveryFee
+  });
+
+  if(error)throw error;
+  notice("Мағоза сабт шуд ва интизори тасдиқ аст.",true);
+  $("shopForm").reset();
+  updateDeliveryUI();
+
+  if(marker&&map){
+   map.removeLayer(marker);
+   marker=null;
   }
 
-  const name = $("shopName").value.trim();
-  const city = $("city").value;
-  const address = $("address").value.trim();
+  await loadShops();
+  sendHeartbeat();
+  updateActivityDisplay();
 
-  if(!name || !city || !address){
-    notice("Ном, шаҳр ва суроғаро пур кунед.");
-    return;
-  }
-
-  const lat = $("latitude").value;
-  const lng = $("longitude").value;
-
-  if(!lat || !lng){
-    notice(
-      "Ҷойгиршавии мағозаро дар харита интихоб кунед."
-    );
-    return;
-  }
-
-  const deliveryType = $("deliveryType").value;
-
-  const deliveryFee =
-    deliveryType === "own"
-      ? Number($("deliveryFee").value)
-      : 0;
-
-  if(
-    !Number.isFinite(deliveryFee) ||
-    deliveryFee < 0
-  ){
-    notice(
-      "Нархи расонидан бояд рақами дуруст бошад."
-    );
-    return;
-  }
-
-  $("saveBtn").disabled = true;
-
-  try{
-    const {error} = await db
-      .from("vayo_shops")
-      .insert({
-        owner_id:currentUser.id,
-        name:name,
-        phone:$("phone").value.trim() || null,
-        city:city,
-        district:$("district").value.trim() || null,
-        address:address,
-        latitude:Number(lat),
-        longitude:Number(lng),
-        delivery_type:deliveryType,
-        delivery_fee:deliveryFee
-      });
-
-    if(error) throw error;
-
-    notice(
-      "Мағоза сабт шуд ва интизори тасдиқ аст.",
-      true
-    );
-
-    $("shopForm").reset();
-    updateDeliveryUI();
-
-    if(marker && map){
-      map.removeLayer(marker);
-      marker = null;
-    }
-
-    await loadShops();
-
-  }catch(err){
-    notice(
-      "Хато: "+(err.message || String(err))
-    );
-  }finally{
-    $("saveBtn").disabled = false;
-  }
+ }catch(err){
+  notice("Хато: "+(err.message||String(err)));
+ }finally{
+  $("saveBtn").disabled=false;
+ }
 });
 
-/* ===== БАРОМАДАН ===== */
+/* БАРОМАДАН */
 
-$("logoutBtn").addEventListener("click",async ()=>{
-  if(db) await db.auth.signOut();
-  location.href = "login.html";
+$("logoutBtn").addEventListener("click",async()=>{
+ stopActivity();
+ if(db)await db.auth.signOut();
+ location.href="login.html";
 });
+
+window.addEventListener("pagehide",stopActivity);
 
 updateDeliveryUI();
 init();
-
 </script>
 </body>
 </html>
