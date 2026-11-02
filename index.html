@@ -3,562 +3,1733 @@
 <html lang="tg">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VAYO — Мағозаи онлайн</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ef330b">
+<meta name="description" content="VAYO — бозори онлайни Тоҷикистон">
+<title>VAYO — Бозори онлайн</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-:root{
- --orange:#ff6900;
- --dark:#202124;
- --muted:#737b86;
- --bg:#f6f7f9
+:root {
+  --orange:#f43a10;
+  --orange2:#ff6500;
+  --orange3:#ff8a00;
+  --red:#e92f20;
+  --green:#078622;
+  --ink:#202124;
+  --muted:#777b83;
+  --line:#e9e9e9;
+  --bg:#f5f5f5;
+  --white:#ffffff;
+  --radius:13px;
+  --shadow:0 5px 24px rgba(0,0,0,.07);
 }
-*{box-sizing:border-box}
-body{
- margin:0;
- background:var(--bg);
- color:var(--dark);
- font-family:Inter,"Noto Sans",sans-serif
+* {
+  box-sizing:border-box;
 }
-button,input{font:inherit}
-button{cursor:pointer}
-header{
- background:#fff;
- position:sticky;
- top:0;
- z-index:10;
- border-bottom:1px solid #eee
+html {
+  scroll-behavior:smooth;
 }
-.top{
- max-width:1250px;
- margin:auto;
- padding:14px 16px;
- display:flex;
- align-items:center;
- gap:18px
+body {
+  margin:0;
+  font-family:Inter,Arial,sans-serif;
+  color:var(--ink);
+  background:var(--bg);
 }
-.logo{
- font-size:30px;
- font-weight:900;
- color:var(--orange);
- text-decoration:none;
- letter-spacing:-1.5px
+button,input {
+  font:inherit;
 }
-.search{
- flex:1;
- display:flex;
- border:2px solid var(--orange);
- border-radius:30px;
- overflow:hidden
+button {
+  cursor:pointer;
 }
-.search input{
- flex:1;
- min-width:0;
- padding:13px 18px;
- border:0;
- outline:0
+button:disabled {
+  cursor:not-allowed;
+  opacity:.55;
 }
-.search button{
- background:var(--orange);
- color:#fff;
- border:0;
- padding:0 23px;
- font-weight:800
+a {
+  color:inherit;
+  text-decoration:none;
 }
-.navbtn{
- color:var(--dark);
- text-decoration:none;
- font-size:13px;
- font-weight:800;
- white-space:nowrap;
- background:none;
- border:0
+.hidden {
+  display:none!important;
 }
-.categories{
- max-width:1250px;
- margin:auto;
- padding:0 16px 12px;
- display:flex;
- gap:10px;
- overflow-x:auto
+.container {
+  max-width:1280px;
+  margin:auto;
+  padding-left:15px;
+  padding-right:15px;
 }
-.cat{
- white-space:nowrap;
- border:1px solid #e5e5e5;
- border-radius:20px;
- padding:9px 15px;
- background:#fff;
- font-size:13px;
- font-weight:700
+
+/* HEADER */
+
+.site-header {
+  position:sticky;
+  top:0;
+  z-index:50;
+  background:linear-gradient(110deg,#e92c0b,#ff5d00);
+  color:white;
+  box-shadow:0 3px 15px #00000012;
 }
-.cat.active{
- background:var(--orange);
- border-color:var(--orange);
- color:#fff
+.header-inner {
+  max-width:1280px;
+  margin:auto;
+  padding:13px 15px;
+  display:flex;
+  align-items:center;
+  gap:17px;
 }
-main{
- max-width:1250px;
- margin:auto;
- padding:18px 16px 45px
+.logo {
+  color:white;
+  font-size:35px;
+  font-weight:900;
+  letter-spacing:-2px;
+  white-space:nowrap;
 }
-.hero{
- background:linear-gradient(110deg,#ff6900,#ff9b37);
- color:#fff;
- border-radius:22px;
- padding:32px;
- margin-bottom:25px
+.search {
+  display:flex;
+  align-items:center;
+  flex:1;
+  min-width:0;
+  height:51px;
+  background:white;
+  border-radius:40px;
+  overflow:hidden;
+  padding:5px;
 }
-.hero h1{
- font-size:clamp(25px,4vw,43px);
- margin:0 0 10px;
- font-weight:900
+.search input {
+  flex:1;
+  min-width:0;
+  border:0;
+  outline:0;
+  background:transparent;
+  padding:0 16px;
+  font-size:15px;
+  color:#333;
 }
-.hero p{margin:0;font-size:15px}
-.section-title{
- font-size:22px;
- font-weight:900;
- margin:0 0 18px
+.search input::placeholder {
+  color:#777;
 }
-.grid{
- display:grid;
- grid-template-columns:repeat(5,minmax(0,1fr));
- gap:15px
+.camera-btn {
+  width:42px;
+  height:42px;
+  border:0;
+  background:transparent;
+  font-size:24px;
+  display:grid;
+  place-items:center;
 }
-.product{
- background:#fff;
- border-radius:15px;
- overflow:hidden;
- border:1px solid #eee
+.search-btn {
+  border:0;
+  background:#080808;
+  color:white;
+  height:42px;
+  min-width:65px;
+  border-radius:30px;
+  font-size:20px;
+  font-weight:900;
 }
-.product img{
- width:100%;
- aspect-ratio:1;
- object-fit:cover;
- background:#f1f1f1
+.desktop-links {
+  display:flex;
+  align-items:center;
+  gap:16px;
 }
-.info{padding:13px}
-.name{
- font-size:13px;
- font-weight:700;
- line-height:1.5;
- min-height:40px
+.desktop-links a,
+.desktop-links button {
+  background:transparent;
+  border:0;
+  color:white;
+  font-size:13px;
+  font-weight:800;
+  white-space:nowrap;
 }
-.price{
- font-size:20px;
- font-weight:900;
- color:var(--orange);
- margin:8px 0
+.header-categories {
+  max-width:1280px;
+  margin:auto;
+  display:flex;
+  overflow-x:auto;
+  gap:8px;
+  padding:0 15px 11px;
+  scrollbar-width:none;
 }
-.old-price{
- color:#888;
- font-size:13px;
- text-decoration:line-through
+.header-categories::-webkit-scrollbar {
+  display:none;
 }
-.discount{
- display:inline-block;
- color:#b42b00;
- background:#fff0e7;
- padding:4px 7px;
- border-radius:6px;
- font-size:12px;
- font-weight:800
+.cat {
+  border:1px solid #ffffff65;
+  color:white;
+  background:#ffffff1b;
+  border-radius:25px;
+  padding:9px 15px;
+  font-size:13px;
+  font-weight:800;
+  white-space:nowrap;
 }
-.buy{
- width:100%;
- background:var(--orange);
- color:#fff;
- border:0;
- padding:11px;
- border-radius:9px;
- font-weight:800
+.cat.active {
+  background:white;
+  color:var(--orange);
+  border-color:white;
 }
-.buy:disabled{opacity:.5}
-.empty{
- grid-column:1/-1;
- text-align:center;
- padding:35px;
- color:var(--muted)
+.cat-link {
+  display:inline-flex;
+  align-items:center;
 }
-.cartpanel{
- position:fixed;
- right:0;
- top:0;
- bottom:0;
- width:min(420px,100%);
- background:#fff;
- z-index:30;
- box-shadow:-8px 0 35px #0002;
- padding:20px;
- overflow-y:auto
+
+/* BANNER */
+
+.hero {
+  background:linear-gradient(110deg,#f32b08,#ff5d00 60%,#ff8b00);
+  color:white;
+  min-height:220px;
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:30px 18px;
 }
-.carthead{
- display:flex;
- justify-content:space-between;
- align-items:center
+.hero::before {
+  content:"";
+  position:absolute;
+  width:260px;
+  height:260px;
+  border:55px solid #ffffff18;
+  border-radius:50%;
+  left:-100px;
+  top:-100px;
 }
-.cartrow{
- display:flex;
- justify-content:space-between;
- gap:12px;
- padding:13px 0;
- border-bottom:1px solid #eee;
- font-size:13px
+.hero::after {
+  content:"";
+  position:absolute;
+  width:300px;
+  height:300px;
+  border:60px solid #ffffff14;
+  border-radius:50%;
+  right:-130px;
+  bottom:-190px;
 }
-.cartrow button{
- border:0;
- background:#fff0e8;
- color:var(--orange);
- border-radius:8px;
- padding:8px
+.hero-content {
+  position:relative;
+  z-index:1;
 }
-.checkout{
- display:block;
- text-align:center;
- background:var(--orange);
- color:#fff;
- text-decoration:none;
- padding:14px;
- border-radius:10px;
- font-weight:800;
- margin-top:16px
+.hero-kicker {
+  color:#fff58b;
+  font-weight:900;
+  font-size:clamp(20px,3vw,35px);
+  text-shadow:0 2px 3px #0003;
 }
-.overlay{
- position:fixed;
- inset:0;
- background:#0007;
- z-index:20
+.hero h1 {
+  margin:8px 0 12px;
+  font-weight:900;
+  font-size:clamp(26px,4vw,48px);
+  line-height:1.15;
+  text-transform:uppercase;
 }
-.hidden{display:none!important}
-footer{
- text-align:center;
- color:var(--muted);
- padding:25px;
- font-size:13px
+.hero p {
+  margin:0 0 20px;
+  font-size:15px;
 }
-@media(max-width:1000px){
- .grid{grid-template-columns:repeat(4,1fr)}
+.hero-button {
+  display:inline-block;
+  background:#fff2a6;
+  color:#bd2908;
+  font-size:14px;
+  font-weight:900;
+  padding:12px 24px;
+  border-radius:30px;
 }
-@media(max-width:700px){
- .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .top{gap:9px;flex-wrap:wrap}
- .logo{font-size:25px}
- .search{order:3;flex-basis:100%}
- .hero{padding:23px}
- .navbtn{font-size:12px}
+.hero-deco {
+  position:absolute;
+  font-size:70px;
+  opacity:.45;
+}
+.hero-deco.left {
+  left:8%;
+  top:27%;
+  transform:rotate(-20deg);
+}
+.hero-deco.right {
+  right:9%;
+  top:20%;
+  transform:rotate(20deg);
+}
+
+/* SERVICES */
+
+.service-strip {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  background:#fff0e4;
+  margin-top:15px;
+  border-radius:13px;
+  overflow:hidden;
+  border:1px solid #ffe4d0;
+}
+.service {
+  padding:17px 18px;
+  min-width:0;
+}
+.service:first-child {
+  border-right:1px solid #e7d2c1;
+}
+.service-title {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  font-size:17px;
+  font-weight:900;
+}
+.service-title.green {
+  color:var(--green);
+}
+.service p {
+  color:#69615b;
+  font-size:13px;
+  margin:9px 0 0;
+}
+.trust-banner {
+  margin-top:13px;
+  background:#07860a;
+  color:white;
+  padding:13px 18px;
+  font-weight:900;
+  border-radius:9px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.trust-banner a {
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+/* SECTIONS */
+
+.section {
+  margin-top:20px;
+}
+.section-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:13px;
+}
+.section-title {
+  margin:0;
+  font-size:22px;
+  font-weight:900;
+}
+.section-more {
+  color:var(--orange);
+  font-size:13px;
+  font-weight:800;
+}
+.featured {
+  background:linear-gradient(180deg,#ffe8ea,#fff5f5);
+  padding:15px;
+  border-radius:13px;
+}
+.featured-title {
+  color:#b71d2a;
+  font-weight:900;
+  font-style:italic;
+  font-size:20px;
+  margin:0 0 13px;
+}
+.featured-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.featured-grid .product-card {
+  border:0;
+}
+.product-grid {
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:14px;
+}
+.product-card {
+  background:white;
+  border:1px solid #eeeeee;
+  border-radius:11px;
+  overflow:hidden;
+  min-width:0;
+  position:relative;
+  transition:transform .15s,box-shadow .15s;
+}
+.product-card:hover {
+  transform:translateY(-2px);
+  box-shadow:var(--shadow);
+}
+.product-photo {
+  position:relative;
+  width:100%;
+  aspect-ratio:1/1.08;
+  background:#f0f0f0;
+  overflow:hidden;
+}
+.product-photo img {
+  width:100%;
+  height:100%;
+  display:block;
+  object-fit:cover;
+}
+.no-image {
+  width:100%;
+  height:100%;
+  display:grid;
+  place-items:center;
+  font-size:48px;
+  color:#aaa;
+  background:#f3f3f3;
+}
+.sale-badge {
+  position:absolute;
+  top:9px;
+  left:9px;
+  background:#e82e20;
+  color:white;
+  padding:6px 8px;
+  font-size:12px;
+  font-weight:900;
+  border-radius:6px;
+}
+.product-info {
+  padding:11px 12px 13px;
+}
+.product-name {
+  font-size:13px;
+  line-height:1.5;
+  font-weight:700;
+  min-height:39px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.product-price {
+  color:#e52e20;
+  font-size:21px;
+  font-weight:900;
+  margin-top:8px;
+}
+.old-price {
+  color:#8b8b8b;
+  text-decoration:line-through;
+  font-size:12px;
+  margin-top:4px;
+}
+.product-meta {
+  color:#777;
+  font-size:12px;
+  margin-top:6px;
+}
+.buy {
+  width:100%;
+  margin-top:11px;
+  border:0;
+  background:linear-gradient(90deg,#ff4a0a,#ff7600);
+  color:white;
+  border-radius:9px;
+  padding:11px 7px;
+  font-weight:800;
+  font-size:13px;
+}
+.buy:active {
+  transform:scale(.98);
+}
+.empty {
+  grid-column:1/-1;
+  background:white;
+  text-align:center;
+  border-radius:12px;
+  padding:35px 18px;
+  color:var(--muted);
+  line-height:1.7;
+}
+.empty strong {
+  color:var(--ink);
+}
+.tabs {
+  display:flex;
+  align-items:center;
+  gap:25px;
+  background:white;
+  overflow-x:auto;
+  padding:15px 8px 0;
+  margin-bottom:0;
+  scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar {
+  display:none;
+}
+.tab {
+  border:0;
+  background:transparent;
+  white-space:nowrap;
+  color:#888;
+  font-size:16px;
+  font-weight:800;
+  padding:0 3px 15px;
+  position:relative;
+}
+.tab.active {
+  color:#111;
+}
+.tab.active::after {
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:4px;
+  background:#111;
+  border-radius:5px;
+}
+
+/* CART */
+
+.overlay {
+  position:fixed;
+  inset:0;
+  background:#0009;
+  z-index:90;
+}
+.cart-panel {
+  position:fixed;
+  top:0;
+  right:0;
+  bottom:0;
+  width:min(450px,100%);
+  background:white;
+  z-index:100;
+  padding:20px;
+  overflow-y:auto;
+  box-shadow:-10px 0 35px #0003;
+}
+.cart-head {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding-bottom:15px;
+  border-bottom:1px solid var(--line);
+}
+.cart-head h2 {
+  margin:0;
+  font-size:22px;
+}
+.close-cart {
+  background:#f4f4f4;
+  border:0;
+  border-radius:50%;
+  width:38px;
+  height:38px;
+  font-size:20px;
+}
+.cart-row {
+  display:flex;
+  gap:12px;
+  padding:16px 0;
+  border-bottom:1px solid var(--line);
+}
+.cart-img {
+  width:70px;
+  height:75px;
+  object-fit:cover;
+  border-radius:9px;
+  background:#f1f1f1;
+}
+.cart-detail {
+  flex:1;
+  min-width:0;
+}
+.cart-name {
+  font-weight:800;
+  font-size:13px;
+  line-height:1.5;
+}
+.cart-price {
+  font-size:15px;
+  font-weight:900;
+  color:var(--red);
+  margin:7px 0;
+}
+.qty-controls {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:9px;
+}
+.qty-controls button {
+  width:30px;
+  height:30px;
+  border:1px solid #ddd;
+  background:white;
+  border-radius:7px;
+  font-size:18px;
+}
+.qty-controls span {
+  font-weight:800;
+  min-width:20px;
+  text-align:center;
+}
+.remove {
+  border:0;
+  background:#fff0eb;
+  color:#d83220;
+  padding:8px;
+  border-radius:7px;
+  align-self:start;
+}
+.cart-total {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-top:22px;
+  font-size:19px;
+  font-weight:900;
+}
+.cart-total strong {
+  color:var(--red);
+}
+.checkout {
+  display:block;
+  background:linear-gradient(100deg,#f43b0b,#ff8000);
+  color:white;
+  text-align:center;
+  padding:15px;
+  border-radius:12px;
+  font-weight:900;
+  margin-top:18px;
+}
+.cart-note {
+  color:var(--muted);
+  font-size:12px;
+  line-height:1.6;
+}
+.toast {
+  position:fixed;
+  bottom:85px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#222;
+  color:white;
+  padding:12px 20px;
+  border-radius:30px;
+  z-index:150;
+  font-size:13px;
+  font-weight:700;
+  box-shadow:0 6px 20px #0003;
+  max-width:90%;
+  text-align:center;
+}
+
+/* MOBILE BOTTOM NAV */
+
+.bottom-nav {
+  display:none;
+}
+.bottom-link {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  font-size:11px;
+  font-weight:800;
+  color:#222;
+  min-width:0;
+  border:0;
+  background:transparent;
+  position:relative;
+}
+.bottom-icon {
+  font-size:26px;
+  line-height:1;
+}
+.bottom-link.active {
+  color:#e42f20;
+}
+.cart-count {
+  position:absolute;
+  top:-5px;
+  right:12%;
+  background:#ff7900;
+  color:white;
+  font-size:11px;
+  border-radius:20px;
+  padding:2px 6px;
+}
+footer {
+  color:#888;
+  text-align:center;
+  font-size:12px;
+  padding:35px 15px;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1100px) {
+  .product-grid {
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+  .desktop-links {
+    gap:9px;
+  }
+}
+@media(max-width:800px) {
+  .product-grid {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+  .desktop-links {
+    display:none;
+  }
+  .hero-deco {
+    font-size:45px;
+  }
+}
+@media(max-width:650px) {
+  body {
+    padding-bottom:67px;
+    background:white;
+  }
+  .site-header {
+    position:sticky;
+    top:0;
+  }
+  .header-inner {
+    padding:8px 12px 10px;
+    gap:9px;
+  }
+  .logo {
+    display:none;
+  }
+  .search {
+    height:48px;
+    flex:1;
+  }
+  .search input {
+    padding-left:15px;
+    font-size:15px;
+  }
+  .search-btn {
+    height:39px;
+    min-width:54px;
+  }
+  .camera-btn {
+    height:39px;
+    width:37px;
+  }
+  .header-categories {
+    display:none;
+  }
+  .container {
+    padding-left:9px;
+    padding-right:9px;
+  }
+  .hero {
+    min-height:175px;
+    padding:23px 12px;
+  }
+  .hero h1 {
+    font-size:clamp(23px,6vw,35px);
+  }
+  .hero-kicker {
+    font-size:22px;
+  }
+  .hero p {
+    font-size:12px;
+  }
+  .hero-deco.left {
+    left:2%;
+  }
+  .hero-deco.right {
+    right:2%;
+  }
+  .hero-button {
+    padding:10px 18px;
+    font-size:12px;
+  }
+  .service-strip {
+    margin-top:12px;
+  }
+  .service {
+    padding:13px 10px;
+  }
+  .service-title {
+    font-size:13px;
+    gap:5px;
+  }
+  .service p {
+    font-size:11px;
+  }
+  .trust-banner {
+    padding:12px;
+    font-size:13px;
+  }
+  .section {
+    margin-top:14px;
+  }
+  .section-title {
+    font-size:19px;
+  }
+  .featured {
+    padding:10px;
+  }
+  .featured-title {
+    font-size:18px;
+  }
+  .product-grid {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:5px;
+  }
+  .featured-grid {
+    gap:7px;
+  }
+  .product-card {
+    border-radius:3px;
+    border-color:#f3f3f3;
+  }
+  .product-photo {
+    aspect-ratio:1/1.12;
+  }
+  .product-info {
+    padding:9px 9px 11px;
+  }
+  .product-name {
+    font-size:12px;
+  }
+  .product-price {
+    font-size:19px;
+  }
+  .buy {
+    padding:10px 5px;
+    font-size:12px;
+  }
+  .tabs {
+    gap:24px;
+    padding-left:12px;
+  }
+  .tab {
+    font-size:15px;
+  }
+  .bottom-nav {
+    position:fixed;
+    display:grid;
+    grid-template-columns:repeat(5,minmax(0,1fr));
+    left:0;
+    right:0;
+    bottom:0;
+    height:65px;
+    background:white;
+    border-top:1px solid #e5e5e5;
+    z-index:80;
+    padding:8px 4px 5px;
+    box-shadow:0 -4px 15px #00000009;
+  }
+  .toast {
+    bottom:80px;
+  }
 }
 </style>
 </head>
 <body>
 
-<header>
-<div class="top">
-<a href="./index.html" class="logo">VAYO</a>
+<header class="site-header">
+  <div class="header-inner">
+    <a class="logo" href="./index.html">VAYO</a>
 
-<div class="search">
-<input id="search" placeholder="Ҷустуҷӯи маҳсулот...">
-<button id="searchBtn">Ҷустуҷӯ</button>
-</div>
+    <div class="search">
+      <input
+        id="search"
+        type="search"
+        placeholder="Ҷустуҷӯи маҳсулот..."
+        aria-label="Ҷустуҷӯи маҳсулот"
+      >
+      <button class="camera-btn" id="cameraBtn"
+        type="button" title="Ҷустуҷӯ бо акс">
+        📷
+      </button>
+      <button class="search-btn" id="searchBtn"
+        type="button" aria-label="Ҷустуҷӯ">
+        🔍
+      </button>
+    </div>
 
-<a class="navbtn" id="accountLink" href="./pages/login.html">
-👤 Воридшавӣ
-</a>
+    <div class="desktop-links">
+      <a id="accountLink" href="./pages/login.html">
+        👤 Воридшавӣ
+      </a>
+      <a href="./pages/orders.html">📦 Фармоишҳо</a>
+      <button id="cartBtn" type="button">
+        🛒 Сабад (<span id="count">0</span>)
+      </button>
+      <a href="./pages/seller.html">🏪 Фурӯшанда</a>
+    </div>
+  </div>
 
-<a class="navbtn" href="./pages/orders.html">
-📦 Фармоишҳои ман
-</a>
-
-<button class="navbtn" id="cartBtn">
-🛒 Сабад (<span id="count">0</span>)
-</button>
-
-<a class="navbtn" href="./pages/seller.html">
-🏪 Фурӯшанда
-</a>
-</div>
-
-<nav class="categories" id="categories">
-<button class="cat active" data-category="all">Ҳама</button>
-<button class="cat" data-category="Либос">Либос</button>
-<button class="cat" data-category="Пойафзол">Пойафзол</button>
-<button class="cat" data-category="Электроника">Электроника</button>
-<button class="cat" data-category="Хона">Барои хона</button>
-<button class="cat" data-category="Зебоӣ">Зебоӣ</button>
-<a class="cat" href="./pages/promotions.html"
-style="text-decoration:none;color:#ff6900">
-🔥 Аксияҳо
-</a>
-</nav>
+  <nav class="header-categories" id="categories">
+    <button class="cat active" data-category="all">Ҳама</button>
+    <button class="cat" data-category="Либос">Либос</button>
+    <button class="cat" data-category="Пойафзол">Пойафзол</button>
+    <button class="cat" data-category="Электроника">Электроника</button>
+    <button class="cat" data-category="Хона">Барои хона</button>
+    <button class="cat" data-category="Зебоӣ">Зебоӣ</button>
+    <a class="cat cat-link" href="./pages/promotions.html">
+      🔥 Аксияҳо
+    </a>
+  </nav>
 </header>
 
-<main>
 <section class="hero">
-<h1>Хуш омадед ба VAYO!</h1>
-<p>Маҳсулоти гуногун, нархҳои дастрас ва хариди осон.</p>
+  <div class="hero-deco left">🛍️</div>
+  <div class="hero-content">
+    <div class="hero-kicker">🔥 ТАХФИФҲОИ VAYO</div>
+    <h1>Пешниҳодҳои беҳтаринро пайдо кунед!</h1>
+    <p>Маҳсулоти гуногун бо нархҳои дастрас</p>
+    <a href="./pages/promotions.html" class="hero-button">
+      Дидани аксияҳо ❯
+    </a>
+  </div>
+  <div class="hero-deco right">🎁</div>
 </section>
 
-<h2 class="section-title">Маҳсулоти VAYO</h2>
+<main class="container">
 
-<div class="grid" id="products">
-<div class="empty">Маҳсулот бор шуда истодааст...</div>
-</div>
+  <section class="service-strip">
+    <div class="service">
+      <div class="service-title green">
+        🚚 Расонидан
+      </div>
+      <p>Шарт ва нарх аз мағоза вобаста аст.</p>
+    </div>
+    <div class="service">
+      <div class="service-title">
+        📦 Фармоиши осон
+      </div>
+      <p>Маҳсулотро интихоб карда фармоиш диҳед.</p>
+    </div>
+  </section>
+
+  <div class="trust-banner">
+    <span>🛡️ Нархҳо ва захираи маҳсулот ҳангоми фармоиш санҷида мешаванд</span>
+    <span>✓</span>
+  </div>
+
+  <section class="section featured">
+    <div class="section-head">
+      <h2 class="featured-title">Топ-маҳсулот ❯</h2>
+      <a class="section-more" href="./pages/promotions.html">
+        Ҳамаи аксияҳо
+      </a>
+    </div>
+    <div class="featured-grid" id="featuredProducts">
+      <div class="empty">Маҳсулот бор шуда истодааст...</div>
+    </div>
+  </section>
+
+  <section class="section" id="catalog">
+    <div class="tabs" id="catalogTabs">
+      <button class="tab active" data-tab="all">Ҳама</button>
+      <button class="tab" data-tab="featured">Интихобшуда</button>
+      <button class="tab" data-tab="local">Мағозаҳои маҳаллӣ</button>
+      <button class="tab" data-tab="sale">🔥 Тахфифҳо</button>
+    </div>
+
+    <div class="section-head" style="margin-top:18px">
+      <h2 class="section-title">Маҳсулоти VAYO</h2>
+      <span id="resultCount" class="section-more"></span>
+    </div>
+
+    <div class="product-grid" id="products">
+      <div class="empty">Маҳсулот бор шуда истодааст...</div>
+    </div>
+  </section>
+
 </main>
 
 <div class="overlay hidden" id="overlay"></div>
 
-<aside class="cartpanel hidden" id="cartPanel">
-<div class="carthead">
-<h2>🛒 Сабади шумо</h2>
-<button id="closeCart">✕</button>
-</div>
+<aside class="cart-panel hidden" id="cartPanel"
+  aria-label="Сабади харид">
+  <div class="cart-head">
+    <h2>🛒 Сабади шумо</h2>
+    <button class="close-cart" id="closeCart"
+      type="button" aria-label="Пӯшидан">✕</button>
+  </div>
 
-<div id="cartItems"></div>
-<h3 id="total">Ҳамагӣ: 0 сомонӣ</h3>
+  <div id="cartItems"></div>
 
-<p style="color:#737b86;font-size:13px">
-Нархи ниҳоии маҳсулот ҳангоми фармоиш
-дар сервер ҳисоб карда мешавад.
-</p>
+  <div class="cart-total">
+    <span>Ҳамагӣ:</span>
+    <strong id="total">0 сомонӣ</strong>
+  </div>
 
-<a class="checkout" href="./pages/checkout.html">
-📦 Гузаштан ба фармоиш
-</a>
+  <p class="cart-note">
+    Нархи ниҳоии маҳсулот ва ҳаққи расонидан
+    ҳангоми фармоиш дар сервер ҳисоб карда мешаванд.
+  </p>
+
+  <a class="checkout" href="./pages/checkout.html">
+    📦 Гузаштан ба фармоиш
+  </a>
 </aside>
 
-<footer>© 2026 VAYO — Мағозаи онлайн</footer>
+<nav class="bottom-nav" aria-label="Менюи асосӣ">
+  <a class="bottom-link active" href="./index.html">
+    <span class="bottom-icon">🏠</span>
+    <span>Асосӣ</span>
+  </a>
+  <button class="bottom-link" id="mobileCategories"
+    type="button">
+    <span class="bottom-icon">☷</span>
+    <span>Категорияҳо</span>
+  </button>
+  <a class="bottom-link" href="./pages/orders.html">
+    <span class="bottom-icon">🚚</span>
+    <span>Фармоишҳо</span>
+  </a>
+  <button class="bottom-link" id="mobileCart"
+    type="button">
+    <span class="bottom-icon">🛒</span>
+    <span>Сабад</span>
+    <span class="cart-count" id="mobileCount">0</span>
+  </button>
+  <a class="bottom-link" id="mobileAccount"
+    href="./pages/login.html">
+    <span class="bottom-icon">👤</span>
+    <span>Профил</span>
+  </a>
+</nav>
+
+<div id="toast" class="toast hidden" role="status"></div>
+
+<footer>
+  © 2026 VAYO — Бозори онлайни Тоҷикистон
+  <div style="margin-top:10px">
+    <a href="./pages/seller.html">Барои фурӯшандагон</a>
+    ·
+    <a href="./pages/orders.html">Фармоишҳои ман</a>
+  </div>
+</footer>
 
 <script>
 "use strict";
 
-const SB_URL="https://rgminzzmlktkliliiupt.supabase.co";
-const SB_KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
-const db=window.supabase.createClient(SB_URL,SB_KEY);
+/* SUPABASE */
 
-const $=id=>document.getElementById(id);
-const CART_KEY="vayo_cart_v1";
+const SB_URL =
+  "https://rgminzzmlktkliliiupt.supabase.co";
 
-let products=[];
-let category="all";
-let cart=[];
+const SB_KEY =
+  "sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
 
-function readCart(){
- try{
-  const saved=JSON.parse(localStorage.getItem(CART_KEY)||"[]");
-  return Array.isArray(saved)?saved:[];
- }catch{
-  return [];
- }
+const db = window.supabase.createClient(SB_URL, SB_KEY);
+
+const $ = id => document.getElementById(id);
+const CART_KEY = "vayo_cart_v1";
+
+let products = [];
+let cart = [];
+let category = "all";
+let activeTab = "all";
+let toastTimer = null;
+let loading = true;
+
+/* HELPERS */
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[char]));
 }
 
-cart=readCart();
-
-function saveCart(){
- localStorage.setItem(CART_KEY,JSON.stringify(cart));
- $("count").textContent=cart.reduce(
-  (sum,item)=>sum+Number(item.quantity||0),0
- );
+function money(value) {
+  return (Number(value) || 0).toFixed(2) + " сомонӣ";
 }
 
-function escapeHTML(value){
- return String(value??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;",
-  "<":"&lt;",
-  ">":"&gt;",
-  '"':"&quot;",
-  "'":"&#39;"
- }[c]));
-}
-
-function imageOf(p){
- const url=p.image_url;
- return typeof url==="string"&&/^https:\/\//i.test(url)
-  ?url:"";
-}
-
-function money(value){
- return Number(value||0).toFixed(2)+" сомонӣ";
-}
-
-function render(){
- const query=$("search").value.trim().toLowerCase();
-
- const filtered=products.filter(p=>{
-  const title=String(p.name||"").toLowerCase();
-  const cat=String(p.category||"");
-  return (category==="all"||cat===category)&&title.includes(query);
- });
-
- $("products").replaceChildren();
-
- if(!filtered.length){
-  $("products").innerHTML=
-   '<div class="empty">Ҳоло маҳсулот ёфт нашуд.</div>';
-  return;
- }
-
- filtered.forEach(p=>{
-  const card=document.createElement("article");
-  card.className="product";
-
-  const img=imageOf(p);
-  const name=p.name||"Маҳсулот";
-  const price=Number(p.current_price)||0;
-  const regular=Number(p.regular_price)||price;
-  const stock=Number(p.stock)||0;
-  const discount=Number(p.discount_percent)||0;
-
-  card.innerHTML=`
-   ${img
-    ?`<img src="${escapeHTML(img)}" alt="${escapeHTML(name)}" loading="lazy">`
-    :'<div style="aspect-ratio:1;background:#f2f2f2;display:grid;place-items:center">🛍️</div>'
-   }
-   <div class="info">
-    <div class="name">${escapeHTML(name)}</div>
-    ${discount>0
-     ?`<div class="old-price">${money(regular)}</div>
-       <span class="discount">-${discount}%</span>`
-     :""
-    }
-    <div class="price">${money(price)}</div>
-    <button class="buy" ${stock<=0?"disabled":""}>
-     ${stock>0?"Ба сабад":"Тамом шудааст"}
-    </button>
-   </div>
-  `;
-
-  card.querySelector(".buy").addEventListener("click",()=>addCart(p));
-  $("products").appendChild(card);
- });
-}
-
-function addCart(p){
- const id=String(p.id);
- const existing=cart.find(x=>String(x.product_id)===id);
- const stock=Number(p.stock)||0;
-
- if(stock<=0){
-  alert("Ин маҳсулот ҳоло дар анбор нест.");
-  return;
- }
-
- if(existing){
-  if(existing.quantity>=stock){
-   alert("Миқдори бештар дар анбор нест.");
-   return;
+function validImage(value) {
+  if (typeof value !== "string" || !value.trim()) {
+    return "";
   }
-  existing.quantity++;
- }else{
-  cart.push({product_id:id,quantity:1});
- }
-
- saveCart();
- alert("Маҳсулот ба сабад илова шуд!");
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" ? url.href : "";
+  } catch {
+    return "";
+  }
 }
 
-function renderCart(){
- const target=$("cartItems");
- target.replaceChildren();
+function showToast(message) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.classList.remove("hidden");
 
- if(!cart.length){
-  target.textContent="Сабад холӣ аст.";
- }
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.add("hidden");
+  }, 2500);
+}
 
- let total=0;
+function readCart() {
+  try {
+    const value = JSON.parse(
+      localStorage.getItem(CART_KEY) || "[]"
+    );
+    return Array.isArray(value) ? value : [];
+  } catch {
+    return [];
+  }
+}
 
- cart.forEach(item=>{
-  const product=products.find(
-   p=>String(p.id)===String(item.product_id)
+function normalizeCart(raw) {
+  const grouped = new Map();
+
+  for (const item of raw) {
+    const id = String(item?.product_id || "");
+    const qty = Number(item?.quantity);
+
+    if (!/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(id)) {
+      continue;
+    }
+    if (!Number.isInteger(qty) || qty <= 0) {
+      continue;
+    }
+
+    grouped.set(
+      id,
+      Math.min(100, (grouped.get(id) || 0) + qty)
+    );
+  }
+
+  return [...grouped].map(([product_id, quantity]) => ({
+    product_id,
+    quantity
+  }));
+}
+
+cart = normalizeCart(readCart());
+
+function saveCart() {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+
+  const count = cart.reduce(
+    (sum, item) => sum + Number(item.quantity || 0),
+    0
   );
 
-  const quantity=Number(item.quantity)||0;
-  const name=product?.name||"Маҳсулот";
-  const price=Number(product?.current_price)||0;
+  $("count").textContent = count;
+  $("mobileCount").textContent = count;
+}
 
-  const row=document.createElement("div");
-  row.className="cartrow";
+/* PRODUCT DATA */
 
-  const label=document.createElement("span");
-  label.textContent=name+" × "+quantity;
+function getProductPrice(product) {
+  const price = Number(
+    product.current_price ?? product.price ?? 0
+  );
+  return Number.isFinite(price) ? Math.max(0, price) : 0;
+}
 
-  const remove=document.createElement("button");
-  remove.textContent="Нест кардан";
+function getRegularPrice(product) {
+  const current = getProductPrice(product);
+  const regular = Number(
+    product.regular_price ?? current
+  );
 
-  remove.addEventListener("click",()=>{
-   cart=cart.filter(
-    x=>String(x.product_id)!==String(item.product_id)
-   );
-   saveCart();
-   renderCart();
+  return Number.isFinite(regular)
+    ? Math.max(current, regular)
+    : current;
+}
+
+function getDiscount(product) {
+  const current = getProductPrice(product);
+  const regular = getRegularPrice(product);
+
+  if (regular <= current || regular <= 0) {
+    return 0;
+  }
+
+  return Math.max(
+    0,
+    Math.min(99, Math.round((1 - current / regular) * 100))
+  );
+}
+
+function getStock(product) {
+  return Math.max(0, Number(product.stock) || 0);
+}
+
+function getProductImage(product) {
+  return validImage(product.image_url);
+}
+
+function isOnSale(product) {
+  return getDiscount(product) > 0;
+}
+
+function getFeaturedProducts() {
+  return products
+    .filter(product => getStock(product) > 0)
+    .slice()
+    .sort((a, b) => {
+      const discountDifference =
+        getDiscount(b) - getDiscount(a);
+
+      if (discountDifference !== 0) {
+        return discountDifference;
+      }
+
+      return 0;
+    })
+    .slice(0, 2);
+}
+
+/* PRODUCT CARD */
+
+function createProductCard(product) {
+  const card = document.createElement("article");
+  card.className = "product-card";
+
+  const name = String(product.name || "Маҳсулот");
+  const price = getProductPrice(product);
+  const regular = getRegularPrice(product);
+  const discount = getDiscount(product);
+  const stock = getStock(product);
+  const image = getProductImage(product);
+
+  const photo = document.createElement("div");
+  photo.className = "product-photo";
+
+  if (image) {
+    const img = document.createElement("img");
+    img.src = image;
+    img.alt = name;
+    img.loading = "lazy";
+    img.onerror = () => {
+      photo.replaceChildren();
+      const empty = document.createElement("div");
+      empty.className = "no-image";
+      empty.textContent = "🛍️";
+      photo.append(empty);
+    };
+    photo.append(img);
+  } else {
+    const empty = document.createElement("div");
+    empty.className = "no-image";
+    empty.textContent = "🛍️";
+    photo.append(empty);
+  }
+
+  if (discount > 0) {
+    const badge = document.createElement("span");
+    badge.className = "sale-badge";
+    badge.textContent = "−" + discount + "%";
+    photo.append(badge);
+  }
+
+  const info = document.createElement("div");
+  info.className = "product-info";
+
+  const productName = document.createElement("div");
+  productName.className = "product-name";
+  productName.textContent = name;
+
+  const productPrice = document.createElement("div");
+  productPrice.className = "product-price";
+  productPrice.textContent = money(price);
+
+  info.append(productName, productPrice);
+
+  if (discount > 0) {
+    const oldPrice = document.createElement("div");
+    oldPrice.className = "old-price";
+    oldPrice.textContent = money(regular);
+    info.append(oldPrice);
+  }
+
+  const meta = document.createElement("div");
+  meta.className = "product-meta";
+  meta.textContent = stock > 0
+    ? "Дар анбор: " + stock
+    : "Маҳсулот тамом шудааст";
+
+  const buy = document.createElement("button");
+  buy.className = "buy";
+  buy.type = "button";
+  buy.disabled = stock <= 0;
+  buy.textContent = stock > 0
+    ? "🛒 Ба сабад"
+    : "Тамом шудааст";
+
+  buy.addEventListener("click", () => {
+    addCart(product);
   });
 
-  row.append(label,remove);
-  target.appendChild(row);
+  info.append(meta, buy);
+  card.append(photo, info);
 
-  total+=price*quantity;
- });
-
- $("total").textContent="Ҳамагӣ: "+money(total);
+  return card;
 }
 
-function toggleCart(open){
- $("cartPanel").classList.toggle("hidden",!open);
- $("overlay").classList.toggle("hidden",!open);
- if(open)renderCart();
+/* SEARCH AND FILTER */
+
+function getFilteredProducts() {
+  const query = $("search").value
+    .trim()
+    .toLocaleLowerCase();
+
+  return products.filter(product => {
+    const name = String(product.name || "")
+      .toLocaleLowerCase();
+
+    const productCategory = String(
+      product.category || ""
+    );
+
+    const matchesSearch = name.includes(query);
+    const matchesCategory =
+      category === "all" ||
+      productCategory === category;
+
+    let matchesTab = true;
+
+    if (activeTab === "sale") {
+      matchesTab = isOnSale(product);
+    }
+
+    if (activeTab === "featured") {
+      matchesTab = getFeaturedProducts().some(
+        item => String(item.id) === String(product.id)
+      );
+    }
+
+    if (activeTab === "local") {
+      // Маълумоти анбори маҳаллӣ ҳоло дар
+      // vayo_public_deals муайян нашудааст.
+      // Маҳсулот бе далел маҳаллӣ эълон намешавад.
+      matchesTab = false;
+    }
+
+    return matchesSearch &&
+      matchesCategory &&
+      matchesTab;
+  });
 }
 
-$("cartBtn").onclick=()=>toggleCart(true);
-$("closeCart").onclick=()=>toggleCart(false);
-$("overlay").onclick=()=>toggleCart(false);
+function renderProducts() {
+  const root = $("products");
+  root.replaceChildren();
 
-$("search").addEventListener("input",render);
-$("searchBtn").onclick=render;
+  if (loading) {
+    root.innerHTML =
+      '<div class="empty">Маҳсулот бор шуда истодааст...</div>';
+    return;
+  }
 
-document.querySelectorAll(".cat[data-category]").forEach(btn=>{
- btn.onclick=()=>{
-  category=btn.dataset.category;
+  const filtered = getFilteredProducts();
+  $("resultCount").textContent =
+    filtered.length + " маҳсулот";
 
-  document.querySelectorAll(".cat[data-category]").forEach(
-   b=>b.classList.remove("active")
+  if (!filtered.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+
+    if (activeTab === "local") {
+      empty.textContent =
+        "Маълумоти анбори маҳаллӣ ҳоло пайваст нашудааст.";
+    } else {
+      empty.textContent =
+        "Ҳоло дар ин қисм маҳсулот ёфт нашуд.";
+    }
+
+    root.append(empty);
+    return;
+  }
+
+  const fragment = document.createDocumentFragment();
+
+  filtered.forEach(product => {
+    fragment.append(createProductCard(product));
+  });
+
+  root.append(fragment);
+}
+
+function renderFeatured() {
+  const root = $("featuredProducts");
+  root.replaceChildren();
+
+  const featured = getFeaturedProducts();
+
+  if (!featured.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent =
+      "Ҳоло маҳсулоти дастрас нест.";
+    root.append(empty);
+    return;
+  }
+
+  featured.forEach(product => {
+    root.append(createProductCard(product));
+  });
+}
+
+function render() {
+  renderFeatured();
+  renderProducts();
+}
+
+/* CART */
+
+function addCart(product) {
+  const id = String(product.id);
+  const stock = getStock(product);
+
+  if (stock <= 0) {
+    showToast("Ин маҳсулот дар анбор нест.");
+    return;
+  }
+
+  const existing = cart.find(
+    item => String(item.product_id) === id
   );
 
-  btn.classList.add("active");
-  render();
- };
+  if (existing) {
+    if (existing.quantity >= stock ||
+        existing.quantity >= 100) {
+      showToast("Миқдори бештар дар анбор нест.");
+      return;
+    }
+    existing.quantity += 1;
+  } else {
+    cart.push({
+      product_id:id,
+      quantity:1
+    });
+  }
+
+  saveCart();
+  showToast("✅ Маҳсулот ба сабад илова шуд!");
+}
+
+function changeQuantity(productId, change) {
+  const item = cart.find(
+    entry => String(entry.product_id) === String(productId)
+  );
+
+  if (!item) return;
+
+  const product = products.find(
+    entry => String(entry.id) === String(productId)
+  );
+
+  const stock = product ? getStock(product) : 100;
+  const next = item.quantity + change;
+
+  if (next <= 0) {
+    removeFromCart(productId);
+    return;
+  }
+
+  if (next > stock || next > 100) {
+    showToast("Миқдори бештар дар анбор нест.");
+    return;
+  }
+
+  item.quantity = next;
+  saveCart();
+  renderCart();
+}
+
+function removeFromCart(productId) {
+  cart = cart.filter(
+    item => String(item.product_id) !== String(productId)
+  );
+  saveCart();
+  renderCart();
+}
+
+function renderCart() {
+  const root = $("cartItems");
+  root.replaceChildren();
+
+  let total = 0;
+
+  if (!cart.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "Сабади шумо холӣ аст.";
+    root.append(empty);
+  }
+
+  cart.forEach(item => {
+    const product = products.find(
+      p => String(p.id) === String(item.product_id)
+    );
+
+    const quantity = Number(item.quantity) || 0;
+    const price = product ? getProductPrice(product) : 0;
+    const name = product?.name || "Маҳсулот";
+    const image = product ? getProductImage(product) : "";
+
+    const row = document.createElement("div");
+    row.className = "cart-row";
+
+    if (image) {
+      const img = document.createElement("img");
+      img.className = "cart-img";
+      img.src = image;
+      img.alt = name;
+      row.append(img);
+    } else {
+      const img = document.createElement("div");
+      img.className = "cart-img no-image";
+      img.style.fontSize = "25px";
+      img.textContent = "🛍️";
+      row.append(img);
+    }
+
+    const detail = document.createElement("div");
+    detail.className = "cart-detail";
+
+    const label = document.createElement("div");
+    label.className = "cart-name";
+    label.textContent = name;
+
+    const priceElement = document.createElement("div");
+    priceElement.className = "cart-price";
+    priceElement.textContent = product
+      ? money(price * quantity)
+      : "Нарх ҳангоми фармоиш санҷида мешавад";
+
+    const controls = document.createElement("div");
+    controls.className = "qty-controls";
+
+    const minus = document.createElement("button");
+    minus.textContent = "−";
+    minus.type = "button";
+    minus.addEventListener("click", () => {
+      changeQuantity(item.product_id, -1);
+    });
+
+    const qty = document.createElement("span");
+    qty.textContent = quantity;
+
+    const plus = document.createElement("button");
+    plus.textContent = "+";
+    plus.type = "button";
+    plus.addEventListener("click", () => {
+      changeQuantity(item.product_id, 1);
+    });
+
+    controls.append(minus, qty, plus);
+    detail.append(label, priceElement, controls);
+
+    const remove = document.createElement("button");
+    remove.className = "remove";
+    remove.textContent = "✕";
+    remove.title = "Нест кардан";
+    remove.addEventListener("click", () => {
+      removeFromCart(item.product_id);
+    });
+
+    row.append(detail, remove);
+    root.append(row);
+
+    if (product) {
+      total += price * quantity;
+    }
+  });
+
+  $("total").textContent = money(total);
+}
+
+function toggleCart(open) {
+  $("cartPanel").classList.toggle("hidden", !open);
+  $("overlay").classList.toggle("hidden", !open);
+  document.body.style.overflow = open ? "hidden" : "";
+
+  if (open) {
+    renderCart();
+  }
+}
+
+/* EVENTS */
+
+$("cartBtn").addEventListener("click", () => {
+  toggleCart(true);
 });
 
-async function loadProducts(){
- try{
-  const {data,error}=await db
-   .from("vayo_public_deals")
-   .select("*")
-   .limit(100);
+$("mobileCart").addEventListener("click", () => {
+  toggleCart(true);
+});
 
-  if(error)throw error;
+$("closeCart").addEventListener("click", () => {
+  toggleCart(false);
+});
 
-  products=data||[];
-  render();
+$("overlay").addEventListener("click", () => {
+  toggleCart(false);
+});
 
- }catch(error){
-  $("products").innerHTML=
-   '<div class="empty">Маҳсулот бор нашуд. Танзимоти ҷадвал ва RLS-ро санҷед.</div>';
-  console.error(error);
- }
-}
-
-async function loadAccount(){
- try{
-  const {data}=await db.auth.getUser();
-  if(data?.user){
-   $("accountLink").textContent="👤 Ҳисоби ман";
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    toggleCart(false);
   }
- }catch(error){
-  console.error(error);
- }
+});
+
+$("search").addEventListener("input", () => {
+  renderProducts();
+});
+
+$("search").addEventListener("keydown", event => {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    document.getElementById("catalog")
+      .scrollIntoView({behavior:"smooth"});
+    renderProducts();
+  }
+});
+
+$("searchBtn").addEventListener("click", () => {
+  renderProducts();
+  $("catalog").scrollIntoView({behavior:"smooth"});
+});
+
+$("cameraBtn").addEventListener("click", () => {
+  showToast(
+    "Ҷустуҷӯ бо акс ҳоло пайваст нашудааст."
+  );
+});
+
+document.querySelectorAll(".cat[data-category]")
+  .forEach(button => {
+    button.addEventListener("click", () => {
+      category = button.dataset.category;
+
+      document.querySelectorAll(".cat[data-category]")
+        .forEach(item => {
+          item.classList.remove("active");
+        });
+
+      button.classList.add("active");
+      activeTab = "all";
+
+      document.querySelectorAll(".tab")
+        .forEach(item => {
+          item.classList.toggle(
+            "active",
+            item.dataset.tab === "all"
+          );
+        });
+
+      renderProducts();
+    });
+  });
+
+document.querySelectorAll(".tab[data-tab]")
+  .forEach(button => {
+    button.addEventListener("click", () => {
+      activeTab = button.dataset.tab;
+
+      document.querySelectorAll(".tab")
+        .forEach(item => {
+          item.classList.remove("active");
+        });
+
+      button.classList.add("active");
+      renderProducts();
+    });
+  });
+
+$("mobileCategories").addEventListener("click", () => {
+  const categories = document.getElementById("categories");
+
+  categories.style.display =
+    categories.style.display === "flex" ? "none" : "flex";
+
+  if (categories.style.display === "flex") {
+    categories.scrollIntoView({behavior:"smooth"});
+  }
+});
+
+/* LOAD PRODUCTS FROM SUPABASE */
+
+async function loadProducts() {
+  loading = true;
+  renderProducts();
+
+  try {
+    const {data,error} = await db
+      .from("vayo_public_deals")
+      .select("*")
+      .limit(100);
+
+    if (error) throw error;
+
+    products = Array.isArray(data) ? data : [];
+    loading = false;
+
+    render();
+
+  } catch (error) {
+    console.error("VAYO products error:", error);
+    loading = false;
+
+    $("featuredProducts").replaceChildren();
+    $("products").replaceChildren();
+
+    const message = document.createElement("div");
+    message.className = "empty";
+    message.textContent =
+      "Маҳсулот бор нашуд. Пайвасти Supabase, " +
+      "ҷадвали vayo_public_deals ва RLS-ро санҷед.";
+
+    $("products").append(message);
+  }
 }
+
+/* AUTH */
+
+async function loadAccount() {
+  try {
+    const {data,error} = await db.auth.getUser();
+
+    if (error) {
+      console.warn(error.message);
+      return;
+    }
+
+    if (data?.user) {
+      $("accountLink").textContent = "👤 Ҳисоби ман";
+      $("mobileAccount").href = "./pages/login.html";
+    }
+  } catch (error) {
+    console.error("Auth:", error);
+  }
+}
+
+/* START */
 
 saveCart();
 loadProducts();
 loadAccount();
 </script>
+
 </body>
 </html>
