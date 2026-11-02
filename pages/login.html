@@ -23,7 +23,7 @@ button:disabled{opacity:.6}
 .message{margin-top:14px;padding:12px;border-radius:8px;background:#f4f4f4;display:none;overflow-wrap:anywhere}
 .message.ok{background:#e5f8ec;color:#146b35}
 .message.error{background:#ffe9e9;color:#b42318}
-.hidden{display:none}
+.hidden{display:none!important}
 .small{font-size:12px;color:#777;line-height:1.6}
 </style>
 </head>
@@ -70,35 +70,49 @@ button:disabled{opacity:.6}
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/config.js"></script>
 
 <script>
 "use strict";
 
-const $ = id => document.getElementById(id);
-let mode = "login";
+const $=id=>document.getElementById(id);
 
-const SUPABASE_URL =
+const SUPABASE_URL=
  "https://rgminzzmlktkliliiupt.supabase.co";
 
-const SUPABASE_KEY =
+const SUPABASE_KEY=
  "sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
 
+const LOGIN_URL=
+ "https://zikriollohismonov18-sketch.github.io/VAYO/pages/login.html";
+
+const RESET_URL=
+ "https://zikriollohismonov18-sketch.github.io/VAYO/pages/reset-password.html";
+
+let mode="login";
+let db=null;
+
 function getDB(){
- if(window.vayoDB){
-  return window.vayoDB;
+ if(db)return db;
+
+ if(!window.supabase ||
+    typeof window.supabase.createClient!=="function"){
+  return null;
  }
 
- if(window.supabase &&
-    typeof window.supabase.createClient==="function"){
-  window.vayoDB = window.supabase.createClient(
-   SUPABASE_URL,
-   SUPABASE_KEY
-  );
-  return window.vayoDB;
- }
+ db=window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY,
+  {
+   auth:{
+    persistSession:true,
+    autoRefreshToken:true,
+    detectSessionInUrl:true
+   }
+  }
+ );
 
- return null;
+ window.vayoDB=db;
+ return db;
 }
 
 function message(text,ok=false){
@@ -129,12 +143,10 @@ $("registerTab").onclick=()=>setMode("register");
 $("authForm").onsubmit=async e=>{
  e.preventDefault();
 
- const db=getDB();
+ const client=getDB();
 
- if(!db){
-  message(
-   "Supabase боргирӣ нашуд. Интернет ва файли config.js-ро санҷед."
-  );
+ if(!client){
+  message("Supabase боргирӣ нашуд. Интернетро санҷед.");
   return;
  }
 
@@ -151,10 +163,11 @@ $("authForm").onsubmit=async e=>{
 
  try{
   if(mode==="register"){
-   const {data,error}=await db.auth.signUp({
+   const {data,error}=await client.auth.signUp({
     email,
     password,
     options:{
+     emailRedirectTo:LOGIN_URL,
      data:{full_name:fullName}
     }
    });
@@ -162,19 +175,23 @@ $("authForm").onsubmit=async e=>{
    if(error)throw error;
 
    if(data.session){
-    message("Сабти ном бомуваффақият анҷом ёфт!",true);
+    message(
+     "Сабти ном бомуваффақият анҷом ёфт!",
+     true
+    );
 
     setTimeout(()=>{
      location.href="seller.html";
     },1200);
    }else{
     message(
-     "Сабти ном қабул шуд. Агар тасдиқи email фаъол бошад, почтаи худро санҷед.",
+     "Сабти ном қабул шуд. Почтаи худро санҷед ва пайванди тасдиқи email-ро кушоед.",
      true
     );
    }
+
   }else{
-   const {error}=await db.auth.signInWithPassword({
+   const {error}=await client.auth.signInWithPassword({
     email,
     password
    });
@@ -187,6 +204,7 @@ $("authForm").onsubmit=async e=>{
     location.href="seller.html";
    },1000);
   }
+
  }catch(err){
   message(err.message||"Хатогӣ рух дод.");
  }finally{
@@ -195,10 +213,10 @@ $("authForm").onsubmit=async e=>{
 };
 
 $("forgotBtn").onclick=async()=>{
- const db=getDB();
+ const client=getDB();
 
- if(!db){
-  message("Supabase танзим нашудааст.");
+ if(!client){
+  message("Supabase боргирӣ нашуд.");
   return;
  }
 
@@ -210,12 +228,9 @@ $("forgotBtn").onclick=async()=>{
  }
 
  try{
-  const redirectTo=new URL(
-   "reset-password.html",location.href
-  ).href;
-
-  const {error}=await db.auth.resetPasswordForEmail(
-   email,{redirectTo}
+  const {error}=await client.auth.resetPasswordForEmail(
+   email,
+   {redirectTo:RESET_URL}
   );
 
   if(error)throw error;
@@ -229,11 +244,80 @@ $("forgotBtn").onclick=async()=>{
  }
 };
 
-if(!getDB()){
- message(
-  "Пайвасти Supabase ҳоло дастрас нест. Боргирии китобхонаи Supabase-ро санҷед."
+async function initialize(){
+ const client=getDB();
+
+ if(!client){
+  message(
+   "Пайвасти Supabase дастрас нест. Интернетро санҷед."
+  );
+  return;
+ }
+
+ const params=new URLSearchParams(location.search);
+ const hash=new URLSearchParams(
+  location.hash.replace(/^#/,"")
  );
+
+ if(params.get("error")||hash.get("error")){
+  message(
+   params.get("error_description")||
+   hash.get("error_description")||
+   "Пайванди тасдиқи email эътибор надорад."
+  );
+  return;
+ }
+
+ if(params.get("code")){
+  const {error}=await client.auth.exchangeCodeForSession(
+   params.get("code")
+  );
+
+  if(error){
+   message(error.message);
+   return;
+  }
+
+  history.replaceState(
+   {},
+   document.title,
+   location.pathname
+  );
+
+  message(
+   "Email бомуваффақият тасдиқ шуд! Акнун метавонед ворид шавед.",
+   true
+  );
+
+  return;
+ }
+
+ if(hash.get("access_token")){
+  const {data,error}=await client.auth.getSession();
+
+  if(error){
+   message(error.message);
+   return;
+  }
+
+  if(data?.session){
+   history.replaceState(
+    {},
+    document.title,
+    location.pathname
+   );
+
+   message(
+    "Email тасдиқ шуд! Шумо метавонед ба панели фурӯшанда гузаред.",
+    true
+   );
+  }
+ }
 }
+
+initialize().catch(err=>{
+ message(err.message||"Хато ҳангоми кушодани саҳифа.");
+});
 </script>
 </body>
 </html>
