@@ -5,37 +5,139 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VAYO — Панели фурӯшанда</title>
+
 <link rel="stylesheet"
  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f6f8;color:#222}
-header{background:#ff6500;color:white;padding:18px}
-.top{max-width:950px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#f5f6f8;
+ color:#222;
+}
+header{
+ background:#ff6500;
+ color:white;
+ padding:18px;
+}
+.top{
+ max-width:950px;
+ margin:auto;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:12px;
+}
 .logo{font-size:28px;font-weight:900}
-header a{color:white;text-decoration:none;font-size:13px}
-main{max-width:950px;margin:20px auto;padding:0 12px 50px}
-.card{background:white;border-radius:14px;padding:20px;margin-bottom:15px;box-shadow:0 3px 14px #0001}
+header a{
+ color:white;
+ text-decoration:none;
+ font-size:13px;
+}
+main{
+ max-width:950px;
+ margin:20px auto;
+ padding:0 12px 50px;
+}
+.card{
+ background:white;
+ border-radius:14px;
+ padding:20px;
+ margin-bottom:15px;
+ box-shadow:0 3px 14px #0001;
+}
 h2{margin-top:0;font-size:21px}
-input,textarea,select{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:7px 0;font:inherit}
-textarea{min-height:85px;resize:vertical}
-label{font-size:13px;font-weight:bold}
-button{border:0;background:#ff6500;color:white;padding:12px 17px;border-radius:8px;font-weight:bold;cursor:pointer}
+input,textarea,select{
+ width:100%;
+ padding:12px;
+ border:1px solid #ddd;
+ border-radius:8px;
+ margin:7px 0;
+ font:inherit;
+}
+textarea{
+ min-height:85px;
+ resize:vertical;
+}
+label{
+ display:block;
+ font-size:13px;
+ font-weight:bold;
+ margin-top:10px;
+}
+button{
+ border:0;
+ background:#ff6500;
+ color:white;
+ padding:12px 17px;
+ border-radius:8px;
+ font-weight:bold;
+ cursor:pointer;
+}
 button:disabled{opacity:.6}
 .secondary{background:#333}
-.muted{color:#777;font-size:13px;line-height:1.5}
-#map{height:300px;border-radius:10px;margin:10px 0;z-index:1}
-.hidden{display:none}
-.message{padding:12px;border-radius:8px;margin:10px 0;background:#f1f1f1;overflow-wrap:anywhere}
-.success{background:#e5f8ec;color:#146b35}
-.error{background:#ffe9e9;color:#b42318}
-.shop{border:1px solid #eee;border-radius:10px;padding:15px;margin:10px 0}
-.status{display:inline-block;padding:5px 9px;border-radius:20px;background:#fff1dd;font-size:12px}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
-a.action{display:inline-block;background:#ff6500;color:white;text-decoration:none;padding:11px 14px;border-radius:8px;font-size:13px}
+.muted{
+ color:#777;
+ font-size:13px;
+ line-height:1.5;
+}
+#map{
+ height:300px;
+ border-radius:10px;
+ margin:10px 0;
+ z-index:1;
+}
+.hidden{display:none!important}
+.message{
+ padding:12px;
+ border-radius:8px;
+ margin:10px 0;
+ background:#f1f1f1;
+ overflow-wrap:anywhere;
+}
+.success{
+ background:#e5f8ec;
+ color:#146b35;
+}
+.error{
+ background:#ffe9e9;
+ color:#b42318;
+}
+.shop{
+ border:1px solid #eee;
+ border-radius:10px;
+ padding:15px;
+ margin:10px 0;
+}
+.status{
+ display:inline-block;
+ padding:5px 9px;
+ border-radius:20px;
+ background:#fff1dd;
+ font-size:12px;
+}
+.actions{
+ display:flex;
+ gap:10px;
+ flex-wrap:wrap;
+ margin-top:12px;
+}
+a.action{
+ display:inline-block;
+ background:#ff6500;
+ color:white;
+ text-decoration:none;
+ padding:11px 14px;
+ border-radius:8px;
+ font-size:13px;
+}
 </style>
 </head>
+
 <body>
+
 <header>
 <div class="top">
  <div class="logo">VAYO</div>
@@ -44,19 +146,31 @@ a.action{display:inline-block;background:#ff6500;color:white;text-decoration:non
 </header>
 
 <main>
+
 <section class="card">
 <h2>🏪 Панели фурӯшанда</h2>
-<p class="muted" id="welcome">Ҳисоб санҷида мешавад...</p>
+
+<p class="muted" id="welcome">
+Ҳисоб санҷида мешавад...
+</p>
+
 <div id="authActions" class="hidden">
-<a class="action" href="login.html">Ворид шудан / Сабти ном</a>
+<a class="action" href="login.html">
+Ворид шудан / Сабти ном
+</a>
 </div>
+
 <div id="signedActions" class="hidden">
-<button class="secondary" id="logoutBtn">Баромадан аз ҳисоб</button>
+<button class="secondary" id="logoutBtn">
+Баромадан аз ҳисоб
+</button>
 </div>
+
 <div id="notice" class="message hidden"></div>
 </section>
 
 <section id="sellerContent" class="hidden">
+
 <div class="card">
 <h2>📋 Мағозаҳои ман</h2>
 <div id="shopsList"></div>
@@ -64,16 +178,37 @@ a.action{display:inline-block;background:#ff6500;color:white;text-decoration:non
 
 <div class="card">
 <h2>➕ Сохтани мағозаи нав</h2>
-<form id="shopForm">
-<label for="shopName">Номи мағоза</label>
-<input id="shopName" required maxlength="120"
- placeholder="Масалан: VAYO Fashion">
 
-<label for="description">Маълумот дар бораи мағоза</label>
-<textarea id="description" placeholder="Маҳсулоти мағоза..."></textarea>
+<form id="shopForm">
+
+<label for="shopName">Номи мағоза</label>
+<input
+ id="shopName"
+ required
+ maxlength="120"
+ placeholder="Масалан: VAYO Fashion"
+>
+
+<label for="description">
+Маълумот дар бораи мағоза
+</label>
+<textarea
+ id="description"
+ placeholder="Маҳсулоти мағоза..."
+></textarea>
+
+<p class="muted">
+Маълумоти тавсифӣ ҳоло дар ин шакл нигоҳ дошта
+намешавад, зеро барои он дар ҷадвали мағозаҳо
+сутуни алоҳида вуҷуд надорад.
+</p>
 
 <label for="phone">Рақами телефон</label>
-<input id="phone" type="tel" placeholder="+992 ...">
+<input
+ id="phone"
+ type="tel"
+ placeholder="+992 ..."
+>
 
 <label for="city">Шаҳр</label>
 <select id="city" required>
@@ -91,62 +226,133 @@ a.action{display:inline-block;background:#ff6500;color:white;text-decoration:non
 </select>
 
 <label for="district">Ноҳия</label>
-<input id="district" placeholder="Номи ноҳия">
+<input
+ id="district"
+ placeholder="Номи ноҳия"
+>
 
 <label for="address">Суроғаи пурра</label>
-<input id="address" required
- placeholder="Кӯча, рақами бино, нишона">
+<input
+ id="address"
+ required
+ placeholder="Кӯча, рақами бино, нишона"
+>
+
+<label for="deliveryType">
+🚚 Тарзи расонидан
+</label>
+<select id="deliveryType" required>
+<option value="external">
+Карго ё ширкати расонидан
+</option>
+<option value="own">
+Расонидан аз тарафи мағоза
+</option>
+<option value="pickup">
+Харидор худаш мегирад
+</option>
+</select>
+
+<div id="deliveryFeeBox" class="hidden">
+<label for="deliveryFee">
+Нархи расонидани мағоза (сомонӣ)
+</label>
+<input
+ id="deliveryFee"
+ type="number"
+ min="0"
+ step="0.01"
+ value="0"
+>
+</div>
+
+<p id="deliveryHint" class="muted">
+Расонидан тавассути карго анҷом мешавад.
+Хароҷоти карго алоҳида ҳисоб мешавад.
+</p>
 
 <label>📍 Ҷойгиршавӣ дар харита</label>
 <p class="muted">
 Дар харита ҷои мағозаро пахш кунед.
 Координатаҳо худкор сабт мешаванд.
 </p>
+
 <div id="map"></div>
 
-<input id="latitude" type="number" step="any"
- placeholder="Latitude" readonly>
-<input id="longitude" type="number" step="any"
- placeholder="Longitude" readonly>
+<input
+ id="latitude"
+ type="number"
+ step="any"
+ placeholder="Latitude"
+ readonly
+>
+<input
+ id="longitude"
+ type="number"
+ step="any"
+ placeholder="Longitude"
+ readonly
+>
 
-<button id="saveBtn" type="submit">Сабти мағоза</button>
+<button id="saveBtn" type="submit">
+Сабти мағоза
+</button>
+
 </form>
 </div>
+
 </section>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/config.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script>
 "use strict";
 
-const $=id=>document.getElementById(id);
-let currentUser=null;
-let map=null;
-let marker=null;
+const SB_URL =
+ "https://rgminzzmlktkliliiupt.supabase.co";
+
+const SB_KEY =
+ "sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+
+const $ = id => document.getElementById(id);
+
+let db = null;
+let currentUser = null;
+let map = null;
+let marker = null;
 
 function notice(text,success=false){
- const el=$("notice");
- el.classList.remove("hidden");
- el.className="message "+(success?"success":"error");
- el.textContent=text;
+ const el = $("notice");
+ el.className =
+  "message " + (success ? "success" : "error");
+ el.textContent = text;
 }
 
 function setPoint(lat,lng){
- $("latitude").value=lat.toFixed(6);
- $("longitude").value=lng.toFixed(6);
+ $("latitude").value = lat.toFixed(6);
+ $("longitude").value = lng.toFixed(6);
 
  if(marker){
   marker.setLatLng([lat,lng]);
  }else{
-  marker=L.marker([lat,lng]).addTo(map);
+  marker = L.marker([lat,lng]).addTo(map);
  }
 }
 
 function initMap(){
- if(map)return;
- map=L.map("map").setView([38.5598,68.7870],12);
+ if(map) return;
+
+ if(!window.L){
+  notice("Харита боргирӣ нашуд.");
+  return;
+ }
+
+ map = L.map("map").setView(
+  [38.5598,68.7870],
+  12
+ );
 
  L.tileLayer(
   "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -157,10 +363,15 @@ function initMap(){
  ).addTo(map);
 
  map.on("click",e=>{
-  setPoint(e.latlng.lat,e.latlng.lng);
+  setPoint(
+   e.latlng.lat,
+   e.latlng.lng
+  );
  });
 
- setTimeout(()=>map.invalidateSize(),150);
+ setTimeout(()=>{
+  map.invalidateSize();
+ },200);
 }
 
 function statusText(status){
@@ -169,148 +380,268 @@ function statusText(status){
   approved:"✅ Тасдиқ шудааст",
   rejected:"❌ Рад шудааст",
   suspended:"⛔ Боздошта шудааст"
- })[status]||status;
+ })[status] || status;
+}
+
+function updateDeliveryUI(){
+ const type = $("deliveryType").value;
+
+ $("deliveryFeeBox").classList.toggle(
+  "hidden",
+  type !== "own"
+ );
+
+ if(type === "own"){
+  $("deliveryHint").textContent =
+   "Мағоза маҳсулотро худаш мерасонад. Нархи расонидан барои ҳар мағоза як бор ҳисоб мешавад.";
+ }else if(type === "pickup"){
+  $("deliveryHint").textContent =
+   "Харидор маҳсулотро аз мағоза худаш мегирад.";
+ }else{
+  $("deliveryHint").textContent =
+   "Расонидан тавассути карго анҷом мешавад. Хароҷоти карго алоҳида ҳисоб мешавад.";
+ }
 }
 
 async function loadShops(){
- const root=$("shopsList");
- root.textContent="Боргирӣ...";
+ const root = $("shopsList");
+ root.textContent = "Боргирӣ...";
 
- const {data,error}=await vayoDB
-  .from("shops")
-  .select("id,name,city,address,status,created_at")
+ const {data,error} = await db
+  .from("vayo_shops")
+  .select(
+   "id,name,city,address,status,created_at,delivery_type,delivery_fee"
+  )
   .eq("owner_id",currentUser.id)
   .order("created_at",{ascending:false});
 
  if(error){
-  root.textContent="Хато: "+error.message;
+  root.textContent =
+   "Хато: " + error.message;
   return;
  }
 
  root.replaceChildren();
 
- if(!data.length){
-  root.textContent="Шумо ҳоло мағоза надоред.";
+ if(!data || data.length === 0){
+  root.textContent =
+   "Шумо ҳоло мағоза надоред.";
   return;
  }
 
  data.forEach(shop=>{
-  const card=document.createElement("div");
-  card.className="shop";
+  const card = document.createElement("div");
+  card.className = "shop";
 
-  const title=document.createElement("h3");
-  title.textContent=shop.name;
+  const title = document.createElement("h3");
+  title.textContent = shop.name;
 
-  const address=document.createElement("p");
-  address.className="muted";
-  address.textContent="📍 "+shop.city+", "+shop.address;
+  const address = document.createElement("p");
+  address.className = "muted";
+  address.textContent =
+   "📍 " + shop.city + ", " + shop.address;
 
-  const status=document.createElement("span");
-  status.className="status";
-  status.textContent=statusText(shop.status);
+  const status = document.createElement("span");
+  status.className = "status";
+  status.textContent = statusText(shop.status);
 
-  const actions=document.createElement("div");
-  actions.className="actions";
+  const delivery = document.createElement("p");
+  delivery.className = "muted";
 
-  const products=document.createElement("a");
-  products.className="action";
-  products.href="add-product.html?shop="+encodeURIComponent(shop.id);
-  products.textContent="➕ Иловаи маҳсулот";
+  if(shop.delivery_type === "own"){
+   delivery.textContent =
+    "🚚 Расонидани мағоза: " +
+    Number(shop.delivery_fee || 0).toFixed(2) +
+    " сомонӣ";
+  }else if(shop.delivery_type === "pickup"){
+   delivery.textContent =
+    "🏪 Гирифтан аз мағоза";
+  }else{
+   delivery.textContent =
+    "📦 Расонидан тавассути карго";
+  }
+
+  const actions = document.createElement("div");
+  actions.className = "actions";
+
+  const products = document.createElement("a");
+  products.className = "action";
+  products.href =
+   "add-product.html?shop=" +
+   encodeURIComponent(shop.id);
+  products.textContent = "➕ Иловаи маҳсулот";
 
   actions.appendChild(products);
-  card.append(title,address,status,actions);
+
+  card.append(
+   title,
+   address,
+   status,
+   delivery,
+   actions
+  );
+
   root.appendChild(card);
  });
 }
 
 async function init(){
- if(!window.vayoDB){
-  $("welcome").textContent="Пайвасти Supabase танзим нашудааст.";
+ if(
+  !window.supabase ||
+  typeof window.supabase.createClient !== "function"
+ ){
+  $("welcome").textContent =
+   "Китобхонаи Supabase боргирӣ нашуд.";
   $("authActions").classList.remove("hidden");
   return;
  }
 
- const {data,error}=await vayoDB.auth.getUser();
+ db = window.supabase.createClient(
+  SB_URL,
+  SB_KEY
+ );
 
- if(error||!data.user){
-  $("welcome").textContent="Барои сохтани мағоза ворид шавед.";
-  $("authActions").classList.remove("hidden");
-  return;
- }
-
- currentUser=data.user;
- $("welcome").textContent="Хуш омадед: "+(currentUser.email||"Фурӯшанда");
- $("signedActions").classList.remove("hidden");
- $("sellerContent").classList.remove("hidden");
-
- initMap();
- await loadShops();
-}
-
-$("shopForm").addEventListener("submit",async e=>{
- e.preventDefault();
-
- if(!currentUser){
-  notice("Аввал ворид шавед.");
-  return;
- }
-
- const name=$("shopName").value.trim();
- const city=$("city").value;
- const address=$("address").value.trim();
-
- if(!name||!city||!address){
-  notice("Ном, шаҳр ва суроғаро пур кунед.");
-  return;
- }
-
- const lat=$("latitude").value;
- const lng=$("longitude").value;
-
- if(!lat||!lng){
-  notice("Ҷойгиршавии мағозаро дар харита интихоб кунед.");
-  return;
- }
-
- $("saveBtn").disabled=true;
+ window.vayoDB = db;
 
  try{
-  const {error}=await vayoDB.from("shops").insert({
-   owner_id:currentUser.id,
-   name,
-   description:$("description").value.trim(),
-   phone:$("phone").value.trim(),
-   city,
-   district:$("district").value.trim(),
-   address,
-   latitude:Number(lat),
-   longitude:Number(lng),
-   status:"pending"
-  });
+  const {data,error} =
+   await db.auth.getUser();
 
-  if(error)throw error;
-
-  notice("Мағоза сабт шуд ва интизори тасдиқ аст.",true);
-  $("shopForm").reset();
-
-  if(marker){
-   map.removeLayer(marker);
-   marker=null;
+  if(error || !data?.user){
+   $("welcome").textContent =
+    "Барои сохтани мағоза ворид шавед.";
+   $("authActions").classList.remove("hidden");
+   return;
   }
 
+  currentUser = data.user;
+
+  $("welcome").textContent =
+   "Хуш омадед: " +
+   (currentUser.email || "Фурӯшанда");
+
+  $("signedActions").classList.remove("hidden");
+  $("sellerContent").classList.remove("hidden");
+
+  initMap();
   await loadShops();
+
  }catch(err){
-  notice("Хато: "+(err.message||String(err)));
- }finally{
-  $("saveBtn").disabled=false;
+  $("welcome").textContent =
+   "Хато ҳангоми пайвастшавӣ.";
+  notice(err.message || String(err));
  }
-});
+}
 
-$("logoutBtn").onclick=async()=>{
- await vayoDB.auth.signOut();
- location.href="login.html";
-};
+$("deliveryType").addEventListener(
+ "change",
+ updateDeliveryUI
+);
 
+$("shopForm").addEventListener(
+ "submit",
+ async e=>{
+  e.preventDefault();
+
+  if(!currentUser || !db){
+   notice("Аввал ворид шавед.");
+   return;
+  }
+
+  const name = $("shopName").value.trim();
+  const city = $("city").value;
+  const address = $("address").value.trim();
+
+  if(!name || !city || !address){
+   notice("Ном, шаҳр ва суроғаро пур кунед.");
+   return;
+  }
+
+  const lat = $("latitude").value;
+  const lng = $("longitude").value;
+
+  if(!lat || !lng){
+   notice(
+    "Ҷойгиршавии мағозаро дар харита интихоб кунед."
+   );
+   return;
+  }
+
+  const deliveryType =
+   $("deliveryType").value;
+
+  const deliveryFee =
+   deliveryType === "own"
+    ? Number($("deliveryFee").value)
+    : 0;
+
+  if(
+   !Number.isFinite(deliveryFee) ||
+   deliveryFee < 0
+  ){
+   notice(
+    "Нархи расонидан бояд рақами дуруст бошад."
+   );
+   return;
+  }
+
+  $("saveBtn").disabled = true;
+
+  try{
+   const {error} = await db
+    .from("vayo_shops")
+    .insert({
+     owner_id:currentUser.id,
+     name:name,
+     phone:$("phone").value.trim() || null,
+     city:city,
+     district:$("district").value.trim() || null,
+     address:address,
+     latitude:Number(lat),
+     longitude:Number(lng),
+     delivery_type:deliveryType,
+     delivery_fee:deliveryFee
+    });
+
+   if(error) throw error;
+
+   notice(
+    "Мағоза сабт шуд ва интизори тасдиқ аст.",
+    true
+   );
+
+   $("shopForm").reset();
+   updateDeliveryUI();
+
+   if(marker && map){
+    map.removeLayer(marker);
+    marker = null;
+   }
+
+   await loadShops();
+
+  }catch(err){
+   notice(
+    "Хато: " +
+    (err.message || String(err))
+   );
+  }finally{
+   $("saveBtn").disabled = false;
+  }
+ }
+);
+
+$("logoutBtn").addEventListener(
+ "click",
+ async ()=>{
+  if(db){
+   await db.auth.signOut();
+  }
+  location.href = "login.html";
+ }
+);
+
+updateDeliveryUI();
 init();
 </script>
 </body>
