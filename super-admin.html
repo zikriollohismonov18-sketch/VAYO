@@ -75,6 +75,7 @@ th{background:#f8fafc;color:#64748b}
 .activity-good{color:#15803d;font-weight:bold}
 .activity-bad{color:#dc2626;font-weight:bold}
 .activity-title{border-left:5px solid #ff6900}
+.order-warning{background:#fff7ed;border:1px solid #fed7aa;padding:13px;border-radius:10px;color:#9a3412;font-size:13px;margin:12px 0}
 @media(max-width:850px){
 .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
 .charts,.form-grid{grid-template-columns:1fr}
@@ -90,7 +91,7 @@ th{background:#f8fafc;color:#64748b}
  <div class="top">
   <div class="logo">VAYO <span>SUPER ADMIN</span></div>
   <div>
-   <a href="../index.html">Саҳифаи асосӣ</a>
+   <a href="index.html">Саҳифаи асосӣ</a>
    <button id="logoutBtn" class="logout" style="display:none">Баромадан</button>
   </div>
  </div>
@@ -149,9 +150,9 @@ th{background:#f8fafc;color:#64748b}
    <strong id="rejectedCount">0</strong>
   </div>
   <div class="stat">
-   <small>Комиссияи амалкунандаи VAYO</small>
-   <strong id="commissionDisplay">Танзим нашудааст</strong>
-   <small>Сиёсати 2% бояд алоҳида дар сервер татбиқ шавад</small>
+   <small>Комиссияи VAYO</small>
+   <strong id="commissionDisplay">2%</strong>
+   <small>Танҳо аз амалиёти анҷомёфта ва пардохтшуда. Санҷиши серверии пардохт ҳанӯз пурра нест.</small>
   </div>
  </div>
 
@@ -226,17 +227,18 @@ th{background:#f8fafc;color:#64748b}
     <input id="orderSearch" placeholder="Рақам, харидор ё шаҳр">
     <button id="reloadOrders" class="refresh">Навсозӣ</button>
    </div>
-   <p class="muted">
-    Тағйири ҳолати фармоишҳо баъд аз иловаи
-    функсияи серверии махсус фаъол мешавад.
-   </p>
+   <div class="order-warning">
+    Пеш аз пахш кардани «Расонида шуд» ҳатман санҷед:
+    маҳсулот ба харидор расидааст ва маблағ воқеан гирифта шудааст.
+    Тасдиқи дастӣ далели мустақили пардохт дар сервер нест.
+   </div>
    <div class="tablewrap">
     <table>
      <thead>
       <tr>
        <th>ID</th><th>Харидор</th><th>Шаҳр</th>
        <th>Маблағ</th><th>Пардохт</th><th>Ҳолат</th>
-       <th>Сана</th>
+       <th>Сана</th><th>Идоракунӣ</th>
       </tr>
      </thead>
      <tbody id="orderRows"></tbody>
@@ -272,8 +274,7 @@ th{background:#f8fafc;color:#64748b}
   <div class="panel">
    <h2>Маркази эълонҳо ва реклама</h2>
    <p class="muted">
-    Эълонҳои фаъол дар саҳифаҳои пайвастшуда
-    нишон дода мешаванд.
+    Эълонҳои фаъол дар саҳифаҳои пайвастшуда нишон дода мешаванд.
    </p>
 
    <div class="form-grid">
@@ -281,7 +282,6 @@ th{background:#f8fafc;color:#64748b}
      <label for="annTitle">Сарлавҳа</label>
      <input id="annTitle" placeholder="Масалан: Корҳои техникӣ">
     </div>
-
     <div class="form-field">
      <label for="annType">Навъ</label>
      <select id="annType">
@@ -291,7 +291,6 @@ th{background:#f8fafc;color:#64748b}
       <option value="advertisement">Реклама</option>
      </select>
     </div>
-
     <div class="form-field">
      <label for="annAudience">Дар куҷо нишон дода шавад?</label>
      <select id="annAudience">
@@ -301,22 +300,18 @@ th{background:#f8fafc;color:#64748b}
       <option value="customer">Саҳифаҳои харидор</option>
      </select>
     </div>
-
     <div class="form-field">
      <label for="annImage">URL-и акс</label>
      <input id="annImage" placeholder="https://...">
     </div>
-
     <div class="form-field">
      <label for="annLink">URL-и реклама</label>
      <input id="annLink" placeholder="https://...">
     </div>
-
     <div class="form-field">
      <label for="annStart">Санаи оғоз</label>
      <input id="annStart" type="datetime-local">
     </div>
-
     <div class="form-field">
      <label for="annEnd">Санаи анҷом</label>
      <input id="annEnd" type="datetime-local">
@@ -395,7 +390,6 @@ th{background:#f8fafc;color:#64748b}
 
    <div class="controls">
     <input id="activityDate" type="date">
-
     <select id="activityService">
      <option value="all">Ҳамаи хизматрасониҳо</option>
      <option value="market">Market</option>
@@ -405,13 +399,8 @@ th{background:#f8fafc;color:#64748b}
      <option value="rental">Rental</option>
      <option value="language_ai">Language AI</option>
     </select>
-
-    <input id="activitySearch"
-           placeholder="Ҷустуҷӯи ном ё ID">
-
-    <button id="reloadActivity" class="refresh">
-     🔄 Навсозӣ
-    </button>
+    <input id="activitySearch" placeholder="Ҷустуҷӯи ном ё ID">
+    <button id="reloadActivity" class="refresh">🔄 Навсозӣ</button>
    </div>
   </div>
 
@@ -420,17 +409,14 @@ th{background:#f8fafc;color:#64748b}
     <small>Иштирокчиёни фаъол</small>
     <strong id="activityPeople">0</strong>
    </div>
-
    <div class="stat">
     <small>Ҳамаи сессияҳо</small>
     <strong id="activitySessions">0</strong>
    </div>
-
    <div class="stat">
     <small>Вақти умумии сабтшуда</small>
     <strong id="activityTotalTime">00:00:00</strong>
    </div>
-
    <div class="stat">
     <small>Хизматрасониҳои сабтшуда</small>
     <strong id="activityServices">0</strong>
@@ -439,22 +425,15 @@ th{background:#f8fafc;color:#64748b}
 
   <div class="panel">
    <h2>Ҳисоботи фаъолияти ҳаррӯза</h2>
-
-   <p id="activityReportStatus"
-      class="muted"
-      role="status">
+   <p id="activityReportStatus" class="muted" role="status">
     Барои гирифтани маълумот Навсозӣ-ро пахш кунед.
    </p>
-
    <div class="tablewrap">
     <table>
      <thead>
       <tr>
-       <th>Ном</th>
-       <th>ID</th>
-       <th>Хизматрасонӣ</th>
-       <th>Сессияҳо</th>
-       <th>Вақти фаъолият</th>
+       <th>Ном</th><th>ID</th><th>Хизматрасонӣ</th>
+       <th>Сессияҳо</th><th>Вақти фаъолият</th>
        <th>Охирин фаъолият</th>
       </tr>
      </thead>
@@ -484,7 +463,6 @@ let presenceTimer=null,onlineTimer=null;
 let activityLoading=false;
 
 /* HELPERS */
-
 function notify(message,success=false){
  const node=$("message");
  node.style.display="block";
@@ -567,11 +545,9 @@ document.querySelectorAll(".tabs button").forEach(button=>{
 });
 
 /* ADMIN STATS */
-
 async function loadAdminStats(){
  const {data,error}=await db.rpc("vayo_admin_stats");
  if(error)throw error;
-
  $("usersCount").textContent=fmt(data?.users);
  $("productsCount").textContent=fmt(data?.products);
  $("ordersCount").textContent=fmt(data?.orders);
@@ -580,13 +556,11 @@ async function loadAdminStats(){
 
 async function loadOnlineCount(){
  const {data,error}=await db.rpc("vayo_admin_online_count");
-
  if(error){
   $("onlineCount").textContent="Хато";
   console.error(error);
   return;
  }
-
  $("onlineCount").textContent=fmt(data);
 }
 
@@ -610,7 +584,6 @@ function startPresence(){
 }
 
 /* SHOPS */
-
 function shopStats(){
  $("total").textContent=fmt(shops.length);
  $("pendingCount").textContent=fmt(
@@ -685,12 +658,9 @@ function renderShops(){
        p_status:status
       }
      );
-
      if(error)throw error;
-
      await loadShops();
      notify("Ҳолати мағоза навсозӣ шуд.",true);
-
     }catch(e){
      notify(e.message);
     }finally{
@@ -709,14 +679,12 @@ function renderShops(){
 async function loadShops(){
  const {data,error}=await db.rpc("vayo_admin_list_shops");
  if(error)throw error;
-
  shops=Array.isArray(data)?data:[];
  shopStats();
  renderShops();
 }
 
 /* PRODUCTS */
-
 function renderProducts(){
  const tbody=$("productRows");
  tbody.replaceChildren();
@@ -741,7 +709,6 @@ function renderProducts(){
   if(p.image_url){
    try{
     const url=new URL(p.image_url,location.origin);
-
     if(url.protocol==="https:"){
      const img=document.createElement("img");
      img.src=url.href;
@@ -766,7 +733,6 @@ function renderProducts(){
    async()=>{
     if(busy)return;
     busy=true;
-
     try{
      const {error}=await db.rpc(
       "vayo_admin_set_product_active",{
@@ -774,11 +740,9 @@ function renderProducts(){
        p_active:!p.active
       }
      );
-
      if(error)throw error;
      await loadProducts();
      notify("Маҳсулот навсозӣ шуд.",true);
-
     }catch(e){
      notify(e.message);
     }finally{
@@ -795,12 +759,62 @@ function renderProducts(){
 async function loadProducts(){
  const {data,error}=await db.rpc("vayo_admin_products");
  if(error)throw error;
-
  products=Array.isArray(data)?data:[];
  renderProducts();
 }
 
 /* ORDERS */
+async function confirmOrderDelivered(order,button){
+ if(busy)return;
+
+ if(order.status!=="pending"){
+  notify("Ин фармоиш дар ҳолати интизорӣ нест.");
+  return;
+ }
+
+ if(!confirm(
+  "Фармоиш: "+order.id+
+  "\nОё маҳсулот воқеан расонида шудааст?"
+ ))return;
+
+ if(!confirm(
+  "Маблағ: "+money(order.total_amount)+" сомонӣ"+
+  "\nОё пардохт воқеан гирифта шудааст?"+
+  "\n\nБо тасдиқ триггери комиссияи 2% фаъол мешавад."
+ ))return;
+
+ busy=true;
+ button.disabled=true;
+ button.textContent="Сабт мешавад...";
+
+ try{
+  const {data,error}=await db.rpc(
+   "vayo_admin_change_order_status",{
+    p_order_id:order.id,
+    p_new_status:"delivered"
+   }
+  );
+
+  if(error)throw error;
+  if(!data?.success){
+   throw new Error("Тасдиқи сервер иҷро нашуд.");
+  }
+
+  await Promise.all([
+   loadOrders(),
+   loadAdminStats()
+  ]);
+
+  notify("Фармоиш расонида шуд.",true);
+
+ }catch(e){
+  notify(e.message||String(e));
+ }finally{
+  busy=false;
+  button.disabled=false;
+  button.textContent="Расонида шуд";
+ }
+}
 
 function renderOrders(){
  const tbody=$("orderRows");
@@ -815,7 +829,7 @@ function renderOrders(){
  );
 
  if(!filtered.length){
-  emptyRow(tbody,7,"Фармоиш ёфт нашуд.");
+  emptyRow(tbody,8,"Фармоиш ёфт нашуд.");
   return;
  }
 
@@ -827,8 +841,37 @@ function renderOrders(){
   cell(tr,o.city||"—");
   cell(tr,money(o.total_amount)+" сомонӣ");
   cell(tr,o.payment_method||"—");
-  cell(tr,o.status||"—");
+
+  const statusCell=cell(tr,"");
+  const badge=el("span",{
+   pending:"Интизор",
+   delivered:"Расонида шуд",
+   cancelled:"Бекоршуда"
+  }[o.status]||o.status||"—");
+
+  badge.className="status "+
+   (o.status==="delivered"?"approved":
+    o.status==="pending"?"pending":"rejected");
+
+  statusCell.appendChild(badge);
+
   cell(tr,dateText(o.created_at));
+
+  const actions=cell(tr,"");
+  actions.className="actions";
+
+  if(o.status==="pending"){
+   const btn=actionButton(
+    "Расонида шуд",
+    ()=>confirmOrderDelivered(o,btn),
+    "green"
+   );
+   actions.appendChild(btn);
+  }else if(o.status==="delivered"){
+   actions.appendChild(el("span","✅ Тасдиқшуда"));
+  }else{
+   actions.textContent="—";
+  }
 
   tbody.appendChild(tr);
  }
@@ -837,13 +880,11 @@ function renderOrders(){
 async function loadOrders(){
  const {data,error}=await db.rpc("vayo_admin_orders");
  if(error)throw error;
-
  orders=Array.isArray(data)?data:[];
  renderOrders();
 }
 
 /* USERS */
-
 function renderUsers(){
  const tbody=$("userRows");
  tbody.replaceChildren();
@@ -863,13 +904,11 @@ function renderUsers(){
 
  for(const u of filtered){
   const tr=document.createElement("tr");
-
   cell(tr,u.email||"—");
   cell(tr,u.id);
   cell(tr,u.is_admin?"Администратор":"Корбар");
   cell(tr,dateText(u.created_at));
   cell(tr,dateText(u.last_sign_in_at));
-
   tbody.appendChild(tr);
  }
 }
@@ -877,47 +916,38 @@ function renderUsers(){
 async function loadUsers(){
  const {data,error}=await db.rpc("vayo_admin_users");
  if(error)throw error;
-
  users=Array.isArray(data)?data:[];
  renderUsers();
 }
 
 /* ANNOUNCEMENTS */
-
 function safeURL(value){
  if(!value||!value.trim())return null;
-
  const url=new URL(value.trim(),location.origin);
-
  if(url.protocol!=="https:"&&
     !(url.protocol==="http:"&&url.hostname==="localhost")){
   throw new Error("Пайванд бояд HTTPS бошад.");
  }
-
  return url.href;
 }
 
 function localDate(value){
  if(!value)return "";
-
  const date=new Date(value);
  const adjusted=new Date(
   date.getTime()-date.getTimezoneOffset()*60000
  );
-
  return adjusted.toISOString().slice(0,16);
 }
 
 function clearAnnouncementForm(){
  editingAnnouncementId=null;
-
  for(const id of [
   "annTitle","annMessage","annImage",
   "annLink","annStart","annEnd"
  ]){
   $(id).value="";
  }
-
  $("annType").value="info";
  $("annAudience").value="all";
  $("annActive").checked=true;
@@ -927,7 +957,6 @@ function clearAnnouncementForm(){
 
 function editAnnouncement(item){
  editingAnnouncementId=item.id;
-
  $("annTitle").value=item.title||"";
  $("annMessage").value=item.message||"";
  $("annType").value=item.type||"info";
@@ -937,10 +966,8 @@ function editAnnouncement(item){
  $("annStart").value=localDate(item.starts_at);
  $("annEnd").value=localDate(item.ends_at);
  $("annActive").checked=!!item.active;
-
  $("saveAnnouncement").textContent="Нигоҳ доштани тағйирот";
  $("announcementStatus").textContent="Таҳрир: "+item.title;
-
  window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -973,7 +1000,6 @@ function renderAnnouncements(){
   if(item.image_url){
    try{
     const url=safeURL(item.image_url);
-
     if(url){
      const img=document.createElement("img");
      img.src=url;
@@ -1005,11 +1031,9 @@ function renderAnnouncements(){
        p_active:!item.active
       }
      );
-
      if(error)throw error;
      await loadAnnouncements();
      notify("Ҳолати эълон тағйир ёфт.",true);
-
     }catch(e){
      notify(e.message);
     }
@@ -1021,23 +1045,18 @@ function renderAnnouncements(){
    "Нест кардан",
    async()=>{
     if(!confirm("Ин эълон нест карда шавад?"))return;
-
     try{
      const {error}=await db.rpc(
       "vayo_admin_delete_announcement",{
        p_id:item.id
       }
      );
-
      if(error)throw error;
-
      if(editingAnnouncementId===item.id){
       clearAnnouncementForm();
      }
-
      await loadAnnouncements();
      notify("Эълон нест карда шуд.",true);
-
     }catch(e){
      notify(e.message);
     }
@@ -1054,9 +1073,7 @@ async function loadAnnouncements(){
  const {data,error}=await db.rpc(
   "vayo_admin_list_announcements"
  );
-
  if(error)throw error;
-
  announcements=Array.isArray(data)?data:[];
  renderAnnouncements();
 }
@@ -1122,12 +1139,10 @@ async function saveAnnouncement(){
 }
 
 /* MARKETING */
-
 async function loadMarketing(){
  const {data,error}=await db.rpc(
   "vayo_admin_marketing"
  );
-
  if(error)throw error;
 
  const coupons=$("couponList");
@@ -1167,7 +1182,6 @@ async function loadMarketing(){
 }
 
 /* CHARTS */
-
 function drawChart(id,oldChart,rows,labelKey,type){
  if(oldChart)oldChart.destroy();
 
@@ -1222,7 +1236,6 @@ async function loadCharts(){
  const {data,error}=await db.rpc(
   "vayo_admin_sales_chart"
  );
-
  if(error)throw error;
 
  dailyChart=drawChart(
@@ -1243,7 +1256,6 @@ async function loadCharts(){
 }
 
 /* PROVIDER ACTIVITY */
-
 function dushanbeToday(){
  const parts=new Intl.DateTimeFormat("en-US",{
   timeZone:"Asia/Dushanbe",
@@ -1266,7 +1278,6 @@ function activityDuration(value){
  const seconds=Math.max(
   0,Math.floor(Number(value)||0)
  );
-
  const hours=Math.floor(seconds/3600);
  const minutes=Math.floor(seconds%3600/60);
  const secs=seconds%60;
@@ -1278,9 +1289,7 @@ function activityDuration(value){
 
 function activityDateText(value){
  if(!value)return "—";
-
  const date=new Date(value);
-
  if(Number.isNaN(date.getTime()))return "—";
 
  return date.toLocaleString("ru-RU",{
@@ -1303,7 +1312,6 @@ function serviceName(value){
   rental:"🏠 Rental",
   language_ai:"📚 Language AI"
  };
-
  return names[value]||value||"—";
 }
 
@@ -1356,8 +1364,7 @@ function renderActivity(){
 
  if(!filtered.length){
   emptyRow(
-   tbody,
-   6,
+   tbody,6,
    "Барои ин сана ва филтр фаъолият ёфт нашуд."
   );
   return;
@@ -1446,7 +1453,6 @@ async function loadActivity(){
 }
 
 /* REFRESH ALL */
-
 async function refreshAll(){
  const tasks=[
   loadShops(),
@@ -1475,7 +1481,6 @@ async function refreshAll(){
 }
 
 /* AUTHENTICATION */
-
 async function init(){
  try{
   if(!window.supabase){
@@ -1488,13 +1493,11 @@ async function init(){
   );
 
   const {data,error}=await db.auth.getUser();
-
   if(error)throw error;
 
   if(!data?.user){
    $("accountInfo").textContent=
     "Барои ворид шудан ба login.html гузар.";
-
    notify("Аввал ба ҳисоби худ ворид шав.");
    return;
   }
@@ -1503,7 +1506,6 @@ async function init(){
    "Ҳисоб: "+data.user.email;
 
   const admin=await db.rpc("vayo_is_admin");
-
   if(admin.error)throw admin.error;
 
   if(admin.data!==true){
@@ -1513,12 +1515,10 @@ async function init(){
 
   $("dashboard").style.display="block";
   $("logoutBtn").style.display="inline-block";
-
   $("activityDate").value=dushanbeToday();
 
   await touchPresence();
   await refreshAll();
-
   startPresence();
 
  }catch(e){
@@ -1529,7 +1529,6 @@ async function init(){
 }
 
 /* EVENTS */
-
 $("search").addEventListener("input",renderShops);
 $("filter").addEventListener("change",renderShops);
 
@@ -1626,7 +1625,6 @@ $("logoutBtn").addEventListener(
 
 /* START */
 init();
-
 </script>
 </body>
 </html>
