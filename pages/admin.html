@@ -3,213 +3,59 @@
 <html lang="tg">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>VAYO — Super Admin</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
 
 <style>
 *{box-sizing:border-box}
-
-body{
- margin:0;
- background:#f3f5f9;
- color:#182235;
- font-family:Arial,sans-serif;
-}
-
-header{
- background:#101827;
- color:white;
- padding:18px;
-}
-
-.top{
- max-width:1200px;
- margin:auto;
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:12px;
- flex-wrap:wrap;
-}
-
-.logo{
- font-size:24px;
- font-weight:800;
-}
-
+body{margin:0;background:#f3f5f9;color:#182235;font-family:Arial,sans-serif}
+header{background:#101827;color:white;padding:18px}
+.top{max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:24px;font-weight:800}
 .logo span{color:#ff6900}
-
-header a{
- color:white;
- text-decoration:none;
- margin-right:12px;
-}
-
-main{
- max-width:1200px;
- margin:24px auto;
- padding:0 15px;
-}
-
+header a{color:white;text-decoration:none;margin-right:12px}
+main{max-width:1200px;margin:24px auto;padding:0 15px}
 h1{font-size:26px}
 h2{font-size:19px}
-
-.stats{
- display:grid;
- grid-template-columns:repeat(4,minmax(0,1fr));
- gap:14px;
- margin:20px 0;
-}
-
-.stat,.panel{
- background:white;
- border-radius:14px;
- padding:20px;
- box-shadow:0 3px 15px #00000009;
-}
-
-.stat small{
- color:#667085;
- line-height:1.5;
-}
-
-.stat strong{
- display:block;
- font-size:28px;
- margin-top:10px;
- overflow-wrap:anywhere;
-}
-
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:20px 0}
+.stat,.panel{background:white;border-radius:14px;padding:20px;box-shadow:0 3px 15px #00000009}
+.stat small{color:#667085;line-height:1.5}
+.stat strong{display:block;font-size:28px;margin-top:10px;overflow-wrap:anywhere}
 .panel{margin-top:18px}
-
-.controls{
- display:flex;
- gap:10px;
- flex-wrap:wrap;
- margin:15px 0;
-}
-
-input,select{
- padding:12px;
- border:1px solid #d9dfeb;
- border-radius:9px;
- font-size:14px;
-}
-
-input{
- flex:1;
- min-width:170px;
-}
-
-button{
- background:#ff6900;
- color:white;
- border:0;
- border-radius:8px;
- padding:10px 14px;
- font-weight:bold;
- cursor:pointer;
-}
-
-button:disabled{
- opacity:.5;
- cursor:not-allowed;
-}
-
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}
+input,select{padding:12px;border:1px solid #d9dfeb;border-radius:9px;font-size:14px}
+input{flex:1;min-width:170px}
+button{background:#ff6900;color:white;border:0;border-radius:8px;padding:10px 14px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
 button.reject{background:#dc3545}
 button.pending{background:#64748b}
 button.refresh{background:#26364d}
 button.logout{background:#344256}
-
 .tablewrap{overflow-x:auto}
-
-table{
- width:100%;
- border-collapse:collapse;
- min-width:800px;
-}
-
-th,td{
- padding:13px;
- text-align:left;
- border-bottom:1px solid #edf0f5;
- font-size:14px;
- vertical-align:top;
-}
-
-th{
- background:#f8fafc;
- color:#64748b;
-}
-
-.actions{
- display:flex;
- gap:6px;
- flex-wrap:wrap;
-}
-
-.status{
- padding:5px 9px;
- border-radius:20px;
- font-size:12px;
- font-weight:bold;
- display:inline-block;
-}
-
-.status.approved{
- background:#dcfce7;
- color:#166534;
-}
-
-.status.pending{
- background:#fef3c7;
- color:#92400e;
-}
-
-.status.rejected{
- background:#fee2e2;
- color:#991b1b;
-}
-
-#message{
- display:none;
- padding:14px;
- border-radius:10px;
- margin:14px 0;
- overflow-wrap:anywhere;
-}
-
-.ok{
- background:#dcfce7;
- color:#166534;
-}
-
-.error{
- background:#fee2e2;
- color:#991b1b;
-}
-
+table{width:100%;border-collapse:collapse;min-width:800px}
+th,td{padding:13px;text-align:left;border-bottom:1px solid #edf0f5;font-size:14px;vertical-align:top}
+th{background:#f8fafc;color:#64748b}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.status{padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold;display:inline-block}
+.status.approved{background:#dcfce7;color:#166534}
+.status.pending{background:#fef3c7;color:#92400e}
+.status.rejected{background:#fee2e2;color:#991b1b}
+#message{display:none;padding:14px;border-radius:10px;margin:14px 0;overflow-wrap:anywhere}
+.ok{background:#dcfce7;color:#166534}
+.error{background:#fee2e2;color:#991b1b}
 #dashboard{display:none}
-
-.muted{
- color:#64748b;
- font-size:13px;
+.muted{color:#64748b;font-size:13px}
+.empty{text-align:center;padding:30px;color:#64748b}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.chartbox{position:relative;height:320px}
+.chartbox canvas{width:100%!important;height:100%!important}
+@media(max-width:850px){
+ .charts{grid-template-columns:1fr}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
-
-.empty{
- text-align:center;
- padding:30px;
- color:#64748b;
-}
-
-@media(max-width:750px){
- .stats{
-  grid-template-columns:repeat(2,minmax(0,1fr));
- }
- .stat{padding:15px}
- .stat strong{font-size:23px}
-}
-
 @media(max-width:380px){
  .stats{grid-template-columns:1fr}
 }
@@ -217,292 +63,178 @@ th{
 </head>
 
 <body>
-
 <header>
  <div class="top">
-  <div class="logo">
-   VAYO <span>SUPER ADMIN</span>
-  </div>
-
+  <div class="logo">VAYO <span>SUPER ADMIN</span></div>
   <div>
    <a href="../index.html">Саҳифаи асосӣ</a>
-   <button
-    id="logoutBtn"
-    class="logout"
-    style="display:none"
-   >
-    Баромадан
-   </button>
+   <button id="logoutBtn" class="logout" style="display:none">Баромадан</button>
   </div>
  </div>
 </header>
 
 <main>
-
  <h1>Маркази идоракунии VAYO</h1>
-
- <p class="muted" id="accountInfo">
-  Санҷиши иҷозат...
- </p>
-
+ <p class="muted" id="accountInfo">Санҷиши иҷозат...</p>
  <div id="message" role="status"></div>
 
  <div id="dashboard">
-
-  <!-- ОМОРИ КОРБАРОН ВА ФАРМОИШҲО -->
-
   <div class="stats">
-
-   <div class="stat">
-    <small>Ҳамаи корбарон</small>
-    <strong id="usersCount">—</strong>
-   </div>
-
-   <div class="stat">
-    <small>Ҳамаи маҳсулот</small>
-    <strong id="productsCount">—</strong>
-   </div>
-
-   <div class="stat">
-    <small>Ҳамаи фармоишҳо</small>
-    <strong id="ordersCount">—</strong>
-   </div>
-
+   <div class="stat"><small>Ҳамаи корбарон</small><strong id="usersCount">—</strong></div>
+   <div class="stat"><small>Ҳамаи маҳсулот</small><strong id="productsCount">—</strong></div>
+   <div class="stat"><small>Ҳамаи фармоишҳо</small><strong id="ordersCount">—</strong></div>
    <div class="stat">
     <small>Маблағи фармоишҳо</small>
     <strong id="salesAmount">—</strong>
     <small>сомонӣ · фармоишҳои бекорнашуда</small>
    </div>
-
   </div>
-
-  <!-- ОМОРИ МАҒОЗАҲО -->
 
   <div class="stats">
-
-   <div class="stat">
-    <small>Ҳамаи мағозаҳо</small>
-    <strong id="total">0</strong>
-   </div>
-
-   <div class="stat">
-    <small>Интизори тасдиқ</small>
-    <strong id="pendingCount">0</strong>
-   </div>
-
-   <div class="stat">
-    <small>Тасдиқшуда</small>
-    <strong id="approvedCount">0</strong>
-   </div>
-
-   <div class="stat">
-    <small>Радшуда</small>
-    <strong id="rejectedCount">0</strong>
-   </div>
-
+   <div class="stat"><small>Ҳамаи мағозаҳо</small><strong id="total">0</strong></div>
+   <div class="stat"><small>Интизори тасдиқ</small><strong id="pendingCount">0</strong></div>
+   <div class="stat"><small>Тасдиқшуда</small><strong id="approvedCount">0</strong></div>
+   <div class="stat"><small>Радшуда</small><strong id="rejectedCount">0</strong></div>
   </div>
 
-  <!-- ИДОРАКУНИИ МАҒОЗАҲО -->
-
   <section class="panel">
-
    <h2>Идоракунии мағозаҳо</h2>
-
    <div class="controls">
-
-    <input
-     id="search"
-     placeholder="Ном, шаҳр, телефон ё суроға"
-    >
-
+    <input id="search" placeholder="Ном, шаҳр, телефон ё суроға">
     <select id="filter">
      <option value="all">Ҳамаи мағозаҳо</option>
      <option value="pending">Интизори тасдиқ</option>
      <option value="approved">Тасдиқшуда</option>
      <option value="rejected">Радшуда</option>
     </select>
-
-    <button class="refresh" id="refreshBtn">
-     Навсозӣ
-    </button>
-
+    <button class="refresh" id="refreshBtn">Навсозӣ</button>
    </div>
 
    <div class="tablewrap">
     <table>
      <thead>
       <tr>
-       <th>Мағоза</th>
-       <th>Шаҳр ва суроға</th>
-       <th>Телефон</th>
-       <th>Расонидан</th>
-       <th>Ҳолат</th>
-       <th>Сана</th>
-       <th>Идоракунӣ</th>
+       <th>Мағоза</th><th>Шаҳр ва суроға</th><th>Телефон</th>
+       <th>Расонидан</th><th>Ҳолат</th><th>Сана</th><th>Идоракунӣ</th>
       </tr>
      </thead>
      <tbody id="shopRows"></tbody>
     </table>
    </div>
-
   </section>
+
+  <div class="charts">
+   <section class="panel">
+    <h2>Фурӯши 30 рӯзи охир</h2>
+    <p class="muted">Маблағи фармоишҳои бекорнашуда, сомонӣ</p>
+    <div class="chartbox"><canvas id="dailyChart"></canvas></div>
+   </section>
+   <section class="panel">
+    <h2>Фурӯши 12 моҳи охир</h2>
+    <p class="muted">Маблағи фармоишҳои бекорнашуда, сомонӣ</p>
+    <div class="chartbox"><canvas id="monthlyChart"></canvas></div>
+   </section>
+  </div>
 
   <section class="panel">
    <h2>Таҳлил ва графикҳо</h2>
    <p class="muted">
-    Омори асосӣ ба Supabase пайваст аст.
-    Графикҳои рӯзона ва моҳонаи фурӯш ва
-    шумораи корбарони онлайн дар қадамҳои
-    навбатӣ илова мешаванд.
+    Графикҳо аз фармоишҳои воқеии Supabase ҳисоб мешаванд.
+    Маблағи фармоишҳо маънои пардохти тасдиқшударо надорад.
+    Омори корбарони онлайн дар қадами навбатӣ илова мешавад.
    </p>
   </section>
-
  </div>
-
 </main>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 "use strict";
 
-const SB_URL =
- "https://rgminzzmlktkliliiupt.supabase.co";
-
-const SB_KEY =
- "sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
-
-const LOGIN_URL = "login.html";
-
-const $ = id => document.getElementById(id);
+const SB_URL="https://rgminzzmlktkliliiupt.supabase.co";
+const SB_KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+const LOGIN_URL="login.html";
+const $=id=>document.getElementById(id);
 
 let db;
-let shops = [];
-let busy = false;
+let shops=[];
+let busy=false;
+let dailyChart=null;
+let monthlyChart=null;
 
 function notify(text,success=false){
- const el = $("message");
- el.style.display = "block";
- el.className = success ? "ok" : "error";
- el.textContent = text;
+ const el=$("message");
+ el.style.display="block";
+ el.className=success?"ok":"error";
+ el.textContent=text;
 }
 
 function make(tag,text){
- const el = document.createElement(tag);
- el.textContent = text == null ? "" : String(text);
+ const el=document.createElement(tag);
+ el.textContent=text==null?"":String(text);
  return el;
 }
 
 function dateText(value){
  if(!value)return "—";
- const date = new Date(value);
- if(Number.isNaN(date.getTime()))return "—";
- return date.toLocaleDateString("tg-TJ");
+ const date=new Date(value);
+ return Number.isNaN(date.getTime())?"—":date.toLocaleDateString("tg-TJ");
 }
 
 function numberText(value){
- return Number(value || 0).toLocaleString("ru-RU");
+ return Number(value||0).toLocaleString("ru-RU");
 }
 
 function moneyText(value){
- return Number(value || 0).toLocaleString(
-  "ru-RU",
-  {
-   minimumFractionDigits:2,
-   maximumFractionDigits:2
-  }
- );
+ return Number(value||0).toLocaleString("ru-RU",{
+  minimumFractionDigits:2,
+  maximumFractionDigits:2
+ });
 }
-
-/* ОМОРИ МАҒОЗАҲО */
 
 function updateStats(){
- $("total").textContent = numberText(shops.length);
-
- $("pendingCount").textContent = numberText(
-  shops.filter(x=>x.status==="pending").length
- );
-
- $("approvedCount").textContent = numberText(
-  shops.filter(x=>x.status==="approved").length
- );
-
- $("rejectedCount").textContent = numberText(
-  shops.filter(x=>x.status==="rejected").length
- );
+ $("total").textContent=numberText(shops.length);
+ $("pendingCount").textContent=numberText(shops.filter(x=>x.status==="pending").length);
+ $("approvedCount").textContent=numberText(shops.filter(x=>x.status==="approved").length);
+ $("rejectedCount").textContent=numberText(shops.filter(x=>x.status==="rejected").length);
 }
-
-/* ОМОРИ УМУМӢ */
 
 async function loadAdminStats(){
- const {data,error} = await db.rpc("vayo_admin_stats");
-
+ const {data,error}=await db.rpc("vayo_admin_stats");
  if(error)throw error;
-
- $("usersCount").textContent =
-  numberText(data?.users);
-
- $("productsCount").textContent =
-  numberText(data?.products);
-
- $("ordersCount").textContent =
-  numberText(data?.orders);
-
- $("salesAmount").textContent =
-  moneyText(data?.sales);
+ $("usersCount").textContent=numberText(data?.users);
+ $("productsCount").textContent=numberText(data?.products);
+ $("ordersCount").textContent=numberText(data?.orders);
+ $("salesAmount").textContent=moneyText(data?.sales);
 }
 
-/* ҶАДВАЛИ МАҒОЗАҲО */
-
 function addCell(tr,text){
- const td = make("td",text);
+ const td=make("td",text);
  tr.appendChild(td);
  return td;
 }
 
 function addStatusButton(container,shop,status,label,cls){
- const btn = make("button",label);
- if(cls)btn.className = cls;
-
- btn.disabled = shop.status === status;
+ const btn=make("button",label);
+ if(cls)btn.className=cls;
+ btn.disabled=shop.status===status;
 
  btn.addEventListener("click",async()=>{
   if(busy)return;
-
-  const confirmed = confirm(
-   `Ҳолати мағозаи "${shop.name}" ба "${label}" тағйир ёбад?`
-  );
-
-  if(!confirmed)return;
-
-  busy = true;
-  btn.disabled = true;
-
+  if(!confirm(`Ҳолати мағозаи "${shop.name}" ба "${label}" тағйир ёбад?`))return;
+  busy=true;
+  btn.disabled=true;
   try{
-   const {error} = await db.rpc(
-    "vayo_admin_change_shop_status",
-    {
-     p_shop_id:shop.id,
-     p_status:status
-    }
-   );
-
+   const {error}=await db.rpc("vayo_admin_change_shop_status",{
+    p_shop_id:shop.id,
+    p_status:status
+   });
    if(error)throw error;
-
    await refreshAll();
-
-   notify(
-    "Ҳолати мағоза бомуваффақият тағйир ёфт.",
-    true
-   );
-
+   notify("Ҳолати мағоза бомуваффақият тағйир ёфт.",true);
   }catch(err){
-   notify(
-    "Хатои тағйири ҳолат: " +
-    (err.message || "Хатои номаълум")
-   );
+   notify("Хатои тағйири ҳолат: "+(err.message||"Хатои номаълум"));
   }finally{
-   busy = false;
+   busy=false;
    renderShops();
   }
  });
@@ -511,268 +243,223 @@ function addStatusButton(container,shop,status,label,cls){
 }
 
 function renderShops(){
- const tbody = $("shopRows");
+ const tbody=$("shopRows");
  tbody.replaceChildren();
+ const q=$("search").value.trim().toLowerCase();
+ const filter=$("filter").value;
 
- const q = $("search").value.trim().toLowerCase();
- const filter = $("filter").value;
-
- const filtered = shops.filter(shop=>{
-  if(filter !== "all" && shop.status !== filter){
-   return false;
-  }
-
-  const text = [
-   shop.name,
-   shop.city,
-   shop.address,
-   shop.phone
-  ].filter(Boolean).join(" ").toLowerCase();
-
-  return text.includes(q);
+ const filtered=shops.filter(shop=>{
+  if(filter!=="all"&&shop.status!==filter)return false;
+  return [shop.name,shop.city,shop.address,shop.phone]
+   .filter(Boolean).join(" ").toLowerCase().includes(q);
  });
 
  if(!filtered.length){
-  const tr = document.createElement("tr");
-  const td = make("td","Мағоза ёфт нашуд.");
-  td.colSpan = 7;
-  td.className = "empty";
+  const tr=document.createElement("tr");
+  const td=make("td","Мағоза ёфт нашуд.");
+  td.colSpan=7;
+  td.className="empty";
   tr.appendChild(td);
   tbody.appendChild(tr);
   return;
  }
 
  for(const shop of filtered){
-  const tr = document.createElement("tr");
-
-  const nameCell = addCell(
-   tr,
-   shop.name || "Беном"
-  );
-
-  const idText = make("div",shop.id);
-  idText.className = "muted";
+  const tr=document.createElement("tr");
+  const nameCell=addCell(tr,shop.name||"Беном");
+  const idText=make("div",shop.id);
+  idText.className="muted";
   nameCell.appendChild(idText);
 
-  addCell(
-   tr,
-   [shop.city,shop.address]
-    .filter(Boolean)
-    .join(", ") || "—"
-  );
+  addCell(tr,[shop.city,shop.address].filter(Boolean).join(", ")||"—");
+  addCell(tr,shop.phone||"—");
 
-  addCell(tr,shop.phone || "—");
-
-  const delivery = {
+  const delivery={
    own:"Расонидани мағоза",
    external:"Расонидани беруна",
    pickup:"Худаш мегирад"
   };
 
-  addCell(
-   tr,
-   (delivery[shop.delivery_type] ||
-    shop.delivery_type || "—") +
-   " / " +
-   moneyText(shop.delivery_fee) +
-   " сомонӣ"
-  );
+  addCell(tr,(delivery[shop.delivery_type]||shop.delivery_type||"—")+
+   " / "+moneyText(shop.delivery_fee)+" сомонӣ");
 
-  const statusCell = addCell(tr,"");
-
-  const statusEl = make(
-   "span",
-   {
-    pending:"Интизор",
-    approved:"Тасдиқшуда",
-    rejected:"Радшуда"
-   }[shop.status] || shop.status
-  );
-
-  statusEl.className = "status " + shop.status;
+  const statusCell=addCell(tr,"");
+  const statusEl=make("span",{
+   pending:"Интизор",
+   approved:"Тасдиқшуда",
+   rejected:"Радшуда"
+  }[shop.status]||shop.status);
+  statusEl.className="status "+shop.status;
   statusCell.appendChild(statusEl);
 
   addCell(tr,dateText(shop.created_at));
 
-  const actionCell = addCell(tr,"");
-  actionCell.className = "actions";
-
-  addStatusButton(
-   actionCell,
-   shop,
-   "approved",
-   "Тасдиқ",
-   ""
-  );
-
-  addStatusButton(
-   actionCell,
-   shop,
-   "rejected",
-   "Рад",
-   "reject"
-  );
-
-  addStatusButton(
-   actionCell,
-   shop,
-   "pending",
-   "Интизор",
-   "pending"
-  );
+  const actionCell=addCell(tr,"");
+  actionCell.className="actions";
+  addStatusButton(actionCell,shop,"approved","Тасдиқ","");
+  addStatusButton(actionCell,shop,"rejected","Рад","reject");
+  addStatusButton(actionCell,shop,"pending","Интизор","pending");
 
   tbody.appendChild(tr);
  }
 }
 
-/* ГИРИФТАНИ МАҒОЗАҲО */
-
 async function loadShops(){
- const {data,error} = await db.rpc(
-  "vayo_admin_list_shops"
- );
-
+ const {data,error}=await db.rpc("vayo_admin_list_shops");
  if(error)throw error;
-
- shops = Array.isArray(data) ? data : [];
-
+ shops=Array.isArray(data)?data:[];
  updateStats();
  renderShops();
 }
 
-/* НАВСОЗИИ ҲАМАИ ОМОР */
+function drawChart(canvasId,oldChart,rows,labelKey,type){
+ if(oldChart)oldChart.destroy();
 
-async function refreshAll(){
- const results = await Promise.allSettled([
-  loadShops(),
-  loadAdminStats()
- ]);
+ const labels=rows.map(x=>x[labelKey]);
+ const sales=rows.map(x=>Number(x.sales||0));
+ const orders=rows.map(x=>Number(x.orders||0));
 
- const errors = results
-  .filter(x=>x.status==="rejected")
-  .map(x=>x.reason?.message || "Хатои номаълум");
-
- if(errors.length){
-  throw new Error(errors.join(" | "));
- }
+ return new Chart($(canvasId),{
+  type,
+  data:{
+   labels,
+   datasets:[
+    {
+     label:"Маблағи фармоишҳо (сомонӣ)",
+     data:sales,
+     borderColor:"#ff6900",
+     backgroundColor:type==="bar"?"#ff6900":"rgba(255,105,0,.12)",
+     borderWidth:2,
+     fill:type==="line",
+     tension:.3,
+     yAxisID:"y"
+    },
+    {
+     label:"Шумораи фармоишҳо",
+     data:orders,
+     borderColor:"#2563eb",
+     backgroundColor:"rgba(37,99,235,.15)",
+     borderWidth:2,
+     fill:false,
+     tension:.3,
+     type:"line",
+     yAxisID:"y1"
+    }
+   ]
+  },
+  options:{
+   responsive:true,
+   maintainAspectRatio:false,
+   interaction:{mode:"index",intersect:false},
+   scales:{
+    y:{
+     beginAtZero:true,
+     position:"left",
+     title:{display:true,text:"Сомонӣ"}
+    },
+    y1:{
+     beginAtZero:true,
+     position:"right",
+     grid:{drawOnChartArea:false},
+     ticks:{precision:0},
+     title:{display:true,text:"Фармоишҳо"}
+    }
+   }
+  }
+ });
 }
 
-/* ВОРИДШАВИИ SUPER ADMIN */
+async function loadSalesCharts(){
+ if(typeof Chart==="undefined"){
+  throw new Error("Chart.js боргирӣ нашуд.");
+ }
+
+ const {data,error}=await db.rpc("vayo_admin_sales_chart");
+ if(error)throw error;
+
+ const daily=Array.isArray(data?.daily)?data.daily:[];
+ const monthly=Array.isArray(data?.monthly)?data.monthly:[];
+
+ dailyChart=drawChart("dailyChart",dailyChart,daily,"date","line");
+ monthlyChart=drawChart("monthlyChart",monthlyChart,monthly,"month","bar");
+}
+
+async function refreshAll(){
+ const results=await Promise.allSettled([
+  loadShops(),
+  loadAdminStats(),
+  loadSalesCharts()
+ ]);
+
+ const errors=results.filter(x=>x.status==="rejected")
+  .map(x=>x.reason?.message||"Хатои номаълум");
+
+ if(errors.length)throw new Error(errors.join(" | "));
+}
 
 async function init(){
  try{
   if(!window.supabase){
-   throw new Error(
-    "Китобхонаи Supabase боргирӣ нашуд."
-   );
+   throw new Error("Китобхонаи Supabase боргирӣ нашуд.");
   }
 
-  db = window.supabase.createClient(
-   SB_URL,
-   SB_KEY
-  );
+  db=window.supabase.createClient(SB_URL,SB_KEY);
 
-  const {data:userData,error:userError} =
-   await db.auth.getUser();
-
+  const {data:userData,error:userError}=await db.auth.getUser();
   if(userError)throw userError;
 
   if(!userData?.user){
-   notify(
-    "Барои кушодани панели администратор ворид шавед."
-   );
-
-   $("accountInfo").textContent =
-    "Ҳисоб ворид нашудааст.";
-
+   $("accountInfo").textContent="Ҳисоб ворид нашудааст.";
+   notify("Барои кушодани панели администратор ворид шавед.");
    return;
   }
 
-  $("accountInfo").textContent =
-   "Ҳисоб: " + userData.user.email;
+  $("accountInfo").textContent="Ҳисоб: "+userData.user.email;
 
-  const {data:isAdmin,error:adminError} =
-   await db.rpc("vayo_is_admin");
-
+  const {data:isAdmin,error:adminError}=await db.rpc("vayo_is_admin");
   if(adminError)throw adminError;
 
-  if(isAdmin !== true){
-   notify(
-    "Шумо ҳуқуқи администратор надоред."
-   );
+  if(isAdmin!==true){
+   notify("Шумо ҳуқуқи администратор надоред.");
    return;
   }
 
-  $("dashboard").style.display = "block";
-  $("logoutBtn").style.display = "inline-block";
+  $("dashboard").style.display="block";
+  $("logoutBtn").style.display="inline-block";
 
   await refreshAll();
-
  }catch(err){
-  notify(
-   err.message ||
-   "Хато ҳангоми кушодани панел."
-  );
+  notify(err.message||"Хато ҳангоми кушодани панел.");
  }
 }
 
-/* ҶУСТУҶӮ ВА ФИЛТР */
+$("search").addEventListener("input",renderShops);
+$("filter").addEventListener("change",renderShops);
 
-$("search").addEventListener(
- "input",
- renderShops
-);
-
-$("filter").addEventListener(
- "change",
- renderShops
-);
-
-/* НАВСОЗӢ */
-
-$("refreshBtn").addEventListener(
- "click",
- async()=>{
-  if(busy)return;
-  busy = true;
-
-  try{
-   await refreshAll();
-   notify("Маълумот навсозӣ шуд.",true);
-  }catch(err){
-   notify(
-    "Хатои навсозӣ: " +
-    (err.message || "Хатои номаълум")
-   );
-  }finally{
-   busy = false;
-  }
+$("refreshBtn").addEventListener("click",async()=>{
+ if(busy)return;
+ busy=true;
+ try{
+  await refreshAll();
+  notify("Маълумот навсозӣ шуд.",true);
+ }catch(err){
+  notify("Хатои навсозӣ: "+(err.message||"Хатои номаълум"));
+ }finally{
+  busy=false;
  }
-);
+});
 
-/* БАРОМАДАН */
-
-$("logoutBtn").addEventListener(
- "click",
- async()=>{
-  if(!db)return;
-
-  const {error} = await db.auth.signOut();
-
-  if(error){
-   notify(error.message);
-   return;
-  }
-
-  location.href = LOGIN_URL;
+$("logoutBtn").addEventListener("click",async()=>{
+ if(!db)return;
+ const {error}=await db.auth.signOut();
+ if(error){
+  notify(error.message);
+  return;
  }
-);
-
-/* ОҒОЗ */
+ location.href=LOGIN_URL;
+});
 
 init();
-
 </script>
-
 </body>
 </html>
