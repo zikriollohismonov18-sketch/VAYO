@@ -3,1023 +3,790 @@
 <html lang="tg">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ef330b">
 <meta name="description" content="VAYO — бозори онлайни Тоҷикистон">
 <title>VAYO — Бозори онлайн</title>
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-:root {
-  --orange:#f43a10;
-  --orange2:#ff6500;
-  --orange3:#ff8a00;
-  --red:#e92f20;
-  --green:#078622;
-  --ink:#202124;
-  --muted:#777b83;
-  --line:#e9e9e9;
-  --bg:#f5f5f5;
-  --white:#ffffff;
-  --radius:13px;
-  --shadow:0 5px 24px rgba(0,0,0,.07);
+:root{
+ --orange:#f43a10;
+ --orange2:#ff7000;
+ --red:#e82e20;
+ --green:#078622;
+ --ink:#202124;
+ --muted:#777b83;
+ --line:#e9e9e9;
+ --bg:#f5f5f5;
+ --white:#fff;
 }
-* {
-  box-sizing:border-box;
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ color:var(--ink);
+ background:var(--bg);
 }
-html {
-  scroll-behavior:smooth;
-}
-body {
-  margin:0;
-  font-family:Inter,Arial,sans-serif;
-  color:var(--ink);
-  background:var(--bg);
-}
-button,input {
-  font:inherit;
-}
-button {
-  cursor:pointer;
-}
-button:disabled {
-  cursor:not-allowed;
-  opacity:.55;
-}
-a {
-  color:inherit;
-  text-decoration:none;
-}
-.hidden {
-  display:none!important;
-}
-.container {
-  max-width:1280px;
-  margin:auto;
-  padding-left:15px;
-  padding-right:15px;
-}
+button,input,select{font:inherit}
+button{cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+a{text-decoration:none;color:inherit}
+.hidden{display:none!important}
+.container{max-width:1280px;margin:auto;padding:0 15px}
 
 /* HEADER */
-
-.site-header {
-  position:sticky;
-  top:0;
-  z-index:50;
-  background:linear-gradient(110deg,#e92c0b,#ff5d00);
-  color:white;
-  box-shadow:0 3px 15px #00000012;
+.site-header{
+ position:sticky;
+ top:0;
+ z-index:50;
+ background:linear-gradient(110deg,#e92c0b,#ff5d00);
+ color:white;
+ box-shadow:0 3px 15px #0002;
 }
-.header-inner {
-  max-width:1280px;
-  margin:auto;
-  padding:13px 15px;
-  display:flex;
-  align-items:center;
-  gap:17px;
+.header-inner{
+ max-width:1280px;
+ margin:auto;
+ padding:12px 15px;
+ display:flex;
+ align-items:center;
+ gap:12px;
 }
-.logo {
-  color:white;
-  font-size:35px;
-  font-weight:900;
-  letter-spacing:-2px;
-  white-space:nowrap;
+.logo{
+ color:white;
+ font-size:35px;
+ font-weight:900;
+ letter-spacing:-2px;
 }
-.search {
-  display:flex;
-  align-items:center;
-  flex:1;
-  min-width:0;
-  height:51px;
-  background:white;
-  border-radius:40px;
-  overflow:hidden;
-  padding:5px;
+.search{
+ display:flex;
+ align-items:center;
+ flex:1;
+ min-width:0;
+ height:49px;
+ padding:4px;
+ background:white;
+ border-radius:40px;
 }
-.search input {
-  flex:1;
-  min-width:0;
-  border:0;
-  outline:0;
-  background:transparent;
-  padding:0 16px;
-  font-size:15px;
-  color:#333;
+.search input{
+ flex:1;
+ min-width:0;
+ border:0;
+ outline:0;
+ padding:0 14px;
+ color:#222;
+ background:transparent;
+ font-size:14px;
 }
-.search input::placeholder {
-  color:#777;
+.camera-btn{
+ width:40px;
+ height:40px;
+ border:0;
+ background:transparent;
+ font-size:23px;
 }
-.camera-btn {
-  width:42px;
-  height:42px;
-  border:0;
-  background:transparent;
-  font-size:24px;
-  display:grid;
-  place-items:center;
+.search-btn{
+ height:40px;
+ min-width:52px;
+ border:0;
+ border-radius:30px;
+ background:#111;
+ color:white;
+ font-size:20px;
 }
-.search-btn {
-  border:0;
-  background:#080808;
-  color:white;
-  height:42px;
-  min-width:65px;
-  border-radius:30px;
-  font-size:20px;
-  font-weight:900;
+.language{
+ display:flex;
+ gap:3px;
+ padding:4px;
+ border-radius:25px;
+ background:#ffffff22;
 }
-.desktop-links {
-  display:flex;
-  align-items:center;
-  gap:16px;
+.language button{
+ border:0;
+ background:transparent;
+ color:white;
+ font-size:12px;
+ font-weight:800;
+ padding:8px;
+ border-radius:20px;
+}
+.language button.active{
+ background:white;
+ color:#ed330b;
+}
+.desktop-links{
+ display:flex;
+ align-items:center;
+ gap:13px;
 }
 .desktop-links a,
-.desktop-links button {
-  background:transparent;
-  border:0;
-  color:white;
-  font-size:13px;
-  font-weight:800;
-  white-space:nowrap;
+.desktop-links button{
+ background:transparent;
+ color:white;
+ border:0;
+ font-size:12px;
+ font-weight:800;
+ white-space:nowrap;
 }
-.header-categories {
-  max-width:1280px;
-  margin:auto;
-  display:flex;
-  overflow-x:auto;
-  gap:8px;
-  padding:0 15px 11px;
-  scrollbar-width:none;
+.header-categories{
+ max-width:1280px;
+ margin:auto;
+ display:flex;
+ gap:8px;
+ overflow-x:auto;
+ padding:0 15px 11px;
+ scrollbar-width:none;
 }
-.header-categories::-webkit-scrollbar {
-  display:none;
+.cat{
+ border:1px solid #ffffff65;
+ background:#ffffff1b;
+ color:white;
+ border-radius:25px;
+ padding:9px 15px;
+ font-size:13px;
+ font-weight:800;
+ white-space:nowrap;
 }
-.cat {
-  border:1px solid #ffffff65;
-  color:white;
-  background:#ffffff1b;
-  border-radius:25px;
-  padding:9px 15px;
-  font-size:13px;
-  font-weight:800;
-  white-space:nowrap;
+.cat.active{
+ background:white;
+ color:var(--orange);
 }
-.cat.active {
-  background:white;
-  color:var(--orange);
-  border-color:white;
-}
-.cat-link {
-  display:inline-flex;
-  align-items:center;
-}
+.cat-link{display:inline-flex;align-items:center}
 
-/* BANNER */
-
-.hero {
-  background:linear-gradient(110deg,#f32b08,#ff5d00 60%,#ff8b00);
-  color:white;
-  min-height:220px;
-  position:relative;
-  overflow:hidden;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:30px 18px;
+/* HERO */
+.hero{
+ background:linear-gradient(110deg,#f32b08,#ff5d00 60%,#ff8b00);
+ color:white;
+ min-height:210px;
+ position:relative;
+ overflow:hidden;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ padding:30px 18px;
 }
-.hero::before {
-  content:"";
-  position:absolute;
-  width:260px;
-  height:260px;
-  border:55px solid #ffffff18;
-  border-radius:50%;
-  left:-100px;
-  top:-100px;
+.hero-content{position:relative;z-index:1}
+.hero-kicker{
+ color:#fff58b;
+ font-weight:900;
+ font-size:clamp(20px,3vw,35px);
 }
-.hero::after {
-  content:"";
-  position:absolute;
-  width:300px;
-  height:300px;
-  border:60px solid #ffffff14;
-  border-radius:50%;
-  right:-130px;
-  bottom:-190px;
+.hero h1{
+ margin:8px 0 12px;
+ font-size:clamp(26px,4vw,46px);
+ font-weight:900;
 }
-.hero-content {
-  position:relative;
-  z-index:1;
+.hero p{font-size:15px}
+.hero-button{
+ display:inline-block;
+ background:#fff2a6;
+ color:#bd2908;
+ font-size:14px;
+ font-weight:900;
+ padding:12px 24px;
+ border-radius:30px;
 }
-.hero-kicker {
-  color:#fff58b;
-  font-weight:900;
-  font-size:clamp(20px,3vw,35px);
-  text-shadow:0 2px 3px #0003;
+.hero-deco{
+ position:absolute;
+ font-size:70px;
+ opacity:.4;
 }
-.hero h1 {
-  margin:8px 0 12px;
-  font-weight:900;
-  font-size:clamp(26px,4vw,48px);
-  line-height:1.15;
-  text-transform:uppercase;
-}
-.hero p {
-  margin:0 0 20px;
-  font-size:15px;
-}
-.hero-button {
-  display:inline-block;
-  background:#fff2a6;
-  color:#bd2908;
-  font-size:14px;
-  font-weight:900;
-  padding:12px 24px;
-  border-radius:30px;
-}
-.hero-deco {
-  position:absolute;
-  font-size:70px;
-  opacity:.45;
-}
-.hero-deco.left {
-  left:8%;
-  top:27%;
-  transform:rotate(-20deg);
-}
-.hero-deco.right {
-  right:9%;
-  top:20%;
-  transform:rotate(20deg);
-}
+.hero-deco.left{left:8%;top:25%}
+.hero-deco.right{right:8%;top:25%}
 
 /* SERVICES */
-
-.service-strip {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:0;
-  background:#fff0e4;
-  margin-top:15px;
-  border-radius:13px;
-  overflow:hidden;
-  border:1px solid #ffe4d0;
+.service-strip{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ background:#fff0e4;
+ border:1px solid #ffe4d0;
+ border-radius:13px;
+ overflow:hidden;
+ margin-top:15px;
 }
-.service {
-  padding:17px 18px;
-  min-width:0;
+.service{padding:16px}
+.service:first-child{border-right:1px solid #e7d2c1}
+.service-title{font-size:17px;font-weight:900}
+.service-title.green{color:var(--green)}
+.service p{
+ color:#69615b;
+ font-size:13px;
+ margin:8px 0 0;
 }
-.service:first-child {
-  border-right:1px solid #e7d2c1;
-}
-.service-title {
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-size:17px;
-  font-weight:900;
-}
-.service-title.green {
-  color:var(--green);
-}
-.service p {
-  color:#69615b;
-  font-size:13px;
-  margin:9px 0 0;
-}
-.trust-banner {
-  margin-top:13px;
-  background:#07860a;
-  color:white;
-  padding:13px 18px;
-  font-weight:900;
-  border-radius:9px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-.trust-banner a {
-  text-decoration:underline;
-  text-underline-offset:3px;
+.trust-banner{
+ margin-top:13px;
+ background:#07860a;
+ color:white;
+ padding:13px 18px;
+ border-radius:9px;
+ font-size:13px;
+ font-weight:800;
 }
 
-/* SECTIONS */
-
-.section {
-  margin-top:20px;
+/* PRODUCTS */
+.section{margin-top:20px}
+.section-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+ margin-bottom:13px;
 }
-.section-head {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-bottom:13px;
+.section-title{margin:0;font-size:22px;font-weight:900}
+.section-more{color:var(--orange);font-size:13px;font-weight:800}
+.featured{
+ background:linear-gradient(180deg,#ffe8ea,#fff5f5);
+ padding:15px;
+ border-radius:13px;
 }
-.section-title {
-  margin:0;
-  font-size:22px;
-  font-weight:900;
+.featured-title{
+ color:#b71d2a;
+ font-size:20px;
+ font-weight:900;
+ margin:0;
 }
-.section-more {
-  color:var(--orange);
-  font-size:13px;
-  font-weight:800;
+.featured-grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:12px;
 }
-.featured {
-  background:linear-gradient(180deg,#ffe8ea,#fff5f5);
-  padding:15px;
-  border-radius:13px;
+.product-grid{
+ display:grid;
+ grid-template-columns:repeat(5,minmax(0,1fr));
+ gap:14px;
 }
-.featured-title {
-  color:#b71d2a;
-  font-weight:900;
-  font-style:italic;
-  font-size:20px;
-  margin:0 0 13px;
+.product-card{
+ background:white;
+ border:1px solid #eee;
+ border-radius:11px;
+ overflow:hidden;
+ min-width:0;
 }
-.featured-grid {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
+.product-photo{
+ position:relative;
+ width:100%;
+ aspect-ratio:1/1.08;
+ background:#f0f0f0;
+ overflow:hidden;
 }
-.featured-grid .product-card {
-  border:0;
+.product-photo img{
+ width:100%;
+ height:100%;
+ object-fit:cover;
+ display:block;
 }
-.product-grid {
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:14px;
+.no-image{
+ display:grid;
+ place-items:center;
+ height:100%;
+ font-size:45px;
+ color:#aaa;
 }
-.product-card {
-  background:white;
-  border:1px solid #eeeeee;
-  border-radius:11px;
-  overflow:hidden;
-  min-width:0;
-  position:relative;
-  transition:transform .15s,box-shadow .15s;
+.sale-badge{
+ position:absolute;
+ top:8px;
+ left:8px;
+ background:#e82e20;
+ color:white;
+ padding:6px 8px;
+ border-radius:6px;
+ font-size:12px;
+ font-weight:900;
 }
-.product-card:hover {
-  transform:translateY(-2px);
-  box-shadow:var(--shadow);
+.product-info{padding:11px}
+.product-name{
+ font-size:13px;
+ line-height:1.5;
+ font-weight:700;
+ min-height:39px;
+ display:-webkit-box;
+ -webkit-line-clamp:2;
+ -webkit-box-orient:vertical;
+ overflow:hidden;
 }
-.product-photo {
-  position:relative;
-  width:100%;
-  aspect-ratio:1/1.08;
-  background:#f0f0f0;
-  overflow:hidden;
+.product-price{
+ color:#e52e20;
+ font-size:21px;
+ font-weight:900;
+ margin-top:8px;
 }
-.product-photo img {
-  width:100%;
-  height:100%;
-  display:block;
-  object-fit:cover;
+.old-price{
+ color:#888;
+ text-decoration:line-through;
+ font-size:12px;
+ margin-top:4px;
 }
-.no-image {
-  width:100%;
-  height:100%;
-  display:grid;
-  place-items:center;
-  font-size:48px;
-  color:#aaa;
-  background:#f3f3f3;
+.product-meta{
+ color:#777;
+ font-size:12px;
+ margin-top:6px;
 }
-.sale-badge {
-  position:absolute;
-  top:9px;
-  left:9px;
-  background:#e82e20;
-  color:white;
-  padding:6px 8px;
-  font-size:12px;
-  font-weight:900;
-  border-radius:6px;
+.buy{
+ width:100%;
+ margin-top:11px;
+ border:0;
+ background:linear-gradient(90deg,#ff4a0a,#ff7600);
+ color:white;
+ border-radius:9px;
+ padding:11px 7px;
+ font-weight:800;
+ font-size:13px;
 }
-.product-info {
-  padding:11px 12px 13px;
+.empty{
+ grid-column:1/-1;
+ background:white;
+ padding:35px 18px;
+ text-align:center;
+ color:#777;
+ border-radius:12px;
+ line-height:1.7;
 }
-.product-name {
-  font-size:13px;
-  line-height:1.5;
-  font-weight:700;
-  min-height:39px;
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  overflow:hidden;
+.tabs{
+ display:flex;
+ align-items:center;
+ gap:24px;
+ background:white;
+ overflow-x:auto;
+ padding:15px 10px 0;
+ scrollbar-width:none;
 }
-.product-price {
-  color:#e52e20;
-  font-size:21px;
-  font-weight:900;
-  margin-top:8px;
+.tab{
+ border:0;
+ background:transparent;
+ color:#888;
+ white-space:nowrap;
+ font-size:15px;
+ font-weight:800;
+ padding:0 3px 15px;
+ border-bottom:4px solid transparent;
 }
-.old-price {
-  color:#8b8b8b;
-  text-decoration:line-through;
-  font-size:12px;
-  margin-top:4px;
+.tab.active{
+ color:#111;
+ border-bottom-color:#111;
 }
-.product-meta {
-  color:#777;
-  font-size:12px;
-  margin-top:6px;
+.photo-status{
+ background:#fff2e6;
+ border:1px solid #ffd5b4;
+ border-radius:10px;
+ padding:13px;
+ margin-top:15px;
+ font-size:13px;
+ color:#853900;
 }
-.buy {
-  width:100%;
-  margin-top:11px;
-  border:0;
-  background:linear-gradient(90deg,#ff4a0a,#ff7600);
-  color:white;
-  border-radius:9px;
-  padding:11px 7px;
-  font-weight:800;
-  font-size:13px;
-}
-.buy:active {
-  transform:scale(.98);
-}
-.empty {
-  grid-column:1/-1;
-  background:white;
-  text-align:center;
-  border-radius:12px;
-  padding:35px 18px;
-  color:var(--muted);
-  line-height:1.7;
-}
-.empty strong {
-  color:var(--ink);
-}
-.tabs {
-  display:flex;
-  align-items:center;
-  gap:25px;
-  background:white;
-  overflow-x:auto;
-  padding:15px 8px 0;
-  margin-bottom:0;
-  scrollbar-width:none;
-}
-.tabs::-webkit-scrollbar {
-  display:none;
-}
-.tab {
-  border:0;
-  background:transparent;
-  white-space:nowrap;
-  color:#888;
-  font-size:16px;
-  font-weight:800;
-  padding:0 3px 15px;
-  position:relative;
-}
-.tab.active {
-  color:#111;
-}
-.tab.active::after {
-  content:"";
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
-  height:4px;
-  background:#111;
-  border-radius:5px;
+.photo-clear{
+ border:0;
+ background:transparent;
+ color:#bc3500;
+ font-weight:900;
+ margin-left:10px;
 }
 
 /* CART */
-
-.overlay {
-  position:fixed;
-  inset:0;
-  background:#0009;
-  z-index:90;
+.overlay{
+ position:fixed;
+ inset:0;
+ background:#0009;
+ z-index:90;
 }
-.cart-panel {
-  position:fixed;
-  top:0;
-  right:0;
-  bottom:0;
-  width:min(450px,100%);
-  background:white;
-  z-index:100;
-  padding:20px;
-  overflow-y:auto;
-  box-shadow:-10px 0 35px #0003;
+.cart-panel{
+ position:fixed;
+ top:0;
+ right:0;
+ bottom:0;
+ width:min(450px,100%);
+ background:white;
+ z-index:100;
+ padding:20px;
+ overflow-y:auto;
+ box-shadow:-10px 0 35px #0003;
 }
-.cart-head {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  padding-bottom:15px;
-  border-bottom:1px solid var(--line);
+.cart-head{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding-bottom:15px;
+ border-bottom:1px solid var(--line);
 }
-.cart-head h2 {
-  margin:0;
-  font-size:22px;
+.cart-head h2{margin:0;font-size:22px}
+.close-cart{
+ width:38px;
+ height:38px;
+ border:0;
+ border-radius:50%;
+ background:#eee;
+ font-size:20px;
 }
-.close-cart {
-  background:#f4f4f4;
-  border:0;
-  border-radius:50%;
-  width:38px;
-  height:38px;
-  font-size:20px;
+.cart-row{
+ display:flex;
+ gap:12px;
+ padding:16px 0;
+ border-bottom:1px solid var(--line);
 }
-.cart-row {
-  display:flex;
-  gap:12px;
-  padding:16px 0;
-  border-bottom:1px solid var(--line);
+.cart-img{
+ width:70px;
+ height:75px;
+ object-fit:cover;
+ border-radius:9px;
+ background:#f1f1f1;
+ flex-shrink:0;
 }
-.cart-img {
-  width:70px;
-  height:75px;
-  object-fit:cover;
-  border-radius:9px;
-  background:#f1f1f1;
+.cart-detail{flex:1;min-width:0}
+.cart-name{font-weight:800;font-size:13px}
+.cart-price{
+ font-weight:900;
+ color:var(--red);
+ margin:7px 0;
 }
-.cart-detail {
-  flex:1;
-  min-width:0;
+.qty-controls{
+ display:flex;
+ gap:8px;
+ align-items:center;
+ margin-top:9px;
 }
-.cart-name {
-  font-weight:800;
-  font-size:13px;
-  line-height:1.5;
+.qty-controls button{
+ width:30px;
+ height:30px;
+ border:1px solid #ddd;
+ background:white;
+ border-radius:7px;
+ font-size:18px;
 }
-.cart-price {
-  font-size:15px;
-  font-weight:900;
-  color:var(--red);
-  margin:7px 0;
+.qty-controls span{font-weight:800}
+.remove{
+ border:0;
+ background:#fff0eb;
+ color:#d83220;
+ padding:8px;
+ border-radius:7px;
+ align-self:start;
 }
-.qty-controls {
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin-top:9px;
+.cart-total{
+ display:flex;
+ justify-content:space-between;
+ margin-top:22px;
+ font-size:19px;
+ font-weight:900;
 }
-.qty-controls button {
-  width:30px;
-  height:30px;
-  border:1px solid #ddd;
-  background:white;
-  border-radius:7px;
-  font-size:18px;
+.cart-total strong{color:var(--red)}
+.checkout{
+ display:block;
+ background:linear-gradient(100deg,#f43b0b,#ff8000);
+ color:white;
+ text-align:center;
+ padding:15px;
+ border-radius:12px;
+ font-weight:900;
+ margin-top:18px;
 }
-.qty-controls span {
-  font-weight:800;
-  min-width:20px;
-  text-align:center;
+.cart-note{
+ color:var(--muted);
+ font-size:12px;
+ line-height:1.6;
 }
-.remove {
-  border:0;
-  background:#fff0eb;
-  color:#d83220;
-  padding:8px;
-  border-radius:7px;
-  align-self:start;
-}
-.cart-total {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
-  margin-top:22px;
-  font-size:19px;
-  font-weight:900;
-}
-.cart-total strong {
-  color:var(--red);
-}
-.checkout {
-  display:block;
-  background:linear-gradient(100deg,#f43b0b,#ff8000);
-  color:white;
-  text-align:center;
-  padding:15px;
-  border-radius:12px;
-  font-weight:900;
-  margin-top:18px;
-}
-.cart-note {
-  color:var(--muted);
-  font-size:12px;
-  line-height:1.6;
-}
-.toast {
-  position:fixed;
-  bottom:85px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#222;
-  color:white;
-  padding:12px 20px;
-  border-radius:30px;
-  z-index:150;
-  font-size:13px;
-  font-weight:700;
-  box-shadow:0 6px 20px #0003;
-  max-width:90%;
-  text-align:center;
+.toast{
+ position:fixed;
+ bottom:85px;
+ left:50%;
+ transform:translateX(-50%);
+ background:#222;
+ color:white;
+ padding:12px 20px;
+ border-radius:30px;
+ z-index:150;
+ font-size:13px;
+ font-weight:700;
+ max-width:90%;
+ text-align:center;
 }
 
-/* MOBILE BOTTOM NAV */
-
-.bottom-nav {
-  display:none;
+/* BOTTOM NAV */
+.bottom-nav{display:none}
+.bottom-link{
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:5px;
+ font-size:11px;
+ font-weight:800;
+ border:0;
+ background:transparent;
+ position:relative;
+ min-width:0;
 }
-.bottom-link {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:5px;
-  font-size:11px;
-  font-weight:800;
-  color:#222;
-  min-width:0;
-  border:0;
-  background:transparent;
-  position:relative;
+.bottom-icon{font-size:25px}
+.bottom-link.active{color:#e42f20}
+.cart-count{
+ position:absolute;
+ top:-5px;
+ right:12%;
+ background:#ff7900;
+ color:white;
+ font-size:11px;
+ border-radius:20px;
+ padding:2px 6px;
 }
-.bottom-icon {
-  font-size:26px;
-  line-height:1;
-}
-.bottom-link.active {
-  color:#e42f20;
-}
-.cart-count {
-  position:absolute;
-  top:-5px;
-  right:12%;
-  background:#ff7900;
-  color:white;
-  font-size:11px;
-  border-radius:20px;
-  padding:2px 6px;
-}
-footer {
-  color:#888;
-  text-align:center;
-  font-size:12px;
-  padding:35px 15px;
+footer{
+ color:#888;
+ text-align:center;
+ font-size:12px;
+ padding:35px 15px;
 }
 
 /* RESPONSIVE */
-
-@media(max-width:1100px) {
-  .product-grid {
-    grid-template-columns:repeat(4,minmax(0,1fr));
-  }
-  .desktop-links {
-    gap:9px;
-  }
+@media(max-width:1100px){
+ .product-grid{grid-template-columns:repeat(4,1fr)}
 }
-@media(max-width:800px) {
-  .product-grid {
-    grid-template-columns:repeat(3,minmax(0,1fr));
-  }
-  .desktop-links {
-    display:none;
-  }
-  .hero-deco {
-    font-size:45px;
-  }
+@media(max-width:850px){
+ .desktop-links{display:none}
+ .product-grid{grid-template-columns:repeat(3,1fr)}
 }
-@media(max-width:650px) {
-  body {
-    padding-bottom:67px;
-    background:white;
-  }
-  .site-header {
-    position:sticky;
-    top:0;
-  }
-  .header-inner {
-    padding:8px 12px 10px;
-    gap:9px;
-  }
-  .logo {
-    display:none;
-  }
-  .search {
-    height:48px;
-    flex:1;
-  }
-  .search input {
-    padding-left:15px;
-    font-size:15px;
-  }
-  .search-btn {
-    height:39px;
-    min-width:54px;
-  }
-  .camera-btn {
-    height:39px;
-    width:37px;
-  }
-  .header-categories {
-    display:none;
-  }
-  .container {
-    padding-left:9px;
-    padding-right:9px;
-  }
-  .hero {
-    min-height:175px;
-    padding:23px 12px;
-  }
-  .hero h1 {
-    font-size:clamp(23px,6vw,35px);
-  }
-  .hero-kicker {
-    font-size:22px;
-  }
-  .hero p {
-    font-size:12px;
-  }
-  .hero-deco.left {
-    left:2%;
-  }
-  .hero-deco.right {
-    right:2%;
-  }
-  .hero-button {
-    padding:10px 18px;
-    font-size:12px;
-  }
-  .service-strip {
-    margin-top:12px;
-  }
-  .service {
-    padding:13px 10px;
-  }
-  .service-title {
-    font-size:13px;
-    gap:5px;
-  }
-  .service p {
-    font-size:11px;
-  }
-  .trust-banner {
-    padding:12px;
-    font-size:13px;
-  }
-  .section {
-    margin-top:14px;
-  }
-  .section-title {
-    font-size:19px;
-  }
-  .featured {
-    padding:10px;
-  }
-  .featured-title {
-    font-size:18px;
-  }
-  .product-grid {
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:5px;
-  }
-  .featured-grid {
-    gap:7px;
-  }
-  .product-card {
-    border-radius:3px;
-    border-color:#f3f3f3;
-  }
-  .product-photo {
-    aspect-ratio:1/1.12;
-  }
-  .product-info {
-    padding:9px 9px 11px;
-  }
-  .product-name {
-    font-size:12px;
-  }
-  .product-price {
-    font-size:19px;
-  }
-  .buy {
-    padding:10px 5px;
-    font-size:12px;
-  }
-  .tabs {
-    gap:24px;
-    padding-left:12px;
-  }
-  .tab {
-    font-size:15px;
-  }
-  .bottom-nav {
-    position:fixed;
-    display:grid;
-    grid-template-columns:repeat(5,minmax(0,1fr));
-    left:0;
-    right:0;
-    bottom:0;
-    height:65px;
-    background:white;
-    border-top:1px solid #e5e5e5;
-    z-index:80;
-    padding:8px 4px 5px;
-    box-shadow:0 -4px 15px #00000009;
-  }
-  .toast {
-    bottom:80px;
-  }
+@media(max-width:650px){
+ body{padding-bottom:67px;background:white}
+ .header-inner{
+  padding:8px 10px;
+  gap:6px;
+  flex-wrap:wrap;
+ }
+ .logo{font-size:24px}
+ .language{order:2}
+ .search{
+  order:3;
+  flex-basis:100%;
+  height:46px;
+ }
+ .header-categories{display:none}
+ .container{padding:0 9px}
+ .hero{min-height:175px;padding:22px 12px}
+ .hero h1{font-size:26px}
+ .hero-kicker{font-size:22px}
+ .hero p{font-size:12px}
+ .hero-deco{font-size:38px}
+ .service{padding:13px 10px}
+ .service-title{font-size:13px}
+ .service p{font-size:11px}
+ .section-title{font-size:19px}
+ .featured{padding:10px}
+ .featured-title{font-size:18px}
+ .product-grid{grid-template-columns:repeat(2,1fr);gap:5px}
+ .featured-grid{gap:7px}
+ .product-card{border-radius:4px}
+ .product-info{padding:9px}
+ .product-name{font-size:12px}
+ .product-price{font-size:19px}
+ .buy{font-size:12px}
+ .bottom-nav{
+  display:grid;
+  position:fixed;
+  grid-template-columns:repeat(5,1fr);
+  left:0;
+  right:0;
+  bottom:0;
+  height:65px;
+  background:white;
+  border-top:1px solid #e5e5e5;
+  z-index:80;
+  padding:8px 4px 5px;
+ }
 }
 </style>
 </head>
+
 <body>
 
 <header class="site-header">
-  <div class="header-inner">
-    <a class="logo" href="./index.html">VAYO</a>
+ <div class="header-inner">
+  <a class="logo" href="./index.html">VAYO</a>
 
-    <div class="search">
-      <input
-        id="search"
-        type="search"
-        placeholder="Ҷустуҷӯи маҳсулот..."
-        aria-label="Ҷустуҷӯи маҳсулот"
-      >
-      <button class="camera-btn" id="cameraBtn"
-        type="button" title="Ҷустуҷӯ бо акс">
-        📷
-      </button>
-      <button class="search-btn" id="searchBtn"
-        type="button" aria-label="Ҷустуҷӯ">
-        🔍
-      </button>
-    </div>
-
-    <div class="desktop-links">
-      <a id="accountLink" href="./pages/login.html">
-        👤 Воридшавӣ
-      </a>
-      <a href="./pages/orders.html">📦 Фармоишҳо</a>
-      <button id="cartBtn" type="button">
-        🛒 Сабад (<span id="count">0</span>)
-      </button>
-      <a href="./pages/seller.html">🏪 Фурӯшанда</a>
-    </div>
+  <div class="search">
+   <input id="search" type="search"
+    placeholder="Ҷустуҷӯи маҳсулот..."
+    aria-label="Search products">
+   <button class="camera-btn" id="cameraBtn"
+    type="button" title="Ҷустуҷӯ бо акс">📷</button>
+   <button class="search-btn" id="searchBtn"
+    type="button" aria-label="Search">🔍</button>
   </div>
 
-  <nav class="header-categories" id="categories">
-    <button class="cat active" data-category="all">Ҳама</button>
-    <button class="cat" data-category="Либос">Либос</button>
-    <button class="cat" data-category="Пойафзол">Пойафзол</button>
-    <button class="cat" data-category="Электроника">Электроника</button>
-    <button class="cat" data-category="Хона">Барои хона</button>
-    <button class="cat" data-category="Зебоӣ">Зебоӣ</button>
-    <a class="cat cat-link" href="./pages/promotions.html">
-      🔥 Аксияҳо
-    </a>
-  </nav>
+  <div class="language">
+   <button data-lang="tg" class="active">TJ</button>
+   <button data-lang="ru">RU</button>
+   <button data-lang="en">EN</button>
+  </div>
+
+  <div class="desktop-links">
+   <a id="accountLink" href="./pages/login.html">👤 Воридшавӣ</a>
+   <a id="ordersLink" href="./pages/orders.html">📦 Фармоишҳо</a>
+   <button id="cartBtn" type="button">
+    🛒 <span id="cartLabel">Сабад</span>
+    (<span id="count">0</span>)
+   </button>
+   <a id="sellerLink" href="./pages/seller.html">🏪 Фурӯшанда</a>
+  </div>
+ </div>
+
+ <nav class="header-categories" id="categories">
+  <button class="cat active" data-category="all" data-i18n="all">Ҳама</button>
+  <button class="cat" data-category="Либос" data-i18n="clothes">Либос</button>
+  <button class="cat" data-category="Пойафзол" data-i18n="shoes">Пойафзол</button>
+  <button class="cat" data-category="Электроника" data-i18n="electronics">Электроника</button>
+  <button class="cat" data-category="Хона" data-i18n="house">Барои хона</button>
+  <button class="cat" data-category="Зебоӣ" data-i18n="beauty">Зебоӣ</button>
+  <a class="cat cat-link" href="./pages/promotions.html">
+   🔥 <span data-i18n="promotions">Аксияҳо</span>
+  </a>
+ </nav>
 </header>
 
 <section class="hero">
-  <div class="hero-deco left">🛍️</div>
-  <div class="hero-content">
-    <div class="hero-kicker">🔥 ТАХФИФҲОИ VAYO</div>
-    <h1>Пешниҳодҳои беҳтаринро пайдо кунед!</h1>
-    <p>Маҳсулоти гуногун бо нархҳои дастрас</p>
-    <a href="./pages/promotions.html" class="hero-button">
-      Дидани аксияҳо ❯
-    </a>
-  </div>
-  <div class="hero-deco right">🎁</div>
+ <div class="hero-deco left">🛍️</div>
+ <div class="hero-content">
+  <div class="hero-kicker">🔥 VAYO SALE</div>
+  <h1 data-i18n="hero">Пешниҳодҳои беҳтаринро пайдо кунед!</h1>
+  <p data-i18n="heroText">Маҳсулоти гуногун бо нархҳои дастрас</p>
+  <a href="./pages/promotions.html" class="hero-button"
+   data-i18n="heroButton">Дидани аксияҳо ❯</a>
+ </div>
+ <div class="hero-deco right">🎁</div>
 </section>
 
 <main class="container">
 
-  <section class="service-strip">
-    <div class="service">
-      <div class="service-title green">
-        🚚 Расонидан
-      </div>
-      <p>Шарт ва нарх аз мағоза вобаста аст.</p>
-    </div>
-    <div class="service">
-      <div class="service-title">
-        📦 Фармоиши осон
-      </div>
-      <p>Маҳсулотро интихоб карда фармоиш диҳед.</p>
-    </div>
-  </section>
+ <section class="service-strip">
+  <div class="service">
+   <div class="service-title green">
+    🚚 <span data-i18n="delivery">Расонидан</span>
+   </div>
+   <p data-i18n="deliveryText">
+    Шарт ва нарх аз мағоза вобаста аст.
+   </p>
+  </div>
+  <div class="service">
+   <div class="service-title">
+    📦 <span data-i18n="easyOrder">Фармоиши осон</span>
+   </div>
+   <p data-i18n="easyText">
+    Маҳсулотро интихоб карда фармоиш диҳед.
+   </p>
+  </div>
+ </section>
 
-  <div class="trust-banner">
-    <span>🛡️ Нархҳо ва захираи маҳсулот ҳангоми фармоиш санҷида мешаванд</span>
-    <span>✓</span>
+ <div class="trust-banner">
+  🛡️ <span data-i18n="trust">
+   Нархҳо ва захираи маҳсулот ҳангоми фармоиш санҷида мешаванд
+  </span>
+ </div>
+
+ <section class="section featured">
+  <div class="section-head">
+   <h2 class="featured-title" data-i18n="top">
+    Топ-маҳсулот ❯
+   </h2>
+   <a class="section-more" href="./pages/promotions.html"
+    data-i18n="allDeals">Ҳамаи аксияҳо</a>
+  </div>
+  <div class="featured-grid" id="featuredProducts">
+   <div class="empty">...</div>
+  </div>
+ </section>
+
+ <div id="photoStatus" class="photo-status hidden"></div>
+
+ <section class="section" id="catalog">
+  <div class="tabs" id="catalogTabs">
+   <button class="tab active" data-tab="all"
+    data-i18n="all">Ҳама</button>
+   <button class="tab" data-tab="featured"
+    data-i18n="selected">Интихобшуда</button>
+   <button class="tab" data-tab="local"
+    data-i18n="local">Мағозаҳои маҳаллӣ</button>
+   <button class="tab" data-tab="sale"
+    data-i18n="discounts">🔥 Тахфифҳо</button>
   </div>
 
-  <section class="section featured">
-    <div class="section-head">
-      <h2 class="featured-title">Топ-маҳсулот ❯</h2>
-      <a class="section-more" href="./pages/promotions.html">
-        Ҳамаи аксияҳо
-      </a>
-    </div>
-    <div class="featured-grid" id="featuredProducts">
-      <div class="empty">Маҳсулот бор шуда истодааст...</div>
-    </div>
-  </section>
+  <div class="section-head" style="margin-top:18px">
+   <h2 class="section-title" data-i18n="catalog">
+    Маҳсулоти VAYO
+   </h2>
+   <span id="resultCount" class="section-more"></span>
+  </div>
 
-  <section class="section" id="catalog">
-    <div class="tabs" id="catalogTabs">
-      <button class="tab active" data-tab="all">Ҳама</button>
-      <button class="tab" data-tab="featured">Интихобшуда</button>
-      <button class="tab" data-tab="local">Мағозаҳои маҳаллӣ</button>
-      <button class="tab" data-tab="sale">🔥 Тахфифҳо</button>
-    </div>
-
-    <div class="section-head" style="margin-top:18px">
-      <h2 class="section-title">Маҳсулоти VAYO</h2>
-      <span id="resultCount" class="section-more"></span>
-    </div>
-
-    <div class="product-grid" id="products">
-      <div class="empty">Маҳсулот бор шуда истодааст...</div>
-    </div>
-  </section>
+  <div class="product-grid" id="products">
+   <div class="empty">...</div>
+  </div>
+ </section>
 
 </main>
 
 <div class="overlay hidden" id="overlay"></div>
 
-<aside class="cart-panel hidden" id="cartPanel"
-  aria-label="Сабади харид">
-  <div class="cart-head">
-    <h2>🛒 Сабади шумо</h2>
-    <button class="close-cart" id="closeCart"
-      type="button" aria-label="Пӯшидан">✕</button>
-  </div>
+<aside class="cart-panel hidden" id="cartPanel">
+ <div class="cart-head">
+  <h2>🛒 <span data-i18n="myCart">Сабади шумо</span></h2>
+  <button class="close-cart" id="closeCart">✕</button>
+ </div>
 
-  <div id="cartItems"></div>
+ <div id="cartItems"></div>
 
-  <div class="cart-total">
-    <span>Ҳамагӣ:</span>
-    <strong id="total">0 сомонӣ</strong>
-  </div>
+ <div class="cart-total">
+  <span data-i18n="total">Ҳамагӣ:</span>
+  <strong id="total">0 сомонӣ</strong>
+ </div>
 
-  <p class="cart-note">
-    Нархи ниҳоии маҳсулот ва ҳаққи расонидан
-    ҳангоми фармоиш дар сервер ҳисоб карда мешаванд.
-  </p>
+ <p class="cart-note" data-i18n="cartNote">
+  Нархи ниҳоии маҳсулот ва ҳаққи расонидан
+  ҳангоми фармоиш дар сервер ҳисоб карда мешаванд.
+ </p>
 
-  <a class="checkout" href="./pages/checkout.html">
-    📦 Гузаштан ба фармоиш
-  </a>
+ <a class="checkout" href="./pages/checkout.html">
+  📦 <span data-i18n="checkout">Гузаштан ба фармоиш</span>
+ </a>
 </aside>
 
-<nav class="bottom-nav" aria-label="Менюи асосӣ">
-  <a class="bottom-link active" href="./index.html">
-    <span class="bottom-icon">🏠</span>
-    <span>Асосӣ</span>
-  </a>
-  <button class="bottom-link" id="mobileCategories"
-    type="button">
-    <span class="bottom-icon">☷</span>
-    <span>Категорияҳо</span>
-  </button>
-  <a class="bottom-link" href="./pages/orders.html">
-    <span class="bottom-icon">🚚</span>
-    <span>Фармоишҳо</span>
-  </a>
-  <button class="bottom-link" id="mobileCart"
-    type="button">
-    <span class="bottom-icon">🛒</span>
-    <span>Сабад</span>
-    <span class="cart-count" id="mobileCount">0</span>
-  </button>
-  <a class="bottom-link" id="mobileAccount"
-    href="./pages/login.html">
-    <span class="bottom-icon">👤</span>
-    <span>Профил</span>
-  </a>
+<nav class="bottom-nav">
+ <a class="bottom-link active" href="./index.html">
+  <span class="bottom-icon">🏠</span>
+  <span data-i18n="home">Асосӣ</span>
+ </a>
+ <button class="bottom-link" id="mobileCategories">
+  <span class="bottom-icon">☷</span>
+  <span data-i18n="categories">Категорияҳо</span>
+ </button>
+ <a class="bottom-link" href="./pages/orders.html">
+  <span class="bottom-icon">🚚</span>
+  <span data-i18n="orders">Фармоишҳо</span>
+ </a>
+ <button class="bottom-link" id="mobileCart">
+  <span class="bottom-icon">🛒</span>
+  <span data-i18n="cart">Сабад</span>
+  <span class="cart-count" id="mobileCount">0</span>
+ </button>
+ <a class="bottom-link" id="mobileAccount"
+  href="./pages/login.html">
+  <span class="bottom-icon">👤</span>
+  <span data-i18n="profile">Профил</span>
+ </a>
 </nav>
 
+<input id="photoInput" type="file" accept="image/*" hidden>
 <div id="toast" class="toast hidden" role="status"></div>
 
 <footer>
-  © 2026 VAYO — Бозори онлайни Тоҷикистон
-  <div style="margin-top:10px">
-    <a href="./pages/seller.html">Барои фурӯшандагон</a>
-    ·
-    <a href="./pages/orders.html">Фармоишҳои ман</a>
-  </div>
+ © 2026 VAYO — <span data-i18n="footer">
+ Бозори онлайни Тоҷикистон
+ </span>
+ <div style="margin-top:10px">
+  <a href="./pages/seller.html" data-i18n="forSellers">
+   Барои фурӯшандагон
+  </a>
+  ·
+  <a href="./pages/orders.html" data-i18n="myOrders">
+   Фармоишҳои ман
+  </a>
+ </div>
 </footer>
 
 <script>
@@ -1027,708 +794,1156 @@ footer {
 
 /* SUPABASE */
 
-const SB_URL =
-  "https://rgminzzmlktkliliiupt.supabase.co";
+const SB_URL="https://rgminzzmlktkliliiupt.supabase.co";
+const SB_KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
 
-const SB_KEY =
-  "sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+const $=id=>document.getElementById(id);
+const CART_KEY="vayo_cart_v1";
+const LANG_KEY="vayo_language";
 
-const db = window.supabase.createClient(SB_URL, SB_KEY);
+let db=null;
+if(window.supabase?.createClient){
+ db=window.supabase.createClient(SB_URL,SB_KEY);
+ window.vayoDB=db;
+}
 
-const $ = id => document.getElementById(id);
-const CART_KEY = "vayo_cart_v1";
+let products=[];
+let cart=[];
+let category="all";
+let activeTab="all";
+let loading=true;
+let loadError=false;
+let photoRanks=null;
+let photoRequest=0;
+let toastTimer=null;
+let signedIn=false;
 
-let products = [];
-let cart = [];
-let category = "all";
-let activeTab = "all";
-let toastTimer = null;
-let loading = true;
+let lang=localStorage.getItem(LANG_KEY)||"tg";
+if(!["tg","ru","en"].includes(lang))lang="tg";
+
+/* TRANSLATIONS */
+
+const translations={
+tg:{
+ all:"Ҳама",
+ clothes:"Либос",
+ shoes:"Пойафзол",
+ electronics:"Электроника",
+ house:"Барои хона",
+ beauty:"Зебоӣ",
+ promotions:"Аксияҳо",
+ hero:"Пешниҳодҳои беҳтаринро пайдо кунед!",
+ heroText:"Маҳсулоти гуногун бо нархҳои дастрас",
+ heroButton:"Дидани аксияҳо ❯",
+ delivery:"Расонидан",
+ deliveryText:"Шарт ва нарх аз мағоза вобаста аст.",
+ easyOrder:"Фармоиши осон",
+ easyText:"Маҳсулотро интихоб карда фармоиш диҳед.",
+ trust:"Нархҳо ва захираи маҳсулот ҳангоми фармоиш санҷида мешаванд",
+ top:"Топ-маҳсулот ❯",
+ allDeals:"Ҳамаи аксияҳо",
+ selected:"Интихобшуда",
+ local:"Мағозаҳои маҳаллӣ",
+ discounts:"🔥 Тахфифҳо",
+ catalog:"Маҳсулоти VAYO",
+ myCart:"Сабади шумо",
+ total:"Ҳамагӣ:",
+ checkout:"Гузаштан ба фармоиш",
+ cartNote:"Нархи ниҳоӣ ва ҳаққи расонидан ҳангоми фармоиш дар сервер ҳисоб карда мешаванд.",
+ home:"Асосӣ",
+ categories:"Категорияҳо",
+ orders:"Фармоишҳо",
+ cart:"Сабад",
+ profile:"Профил",
+ footer:"Бозори онлайни Тоҷикистон",
+ forSellers:"Барои фурӯшандагон",
+ myOrders:"Фармоишҳои ман",
+ search:"Ҷустуҷӯи маҳсулот...",
+ buy:"Ба сабад",
+ out:"Тамом шудааст",
+ stock:"Дар анбор:",
+ item:"маҳсулот",
+ notFound:"Маҳсулот ёфт нашуд.",
+ loading:"Маҳсулот бор шуда истодааст...",
+ error:"Маҳсулот бор нашуд. Пайвасти Supabase ва иҷозатҳои хонданро санҷед.",
+ emptyCart:"Сабади шумо холӣ аст.",
+ added:"Маҳсулот ба сабад илова шуд!",
+ noStock:"Ин маҳсулот дар анбор нест.",
+ tooMany:"Миқдори бештар дар анбор нест.",
+ photoWorking:"Аксҳои маҳсулот муқоиса мешаванд...",
+ photoFound:"Маҳсулоти аз рӯйи тасвир монанд:",
+ photoFail:"Муқоисаи аксҳо имконнопазир шуд.",
+ photoNote:"Натиҷа аз рӯйи ранг ва шакли умумии акс аст.",
+ photoClear:"Пок кардани ҷустуҷӯи акс",
+ photoWait:"Аввал маҳсулот бор шавад.",
+ photoInvalid:"Лутфан акси дуруст интихоб кунед.",
+ login:"Воридшавӣ",
+ account:"Ҳисоби ман",
+ seller:"Фурӯшанда",
+ localUnavailable:"Маълумоти мағозаҳои маҳаллӣ ҳоло пайваст нашудааст.",
+ unknownPrice:"Нарх ҳангоми фармоиш санҷида мешавад"
+},
+ru:{
+ all:"Все",
+ clothes:"Одежда",
+ shoes:"Обувь",
+ electronics:"Электроника",
+ house:"Для дома",
+ beauty:"Красота",
+ promotions:"Акции",
+ hero:"Найдите лучшие предложения!",
+ heroText:"Разные товары по доступным ценам",
+ heroButton:"Смотреть акции ❯",
+ delivery:"Доставка",
+ deliveryText:"Условия и стоимость зависят от магазина.",
+ easyOrder:"Простой заказ",
+ easyText:"Выберите товар и оформите заказ.",
+ trust:"Цены и наличие проверяются при оформлении заказа",
+ top:"Популярные товары ❯",
+ allDeals:"Все акции",
+ selected:"Избранное",
+ local:"Местные магазины",
+ discounts:"🔥 Скидки",
+ catalog:"Товары VAYO",
+ myCart:"Ваша корзина",
+ total:"Итого:",
+ checkout:"Оформить заказ",
+ cartNote:"Итоговая цена и доставка рассчитываются сервером при оформлении.",
+ home:"Главная",
+ categories:"Категории",
+ orders:"Заказы",
+ cart:"Корзина",
+ profile:"Профиль",
+ footer:"Интернет-магазин Таджикистана",
+ forSellers:"Для продавцов",
+ myOrders:"Мои заказы",
+ search:"Поиск товаров...",
+ buy:"В корзину",
+ out:"Нет в наличии",
+ stock:"В наличии:",
+ item:"товаров",
+ notFound:"Товары не найдены.",
+ loading:"Загрузка товаров...",
+ error:"Не удалось загрузить товары. Проверьте Supabase и права чтения.",
+ emptyCart:"Ваша корзина пуста.",
+ added:"Товар добавлен в корзину!",
+ noStock:"Товара нет в наличии.",
+ tooMany:"Недостаточно товара на складе.",
+ photoWorking:"Сравниваем фотографии...",
+ photoFound:"Товары с похожими изображениями:",
+ photoFail:"Не удалось сравнить фотографии.",
+ photoNote:"Результат основан на цвете и общей структуре изображения.",
+ photoClear:"Сбросить поиск по фото",
+ photoWait:"Дождитесь загрузки товаров.",
+ photoInvalid:"Выберите корректное изображение.",
+ login:"Войти",
+ account:"Мой аккаунт",
+ seller:"Продавец",
+ localUnavailable:"Данные местных магазинов пока не подключены.",
+ unknownPrice:"Цена проверяется при оформлении"
+},
+en:{
+ all:"All",
+ clothes:"Clothing",
+ shoes:"Shoes",
+ electronics:"Electronics",
+ house:"Home",
+ beauty:"Beauty",
+ promotions:"Deals",
+ hero:"Discover the best deals!",
+ heroText:"Great products at affordable prices",
+ heroButton:"Explore deals ❯",
+ delivery:"Delivery",
+ deliveryText:"Terms and fees depend on the store.",
+ easyOrder:"Easy ordering",
+ easyText:"Choose products and place an order.",
+ trust:"Prices and stock are verified at checkout",
+ top:"Top products ❯",
+ allDeals:"All deals",
+ selected:"Featured",
+ local:"Local shops",
+ discounts:"🔥 Discounts",
+ catalog:"VAYO products",
+ myCart:"Your cart",
+ total:"Total:",
+ checkout:"Checkout",
+ cartNote:"Final prices and delivery fees are calculated by the server at checkout.",
+ home:"Home",
+ categories:"Categories",
+ orders:"Orders",
+ cart:"Cart",
+ profile:"Profile",
+ footer:"Tajikistan online marketplace",
+ forSellers:"For sellers",
+ myOrders:"My orders",
+ search:"Search products...",
+ buy:"Add to cart",
+ out:"Sold out",
+ stock:"In stock:",
+ item:"products",
+ notFound:"No products found.",
+ loading:"Loading products...",
+ error:"Unable to load products. Check Supabase and read permissions.",
+ emptyCart:"Your cart is empty.",
+ added:"Product added to cart!",
+ noStock:"This product is out of stock.",
+ tooMany:"Not enough stock available.",
+ photoWorking:"Comparing product photos...",
+ photoFound:"Products with similar images:",
+ photoFail:"Could not compare product photos.",
+ photoNote:"Results are based on color and overall image structure.",
+ photoClear:"Clear photo search",
+ photoWait:"Wait for products to load.",
+ photoInvalid:"Please select a valid image.",
+ login:"Sign in",
+ account:"My account",
+ seller:"Seller",
+ localUnavailable:"Local store information is not connected yet.",
+ unknownPrice:"Price will be verified at checkout"
+}
+};
+
+function t(key){
+ return translations[lang][key]||
+ translations.tg[key]||key;
+}
+
+function applyLanguage(){
+ document.documentElement.lang=lang;
+ document.title="VAYO — "+t("catalog");
+
+ document.querySelectorAll("[data-i18n]")
+ .forEach(el=>{
+  el.textContent=t(el.dataset.i18n);
+ });
+
+ document.querySelectorAll("[data-lang]")
+ .forEach(el=>{
+  el.classList.toggle(
+   "active",el.dataset.lang===lang
+  );
+ });
+
+ $("search").placeholder=t("search");
+ $("cameraBtn").title=t("photoFound");
+ $("cartLabel").textContent=t("cart");
+ $("accountLink").textContent=
+  "👤 "+t(signedIn?"account":"login");
+ $("ordersLink").textContent="📦 "+t("orders");
+ $("sellerLink").textContent="🏪 "+t("seller");
+
+ render();
+ renderCart();
+ if(photoRanks)updatePhotoStatus();
+}
+
+document.querySelectorAll("[data-lang]")
+.forEach(button=>{
+ button.addEventListener("click",()=>{
+  lang=button.dataset.lang;
+  localStorage.setItem(LANG_KEY,lang);
+  applyLanguage();
+ });
+});
 
 /* HELPERS */
 
-function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[char]));
+function money(value){
+ return (Number(value)||0).toFixed(2)+" TJS";
 }
 
-function money(value) {
-  return (Number(value) || 0).toFixed(2) + " сомонӣ";
+function validImage(value){
+ if(typeof value!=="string")return "";
+ try{
+  const u=new URL(value);
+  return u.protocol==="https:"?u.href:"";
+ }catch{
+  return "";
+ }
 }
 
-function validImage(value) {
-  if (typeof value !== "string" || !value.trim()) {
-    return "";
-  }
-  try {
-    const url = new URL(value);
-    return url.protocol === "https:" ? url.href : "";
-  } catch {
-    return "";
-  }
+function showToast(message){
+ const node=$("toast");
+ node.textContent=message;
+ node.classList.remove("hidden");
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>{
+  node.classList.add("hidden");
+ },2600);
 }
 
-function showToast(message) {
-  const toast = $("toast");
-  toast.textContent = message;
-  toast.classList.remove("hidden");
-
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => {
-    toast.classList.add("hidden");
-  }, 2500);
-}
-
-function readCart() {
-  try {
-    const value = JSON.parse(
-      localStorage.getItem(CART_KEY) || "[]"
-    );
-    return Array.isArray(value) ? value : [];
-  } catch {
-    return [];
-  }
-}
-
-function normalizeCart(raw) {
-  const grouped = new Map();
-
-  for (const item of raw) {
-    const id = String(item?.product_id || "");
-    const qty = Number(item?.quantity);
-
-    if (!/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(id)) {
-      continue;
-    }
-    if (!Number.isInteger(qty) || qty <= 0) {
-      continue;
-    }
-
-    grouped.set(
-      id,
-      Math.min(100, (grouped.get(id) || 0) + qty)
-    );
-  }
-
-  return [...grouped].map(([product_id, quantity]) => ({
-    product_id,
-    quantity
-  }));
-}
-
-cart = normalizeCart(readCart());
-
-function saveCart() {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-
-  const count = cart.reduce(
-    (sum, item) => sum + Number(item.quantity || 0),
-    0
+function readCart(){
+ try{
+  const data=JSON.parse(
+   localStorage.getItem(CART_KEY)||"[]"
   );
-
-  $("count").textContent = count;
-  $("mobileCount").textContent = count;
+  return Array.isArray(data)?data:[];
+ }catch{
+  return [];
+ }
 }
 
-/* PRODUCT DATA */
+function normalizeCart(raw){
+ const grouped=new Map();
 
-function getProductPrice(product) {
-  const price = Number(
-    product.current_price ?? product.price ?? 0
+ for(const item of raw){
+  const id=String(item?.product_id||"");
+  const quantity=Number(item?.quantity);
+
+  if(!/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(id))
+   continue;
+  if(!Number.isInteger(quantity)||quantity<=0)
+   continue;
+
+  grouped.set(
+   id,
+   Math.min(100,(grouped.get(id)||0)+quantity)
   );
-  return Number.isFinite(price) ? Math.max(0, price) : 0;
+ }
+
+ return [...grouped].map(([product_id,quantity])=>({
+  product_id,quantity
+ }));
 }
 
-function getRegularPrice(product) {
-  const current = getProductPrice(product);
-  const regular = Number(
-    product.regular_price ?? current
-  );
+cart=normalizeCart(readCart());
 
-  return Number.isFinite(regular)
-    ? Math.max(current, regular)
-    : current;
+function saveCart(){
+ localStorage.setItem(CART_KEY,JSON.stringify(cart));
+
+ const count=cart.reduce(
+  (sum,item)=>sum+item.quantity,0
+ );
+
+ $("count").textContent=count;
+ $("mobileCount").textContent=count;
 }
 
-function getDiscount(product) {
-  const current = getProductPrice(product);
-  const regular = getRegularPrice(product);
+function getPrice(p){
+ const n=Number(p.current_price??p.price??0);
+ return Number.isFinite(n)?Math.max(0,n):0;
+}
 
-  if (regular <= current || regular <= 0) {
-    return 0;
+function getRegular(p){
+ const current=getPrice(p);
+ const n=Number(p.regular_price??current);
+ return Number.isFinite(n)?Math.max(current,n):current;
+}
+
+function getDiscount(p){
+ const current=getPrice(p);
+ const regular=getRegular(p);
+ if(regular<=current||regular<=0)return 0;
+ return Math.max(0,Math.min(
+  99,Math.round((1-current/regular)*100)
+ ));
+}
+
+function getStock(p){
+ return Math.max(0,Number(p.stock)||0);
+}
+
+function getImage(p){
+ return validImage(p.image_url);
+}
+
+function featuredProducts(){
+ return products
+  .filter(p=>getStock(p)>0)
+  .slice()
+  .sort((a,b)=>getDiscount(b)-getDiscount(a))
+  .slice(0,2);
+}
+
+/* SEARCH DICTIONARY */
+
+const synonyms=[
+ ["кроссовка","красовка","крассовка","кеды",
+  "sneakers","shoes","обувь","пойафзол"],
+ ["куртка","куртача","jacket","coat","пуховик"],
+ ["либос","одежда","clothes","clothing","dress",
+  "платье","ҷома"],
+ ["телефон","смартфон","phone","smartphone",
+  "мобильный"],
+ ["сумка","халта","bag","handbag","рюкзак"],
+ ["соат","часы","watch","clock"],
+ ["гӯшмонак","наушники","headphones","earbuds"],
+ ["компютер","компьютер","computer","laptop",
+  "ноутбук"],
+ ["хона","дом","home","house"],
+ ["косметика","beauty","makeup","зебоӣ"]
+];
+
+function normalize(value){
+ return String(value||"")
+  .toLowerCase()
+  .normalize("NFKC")
+  .replace(/ё/g,"е")
+  .replace(/ҷ/g,"ч")
+  .replace(/ҳ/g,"х")
+  .replace(/қ/g,"к")
+  .replace(/ӯ/g,"у")
+  .replace(/ӣ/g,"и")
+  .replace(/[^\p{L}\p{N}]+/gu," ")
+  .trim();
+}
+
+function getSearchTerms(query){
+ const q=normalize(query);
+ if(!q)return [];
+
+ const terms=new Set([q]);
+
+ synonyms.forEach(group=>{
+  if(group.some(word=>normalize(word)===q)){
+   group.forEach(word=>terms.add(normalize(word)));
+  }
+ });
+
+ return [...terms];
+}
+
+function matchesSearch(product,query){
+ const terms=getSearchTerms(query);
+ if(!terms.length)return true;
+
+ const text=normalize([
+  product.name,
+  product.category,
+  product.description,
+  product.shop_name
+ ].filter(Boolean).join(" "));
+
+ return terms.some(term=>text.includes(term));
+}
+
+/* FILTER */
+
+function getFilteredProducts(){
+ const query=$("search").value.trim();
+
+ let result=products.filter(p=>{
+  const categoryMatch=
+   category==="all"||
+   String(p.category||"")===category;
+
+  let tabMatch=true;
+
+  if(activeTab==="sale"){
+   tabMatch=getDiscount(p)>0;
   }
 
-  return Math.max(
-    0,
-    Math.min(99, Math.round((1 - current / regular) * 100))
+  if(activeTab==="featured"){
+   tabMatch=featuredProducts().some(
+    f=>String(f.id)===String(p.id)
+   );
+  }
+
+  if(activeTab==="local"){
+   tabMatch=false;
+  }
+
+  return categoryMatch&&tabMatch&&
+   matchesSearch(p,query);
+ });
+
+ if(photoRanks instanceof Map){
+  result=result.filter(p=>
+   photoRanks.has(String(p.id))
   );
-}
+  result.sort((a,b)=>
+   photoRanks.get(String(a.id))-
+   photoRanks.get(String(b.id))
+  );
+ }
 
-function getStock(product) {
-  return Math.max(0, Number(product.stock) || 0);
-}
-
-function getProductImage(product) {
-  return validImage(product.image_url);
-}
-
-function isOnSale(product) {
-  return getDiscount(product) > 0;
-}
-
-function getFeaturedProducts() {
-  return products
-    .filter(product => getStock(product) > 0)
-    .slice()
-    .sort((a, b) => {
-      const discountDifference =
-        getDiscount(b) - getDiscount(a);
-
-      if (discountDifference !== 0) {
-        return discountDifference;
-      }
-
-      return 0;
-    })
-    .slice(0, 2);
+ return result;
 }
 
 /* PRODUCT CARD */
 
-function createProductCard(product) {
-  const card = document.createElement("article");
-  card.className = "product-card";
+function createProductCard(p){
+ const card=document.createElement("article");
+ card.className="product-card";
 
-  const name = String(product.name || "Маҳсулот");
-  const price = getProductPrice(product);
-  const regular = getRegularPrice(product);
-  const discount = getDiscount(product);
-  const stock = getStock(product);
-  const image = getProductImage(product);
+ const photo=document.createElement("div");
+ photo.className="product-photo";
 
-  const photo = document.createElement("div");
-  photo.className = "product-photo";
+ const image=getImage(p);
 
-  if (image) {
-    const img = document.createElement("img");
-    img.src = image;
-    img.alt = name;
-    img.loading = "lazy";
-    img.onerror = () => {
-      photo.replaceChildren();
-      const empty = document.createElement("div");
-      empty.className = "no-image";
-      empty.textContent = "🛍️";
-      photo.append(empty);
-    };
-    photo.append(img);
-  } else {
-    const empty = document.createElement("div");
-    empty.className = "no-image";
-    empty.textContent = "🛍️";
-    photo.append(empty);
-  }
+ function noImage(){
+  photo.replaceChildren();
+  const empty=document.createElement("div");
+  empty.className="no-image";
+  empty.textContent="🛍️";
+  photo.append(empty);
+ }
 
-  if (discount > 0) {
-    const badge = document.createElement("span");
-    badge.className = "sale-badge";
-    badge.textContent = "−" + discount + "%";
-    photo.append(badge);
-  }
+ if(image){
+  const img=document.createElement("img");
+  img.src=image;
+  img.alt=String(p.name||"");
+  img.loading="lazy";
+  img.onerror=noImage;
+  photo.append(img);
+ }else{
+  noImage();
+ }
 
-  const info = document.createElement("div");
-  info.className = "product-info";
+ const discount=getDiscount(p);
+ if(discount>0){
+  const badge=document.createElement("span");
+  badge.className="sale-badge";
+  badge.textContent="−"+discount+"%";
+  photo.append(badge);
+ }
 
-  const productName = document.createElement("div");
-  productName.className = "product-name";
-  productName.textContent = name;
+ const info=document.createElement("div");
+ info.className="product-info";
 
-  const productPrice = document.createElement("div");
-  productPrice.className = "product-price";
-  productPrice.textContent = money(price);
+ const name=document.createElement("div");
+ name.className="product-name";
+ name.textContent=String(p.name||"VAYO");
 
-  info.append(productName, productPrice);
+ const price=document.createElement("div");
+ price.className="product-price";
+ price.textContent=money(getPrice(p));
 
-  if (discount > 0) {
-    const oldPrice = document.createElement("div");
-    oldPrice.className = "old-price";
-    oldPrice.textContent = money(regular);
-    info.append(oldPrice);
-  }
+ info.append(name,price);
 
-  const meta = document.createElement("div");
-  meta.className = "product-meta";
-  meta.textContent = stock > 0
-    ? "Дар анбор: " + stock
-    : "Маҳсулот тамом шудааст";
+ if(discount>0){
+  const old=document.createElement("div");
+  old.className="old-price";
+  old.textContent=money(getRegular(p));
+  info.append(old);
+ }
 
-  const buy = document.createElement("button");
-  buy.className = "buy";
-  buy.type = "button";
-  buy.disabled = stock <= 0;
-  buy.textContent = stock > 0
-    ? "🛒 Ба сабад"
-    : "Тамом шудааст";
+ const meta=document.createElement("div");
+ meta.className="product-meta";
+ meta.textContent=getStock(p)>0
+  ?t("stock")+" "+getStock(p)
+  :t("out");
 
-  buy.addEventListener("click", () => {
-    addCart(product);
-  });
+ const buy=document.createElement("button");
+ buy.className="buy";
+ buy.type="button";
+ buy.disabled=getStock(p)<=0;
+ buy.textContent=getStock(p)>0
+  ?"🛒 "+t("buy"):t("out");
 
-  info.append(meta, buy);
-  card.append(photo, info);
+ buy.addEventListener("click",()=>addCart(p));
 
-  return card;
+ info.append(meta,buy);
+ card.append(photo,info);
+ return card;
 }
 
-/* SEARCH AND FILTER */
+/* RENDER */
 
-function getFilteredProducts() {
-  const query = $("search").value
-    .trim()
-    .toLocaleLowerCase();
+function renderFeatured(){
+ const root=$("featuredProducts");
+ root.replaceChildren();
 
-  return products.filter(product => {
-    const name = String(product.name || "")
-      .toLocaleLowerCase();
+ if(loading){
+  root.append(emptyNode(t("loading")));
+  return;
+ }
 
-    const productCategory = String(
-      product.category || ""
-    );
+ const items=featuredProducts();
 
-    const matchesSearch = name.includes(query);
-    const matchesCategory =
-      category === "all" ||
-      productCategory === category;
+ if(!items.length){
+  root.append(emptyNode(t("notFound")));
+  return;
+ }
 
-    let matchesTab = true;
-
-    if (activeTab === "sale") {
-      matchesTab = isOnSale(product);
-    }
-
-    if (activeTab === "featured") {
-      matchesTab = getFeaturedProducts().some(
-        item => String(item.id) === String(product.id)
-      );
-    }
-
-    if (activeTab === "local") {
-      // Маълумоти анбори маҳаллӣ ҳоло дар
-      // vayo_public_deals муайян нашудааст.
-      // Маҳсулот бе далел маҳаллӣ эълон намешавад.
-      matchesTab = false;
-    }
-
-    return matchesSearch &&
-      matchesCategory &&
-      matchesTab;
-  });
+ items.forEach(p=>root.append(createProductCard(p)));
 }
 
-function renderProducts() {
-  const root = $("products");
-  root.replaceChildren();
-
-  if (loading) {
-    root.innerHTML =
-      '<div class="empty">Маҳсулот бор шуда истодааст...</div>';
-    return;
-  }
-
-  const filtered = getFilteredProducts();
-  $("resultCount").textContent =
-    filtered.length + " маҳсулот";
-
-  if (!filtered.length) {
-    const empty = document.createElement("div");
-    empty.className = "empty";
-
-    if (activeTab === "local") {
-      empty.textContent =
-        "Маълумоти анбори маҳаллӣ ҳоло пайваст нашудааст.";
-    } else {
-      empty.textContent =
-        "Ҳоло дар ин қисм маҳсулот ёфт нашуд.";
-    }
-
-    root.append(empty);
-    return;
-  }
-
-  const fragment = document.createDocumentFragment();
-
-  filtered.forEach(product => {
-    fragment.append(createProductCard(product));
-  });
-
-  root.append(fragment);
+function emptyNode(message){
+ const div=document.createElement("div");
+ div.className="empty";
+ div.textContent=message;
+ return div;
 }
 
-function renderFeatured() {
-  const root = $("featuredProducts");
-  root.replaceChildren();
+function renderProducts(){
+ const root=$("products");
+ root.replaceChildren();
 
-  const featured = getFeaturedProducts();
+ if(loading){
+  root.append(emptyNode(t("loading")));
+  return;
+ }
 
-  if (!featured.length) {
-    const empty = document.createElement("div");
-    empty.className = "empty";
-    empty.textContent =
-      "Ҳоло маҳсулоти дастрас нест.";
-    root.append(empty);
-    return;
-  }
+ if(loadError){
+  root.append(emptyNode(t("error")));
+  return;
+ }
 
-  featured.forEach(product => {
-    root.append(createProductCard(product));
-  });
+ const filtered=getFilteredProducts();
+ $("resultCount").textContent=
+  filtered.length+" "+t("item");
+
+ if(!filtered.length){
+  root.append(emptyNode(
+   activeTab==="local"
+    ?t("localUnavailable")
+    :t("notFound")
+  ));
+  return;
+ }
+
+ const fragment=document.createDocumentFragment();
+
+ filtered.forEach(p=>{
+  fragment.append(createProductCard(p));
+ });
+
+ root.append(fragment);
 }
 
-function render() {
-  renderFeatured();
-  renderProducts();
+function render(){
+ renderFeatured();
+ renderProducts();
 }
 
 /* CART */
 
-function addCart(product) {
-  const id = String(product.id);
-  const stock = getStock(product);
+function addCart(p){
+ const id=String(p.id);
+ const stock=getStock(p);
 
-  if (stock <= 0) {
-    showToast("Ин маҳсулот дар анбор нест.");
-    return;
+ if(stock<=0){
+  showToast(t("noStock"));
+  return;
+ }
+
+ const existing=cart.find(
+  item=>String(item.product_id)===id
+ );
+
+ if(existing){
+  if(existing.quantity>=stock||
+     existing.quantity>=100){
+   showToast(t("tooMany"));
+   return;
   }
+  existing.quantity++;
+ }else{
+  cart.push({product_id:id,quantity:1});
+ }
 
-  const existing = cart.find(
-    item => String(item.product_id) === id
-  );
-
-  if (existing) {
-    if (existing.quantity >= stock ||
-        existing.quantity >= 100) {
-      showToast("Миқдори бештар дар анбор нест.");
-      return;
-    }
-    existing.quantity += 1;
-  } else {
-    cart.push({
-      product_id:id,
-      quantity:1
-    });
-  }
-
-  saveCart();
-  showToast("✅ Маҳсулот ба сабад илова шуд!");
+ saveCart();
+ showToast("✅ "+t("added"));
 }
 
-function changeQuantity(productId, change) {
-  const item = cart.find(
-    entry => String(entry.product_id) === String(productId)
-  );
-
-  if (!item) return;
-
-  const product = products.find(
-    entry => String(entry.id) === String(productId)
-  );
-
-  const stock = product ? getStock(product) : 100;
-  const next = item.quantity + change;
-
-  if (next <= 0) {
-    removeFromCart(productId);
-    return;
-  }
-
-  if (next > stock || next > 100) {
-    showToast("Миқдори бештар дар анбор нест.");
-    return;
-  }
-
-  item.quantity = next;
-  saveCart();
-  renderCart();
+function removeFromCart(id){
+ cart=cart.filter(
+  item=>String(item.product_id)!==String(id)
+ );
+ saveCart();
+ renderCart();
 }
 
-function removeFromCart(productId) {
-  cart = cart.filter(
-    item => String(item.product_id) !== String(productId)
-  );
-  saveCart();
-  renderCart();
+function changeQuantity(id,change){
+ const item=cart.find(
+  x=>String(x.product_id)===String(id)
+ );
+ if(!item)return;
+
+ const p=products.find(
+  x=>String(x.id)===String(id)
+ );
+
+ const next=item.quantity+change;
+ const stock=p?getStock(p):100;
+
+ if(next<=0){
+  removeFromCart(id);
+  return;
+ }
+
+ if(next>stock||next>100){
+  showToast(t("tooMany"));
+  return;
+ }
+
+ item.quantity=next;
+ saveCart();
+ renderCart();
 }
 
-function renderCart() {
-  const root = $("cartItems");
-  root.replaceChildren();
+function renderCart(){
+ const root=$("cartItems");
+ root.replaceChildren();
 
-  let total = 0;
+ let total=0;
 
-  if (!cart.length) {
-    const empty = document.createElement("div");
-    empty.className = "empty";
-    empty.textContent = "Сабади шумо холӣ аст.";
-    root.append(empty);
+ if(!cart.length){
+  root.append(emptyNode(t("emptyCart")));
+ }
+
+ cart.forEach(item=>{
+  const p=products.find(
+   x=>String(x.id)===String(item.product_id)
+  );
+
+  const quantity=Number(item.quantity)||0;
+  const price=p?getPrice(p):0;
+
+  const row=document.createElement("div");
+  row.className="cart-row";
+
+  const image=p?getImage(p):"";
+
+  if(image){
+   const img=document.createElement("img");
+   img.className="cart-img";
+   img.src=image;
+   img.alt=String(p.name||"");
+   row.append(img);
+  }else{
+   const placeholder=document.createElement("div");
+   placeholder.className="cart-img no-image";
+   placeholder.textContent="🛍️";
+   row.append(placeholder);
   }
 
-  cart.forEach(item => {
-    const product = products.find(
-      p => String(p.id) === String(item.product_id)
-    );
+  const detail=document.createElement("div");
+  detail.className="cart-detail";
 
-    const quantity = Number(item.quantity) || 0;
-    const price = product ? getProductPrice(product) : 0;
-    const name = product?.name || "Маҳсулот";
-    const image = product ? getProductImage(product) : "";
+  const name=document.createElement("div");
+  name.className="cart-name";
+  name.textContent=p?.name||"VAYO";
 
-    const row = document.createElement("div");
-    row.className = "cart-row";
+  const priceEl=document.createElement("div");
+  priceEl.className="cart-price";
+  priceEl.textContent=p
+   ?money(price*quantity)
+   :t("unknownPrice");
 
-    if (image) {
-      const img = document.createElement("img");
-      img.className = "cart-img";
-      img.src = image;
-      img.alt = name;
-      row.append(img);
-    } else {
-      const img = document.createElement("div");
-      img.className = "cart-img no-image";
-      img.style.fontSize = "25px";
-      img.textContent = "🛍️";
-      row.append(img);
+  const controls=document.createElement("div");
+  controls.className="qty-controls";
+
+  const minus=document.createElement("button");
+  minus.textContent="−";
+  minus.onclick=()=>changeQuantity(
+   item.product_id,-1
+  );
+
+  const qty=document.createElement("span");
+  qty.textContent=quantity;
+
+  const plus=document.createElement("button");
+  plus.textContent="+";
+  plus.onclick=()=>changeQuantity(
+   item.product_id,1
+  );
+
+  controls.append(minus,qty,plus);
+  detail.append(name,priceEl,controls);
+
+  const remove=document.createElement("button");
+  remove.className="remove";
+  remove.textContent="✕";
+  remove.onclick=()=>removeFromCart(
+   item.product_id
+  );
+
+  row.append(detail,remove);
+  root.append(row);
+
+  if(p)total+=price*quantity;
+ });
+
+ $("total").textContent=money(total);
+}
+
+function toggleCart(open){
+ $("cartPanel").classList.toggle("hidden",!open);
+ $("overlay").classList.toggle("hidden",!open);
+ document.body.style.overflow=open?"hidden":"";
+
+ if(open)renderCart();
+}
+
+/* PHOTO SEARCH */
+
+function imageFromFile(file){
+ return new Promise((resolve,reject)=>{
+  const url=URL.createObjectURL(file);
+  const img=new Image();
+
+  img.onload=()=>{
+   URL.revokeObjectURL(url);
+   resolve(img);
+  };
+  img.onerror=()=>{
+   URL.revokeObjectURL(url);
+   reject(new Error("Image load error"));
+  };
+  img.src=url;
+ });
+}
+
+function imageFromUrl(url){
+ return new Promise((resolve,reject)=>{
+  const img=new Image();
+  img.crossOrigin="anonymous";
+  img.onload=()=>resolve(img);
+  img.onerror=()=>reject(
+   new Error("CORS or image error")
+  );
+  img.src=url;
+ });
+}
+
+function imageFeatures(img){
+ const canvas=document.createElement("canvas");
+ canvas.width=12;
+ canvas.height=12;
+
+ const ctx=canvas.getContext(
+  "2d",{willReadFrequently:true}
+ );
+
+ if(!ctx)throw new Error("Canvas unavailable");
+
+ ctx.drawImage(img,0,0,12,12);
+
+ const data=ctx.getImageData(
+  0,0,12,12
+ ).data;
+
+ const features=[];
+
+ for(let gy=0;gy<4;gy++){
+  for(let gx=0;gx<4;gx++){
+   let r=0,g=0,b=0,n=0;
+
+   for(let y=gy*3;y<gy*3+3;y++){
+    for(let x=gx*3;x<gx*3+3;x++){
+     const i=(y*12+x)*4;
+     if(data[i+3]<20)continue;
+     r+=data[i];
+     g+=data[i+1];
+     b+=data[i+2];
+     n++;
     }
+   }
 
-    const detail = document.createElement("div");
-    detail.className = "cart-detail";
+   features.push(
+    r/Math.max(1,n),
+    g/Math.max(1,n),
+    b/Math.max(1,n)
+   );
+  }
+ }
 
-    const label = document.createElement("div");
-    label.className = "cart-name";
-    label.textContent = name;
+ return features;
+}
 
-    const priceElement = document.createElement("div");
-    priceElement.className = "cart-price";
-    priceElement.textContent = product
-      ? money(price * quantity)
-      : "Нарх ҳангоми фармоиш санҷида мешавад";
+function imageDistance(a,b){
+ let total=0;
 
-    const controls = document.createElement("div");
-    controls.className = "qty-controls";
+ for(let i=0;i<a.length;i++){
+  const d=a[i]-b[i];
+  total+=d*d;
+ }
 
-    const minus = document.createElement("button");
-    minus.textContent = "−";
-    minus.type = "button";
-    minus.addEventListener("click", () => {
-      changeQuantity(item.product_id, -1);
-    });
+ return total/a.length;
+}
 
-    const qty = document.createElement("span");
-    qty.textContent = quantity;
+function updatePhotoStatus(message){
+ const status=$("photoStatus");
+ status.replaceChildren();
 
-    const plus = document.createElement("button");
-    plus.textContent = "+";
-    plus.type = "button";
-    plus.addEventListener("click", () => {
-      changeQuantity(item.product_id, 1);
-    });
+ const label=document.createElement("span");
+ label.textContent=message||(
+  t("photoFound")+" "+t("photoNote")
+ );
 
-    controls.append(minus, qty, plus);
-    detail.append(label, priceElement, controls);
+ const clear=document.createElement("button");
+ clear.className="photo-clear";
+ clear.textContent="✕ "+t("photoClear");
 
-    const remove = document.createElement("button");
-    remove.className = "remove";
-    remove.textContent = "✕";
-    remove.title = "Нест кардан";
-    remove.addEventListener("click", () => {
-      removeFromCart(item.product_id);
-    });
+ clear.onclick=()=>{
+  photoRequest++;
+  photoRanks=null;
+  $("photoInput").value="";
+  status.classList.add("hidden");
+  renderProducts();
+ };
 
-    row.append(detail, remove);
-    root.append(row);
+ status.append(label,clear);
+ status.classList.remove("hidden");
+}
 
-    if (product) {
-      total += price * quantity;
-    }
+async function searchByPhoto(file){
+ if(!file)return;
+
+ if(!file.type.startsWith("image/")||
+    file.size>10*1024*1024){
+  showToast(t("photoInvalid"));
+  return;
+ }
+
+ if(loading||loadError){
+  showToast(t("photoWait"));
+  return;
+ }
+
+ const requestId=++photoRequest;
+ photoRanks=null;
+ updatePhotoStatus(t("photoWorking"));
+
+ try{
+  const chosen=await imageFromFile(file);
+  const target=imageFeatures(chosen);
+
+  const candidates=products.filter(
+   p=>getImage(p)
+  );
+
+  const scores=[];
+
+  for(let i=0;i<candidates.length;i+=6){
+   if(requestId!==photoRequest)return;
+
+   const batch=candidates.slice(i,i+6);
+
+   const results=await Promise.all(
+    batch.map(async p=>{
+     try{
+      const img=await imageFromUrl(getImage(p));
+
+      return {
+       id:String(p.id),
+       score:imageDistance(
+        target,imageFeatures(img)
+       )
+      };
+     }catch{
+      return null;
+     }
+    })
+   );
+
+   scores.push(...results.filter(Boolean));
+  }
+
+  if(requestId!==photoRequest)return;
+
+  scores.sort((a,b)=>a.score-b.score);
+
+  photoRanks=new Map(
+   scores.slice(0,12).map(x=>[
+    x.id,x.score
+   ])
+  );
+
+  category="all";
+  activeTab="all";
+  $("search").value="";
+
+  document.querySelectorAll(
+   ".cat[data-category]"
+  ).forEach(el=>{
+   el.classList.toggle(
+    "active",
+    el.dataset.category==="all"
+   );
   });
 
-  $("total").textContent = money(total);
-}
+  document.querySelectorAll(
+   ".tab[data-tab]"
+  ).forEach(el=>{
+   el.classList.toggle(
+    "active",
+    el.dataset.tab==="all"
+   );
+  });
 
-function toggleCart(open) {
-  $("cartPanel").classList.toggle("hidden", !open);
-  $("overlay").classList.toggle("hidden", !open);
-  document.body.style.overflow = open ? "hidden" : "";
+  updatePhotoStatus(
+   scores.length
+    ?t("photoFound")+" "+t("photoNote")
+    :t("photoFail")
+  );
 
-  if (open) {
-    renderCart();
-  }
+  renderProducts();
+  $("catalog").scrollIntoView({
+   behavior:"smooth"
+  });
+
+ }catch(error){
+  console.error("VAYO photo search:",error);
+  updatePhotoStatus(t("photoFail"));
+ }
 }
 
 /* EVENTS */
 
-$("cartBtn").addEventListener("click", () => {
-  toggleCart(true);
+$("cartBtn").onclick=()=>toggleCart(true);
+$("mobileCart").onclick=()=>toggleCart(true);
+$("closeCart").onclick=()=>toggleCart(false);
+$("overlay").onclick=()=>toggleCart(false);
+
+document.addEventListener("keydown",event=>{
+ if(event.key==="Escape")toggleCart(false);
 });
 
-$("mobileCart").addEventListener("click", () => {
-  toggleCart(true);
+$("search").addEventListener("input",()=>{
+ photoRequest++;
+ photoRanks=null;
+ $("photoStatus").classList.add("hidden");
+ renderProducts();
 });
 
-$("closeCart").addEventListener("click", () => {
-  toggleCart(false);
+function submitSearch(){
+ photoRequest++;
+ photoRanks=null;
+ $("photoStatus").classList.add("hidden");
+ renderProducts();
+ $("catalog").scrollIntoView({behavior:"smooth"});
+}
+
+$("searchBtn").onclick=submitSearch;
+
+$("search").addEventListener("keydown",event=>{
+ if(event.key==="Enter"){
+  event.preventDefault();
+  submitSearch();
+ }
 });
 
-$("overlay").addEventListener("click", () => {
-  toggleCart(false);
-});
+$("cameraBtn").onclick=()=>{
+ $("photoInput").click();
+};
 
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") {
-    toggleCart(false);
-  }
-});
-
-$("search").addEventListener("input", () => {
-  renderProducts();
-});
-
-$("search").addEventListener("keydown", event => {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    document.getElementById("catalog")
-      .scrollIntoView({behavior:"smooth"});
-    renderProducts();
-  }
-});
-
-$("searchBtn").addEventListener("click", () => {
-  renderProducts();
-  $("catalog").scrollIntoView({behavior:"smooth"});
-});
-
-$("cameraBtn").addEventListener("click", () => {
-  showToast(
-    "Ҷустуҷӯ бо акс ҳоло пайваст нашудааст."
-  );
+$("photoInput").addEventListener("change",event=>{
+ const file=event.target.files?.[0];
+ if(file)searchByPhoto(file);
 });
 
 document.querySelectorAll(".cat[data-category]")
-  .forEach(button => {
-    button.addEventListener("click", () => {
-      category = button.dataset.category;
+.forEach(button=>{
+ button.onclick=()=>{
+  category=button.dataset.category;
+  activeTab="all";
 
-      document.querySelectorAll(".cat[data-category]")
-        .forEach(item => {
-          item.classList.remove("active");
-        });
-
-      button.classList.add("active");
-      activeTab = "all";
-
-      document.querySelectorAll(".tab")
-        .forEach(item => {
-          item.classList.toggle(
-            "active",
-            item.dataset.tab === "all"
-          );
-        });
-
-      renderProducts();
-    });
+  document.querySelectorAll(".cat[data-category]")
+  .forEach(el=>{
+   el.classList.toggle("active",el===button);
   });
 
-document.querySelectorAll(".tab[data-tab]")
-  .forEach(button => {
-    button.addEventListener("click", () => {
-      activeTab = button.dataset.tab;
-
-      document.querySelectorAll(".tab")
-        .forEach(item => {
-          item.classList.remove("active");
-        });
-
-      button.classList.add("active");
-      renderProducts();
-    });
+  document.querySelectorAll(".tab[data-tab]")
+  .forEach(el=>{
+   el.classList.toggle(
+    "active",el.dataset.tab==="all"
+   );
   });
 
-$("mobileCategories").addEventListener("click", () => {
-  const categories = document.getElementById("categories");
-
-  categories.style.display =
-    categories.style.display === "flex" ? "none" : "flex";
-
-  if (categories.style.display === "flex") {
-    categories.scrollIntoView({behavior:"smooth"});
-  }
+  renderProducts();
+ };
 });
 
-/* LOAD PRODUCTS FROM SUPABASE */
+document.querySelectorAll(".tab[data-tab]")
+.forEach(button=>{
+ button.onclick=()=>{
+  activeTab=button.dataset.tab;
 
-async function loadProducts() {
-  loading = true;
+  document.querySelectorAll(".tab[data-tab]")
+  .forEach(el=>{
+   el.classList.toggle("active",el===button);
+  });
+
   renderProducts();
+ };
+});
 
-  try {
-    const {data,error} = await db
-      .from("vayo_public_deals")
-      .select("*")
-      .limit(100);
+$("mobileCategories").onclick=()=>{
+ const nav=$("categories");
+ const visible=nav.style.display==="flex";
+ nav.style.display=visible?"none":"flex";
 
-    if (error) throw error;
+ if(!visible){
+  nav.scrollIntoView({behavior:"smooth"});
+ }
+};
 
-    products = Array.isArray(data) ? data : [];
-    loading = false;
+/* SUPABASE PRODUCTS */
 
-    render();
+async function loadProducts(){
+ loading=true;
+ loadError=false;
+ render();
 
-  } catch (error) {
-    console.error("VAYO products error:", error);
-    loading = false;
+ if(!db){
+  loading=false;
+  loadError=true;
+  render();
+  return;
+ }
 
-    $("featuredProducts").replaceChildren();
-    $("products").replaceChildren();
+ try{
+  const all=[];
+  const pageSize=500;
 
-    const message = document.createElement("div");
-    message.className = "empty";
-    message.textContent =
-      "Маҳсулот бор нашуд. Пайвасти Supabase, " +
-      "ҷадвали vayo_public_deals ва RLS-ро санҷед.";
+  // Read all pages instead of limiting search
+  // to only the first 100 products.
+  for(let offset=0;offset<10000;offset+=pageSize){
+   const {data,error}=await db
+    .from("vayo_public_deals")
+    .select("*")
+    .range(offset,offset+pageSize-1);
 
-    $("products").append(message);
+   if(error)throw error;
+
+   if(!Array.isArray(data)||!data.length)break;
+
+   all.push(...data);
+
+   if(data.length<pageSize)break;
   }
+
+  products=all;
+  loading=false;
+  render();
+
+ }catch(error){
+  console.error("VAYO products:",error);
+  loading=false;
+  loadError=true;
+  render();
+ }
 }
 
-/* AUTH */
+/* ACCOUNT */
 
-async function loadAccount() {
-  try {
-    const {data,error} = await db.auth.getUser();
+async function loadAccount(){
+ if(!db)return;
 
-    if (error) {
-      console.warn(error.message);
-      return;
-    }
+ try{
+  const {data,error}=await db.auth.getUser();
 
-    if (data?.user) {
-      $("accountLink").textContent = "👤 Ҳисоби ман";
-      $("mobileAccount").href = "./pages/login.html";
-    }
-  } catch (error) {
-    console.error("Auth:", error);
-  }
+  if(error)return;
+
+  signedIn=Boolean(data?.user);
+  $("accountLink").textContent=
+   "👤 "+t(signedIn?"account":"login");
+
+ }catch(error){
+  console.error("VAYO auth:",error);
+ }
 }
 
 /* START */
 
 saveCart();
+applyLanguage();
 loadProducts();
 loadAccount();
+
 </script>
 
 </body>
