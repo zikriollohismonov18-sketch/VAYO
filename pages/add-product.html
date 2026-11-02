@@ -41,7 +41,9 @@ button:disabled{opacity:.5;cursor:not-allowed}
 <main>
 <div class="card">
 <h2>📦 Маҳсулоти нав</h2>
-<p id="shopInfo" class="muted">Мағоза санҷида мешавад...</p>
+<p id="shopInfo" class="muted">
+Мағоза санҷида мешавад...
+</p>
 <div id="notice" class="message hidden"></div>
 </div>
 
@@ -73,12 +75,12 @@ placeholder="Ранг, андоза, сифат ва маълумоти дига
 </select>
 
 <label for="price">Нарх (сомонӣ)</label>
-<input id="price" type="number" min="0.01"
-step="0.01" required placeholder="150">
+<input id="price" type="number"
+min="0.01" step="0.01" required>
 
 <label for="stock">Миқдор дар анбор</label>
-<input id="stock" type="number" min="0"
-step="1" required value="1">
+<input id="stock" type="number"
+min="0" step="1" required value="1">
 </div>
 
 <div class="card">
@@ -135,24 +137,23 @@ min="0" max="99" step="1" value="0">
 <script>
 "use strict";
 
-// Пайвасти мустақими Supabase
 const SB_URL =
  "https://rgminzzmlktkliliiupt.supabase.co";
 
 const SB_KEY =
  "sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
 
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
 
-let db = null;
-let currentUser = null;
-let currentShop = null;
-let selectedFiles = [];
-let previewURLs = [];
-let saving = false;
+let db=null;
+let currentUser=null;
+let currentShop=null;
+let selectedFiles=[];
+let previewURLs=[];
+let saving=false;
 
-const params = new URLSearchParams(location.search);
-const requestedShopId = params.get("shop");
+const params=new URLSearchParams(location.search);
+const requestedShopId=params.get("shop");
 
 function notice(text,success=false){
  const el=$("notice");
@@ -186,6 +187,7 @@ function clearPreviews(){
 $("images").addEventListener("change",()=>{
  clearPreviews();
  selectedFiles=Array.from($("images").files);
+
  $("imageCount").textContent=
   selectedFiles.length+" акс интихоб шуд";
 
@@ -204,7 +206,7 @@ $("images").addEventListener("change",()=>{
  ];
 
  for(const file of selectedFiles){
-  if(!allowed.includes(file.type) ||
+  if(!allowed.includes(file.type)||
      file.size>5*1024*1024){
    notice("Акс бояд JPG, PNG ё WebP ва то 5 MB бошад.");
    selectedFiles=[];
@@ -219,7 +221,6 @@ $("images").addEventListener("change",()=>{
  selectedFiles.forEach(file=>{
   const url=URL.createObjectURL(file);
   previewURLs.push(url);
-
   const img=document.createElement("img");
   img.src=url;
   img.alt="Акси маҳсулот";
@@ -229,7 +230,7 @@ $("images").addEventListener("change",()=>{
 
 async function initialize(){
  try{
-  if(!window.supabase ||
+  if(!window.supabase||
      !window.supabase.createClient){
    throw new Error(
     "Китобхонаи Supabase бор нашуд."
@@ -237,8 +238,7 @@ async function initialize(){
   }
 
   db=window.supabase.createClient(
-   SB_URL,
-   SB_KEY
+   SB_URL,SB_KEY
   );
 
   const {data:userData,error:userError}=
@@ -255,7 +255,6 @@ async function initialize(){
    return;
   }
 
-  // Танҳо мағозаҳои ҳамин фурӯшанда
   let query=db
    .from("vayo_shops")
    .select("id,name,status,owner_id")
@@ -272,14 +271,10 @@ async function initialize(){
 
   if(shopError)throw shopError;
 
-  if(!shops || shops.length===0){
+  if(!shops||shops.length===0){
    $("shopInfo").textContent=
     "Мағозаи шумо ёфт нашуд.";
-   notice(
-    requestedShopId
-     ? "Мағозаи интихобшуда ёфт нашуд ё шумо соҳиби он нестед."
-     : "Аввал дар панели фурӯшанда мағоза созед."
-   );
+   notice("Мағоза ёфт нашуд ё шумо соҳиби он нестед.");
    return;
   }
 
@@ -287,12 +282,12 @@ async function initialize(){
 
   const statusText=
    currentShop.status==="approved"
-    ? "Тасдиқ шудааст"
-    : currentShop.status==="pending"
-    ? "Интизори тасдиқ"
-    : currentShop.status==="rejected"
-    ? "Рад шудааст"
-    : currentShop.status;
+    ?"Тасдиқ шудааст":
+   currentShop.status==="pending"
+    ?"Интизори тасдиқ":
+   currentShop.status==="rejected"
+    ?"Рад шудааст":
+   currentShop.status;
 
   $("shopInfo").textContent=
    "🏪 "+currentShop.name+" — "+statusText;
@@ -307,15 +302,13 @@ async function initialize(){
   $("productForm").classList.remove("hidden");
 
  }catch(err){
-  $("shopInfo").textContent=
-   "Хатои пайвастшавӣ";
+  $("shopInfo").textContent="Хатои пайвастшавӣ";
   notice("Хато: "+(err.message||String(err)));
  }
 }
 
 $("productForm").addEventListener("submit",async e=>{
  e.preventDefault();
-
  if(saving)return;
 
  if(!db||!currentUser||!currentShop){
@@ -384,7 +377,6 @@ $("productForm").addEventListener("submit",async e=>{
  const uploadedPaths=[];
 
  try{
-  // Пеш аз сабт соҳиби мағозаро месанҷем
   const {data:shop,error:checkError}=
    await db.from("vayo_shops")
     .select("id,status")
@@ -392,12 +384,14 @@ $("productForm").addEventListener("submit",async e=>{
     .eq("owner_id",currentUser.id)
     .single();
 
-  if(checkError)throw checkError;
+  if(checkError){
+   throw new Error(
+    "Санҷиши мағоза: "+checkError.message
+   );
+  }
 
   if(!shop||shop.status!=="approved"){
-   throw new Error(
-    "Мағоза тасдиқ нашудааст."
-   );
+   throw new Error("Мағоза тасдиқ нашудааст.");
   }
 
   const productData={
@@ -423,13 +417,15 @@ $("productForm").addEventListener("submit",async e=>{
     .select("id")
     .single();
 
-  if(productError)throw productError;
+  if(productError){
+   throw new Error(
+    "Сабти маҳсулот: "+productError.message
+   );
+  }
 
   createdProductId=product.id;
-
   let firstImageUrl=null;
 
-  // Боркунии аксҳо
   for(let i=0;i<selectedFiles.length;i++){
    const file=selectedFiles[i];
 
@@ -449,7 +445,11 @@ $("productForm").addEventListener("submit",async e=>{
       upsert:false
      });
 
-   if(uploadError)throw uploadError;
+   if(uploadError){
+    throw new Error(
+     "Боркунии акс: "+uploadError.message
+    );
+   }
 
    uploadedPaths.push(path);
 
@@ -468,7 +468,6 @@ $("productForm").addEventListener("submit",async e=>{
     firstImageUrl=urlData.publicUrl;
    }
 
-   // Ҷадвали аксҳои иловагӣ
    const {error:imageError}=
     await db.from("vayo_product_images")
      .insert({
@@ -477,10 +476,13 @@ $("productForm").addEventListener("submit",async e=>{
       position:i
      });
 
-   if(imageError)throw imageError;
+   if(imageError){
+    throw new Error(
+     "Сабти маълумоти акс: "+imageError.message
+    );
+   }
   }
 
-  // Акси асосии маҳсулот
   const {error:updateError}=
    await db.from("vayo_products")
     .update({
@@ -489,7 +491,11 @@ $("productForm").addEventListener("submit",async e=>{
     })
     .eq("id",createdProductId);
 
-  if(updateError)throw updateError;
+  if(updateError){
+   throw new Error(
+    "Фаъол кардани маҳсулот: "+updateError.message
+   );
+  }
 
   notice(
    "Маҳсулот ва "+selectedFiles.length+
@@ -500,27 +506,40 @@ $("productForm").addEventListener("submit",async e=>{
   $("productForm").reset();
   selectedFiles=[];
   clearPreviews();
-  $("imageCount").textContent=
-   "0 акс интихоб шуд";
+  $("imageCount").textContent="0 акс интихоб шуд";
   calculatePrice();
 
  }catch(err){
-  // Кӯшиши тоза кардани сабти нопурра
+  // Тозакунии маҳсулоти нопурра
   if(createdProductId){
    if(uploadedPaths.length){
-    await db.storage
-     .from("product-images")
-     .remove(uploadedPaths);
+    const {error:removeError}=
+     await db.storage
+      .from("product-images")
+      .remove(uploadedPaths);
+
+    if(removeError){
+     console.warn(
+      "Storage cleanup:",
+      removeError.message
+     );
+    }
    }
 
-   await db.from("vayo_products")
-    .delete()
-    .eq("id",createdProductId);
+   const {error:deleteError}=
+    await db.from("vayo_products")
+     .delete()
+     .eq("id",createdProductId);
+
+   if(deleteError){
+    console.warn(
+     "Product cleanup:",
+     deleteError.message
+    );
+   }
   }
 
-  notice(
-   "Хато: "+(err.message||String(err))
-  );
+  notice("Хато: "+(err.message||String(err)));
 
  }finally{
   saving=false;
