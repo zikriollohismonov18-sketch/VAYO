@@ -4,170 +4,509 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VAYO — Фармоиш</title>
+<title>VAYO — Тасдиқи фармоиш</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
+:root{
+  --orange:#ff6500;
+  --red:#f23325;
+  --ink:#192132;
+  --muted:#6e7686;
+  --line:#e9ebf0;
+  --bg:#f6f7fa;
+  --green:#12834a;
+}
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:#f5f6f8;color:#222}
-header{background:#ff6500;color:white;padding:18px}
-.top{max-width:850px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.logo{font-size:30px;font-weight:900}
-header a{color:white;text-decoration:none}
-main{max-width:850px;margin:20px auto;padding:0 12px 50px}
-.card{background:white;border-radius:14px;padding:20px;margin-bottom:15px;box-shadow:0 3px 12px #0001}
-h2{margin-top:0}
-h3{margin:18px 0 8px;font-size:16px}
-label{display:block;font-size:13px;font-weight:bold;margin-top:13px}
-input,select,textarea{width:100%;padding:13px;border:1px solid #ddd;border-radius:9px;margin-top:7px;font:inherit}
-textarea{min-height:80px}
-button{background:#ff6500;color:white;border:0;padding:14px 18px;border-radius:9px;font-weight:bold;cursor:pointer}
-button:disabled{opacity:.5;cursor:not-allowed}
-#map{height:300px;border-radius:10px;margin-top:12px}
-.muted{color:#777;font-size:13px;line-height:1.6}
-.row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #eee;padding:11px 0}
-.row>span:first-child{min-width:0}
-.row>strong:last-child{text-align:right;white-space:nowrap}
-.total{color:#ff6500;font-size:22px;font-weight:bold}
-.message{padding:13px;border-radius:9px;background:#fff1dc;margin-bottom:15px;overflow-wrap:anywhere;white-space:pre-line}
-.error{background:#ffe9e9;color:#a32121}
-.success{background:#e6f7eb;color:#146b35}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:Arial,Helvetica,sans-serif;
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+header{
+  background:linear-gradient(115deg,#ff4c13,#ff7900);
+  color:white;
+  box-shadow:0 5px 20px #ff650022;
+}
+.top{
+  max-width:1150px;
+  margin:auto;
+  min-height:77px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 18px;
+  gap:15px;
+}
+.logo{
+  font-size:36px;
+  font-weight:900;
+  letter-spacing:-2px;
+}
+.back{
+  background:#ffffff25;
+  border:1px solid #ffffff55;
+  border-radius:24px;
+  padding:11px 17px;
+  font-weight:700;
+}
+.top small{opacity:.92}
+main{
+  max-width:1150px;
+  margin:25px auto 80px;
+  padding:0 14px;
+}
+.intro h1{font-size:30px;margin:0 0 8px}
+.intro p{margin:0 0 22px;color:var(--muted)}
+.layout{
+  display:grid;
+  grid-template-columns:minmax(0,1.55fr) minmax(290px,1fr);
+  gap:18px;
+  align-items:start;
+}
+.card{
+  background:white;
+  border:1px solid #edf0f3;
+  border-radius:19px;
+  padding:23px;
+  margin-bottom:18px;
+  box-shadow:0 7px 26px #101d3810;
+}
+.card h2{font-size:20px;margin:0 0 18px}
+.side{position:sticky;top:16px}
+.muted{
+  font-size:13px;
+  line-height:1.6;
+  color:var(--muted);
+}
+.message{
+  padding:14px 16px;
+  border-radius:12px;
+  background:#fff2e6;
+  margin-bottom:18px;
+  white-space:pre-line;
+  overflow-wrap:anywhere;
+}
+.error{background:#ffeded;color:#a52323}
+.success{background:#e7f9ef;color:#126e3a}
 .hidden{display:none!important}
-.order-id{font-weight:bold;overflow-wrap:anywhere}
-.shop-delivery{border:1px solid #eee;border-radius:12px;padding:14px;margin-top:12px;background:#fafafa}
-.shop-delivery strong{display:block;margin-bottom:8px}
-.delivery-tag{font-size:13px;font-weight:bold;color:#d45500}
-.delivery-detail{font-size:13px;color:#666;line-height:1.6;margin:7px 0}
-.summary{border-top:2px solid #eee;margin-top:14px;padding-top:8px}
-.warning{background:#fff6e8;border:1px solid #ffe1b0;border-radius:9px;padding:12px;font-size:13px;line-height:1.6}
+.item{
+  display:flex;
+  gap:14px;
+  padding:16px 0;
+  border-bottom:1px solid var(--line);
+  align-items:flex-start;
+}
+.item:last-child{border:0}
+.thumb{
+  flex:0 0 94px;
+  width:94px;
+  height:105px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  background:#f5f5f5;
+  object-fit:cover;
+  cursor:zoom-in;
+}
+.thumb.empty{
+  display:grid;
+  place-items:center;
+  color:#aaa;
+  font-size:29px;
+}
+.item-info{flex:1;min-width:0}
+.item-name{font-weight:750;line-height:1.4}
+.item-meta{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:7px;
+}
+.price{
+  font-weight:900;
+  color:var(--red);
+  font-size:19px;
+  margin-top:7px;
+}
+.old{
+  font-size:13px;
+  text-decoration:line-through;
+  color:#9ca3af;
+  margin-left:8px;
+}
+.discount{
+  display:inline-block;
+  background:#ffe6e4;
+  color:#dc2c24;
+  font-size:12px;
+  font-weight:800;
+  padding:4px 7px;
+  border-radius:7px;
+  margin-left:7px;
+}
+.item-total{
+  font-weight:800;
+  font-size:14px;
+  white-space:nowrap;
+}
+.shop-delivery{
+  background:#fafbfc;
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:15px;
+  margin-top:11px;
+}
+.shop-delivery strong{display:block;margin-bottom:7px}
+.delivery-tag{
+  color:#e65c00;
+  font-size:13px;
+  font-weight:750;
+}
+.delivery-detail{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.6;
+  margin:7px 0 0;
+}
+.warning{
+  padding:13px;
+  background:#fff5e7;
+  border:1px solid #ffe1b8;
+  border-radius:11px;
+  font-size:13px;
+  line-height:1.6;
+  margin-top:12px;
+}
+label{
+  display:block;
+  margin:14px 0 6px;
+  font-size:13px;
+  font-weight:750;
+}
+input,select,textarea{
+  width:100%;
+  padding:13px;
+  border:1px solid #dce1e8;
+  border-radius:11px;
+  outline:none;
+  background:#fff;
+  color:var(--ink);
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--orange);
+  box-shadow:0 0 0 3px #ff650017;
+}
+textarea{min-height:83px;resize:vertical}
+.two{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+#map{
+  height:290px;
+  border-radius:12px;
+  border:1px solid var(--line);
+  margin-top:11px;
+}
+.row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:13px 0;
+  border-bottom:1px solid var(--line);
+  font-size:14px;
+}
+.row strong:last-child{text-align:right}
+.total{
+  font-size:25px;
+  color:var(--red);
+  font-weight:900;
+}
+.order-btn{
+  width:100%;
+  border:0;
+  border-radius:12px;
+  padding:16px;
+  background:linear-gradient(100deg,#ff4700,#ff8500);
+  color:white;
+  font-weight:900;
+  font-size:16px;
+  box-shadow:0 8px 18px #ff650033;
+  margin-top:18px;
+}
+.order-btn:disabled{opacity:.5;cursor:not-allowed}
+.pill{
+  display:inline-block;
+  border-radius:50px;
+  background:#e7f8ed;
+  color:#16713c;
+  font-size:12px;
+  font-weight:700;
+  padding:6px 10px;
+  margin-bottom:15px;
+}
+.secure{
+  font-size:12px;
+  color:var(--muted);
+  text-align:center;
+  margin:12px 0 0;
+}
+.lightbox{
+  position:fixed;
+  inset:0;
+  background:#08090cef;
+  z-index:9999;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.lightbox img{
+  max-width:min(90vw,1000px);
+  max-height:77vh;
+  object-fit:contain;
+  border-radius:12px;
+}
+.lightbox-top{
+  position:absolute;
+  top:20px;
+  left:20px;
+  right:20px;
+  display:flex;
+  justify-content:space-between;
+  color:white;
+  gap:15px;
+}
+.lightbox button{
+  border:1px solid #ffffff66;
+  background:#ffffff25;
+  color:white;
+  border-radius:40px;
+  padding:10px 15px;
+  font-size:18px;
+}
+.lightbox-nav{
+  position:absolute;
+  top:50%;
+  width:calc(100% - 30px);
+  display:flex;
+  justify-content:space-between;
+  pointer-events:none;
+}
+.lightbox-nav button{pointer-events:auto}
+.lightbox-caption{
+  color:#fff;
+  margin-top:13px;
+  text-align:center;
+}
+.order-success{text-align:center;padding:28px}
+.order-success h2{color:var(--green)}
+.order-success strong{overflow-wrap:anywhere}
+@media(max-width:800px){
+  .layout{grid-template-columns:1fr}
+  .side{position:static}
+  .card{padding:17px}
+  .intro h1{font-size:25px}
+}
+@media(max-width:450px){
+  .two{grid-template-columns:1fr}
+  .item{gap:10px}
+  .thumb{flex-basis:75px;width:75px;height:85px}
+  .item-total{font-size:12px}
+  .logo{font-size:29px}
+  .top small{display:none}
+}
 </style>
 </head>
 <body>
 
 <header>
-<div class="top">
-<div class="logo">VAYO</div>
-<a href="cart.html">← Сабад</a>
-</div>
+  <div class="top">
+    <div>
+      <a class="logo" href="../index.html">VAYO</a>
+      <small>Бозори онлайн</small>
+    </div>
+    <a class="back" href="cart.html">← Бозгашт ба сабад</a>
+  </div>
 </header>
 
 <main>
-<h1>📦 Тасдиқи фармоиш</h1>
-<div id="notice" class="message hidden" role="status"></div>
+  <div class="intro">
+    <h1>📦 Тасдиқи фармоиш</h1>
+    <p>Маҳсулот, расонидан ва маълумоти худро санҷед.</p>
+  </div>
 
-<div class="card">
-<h2>Молҳои интихобшуда</h2>
-<div id="orderItems">Боргирӣ...</div>
+  <div id="notice" class="message hidden" role="status"></div>
 
-<div class="summary">
-<div class="row">
-<strong>Ҷамъи молҳо</strong>
-<strong id="subtotal">0 сомонӣ</strong>
-</div>
-<div class="row">
-<strong>Ҳаққи расонидани мағозаҳо</strong>
-<strong id="deliveryTotal">0 сомонӣ</strong>
-</div>
-<div class="row">
-<strong>Маблағи умумии пешакӣ</strong>
-<strong id="grandTotal" class="total">0 сомонӣ</strong>
-</div>
-</div>
+  <div class="layout" id="checkoutLayout">
+    <div>
+      <section class="card">
+        <h2>🛍️ Молҳои интихобшуда</h2>
+        <div id="orderItems">Боргирӣ...</div>
+      </section>
 
-<p class="muted">
-Нарх ва захираи маҳсулот ҳангоми сабти фармоиш
-дар сервер аз нав санҷида мешаванд.
-Маблағи ниҳоиро сервер ҳисоб мекунад.
-</p>
-</div>
+      <section class="card">
+        <h2>🚚 Расонидан аз мағозаҳо</h2>
+        <div id="deliveryList">Боргирӣ...</div>
 
-<div class="card">
-<h2>🚚 Расонидан аз мағозаҳо</h2>
-<div id="deliveryList">Боргирӣ...</div>
-<div id="externalWarning" class="warning hidden">
-📦 Барои карго ё почта хароҷоти расонидан
-ба маблағи боло дохил нест.
-Харидор онро алоҳида пардохт мекунад.
-</div>
-</div>
+        <div id="externalWarning" class="warning hidden">
+          📦 Хароҷоти карго ё почта ба маблағи умумӣ дохил нест.
+          Харидор онро алоҳида пардохт мекунад.
+        </div>
+      </section>
 
-<form id="checkoutForm" class="hidden">
+      <form id="checkoutForm" class="hidden">
+        <section class="card">
+          <h2>👤 Маълумоти харидор</h2>
 
-<div class="card">
-<h2>👤 Маълумоти харидор</h2>
+          <div class="two">
+            <div>
+              <label for="fullName">Ному насаб *</label>
+              <input id="fullName" maxlength="120"
+                     autocomplete="name" required>
+            </div>
 
-<label for="fullName">Ному насаб</label>
-<input id="fullName" required maxlength="120" autocomplete="name">
+            <div>
+              <label for="phone">Рақами телефон *</label>
+              <input id="phone" type="tel" maxlength="30"
+                     placeholder="+992..."
+                     autocomplete="tel" required>
+            </div>
+          </div>
 
-<label for="phone">Рақами телефон</label>
-<input id="phone" type="tel" required placeholder="+992..." maxlength="30" autocomplete="tel">
+          <label for="city">Шаҳр *</label>
+          <select id="city" required>
+            <option value="">Интихоб кунед</option>
+            <option>Душанбе</option>
+            <option>Хуҷанд</option>
+            <option>Бохтар</option>
+            <option>Кӯлоб</option>
+            <option>Ҳисор</option>
+            <option>Панҷакент</option>
+            <option>Хоруғ</option>
+            <option>Турсунзода</option>
+            <option>Истаравшан</option>
+            <option>Дигар</option>
+          </select>
 
-<label for="city">Шаҳр</label>
-<select id="city" required>
-<option value="">Интихоб кунед</option>
-<option>Душанбе</option>
-<option>Хуҷанд</option>
-<option>Бохтар</option>
-<option>Кӯлоб</option>
-<option>Ҳисор</option>
-<option>Панҷакент</option>
-<option>Хоруғ</option>
-<option>Турсунзода</option>
-<option>Истаравшан</option>
-<option>Дигар</option>
-</select>
+          <div id="addressSection">
+            <label for="address">Суроғаи пурра *</label>
+            <textarea id="address" required
+              placeholder="Кӯча, бино, хона, нишона"></textarea>
 
-<div id="addressSection">
-<label for="address">Суроғаи пурра</label>
-<textarea id="address" required placeholder="Кӯча, бино, хона, нишона"></textarea>
+            <label>📍 Ҷойгиршавӣ дар харита</label>
+            <p class="muted">
+              Нуқтаи расониданро дар харита пахш кунед.
+            </p>
 
-<label>📍 Ҷойгиршавӣ дар харита</label>
-<p class="muted">Нуқтаи расониданро дар харита пахш кунед.</p>
-<div id="map"></div>
+            <div id="map"></div>
+            <input type="hidden" id="latitude">
+            <input type="hidden" id="longitude">
 
-<input id="latitude" type="hidden">
-<input id="longitude" type="hidden">
+            <label for="notes">Эзоҳ барои курьер</label>
+            <textarea id="notes"
+              placeholder="Масалан: даромадгоҳи дуюм"></textarea>
+          </div>
 
-<label for="notes">Эзоҳ барои курьер</label>
-<textarea id="notes" placeholder="Масалан: даромадгоҳи дуюм"></textarea>
-<p class="muted">
-Эзоҳ ба суроға илова шуда, дар фармоиш нигоҳ дошта мешавад.
-</p>
-</div>
+          <div id="pickupInfo" class="warning hidden">
+            🏪 Ҳамаи маҳсулот аз мағоза гирифта мешаванд.
+            Суроғаи мағозаҳоро дар қисми расонидан бинед.
+          </div>
+        </section>
+      </form>
+    </div>
 
-<div id="pickupInfo" class="warning hidden">
-🏪 Ҳамаи маҳсулот аз мағоза гирифта мешаванд.
-Суроғаи мағозаҳоро дар қисми расонидан бинед.
-</div>
-</div>
+    <div class="side">
+      <section class="card">
+        <span class="pill">✓ Ҳисобкунии серверӣ</span>
+        <h2>💰 Хулосаи фармоиш</h2>
 
-<div class="card">
-<h2>💳 Усули пардохт</h2>
-<select id="paymentMethod" required>
-<option value="cash">Пули нақд ҳангоми қабул</option>
-</select>
-<p class="muted">
-Пардохти онлайн баъд аз пайваст кардани
-провайдери пардохт фаъол мешавад.
-</p>
+        <div class="row">
+          <span>Ҷамъи молҳо</span>
+          <strong id="subtotal">0 сомонӣ</strong>
+        </div>
 
-<button id="orderBtn" type="submit">
-📦 Фармоиш додан
-</button>
-</div>
+        <div class="row">
+          <span>Ҳаққи расонидани мағозаҳо</span>
+          <strong id="deliveryTotal">0 сомонӣ</strong>
+        </div>
 
-</form>
+        <div class="row">
+          <strong>Маблағи умумии пешакӣ</strong>
+          <strong id="grandTotal" class="total">0 сомонӣ</strong>
+        </div>
+
+        <p class="muted">
+          Нарх, тахфиф ва захира ҳангоми сабти фармоиш
+          дар сервер аз нав санҷида мешаванд.
+          Маблағи ниҳоиро сервер ҳисоб мекунад.
+        </p>
+
+        <div id="paymentArea" class="hidden">
+          <label for="paymentMethod">💳 Усули пардохт</label>
+          <select id="paymentMethod">
+            <option value="cash">
+              Пули нақд ҳангоми қабул
+            </option>
+          </select>
+
+          <p class="muted">
+            Пардохти онлайн баъд аз пайваст кардани
+            провайдер фаъол мешавад.
+          </p>
+
+          <button type="submit" form="checkoutForm"
+                  id="orderBtn" class="order-btn">
+            📦 Фармоиш додан
+          </button>
+
+          <p class="secure">
+            🔒 Фармоиш танҳо баъд аз санҷиши сервер сабт мешавад.
+          </p>
+        </div>
+      </section>
+    </div>
+  </div>
 </main>
 
+<div id="lightbox" class="lightbox hidden"
+     role="dialog" aria-modal="true"
+     aria-label="Намоиши акс">
+
+  <div class="lightbox-top">
+    <span id="photoCount"></span>
+    <button id="closePhoto" type="button"
+            aria-label="Пӯшидан">✕</button>
+  </div>
+
+  <img id="largePhoto" alt="Акси маҳсулот">
+
+  <div class="lightbox-nav">
+    <button id="prevPhoto" type="button"
+            aria-label="Акси пешина">❮</button>
+    <button id="nextPhoto" type="button"
+            aria-label="Акси навбатӣ">❯</button>
+  </div>
+
+  <div id="photoCaption" class="lightbox-caption"></div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/config.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 "use strict";
 
+const SB_URL = "https://rgminzzmlktkliliiupt.supabase.co";
+const SB_KEY = "sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
 const $ = id => document.getElementById(id);
 const CART_KEY = "vayo_cart_v1";
 
+let db = null;
 let cart = [];
 let shops = new Map();
 let currentUser = null;
@@ -175,411 +514,783 @@ let map = null;
 let marker = null;
 let submitting = false;
 let needsAddress = true;
+let photoList = [];
+let photoIndex = 0;
 
-function money(n){
- return Number(n).toFixed(2)+" сомонӣ";
+try {
+  db = window.vayoDB ||
+    (window.supabase &&
+     window.supabase.createClient(SB_URL, SB_KEY));
+
+  if (db) window.vayoDB = db;
+} catch (e) {
+  console.error(e);
 }
 
-function notice(text,success=false){
- const el = $("notice");
- el.className = "message "+(success?"success":"error");
- el.textContent = text;
- el.classList.remove("hidden");
- window.scrollTo({top:0,behavior:"smooth"});
+const money = n =>
+  (Number(n) || 0).toFixed(2) + " сомонӣ";
+
+function notice(text, success = false) {
+  const element = $("notice");
+
+  element.className =
+    "message " + (success ? "success" : "error");
+
+  element.textContent = text;
+  element.classList.remove("hidden");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
 
-function readCart(){
- try{
-  const data = JSON.parse(localStorage.getItem(CART_KEY)||"[]");
-  return Array.isArray(data)?data:[];
- }catch{
-  return [];
- }
+function readCart() {
+  try {
+    const value = JSON.parse(
+      localStorage.getItem(CART_KEY) || "[]"
+    );
+
+    return Array.isArray(value) ? value : [];
+  } catch {
+    return [];
+  }
 }
 
-function initMap(){
- if(map)return;
+function normalizeCart(raw) {
+  const grouped = new Map();
 
- if(typeof L==="undefined"){
-  notice("Харита боргирӣ нашуд. Саҳифаро аз нав кушоед.");
-  return;
- }
+  for (const entry of raw) {
+    const id = String(entry?.product_id || "");
+    const qty = Number(entry?.quantity);
 
- map = L.map("map").setView([38.5598,68.7870],12);
+    if (
+      !/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(id) ||
+      !Number.isInteger(qty) ||
+      qty <= 0
+    ) {
+      continue;
+    }
 
- L.tileLayer(
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  {
-   maxZoom:19,
-   attribution:"© OpenStreetMap contributors"
+    grouped.set(
+      id,
+      Math.min(100, (grouped.get(id) || 0) + qty)
+    );
   }
- ).addTo(map);
 
- map.on("click",e=>{
-  const lat = e.latlng.lat;
-  const lng = e.latlng.lng;
-
-  $("latitude").value = lat;
-  $("longitude").value = lng;
-
-  if(marker){
-   marker.setLatLng([lat,lng]);
-  }else{
-   marker = L.marker([lat,lng]).addTo(map);
-  }
- });
-
- setTimeout(()=>map.invalidateSize(),200);
+  return [...grouped].map(
+    ([product_id, quantity]) => ({
+      product_id,
+      quantity
+    })
+  );
 }
 
-function normalizeCart(raw){
- const grouped = new Map();
-
- for(const entry of raw){
-  const id = String(entry?.product_id||"");
-  const qty = Number(entry?.quantity);
-
-  if(!/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(id)){
-   continue;
+function deliveryLabel(type) {
+  if (type === "own") {
+    return "🚚 Расонидани худи мағоза";
   }
 
-  if(!Number.isInteger(qty)||qty<=0){
-   continue;
+  if (type === "pickup") {
+    return "🏪 Гирифтан аз мағоза";
   }
 
-  grouped.set(id,(grouped.get(id)||0)+qty);
- }
-
- return [...grouped.entries()].map(([product_id,quantity])=>({
-  product_id,
-  quantity
- }));
+  return "📦 Карго ё почта";
 }
 
-function deliveryLabel(type){
- if(type==="own")return "🚚 Расонидани худи мағоза";
- if(type==="pickup")return "🏪 Гирифтан аз мағоза";
- return "📦 Карго ё почта";
+function el(tag, cls, text) {
+  const node = document.createElement(tag);
+
+  if (cls) node.className = cls;
+
+  if (text !== undefined) {
+    node.textContent = text;
+  }
+
+  return node;
 }
 
-function renderDelivery(){
- const root = $("deliveryList");
- root.replaceChildren();
+function initMap() {
+  if (map) return;
 
- let deliveryTotal = 0;
- let hasExternal = false;
-
- for(const shop of shops.values()){
-  const box = document.createElement("div");
-  box.className = "shop-delivery";
-
-  const name = document.createElement("strong");
-  name.textContent = shop.name||"Мағоза";
-
-  const type = document.createElement("div");
-  type.className = "delivery-tag";
-  type.textContent = deliveryLabel(shop.delivery_type);
-
-  const detail = document.createElement("p");
-  detail.className = "delivery-detail";
-
-  if(shop.delivery_type==="own"){
-   const fee = Number(shop.delivery_fee)||0;
-   deliveryTotal += fee;
-   detail.textContent = "Нархи расонидан: "+money(fee);
-  }else if(shop.delivery_type==="pickup"){
-   detail.textContent =
-    "Аз ин суроға гиред: "+
-    (shop.address||"Суроға нишон дода нашудааст");
-  }else{
-   hasExternal = true;
-   detail.textContent =
-    "Мағоза маҳсулотро мефиристад. "+
-    "Хароҷоти карго ё почтаро харидор алоҳида пардохт мекунад.";
+  if (typeof L === "undefined") {
+    notice(
+      "Харита боргирӣ нашуд. Саҳифаро аз нав кушоед."
+    );
+    return;
   }
 
-  box.append(name,type,detail);
-  root.appendChild(box);
- }
-
- $("deliveryTotal").textContent = money(deliveryTotal);
- $("externalWarning").classList.toggle("hidden",!hasExternal);
-
- const subtotal = cart.reduce(
-  (sum,item)=>sum+item.price*item.quantity,0
- );
-
- $("subtotal").textContent = money(subtotal);
- $("grandTotal").textContent = money(subtotal+deliveryTotal);
-
- needsAddress = [...shops.values()].some(
-  s=>s.delivery_type!=="pickup"
- );
-
- $("addressSection").classList.toggle("hidden",!needsAddress);
- $("pickupInfo").classList.toggle("hidden",needsAddress);
- $("address").required = needsAddress;
-
- if(needsAddress){
-  initMap();
- }
-}
-
-async function loadCart(){
- if(!window.vayoDB){
-  notice("Supabase танзим нашудааст.");
-  $("orderItems").textContent = "Пайвастшавӣ нест.";
-  return;
- }
-
- try{
-  const {data:authData,error:authError} =
-   await window.vayoDB.auth.getUser();
-
-  if(authError)throw authError;
-
-  currentUser = authData?.user||null;
-
-  if(!currentUser){
-   notice("Барои фармоиш аввал ворид шавед.");
-   $("orderItems").textContent = "Ҳисоб ворид нашудааст.";
-   return;
-  }
-
-  const raw = normalizeCart(readCart());
-  const ids = raw.map(x=>x.product_id);
-
-  if(!ids.length){
-   $("orderItems").textContent = "Сабад холӣ аст.";
-   $("deliveryList").textContent = "Мағоза интихоб нашудааст.";
-   return;
-  }
-
-  const {data,error} = await window.vayoDB
-   .from("vayo_products")
-   .select(`
-    id,
-    name,
-    stock,
-    active,
-    price,
-    regular_price,
-    sale_starts_at,
-    sale_ends_at,
-    shop_id,
-    vayo_shops!inner (
-     id,
-     name,
-     status,
-     address,
-     delivery_type,
-     delivery_fee
-    )
-   `)
-   .in("id",ids)
-   .eq("active",true)
-   .eq("vayo_shops.status","approved");
-
-  if(error)throw error;
-
-  const now = Date.now();
-  const byId = new Map(
-   (data||[]).map(p=>[String(p.id),p])
+  map = L.map("map").setView(
+    [38.5598, 68.7870],
+    12
   );
 
-  cart = [];
-  shops.clear();
+  L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      maxZoom: 19,
+      attribution: "© OpenStreetMap contributors"
+    }
+  ).addTo(map);
 
-  for(const entry of raw){
-   const p = byId.get(String(entry.product_id));
+  map.on("click", event => {
+    const {lat, lng} = event.latlng;
 
-   if(!p||Number(p.stock)<=0)continue;
+    $("latitude").value = lat;
+    $("longitude").value = lng;
 
-   const quantity = Math.min(
-    entry.quantity,
-    Number(p.stock),
-    100
-   );
+    if (marker) {
+      marker.setLatLng([lat, lng]);
+    } else {
+      marker = L.marker([lat, lng]).addTo(map);
+    }
+  });
 
-   if(quantity<=0)continue;
+  setTimeout(() => map.invalidateSize(), 250);
+}
 
-   const regular = Number(p.regular_price ?? p.price);
-   const sale = Number(p.price);
-
-   const starts = p.sale_starts_at
-    ? new Date(p.sale_starts_at).getTime()
-    : NaN;
-
-   const ends = p.sale_ends_at
-    ? new Date(p.sale_ends_at).getTime()
-    : NaN;
-
-   const saleActive =
-    Number.isFinite(starts) &&
-    Number.isFinite(ends) &&
-    starts<=now &&
-    ends>now &&
-    sale<regular;
-
-   const price = saleActive ? sale : regular;
-
-   if(!Number.isFinite(price)||price<0)continue;
-
-   const shop = p.vayo_shops;
-
-   if(!shop)continue;
-
-   cart.push({
-    product_id:p.id,
-    name:p.name,
-    quantity,
-    price,
-    shop_id:p.shop_id
-   });
-
-   if(!shops.has(p.shop_id)){
-    shops.set(p.shop_id,{
-     id:shop.id,
-     name:shop.name,
-     address:shop.address,
-     delivery_type:shop.delivery_type||"external",
-     delivery_fee:shop.delivery_fee
-    });
-   }
-  }
-
-  if(!cart.length){
-   $("orderItems").textContent = "Маҳсулоти дастрас нест.";
-   $("deliveryList").textContent = "Мағоза интихоб нашудааст.";
-   return;
-  }
-
-  const root = $("orderItems");
+function renderDelivery() {
+  const root = $("deliveryList");
   root.replaceChildren();
 
-  for(const item of cart){
-   const line = document.createElement("div");
-   line.className = "row";
+  let fee = 0;
+  let external = false;
 
-   const name = document.createElement("span");
-   name.textContent = item.name+" × "+item.quantity;
+  for (const shop of shops.values()) {
+    const box = el("div", "shop-delivery");
+    const title = el(
+      "strong",
+      "",
+      shop.name || "Мағоза"
+    );
 
-   const amount = document.createElement("strong");
-   amount.textContent = money(item.price*item.quantity);
+    const type = el(
+      "div",
+      "delivery-tag",
+      deliveryLabel(shop.delivery_type)
+    );
 
-   line.append(name,amount);
-   root.appendChild(line);
+    let detail = "";
+
+    if (shop.delivery_type === "own") {
+      const value = Math.max(
+        0,
+        Number(shop.delivery_fee) || 0
+      );
+
+      fee += value;
+      detail = "Нархи расонидан: " + money(value);
+
+    } else if (shop.delivery_type === "pickup") {
+      detail =
+        "Аз ин суроға гиред: " +
+        (shop.address || "Суроға нишон дода нашудааст");
+
+    } else {
+      external = true;
+      detail =
+        "Хароҷоти карго ё почтаро харидор " +
+        "алоҳида пардохт мекунад.";
+    }
+
+    box.append(
+      title,
+      type,
+      el("p", "delivery-detail", detail)
+    );
+
+    root.append(box);
   }
 
-  renderDelivery();
-  $("checkoutForm").classList.remove("hidden");
-
-  if(needsAddress&&map){
-   setTimeout(()=>map.invalidateSize(),200);
-  }
-
- }catch(err){
-  notice("Хатои боргирии сабад: "+(err.message||String(err)));
-  $("orderItems").textContent = "Боргирӣ номуваффақ шуд.";
-  $("deliveryList").textContent = "Боргирӣ номуваффақ шуд.";
- }
-}
-
-async function submitOrder(request){
- const {data,error} = await window.vayoDB.rpc(
-  "vayo_create_order",
-  {
-   p_customer_name:request.customer_name,
-   p_customer_phone:request.customer_phone,
-   p_delivery_address:request.delivery_address,
-   p_city:request.city,
-   p_items:request.items,
-   p_latitude:request.latitude,
-   p_longitude:request.longitude
-  }
- );
-
- if(error)throw error;
- if(!data)throw new Error("Рақами фармоиш барнагашт.");
-
- return data;
-}
-
-$("checkoutForm").addEventListener("submit",async e=>{
- e.preventDefault();
-
- if(submitting)return;
-
- if(!currentUser||!cart.length){
-  notice("Барои фармоиш ворид шавед ва мол интихоб кунед.");
-  return;
- }
-
- if(needsAddress&&(!$("latitude").value||!$("longitude").value)){
-  notice("Нуқтаи расониданро дар харита интихоб кунед.");
-  return;
- }
-
- const fullName = $("fullName").value.trim();
- const phone = $("phone").value.trim();
- const city = $("city").value;
- const address = $("address").value.trim();
- const notes = $("notes").value.trim();
-
- if(!fullName||!phone||!city||(needsAddress&&!address)){
-  notice("Ҳамаи маълумоти заруриро пур кунед.");
-  return;
- }
-
- const fullAddress = needsAddress
-  ? (notes
-     ? address+"\nЭзоҳ барои курьер: "+notes
-     : address)
-  : "Гирифтан аз мағоза (pickup)";
-
- const request = {
-  customer_name:fullName,
-  customer_phone:phone,
-  city,
-  delivery_address:fullAddress,
-  latitude:needsAddress?Number($("latitude").value):null,
-  longitude:needsAddress?Number($("longitude").value):null,
-  items:cart.map(item=>({
-   product_id:item.product_id,
-   quantity:item.quantity
-  }))
- };
-
- submitting = true;
- $("orderBtn").disabled = true;
- $("orderBtn").textContent = "Фармоиш сабт мешавад...";
-
- try{
-  const orderId = await submitOrder(request);
-
-  localStorage.removeItem(CART_KEY);
-
-  notice(
-   "✅ Фармоиш бомуваффақият сабт шуд!\n"+
-   "Рақами фармоиш: "+orderId,
-   true
+  $("externalWarning").classList.toggle(
+    "hidden",
+    !external
   );
 
-  $("checkoutForm").classList.add("hidden");
-  $("orderItems").textContent = "Фармоиш қабул шуд.";
-  $("deliveryList").textContent = "Фармоиш қабул шуд.";
-  $("subtotal").textContent = "—";
-  $("deliveryTotal").textContent = "—";
-  $("grandTotal").textContent = "—";
+  const subtotal = cart.reduce(
+    (sum, product) =>
+      sum + product.price * product.quantity,
+    0
+  );
 
- }catch(err){
-  notice("Хатои фармоиш: "+(err.message||String(err)));
- }finally{
-  submitting = false;
-  $("orderBtn").disabled = false;
-  $("orderBtn").textContent = "📦 Фармоиш додан";
- }
+  $("subtotal").textContent = money(subtotal);
+  $("deliveryTotal").textContent = money(fee);
+  $("grandTotal").textContent = money(
+    subtotal + fee
+  );
+
+  needsAddress = [...shops.values()].some(
+    shop => shop.delivery_type !== "pickup"
+  );
+
+  $("addressSection").classList.toggle(
+    "hidden",
+    !needsAddress
+  );
+
+  $("pickupInfo").classList.toggle(
+    "hidden",
+    needsAddress
+  );
+
+  $("address").required = needsAddress;
+
+  if (needsAddress) initMap();
+}
+
+function validPhoto(value) {
+  if (
+    typeof value !== "string" ||
+    !value.trim()
+  ) {
+    return null;
+  }
+
+  try {
+    const url = new URL(value, location.href);
+
+    return ["https:", "http:"].includes(url.protocol)
+      ? url.href
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+function openPhoto(index) {
+  if (!photoList.length) return;
+
+  photoIndex =
+    (index + photoList.length) % photoList.length;
+
+  $("largePhoto").src = photoList[photoIndex].src;
+
+  $("photoCount").textContent =
+    (photoIndex + 1) + " / " + photoList.length;
+
+  $("photoCaption").textContent =
+    photoList[photoIndex].name;
+
+  $("lightbox").classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+
+function closePhoto() {
+  $("lightbox").classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+$("closePhoto").onclick = closePhoto;
+
+$("prevPhoto").onclick = () =>
+  openPhoto(photoIndex - 1);
+
+$("nextPhoto").onclick = () =>
+  openPhoto(photoIndex + 1);
+
+$("lightbox").addEventListener("click", event => {
+  if (event.target === $("lightbox")) {
+    closePhoto();
+  }
 });
+
+document.addEventListener("keydown", event => {
+  if ($("lightbox").classList.contains("hidden")) {
+    return;
+  }
+
+  if (event.key === "Escape") {
+    closePhoto();
+  }
+
+  if (event.key === "ArrowRight") {
+    openPhoto(photoIndex + 1);
+  }
+
+  if (event.key === "ArrowLeft") {
+    openPhoto(photoIndex - 1);
+  }
+});
+
+function renderItems() {
+  const root = $("orderItems");
+
+  root.replaceChildren();
+  photoList = [];
+
+  for (const item of cart) {
+    const line = el("div", "item");
+    const imgUrl = validPhoto(item.image_url);
+
+    if (imgUrl) {
+      const img = el("img", "thumb");
+
+      img.src = imgUrl;
+      img.alt = item.name;
+      img.loading = "lazy";
+
+      const index = photoList.length;
+
+      photoList.push({
+        src: imgUrl,
+        name: item.name
+      });
+
+      img.addEventListener("click", () => {
+        openPhoto(index);
+      });
+
+      line.append(img);
+    } else {
+      line.append(
+        el("div", "thumb empty", "📦")
+      );
+    }
+
+    const info = el("div", "item-info");
+
+    info.append(
+      el("div", "item-name", item.name),
+      el(
+        "div",
+        "item-meta",
+        "Миқдор: " + item.quantity
+      )
+    );
+
+    const price = el(
+      "div",
+      "price",
+      money(item.price)
+    );
+
+    if (item.regular > item.price) {
+      price.append(
+        el("span", "old", money(item.regular))
+      );
+
+      const percent = Math.round(
+        (1 - item.price / item.regular) * 100
+      );
+
+      if (percent > 0) {
+        price.append(
+          el(
+            "span",
+            "discount",
+            "−" + percent + "%"
+          )
+        );
+      }
+    }
+
+    info.append(price);
+
+    line.append(
+      info,
+      el(
+        "div",
+        "item-total",
+        money(item.price * item.quantity)
+      )
+    );
+
+    root.append(line);
+  }
+}
+
+async function loadCart() {
+  if (!db) {
+    notice(
+      "Supabase боргирӣ нашуд. Интернет ва скриптҳоро санҷед."
+    );
+
+    $("orderItems").textContent =
+      "Пайвастшавӣ нест.";
+
+    return;
+  }
+
+  try {
+    const {
+      data: authData,
+      error: authError
+    } = await db.auth.getUser();
+
+    if (authError) throw authError;
+
+    currentUser = authData?.user || null;
+
+    if (!currentUser) {
+      notice(
+        "Барои фармоиш аввал ворид шавед."
+      );
+
+      $("orderItems").textContent =
+        "Ҳисоб ворид нашудааст.";
+
+      return;
+    }
+
+    const raw = normalizeCart(readCart());
+    const ids = raw.map(x => x.product_id);
+
+    if (!ids.length) {
+      $("orderItems").textContent =
+        "Сабад холӣ аст.";
+
+      $("deliveryList").textContent =
+        "Мағоза интихоб нашудааст.";
+
+      return;
+    }
+
+    const {data, error} = await db
+      .from("vayo_products")
+      .select(`
+        id,
+        name,
+        stock,
+        active,
+        price,
+        regular_price,
+        sale_starts_at,
+        sale_ends_at,
+        image_url,
+        shop_id,
+        vayo_shops!inner(
+          id,
+          name,
+          status,
+          address,
+          delivery_type,
+          delivery_fee
+        )
+      `)
+      .in("id", ids)
+      .eq("active", true)
+      .eq("vayo_shops.status", "approved");
+
+    if (error) throw error;
+
+    const byId = new Map(
+      (data || []).map(
+        product => [
+          String(product.id),
+          product
+        ]
+      )
+    );
+
+    cart = [];
+    shops.clear();
+
+    const now = Date.now();
+
+    for (const entry of raw) {
+      const product = byId.get(
+        String(entry.product_id)
+      );
+
+      if (
+        !product ||
+        Number(product.stock) <= 0 ||
+        !product.vayo_shops
+      ) {
+        continue;
+      }
+
+      const quantity = Math.min(
+        entry.quantity,
+        Number(product.stock),
+        100
+      );
+
+      if (quantity <= 0) continue;
+
+      const regular = Number(
+        product.regular_price ?? product.price
+      );
+
+      const sale = Number(product.price);
+
+      const starts = product.sale_starts_at
+        ? new Date(
+            product.sale_starts_at
+          ).getTime()
+        : NaN;
+
+      const ends = product.sale_ends_at
+        ? new Date(
+            product.sale_ends_at
+          ).getTime()
+        : NaN;
+
+      const saleActive =
+        Number.isFinite(starts) &&
+        Number.isFinite(ends) &&
+        starts <= now &&
+        ends > now &&
+        sale < regular;
+
+      const price = saleActive
+        ? sale
+        : regular;
+
+      if (
+        !Number.isFinite(price) ||
+        price < 0
+      ) {
+        continue;
+      }
+
+      cart.push({
+        product_id: product.id,
+        name: product.name,
+        quantity,
+        price,
+        regular,
+        shop_id: product.shop_id,
+        image_url: product.image_url
+      });
+
+      if (!shops.has(product.shop_id)) {
+        const shop = product.vayo_shops;
+
+        shops.set(product.shop_id, {
+          id: shop.id,
+          name: shop.name,
+          address: shop.address,
+          delivery_type:
+            shop.delivery_type || "external",
+          delivery_fee: shop.delivery_fee
+        });
+      }
+    }
+
+    if (!cart.length) {
+      $("orderItems").textContent =
+        "Маҳсулоти дастрас нест.";
+
+      $("deliveryList").textContent =
+        "Мағоза интихоб нашудааст.";
+
+      return;
+    }
+
+    renderItems();
+    renderDelivery();
+
+    $("checkoutForm").classList.remove("hidden");
+    $("paymentArea").classList.remove("hidden");
+
+    if (needsAddress && map) {
+      setTimeout(
+        () => map.invalidateSize(),
+        250
+      );
+    }
+
+  } catch (error) {
+    notice(
+      "Хатои боргирии сабад: " +
+      (error.message || String(error))
+    );
+
+    $("orderItems").textContent =
+      "Боргирӣ номуваффақ шуд.";
+
+    $("deliveryList").textContent =
+      "Боргирӣ номуваффақ шуд.";
+  }
+}
+
+async function submitOrder(request) {
+  const {data, error} = await db.rpc(
+    "vayo_create_order",
+    {
+      p_customer_name: request.customer_name,
+      p_customer_phone: request.customer_phone,
+      p_delivery_address: request.delivery_address,
+      p_city: request.city,
+      p_items: request.items,
+      p_latitude: request.latitude,
+      p_longitude: request.longitude
+    }
+  );
+
+  if (error) throw error;
+
+  if (!data) {
+    throw new Error(
+      "Рақами фармоиш барнагашт."
+    );
+  }
+
+  return data;
+}
+
+$("checkoutForm").addEventListener(
+  "submit",
+  async event => {
+    event.preventDefault();
+
+    if (submitting) return;
+
+    if (!currentUser || !cart.length) {
+      notice(
+        "Барои фармоиш ворид шавед ва мол интихоб кунед."
+      );
+      return;
+    }
+
+    if (
+      needsAddress &&
+      (
+        !$("latitude").value ||
+        !$("longitude").value
+      )
+    ) {
+      notice(
+        "Нуқтаи расониданро дар харита интихоб кунед."
+      );
+      return;
+    }
+
+    const fullName =
+      $("fullName").value.trim();
+
+    const phone =
+      $("phone").value.trim();
+
+    const city =
+      $("city").value;
+
+    const address =
+      $("address").value.trim();
+
+    const notes =
+      $("notes").value.trim();
+
+    if (
+      !fullName ||
+      !phone ||
+      !city ||
+      (needsAddress && !address)
+    ) {
+      notice(
+        "Ҳамаи маълумоти заруриро пур кунед."
+      );
+      return;
+    }
+
+    const fullAddress = needsAddress
+      ? (
+          notes
+            ? address +
+              "\nЭзоҳ барои курьер: " +
+              notes
+            : address
+        )
+      : "Гирифтан аз мағоза (pickup)";
+
+    const request = {
+      customer_name: fullName,
+      customer_phone: phone,
+      city,
+      delivery_address: fullAddress,
+      latitude: needsAddress
+        ? Number($("latitude").value)
+        : null,
+      longitude: needsAddress
+        ? Number($("longitude").value)
+        : null,
+      items: cart.map(product => ({
+        product_id: product.product_id,
+        quantity: product.quantity
+      }))
+    };
+
+    submitting = true;
+
+    $("orderBtn").disabled = true;
+    $("orderBtn").textContent =
+      "Фармоиш сабт мешавад...";
+
+    try {
+      const orderId = await submitOrder(request);
+
+      localStorage.removeItem(CART_KEY);
+
+      notice(
+        "✅ Фармоиш бомуваффақият сабт шуд!\n" +
+        "Рақами фармоиш: " +
+        orderId,
+        true
+      );
+
+      $("checkoutLayout").replaceChildren();
+
+      const success = el(
+        "section",
+        "card order-success"
+      );
+
+      success.append(
+        el(
+          "h2",
+          "",
+          "✅ Фармоиш қабул шуд!"
+        ),
+        el(
+          "p",
+          "",
+          "Рақами фармоиш:"
+        ),
+        el(
+          "strong",
+          "",
+          String(orderId)
+        )
+      );
+
+      const link = el(
+        "a",
+        "back",
+        "Ба саҳифаи асосӣ"
+      );
+
+      link.href = "../index.html";
+
+      link.style.cssText =
+        "display:inline-block;" +
+        "background:#ff6500;" +
+        "color:white;" +
+        "margin-top:20px";
+
+      success.append(link);
+
+      $("checkoutLayout").append(success);
+
+    } catch (error) {
+      notice(
+        "Хатои фармоиш: " +
+        (error.message || String(error))
+      );
+
+    } finally {
+      submitting = false;
+
+      const button = $("orderBtn");
+
+      if (button) {
+        button.disabled = false;
+        button.textContent =
+          "📦 Фармоиш додан";
+      }
+    }
+  }
+);
 
 loadCart();
 </script>
