@@ -3,7 +3,7 @@
 <html lang="tg">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#ff6500">
 <title>VAYO — Тасдиқи фармоиш</title>
 
@@ -20,318 +20,74 @@
  --green:#12834a;
 }
 *{box-sizing:border-box}
-body{
- margin:0;
- background:var(--bg);
- color:var(--ink);
- font-family:Arial,Helvetica,sans-serif;
-}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,Helvetica,sans-serif}
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
-button:disabled{opacity:.5;cursor:not-allowed}
+button:disabled{opacity:.55;cursor:not-allowed}
 a{text-decoration:none;color:inherit}
 .hidden{display:none!important}
-header{
- background:linear-gradient(115deg,#ff4c13,#ff7900);
- color:white;
- box-shadow:0 5px 20px #ff650022;
-}
-.top{
- max-width:1150px;
- margin:auto;
- min-height:77px;
- display:flex;
- align-items:center;
- justify-content:space-between;
- padding:12px 18px;
- gap:15px;
-}
-.logo{
- font-size:36px;
- font-weight:900;
- letter-spacing:-2px;
-}
-.back{
- background:#ffffff25;
- border:1px solid #ffffff55;
- border-radius:24px;
- padding:11px 17px;
- font-weight:700;
- color:white;
-}
-main{
- max-width:1150px;
- margin:25px auto 80px;
- padding:0 14px;
-}
+header{background:linear-gradient(115deg,#ff4c13,#ff7900);color:#fff;box-shadow:0 5px 20px #ff650022}
+.top{max-width:1150px;margin:auto;min-height:77px;display:flex;align-items:center;justify-content:space-between;padding:12px 18px;gap:15px}
+.logo{font-size:36px;font-weight:900;letter-spacing:-2px}
+.back{display:inline-block;background:#ffffff25;border:1px solid #ffffff55;border-radius:24px;padding:11px 17px;font-weight:700;color:white}
+main{max-width:1150px;margin:25px auto 80px;padding:0 14px}
 .intro h1{font-size:30px;margin:0 0 8px}
 .intro p{margin:0 0 22px;color:var(--muted)}
-.layout{
- display:grid;
- grid-template-columns:minmax(0,1.55fr) minmax(290px,1fr);
- gap:18px;
- align-items:start;
-}
-.card{
- background:white;
- border:1px solid #edf0f3;
- border-radius:19px;
- padding:23px;
- margin-bottom:18px;
- box-shadow:0 7px 26px #101d3810;
-}
+.layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(290px,1fr);gap:18px;align-items:start}
+.card{background:white;border:1px solid #edf0f3;border-radius:19px;padding:23px;margin-bottom:18px;box-shadow:0 7px 26px #101d3810}
 .card h2{font-size:20px;margin:0 0 18px}
 .side{position:sticky;top:16px}
-.muted{
- font-size:13px;
- line-height:1.6;
- color:var(--muted);
-}
-.message{
- padding:14px 16px;
- border-radius:12px;
- background:#fff2e6;
- margin-bottom:18px;
- white-space:pre-line;
- overflow-wrap:anywhere;
-}
+.muted{font-size:13px;line-height:1.6;color:var(--muted)}
+.message{padding:14px 16px;border-radius:12px;background:#fff2e6;margin-bottom:18px;white-space:pre-line;overflow-wrap:anywhere}
 .error{background:#ffeded;color:#a52323}
 .success{background:#e7f9ef;color:#126e3a}
-.item{
- display:flex;
- gap:14px;
- padding:16px 0;
- border-bottom:1px solid var(--line);
- align-items:flex-start;
-}
+.item{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);align-items:flex-start}
 .item:last-child{border:0}
-.thumb{
- flex:0 0 94px;
- width:94px;
- height:105px;
- border-radius:12px;
- border:1px solid var(--line);
- background:#f5f5f5;
- object-fit:cover;
- cursor:zoom-in;
-}
-.thumb.empty{
- display:grid;
- place-items:center;
- color:#aaa;
- font-size:29px;
-}
+.thumb{flex:0 0 94px;width:94px;height:105px;border-radius:12px;border:1px solid var(--line);background:#f5f5f5;object-fit:cover;cursor:zoom-in}
+.thumb.empty{display:grid;place-items:center;color:#aaa;font-size:29px}
 .item-info{flex:1;min-width:0}
 .item-name{font-weight:750;line-height:1.4}
-.item-meta{
- font-size:13px;
- color:var(--muted);
- margin-top:7px;
-}
-.price{
- font-weight:900;
- color:var(--red);
- font-size:19px;
- margin-top:7px;
-}
-.old{
- font-size:13px;
- text-decoration:line-through;
- color:#9ca3af;
- margin-left:8px;
-}
-.discount{
- display:inline-block;
- background:#ffe6e4;
- color:#dc2c24;
- font-size:12px;
- font-weight:800;
- padding:4px 7px;
- border-radius:7px;
- margin-left:7px;
-}
-.item-total{
- font-weight:800;
- font-size:14px;
- white-space:nowrap;
-}
-.shop-delivery{
- background:#fafbfc;
- border:1px solid var(--line);
- border-radius:13px;
- padding:15px;
- margin-top:11px;
-}
+.item-meta{font-size:13px;color:var(--muted);margin-top:7px}
+.price{font-weight:900;color:var(--red);font-size:19px;margin-top:7px}
+.old{font-size:13px;text-decoration:line-through;color:#9ca3af;margin-left:8px}
+.discount{display:inline-block;background:#ffe6e4;color:#dc2c24;font-size:12px;font-weight:800;padding:4px 7px;border-radius:7px;margin-left:7px}
+.item-total{font-weight:800;font-size:14px;white-space:nowrap}
+.shop-delivery{background:#fafbfc;border:1px solid var(--line);border-radius:13px;padding:15px;margin-top:11px}
 .shop-delivery strong{display:block;margin-bottom:7px}
-.delivery-tag{
- color:#e65c00;
- font-size:13px;
- font-weight:750;
-}
-.delivery-detail{
- font-size:13px;
- color:var(--muted);
- line-height:1.6;
- margin:7px 0 0;
-}
-.warning{
- padding:13px;
- background:#fff5e7;
- border:1px solid #ffe1b8;
- border-radius:11px;
- font-size:13px;
- line-height:1.6;
- margin-top:12px;
-}
-label{
- display:block;
- margin:14px 0 6px;
- font-size:13px;
- font-weight:750;
-}
-input,select,textarea{
- width:100%;
- padding:13px;
- border:1px solid #dce1e8;
- border-radius:11px;
- outline:none;
- background:#fff;
- color:var(--ink);
-}
-input:focus,select:focus,textarea:focus{
- border-color:var(--orange);
- box-shadow:0 0 0 3px #ff650017;
-}
+.delivery-tag{color:#e65c00;font-size:13px;font-weight:750}
+.delivery-detail{font-size:13px;color:var(--muted);line-height:1.6;margin:7px 0 0}
+.warning{padding:13px;background:#fff5e7;border:1px solid #ffe1b8;border-radius:11px;font-size:13px;line-height:1.6;margin-top:12px}
+label{display:block;margin:14px 0 6px;font-size:13px;font-weight:750}
+input,select,textarea{width:100%;padding:13px;border:1px solid #dce1e8;border-radius:11px;outline:none;background:#fff;color:var(--ink)}
+input:focus,select:focus,textarea:focus{border-color:var(--orange);box-shadow:0 0 0 3px #ff650017}
 textarea{min-height:83px;resize:vertical}
-.two{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:12px;
-}
-#map{
- height:290px;
- border-radius:12px;
- border:1px solid var(--line);
- margin-top:11px;
-}
-.row{
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:12px;
- padding:13px 0;
- border-bottom:1px solid var(--line);
- font-size:14px;
-}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#map{height:290px;border-radius:12px;border:1px solid var(--line);margin-top:11px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);font-size:14px}
 .row strong:last-child{text-align:right}
-.total{
- font-size:25px;
- color:var(--red);
- font-weight:900;
-}
-.order-btn{
- width:100%;
- border:0;
- border-radius:12px;
- padding:16px;
- background:linear-gradient(100deg,#ff4700,#ff8500);
- color:white;
- font-weight:900;
- font-size:16px;
- box-shadow:0 8px 18px #ff650033;
- margin-top:18px;
-}
-.pill{
- display:inline-block;
- border-radius:50px;
- background:#e7f8ed;
- color:#16713c;
- font-size:12px;
- font-weight:700;
- padding:6px 10px;
- margin-bottom:15px;
-}
-.secure{
- font-size:12px;
- color:var(--muted);
- text-align:center;
- margin:12px 0 0;
-}
-.payment-option{
- display:flex;
- align-items:center;
- gap:12px;
- padding:15px;
- border:1px solid #ffd5b7;
- border-radius:12px;
- background:#fff9f5;
- margin:10px 0;
-}
-.payment-icon{font-size:28px}
-.payment-option strong{display:block;font-size:14px}
-.payment-option small{
- display:block;
- color:var(--muted);
- line-height:1.5;
- margin-top:4px;
-}
-.payment-disabled{
- opacity:.65;
- background:#f7f7f7;
- border-color:#e4e4e4;
-}
-.lightbox{
- position:fixed;
- inset:0;
- background:#08090cef;
- z-index:9999;
- display:flex;
- flex-direction:column;
- align-items:center;
- justify-content:center;
- padding:20px;
-}
-.lightbox img{
- max-width:min(90vw,1000px);
- max-height:77vh;
- object-fit:contain;
- border-radius:12px;
-}
-.lightbox-top{
- position:absolute;
- top:20px;
- left:20px;
- right:20px;
- display:flex;
- justify-content:space-between;
- color:white;
- gap:15px;
-}
-.lightbox button{
- border:1px solid #ffffff66;
- background:#ffffff25;
- color:white;
- border-radius:40px;
- padding:10px 15px;
- font-size:18px;
-}
-.lightbox-nav{
- position:absolute;
- top:50%;
- width:calc(100% - 30px);
- display:flex;
- justify-content:space-between;
- pointer-events:none;
-}
+.total{font-size:25px;color:var(--red);font-weight:900}
+.order-btn{width:100%;border:0;border-radius:12px;padding:16px;background:linear-gradient(100deg,#ff4700,#ff8500);color:white;font-weight:900;font-size:16px;box-shadow:0 8px 18px #ff650033;margin-top:18px}
+.pill{display:inline-block;border-radius:50px;background:#e7f8ed;color:#16713c;font-size:12px;font-weight:700;padding:6px 10px;margin-bottom:15px}
+.secure{font-size:12px;color:var(--muted);text-align:center;margin:12px 0 0}
+.payment-choice{border:1px solid #e5e7eb;border-radius:12px;padding:14px;margin:9px 0;display:flex;gap:12px;align-items:center;cursor:pointer}
+.payment-choice input{width:auto;margin:0}
+.payment-choice:has(input:checked){border-color:var(--orange);background:#fff7f0}
+.payment-choice span{font-weight:700}
+.lightbox{position:fixed;inset:0;background:#08090cef;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.lightbox img{max-width:min(90vw,1000px);max-height:77vh;object-fit:contain;border-radius:12px}
+.lightbox-top{position:absolute;top:20px;left:20px;right:20px;display:flex;justify-content:space-between;color:white;gap:15px}
+.lightbox button{border:1px solid #ffffff66;background:#ffffff25;color:white;border-radius:40px;padding:10px 15px;font-size:18px}
+.lightbox-nav{position:absolute;top:50%;width:calc(100% - 30px);display:flex;justify-content:space-between;pointer-events:none}
 .lightbox-nav button{pointer-events:auto}
-.lightbox-caption{
- color:#fff;
- margin-top:13px;
- text-align:center;
-}
-.order-success{text-align:center;padding:28px}
-.order-success h2{color:var(--green)}
-.order-success strong{overflow-wrap:anywhere}
+.lightbox-caption{color:#fff;margin-top:13px;text-align:center}
+.pay-card{background:#fffaf5;border:1px solid #ffd8ba;border-radius:14px;padding:18px;margin:15px 0}
+.pay-number{font-size:21px;font-weight:900;overflow-wrap:anywhere;margin:12px 0}
+.pay-status{font-size:13px;font-weight:700;margin:10px 0}
+.small-btn{border:0;border-radius:9px;padding:10px 14px;background:#192132;color:white;font-weight:700}
+.pay-submit{border:0;border-radius:10px;background:#148447;color:white;padding:13px 18px;font-weight:800;width:100%;margin-top:12px}
+.result-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.result-links a{display:inline-block;padding:12px 16px;border-radius:10px;background:#ff6500;color:#fff;font-weight:700}
+.result-links a:last-child{background:#192132}
 @media(max-width:800px){
  .layout{grid-template-columns:1fr}
  .side{position:static}
@@ -357,9 +113,7 @@ textarea{min-height:83px;resize:vertical}
    <a class="logo" href="../index.html">VAYO</a>
    <small>Бозори онлайн</small>
   </div>
-  <a class="back" href="cart.html">
-   ← Бозгашт ба сабад
-  </a>
+  <a class="back" href="cart.html">← Бозгашт ба сабад</a>
  </div>
 </header>
 
@@ -394,13 +148,11 @@ textarea{min-height:83px;resize:vertical}
      <div class="two">
       <div>
        <label for="fullName">Ному насаб *</label>
-       <input id="fullName" maxlength="120"
-        autocomplete="name" required>
+       <input id="fullName" maxlength="120" autocomplete="name" required>
       </div>
       <div>
        <label for="phone">Рақами телефон *</label>
-       <input id="phone" type="tel" maxlength="30"
-        placeholder="+992..." autocomplete="tel" required>
+       <input id="phone" type="tel" maxlength="30" placeholder="+992..." autocomplete="tel" required>
       </div>
      </div>
 
@@ -421,20 +173,16 @@ textarea{min-height:83px;resize:vertical}
 
      <div id="addressSection">
       <label for="address">Суроғаи пурра *</label>
-      <textarea id="address" required
-       placeholder="Кӯча, бино, хона, нишона"></textarea>
+      <textarea id="address" required placeholder="Кӯча, бино, хона, нишона"></textarea>
 
       <label>📍 Ҷойгиршавӣ дар харита</label>
-      <p class="muted">
-       Нуқтаи расониданро дар харита пахш кунед.
-      </p>
+      <p class="muted">Нуқтаи расониданро дар харита пахш кунед.</p>
       <div id="map"></div>
       <input type="hidden" id="latitude">
       <input type="hidden" id="longitude">
 
       <label for="notes">Эзоҳ барои курьер</label>
-      <textarea id="notes"
-       placeholder="Масалан: даромадгоҳи дуюм"></textarea>
+      <textarea id="notes" placeholder="Масалан: даромадгоҳи дуюм"></textarea>
      </div>
 
      <div id="pickupInfo" class="warning hidden">
@@ -454,12 +202,10 @@ textarea{min-height:83px;resize:vertical}
      <span>Ҷамъи молҳо</span>
      <strong id="subtotal">0 сомонӣ</strong>
     </div>
-
     <div class="row">
      <span>Ҳаққи расонидани мағозаҳо</span>
      <strong id="deliveryTotal">0 сомонӣ</strong>
     </div>
-
     <div class="row">
      <strong>Маблағи умумии пешакӣ</strong>
      <strong id="grandTotal" class="total">0 сомонӣ</strong>
@@ -473,67 +219,35 @@ textarea{min-height:83px;resize:vertical}
 
     <div id="paymentArea" class="hidden">
      <h2>💳 Усули пардохт</h2>
+     <div id="paymentChoices">Боргирии усулҳои пардохт...</div>
+     <p id="paymentHint" class="muted"></p>
 
-     <div class="payment-option">
-      <span class="payment-icon">💵</span>
-      <div>
-       <strong>Пардохти нақдӣ ба фурӯшанда</strong>
-       <small>
-        Ҳангоми гирифтани мол пулро мустақим
-        ба фурӯшанда ё намояндаи расонидани ӯ диҳед.
-       </small>
-      </div>
-     </div>
-
-     <div class="payment-option payment-disabled">
-      <span class="payment-icon">💳</span>
-      <div>
-       <strong>Пардохти онлайн — ба зудӣ</strong>
-       <small>
-        Баъд аз пайваст шудани API-и бонк
-        ё провайдери пардохт фаъол мешавад.
-       </small>
-      </div>
-     </div>
-
-     <select id="paymentMethod" aria-label="Усули пардохт">
-      <option value="cash">Пардохти нақдӣ</option>
-     </select>
-
-     <button type="submit" form="checkoutForm"
-      id="orderBtn" class="order-btn">
+     <button type="submit" form="checkoutForm" id="orderBtn" class="order-btn">
       📦 Фармоиш додан
      </button>
 
      <p class="secure">
-      🔒 Фармоиш дар сервер санҷида мешавад.
-      Пардохти онлайн ҳоло иҷро намешавад.
+      🔒 Пардохти онлайн мустақим ба фурӯшанда мегузарад.
+      VAYO парол, PIN ё CVV-и кортро намепурсад.
      </p>
     </div>
    </section>
   </div>
  </div>
+
+ <section id="paymentResult" class="card hidden"></section>
 </main>
 
-<div id="lightbox" class="lightbox hidden"
- role="dialog" aria-modal="true"
- aria-label="Намоиши акс">
-
+<div id="lightbox" class="lightbox hidden" role="dialog" aria-modal="true" aria-label="Намоиши акс">
  <div class="lightbox-top">
   <span id="photoCount"></span>
-  <button id="closePhoto" type="button"
-   aria-label="Пӯшидан">✕</button>
+  <button id="closePhoto" type="button" aria-label="Пӯшидан">✕</button>
  </div>
-
  <img id="largePhoto" alt="Акси маҳсулот">
-
  <div class="lightbox-nav">
-  <button id="prevPhoto" type="button"
-   aria-label="Акси пешина">❮</button>
-  <button id="nextPhoto" type="button"
-   aria-label="Акси навбатӣ">❯</button>
+  <button id="prevPhoto" type="button" aria-label="Акси пешина">❮</button>
+  <button id="nextPhoto" type="button" aria-label="Акси навбатӣ">❯</button>
  </div>
-
  <div id="photoCaption" class="lightbox-caption"></div>
 </div>
 
@@ -543,53 +257,62 @@ textarea{min-height:83px;resize:vertical}
 <script>
 "use strict";
 
-const SB_URL =
- "https://rgminzzmlktkliliiupt.supabase.co";
+const SB_URL="https://rgminzzmlktkliliiupt.supabase.co";
+const SB_KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+const CART_KEY="vayo_cart_v1";
+const $=id=>document.getElementById(id);
 
-const SB_KEY =
- "sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+const PAYMENT_NAMES={
+ cash:"💵 Нақдӣ",
+ alif:"💳 Alif",
+ dushanbe_city:"💳 Dushanbe City",
+ visa:"💳 Visa"
+};
 
-const CART_KEY = "vayo_cart_v1";
-const $ = id => document.getElementById(id);
-
-let db = null;
-let cart = [];
-let shops = new Map();
-let currentUser = null;
-let map = null;
-let marker = null;
-let submitting = false;
-let needsAddress = true;
-let photoList = [];
-let photoIndex = 0;
+let db=null;
+let cart=[];
+let shops=new Map();
+let currentUser=null;
+let map=null;
+let marker=null;
+let submitting=false;
+let needsAddress=true;
+let photoList=[];
+let photoIndex=0;
+let paymentAccounts=new Map();
+let availableMethods=["cash"];
+let pendingOrderId=null;
+let pendingMethod=null;
 
 try{
- db = window.vayoDB ||
-  (window.supabase &&
-   window.supabase.createClient(SB_URL,SB_KEY));
+ db=window.vayoDB ||
+  (window.supabase && window.supabase.createClient(SB_URL,SB_KEY));
  if(db)window.vayoDB=db;
 }catch(error){
  console.error(error);
 }
 
-const money = n =>
- (Number(n)||0).toFixed(2)+" сомонӣ";
+const money=n=>(Number(n)||0).toFixed(2)+" сомонӣ";
+
+function el(tag,cls,text){
+ const node=document.createElement(tag);
+ if(cls)node.className=cls;
+ if(text!==undefined)node.textContent=String(text);
+ return node;
+}
 
 function notice(text,success=false){
- const element=$("notice");
- element.className="message "+
-  (success?"success":"error");
- element.textContent=text;
- element.classList.remove("hidden");
+ const node=$("notice");
+ node.className="message "+(success?"success":"error");
+ node.textContent=text;
+ node.classList.remove("hidden");
  window.scrollTo({top:0,behavior:"smooth"});
 }
 
 function readCart(){
  try{
-  const value=JSON.parse(
-   localStorage.getItem(CART_KEY)||"[]"
-  );
-  return Array.isArray(value)?value:[];
+  const data=JSON.parse(localStorage.getItem(CART_KEY)||"[]");
+  return Array.isArray(data)?data:[];
  }catch{
   return [];
  }
@@ -600,37 +323,17 @@ function normalizeCart(raw){
  for(const entry of raw){
   const id=String(entry?.product_id||"");
   const qty=Number(entry?.quantity);
-  if(
-   !/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(id)||
-   !Number.isInteger(qty)||
-   qty<=0
-  )continue;
-
-  grouped.set(
-   id,
-   Math.min(100,(grouped.get(id)||0)+qty)
-  );
+  if(!/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(id) ||
+     !Number.isInteger(qty) || qty<=0)continue;
+  grouped.set(id,Math.min(100,(grouped.get(id)||0)+qty));
  }
- return [...grouped].map(
-  ([product_id,quantity])=>({
-   product_id,quantity
-  })
- );
+ return [...grouped].map(([product_id,quantity])=>({product_id,quantity}));
 }
 
 function deliveryLabel(type){
- if(type==="own")
-  return "🚚 Расонидани худи мағоза";
- if(type==="pickup")
-  return "🏪 Гирифтан аз мағоза";
+ if(type==="own")return "🚚 Расонидани худи мағоза";
+ if(type==="pickup")return "🏪 Гирифтан аз мағоза";
  return "📦 Карго ё почта";
-}
-
-function el(tag,cls,text){
- const node=document.createElement(tag);
- if(cls)node.className=cls;
- if(text!==undefined)node.textContent=String(text);
- return node;
 }
 
 function initMap(){
@@ -639,147 +342,95 @@ function initMap(){
   notice("Харита боргирӣ нашуд.");
   return;
  }
-
- map=L.map("map").setView(
-  [38.5598,68.7870],12
- );
-
- L.tileLayer(
-  "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  {
-   maxZoom:19,
-   attribution:"© OpenStreetMap contributors"
-  }
- ).addTo(map);
+ map=L.map("map").setView([38.5598,68.7870],12);
+ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{
+  maxZoom:19,attribution:"© OpenStreetMap contributors"
+ }).addTo(map);
 
  map.on("click",event=>{
   const {lat,lng}=event.latlng;
   $("latitude").value=lat;
   $("longitude").value=lng;
-  if(marker){
-   marker.setLatLng([lat,lng]);
-  }else{
-   marker=L.marker([lat,lng]).addTo(map);
-  }
+  if(marker)marker.setLatLng([lat,lng]);
+  else marker=L.marker([lat,lng]).addTo(map);
  });
-
  setTimeout(()=>map.invalidateSize(),250);
 }
 
 function renderDelivery(){
  const root=$("deliveryList");
  root.replaceChildren();
-
  let fee=0;
  let external=false;
 
  for(const shop of shops.values()){
   const box=el("div","shop-delivery");
-  const title=el(
-   "strong","",shop.name||"Мағоза"
-  );
-  const type=el(
-   "div","delivery-tag",
-   deliveryLabel(shop.delivery_type)
+  box.append(
+   el("strong","",shop.name||"Мағоза"),
+   el("div","delivery-tag",deliveryLabel(shop.delivery_type))
   );
 
   let detail="";
-
   if(shop.delivery_type==="own"){
-   const value=Math.max(
-    0,Number(shop.delivery_fee)||0
-   );
+   const value=Math.max(0,Number(shop.delivery_fee)||0);
    fee+=value;
    detail="Нархи расонидан: "+money(value);
   }else if(shop.delivery_type==="pickup"){
-   detail="Аз ин суроға гиред: "+
-    (shop.address||"Суроға нишон дода нашудааст");
+   detail="Аз ин суроға гиред: "+(shop.address||"Суроға нишон дода нашудааст");
   }else{
    external=true;
-   detail="Хароҷоти карго ё почтаро харидор "+
-    "алоҳида пардохт мекунад.";
+   detail="Хароҷоти карго ё почтаро харидор алоҳида пардохт мекунад.";
   }
-
-  box.append(
-   title,type,
-   el("p","delivery-detail",detail)
-  );
+  box.append(el("p","delivery-detail",detail));
   root.append(box);
  }
 
- $("externalWarning").classList.toggle(
-  "hidden",!external
- );
+ $("externalWarning").classList.toggle("hidden",!external);
 
- const subtotal=cart.reduce(
-  (sum,p)=>sum+p.price*p.quantity,0
- );
-
+ const subtotal=cart.reduce((sum,p)=>sum+p.price*p.quantity,0);
  $("subtotal").textContent=money(subtotal);
  $("deliveryTotal").textContent=money(fee);
  $("grandTotal").textContent=money(subtotal+fee);
 
- needsAddress=[...shops.values()].some(
-  shop=>shop.delivery_type!=="pickup"
- );
-
- $("addressSection").classList.toggle(
-  "hidden",!needsAddress
- );
- $("pickupInfo").classList.toggle(
-  "hidden",needsAddress
- );
+ needsAddress=[...shops.values()].some(shop=>shop.delivery_type!=="pickup");
+ $("addressSection").classList.toggle("hidden",!needsAddress);
+ $("pickupInfo").classList.toggle("hidden",needsAddress);
  $("address").required=needsAddress;
-
  if(needsAddress)initMap();
 }
 
 function validPhoto(value){
- if(typeof value!=="string"||!value.trim())
-  return null;
+ if(typeof value!=="string"||!value.trim())return null;
  try{
   const url=new URL(value,location.href);
-  return ["https:","http:"].includes(url.protocol)
-   ?url.href:null;
- }catch{
-  return null;
- }
+  return ["https:","http:"].includes(url.protocol)?url.href:null;
+ }catch{return null;}
 }
 
 function openPhoto(index){
  if(!photoList.length)return;
- photoIndex=
-  (index+photoList.length)%photoList.length;
+ photoIndex=(index+photoList.length)%photoList.length;
  $("largePhoto").src=photoList[photoIndex].src;
- $("photoCount").textContent=
-  (photoIndex+1)+" / "+photoList.length;
- $("photoCaption").textContent=
-  photoList[photoIndex].name;
+ $("photoCount").textContent=(photoIndex+1)+" / "+photoList.length;
+ $("photoCaption").textContent=photoList[photoIndex].name;
  $("lightbox").classList.remove("hidden");
  document.body.style.overflow="hidden";
 }
-
 function closePhoto(){
  $("lightbox").classList.add("hidden");
  document.body.style.overflow="";
 }
-
 $("closePhoto").onclick=closePhoto;
 $("prevPhoto").onclick=()=>openPhoto(photoIndex-1);
 $("nextPhoto").onclick=()=>openPhoto(photoIndex+1);
-
 $("lightbox").addEventListener("click",event=>{
  if(event.target===$("lightbox"))closePhoto();
 });
-
 document.addEventListener("keydown",event=>{
- if($("lightbox").classList.contains("hidden"))
-  return;
+ if($("lightbox").classList.contains("hidden"))return;
  if(event.key==="Escape")closePhoto();
- if(event.key==="ArrowRight")
-  openPhoto(photoIndex+1);
- if(event.key==="ArrowLeft")
-  openPhoto(photoIndex-1);
+ if(event.key==="ArrowRight")openPhoto(photoIndex+1);
+ if(event.key==="ArrowLeft")openPhoto(photoIndex-1);
 });
 
 function renderItems(){
@@ -796,53 +447,90 @@ function renderItems(){
    img.src=imgUrl;
    img.alt=item.name;
    img.loading="lazy";
-
    const index=photoList.length;
-   photoList.push({
-    src:imgUrl,name:item.name
-   });
+   photoList.push({src:imgUrl,name:item.name});
    img.addEventListener("click",()=>openPhoto(index));
    line.append(img);
   }else{
-   line.append(
-    el("div","thumb empty","📦")
-   );
+   line.append(el("div","thumb empty","📦"));
   }
 
   const info=el("div","item-info");
   info.append(
    el("div","item-name",item.name),
-   el("div","item-meta",
-    "Миқдор: "+item.quantity)
+   el("div","item-meta","Миқдор: "+item.quantity)
   );
 
-  const price=el(
-   "div","price",money(item.price)
-  );
-
+  const price=el("div","price",money(item.price));
   if(item.regular>item.price){
-   price.append(
-    el("span","old",money(item.regular))
-   );
-
-   const percent=Math.round(
-    (1-item.price/item.regular)*100
-   );
-   if(percent>0){
-    price.append(
-     el("span","discount","−"+percent+"%")
-    );
-   }
+   price.append(el("span","old",money(item.regular)));
+   const percent=Math.round((1-item.price/item.regular)*100);
+   if(percent>0)price.append(el("span","discount","−"+percent+"%"));
   }
-
   info.append(price);
-  line.append(
-   info,
-   el("div","item-total",
-    money(item.price*item.quantity))
-  );
+  line.append(info,el("div","item-total",money(item.price*item.quantity)));
   root.append(line);
  }
+}
+
+async function loadPaymentMethods(){
+ paymentAccounts.clear();
+ availableMethods=["cash"];
+ const shopIds=[...shops.keys()];
+ if(!shopIds.length)return;
+
+ const {data,error}=await db
+  .from("vayo_shop_payment_accounts")
+  .select("shop_id,payment_type,account_number,account_name,active")
+  .in("shop_id",shopIds)
+  .eq("active",true);
+
+ if(error){
+  console.error("Payment accounts:",error);
+  $("paymentHint").textContent="Рақамҳои пардохти онлайн боргирӣ нашуданд: "+error.message;
+  renderPaymentChoices();
+  return;
+ }
+
+ for(const account of data||[]){
+  if(!paymentAccounts.has(account.shop_id))
+   paymentAccounts.set(account.shop_id,new Map());
+  paymentAccounts.get(account.shop_id).set(account.payment_type,account);
+ }
+
+ for(const method of ["alif","dushanbe_city","visa"]){
+  if(shopIds.every(id=>paymentAccounts.get(id)?.has(method)))
+   availableMethods.push(method);
+ }
+ renderPaymentChoices();
+}
+
+function renderPaymentChoices(){
+ const root=$("paymentChoices");
+ root.replaceChildren();
+
+ for(const method of availableMethods){
+  const label=el("label","payment-choice");
+  const radio=document.createElement("input");
+  radio.type="radio";
+  radio.name="paymentMethod";
+  radio.value=method;
+  radio.checked=method==="cash";
+  label.append(radio,el("span","",PAYMENT_NAMES[method]));
+  root.append(label);
+ }
+
+ if(availableMethods.length===1){
+  $("paymentHint").textContent=
+   "Ҳоло ҳамаи мағозаҳои сабад усули ягонаи пардохти онлайн надоранд. Пардохти нақдӣ дастрас аст.";
+ }else{
+  $("paymentHint").textContent=
+   "Барои пардохти онлайн ҳамаи мағозаҳои сабад бояд як усули қабулро дошта бошанд. Баъди фармоиш рақамҳои қабулкунандагон нишон дода мешаванд.";
+ }
+}
+
+function selectedPaymentMethod(){
+ return document.querySelector('input[name="paymentMethod"]:checked')?.value||"cash";
 }
 
 async function loadCart(){
@@ -853,17 +541,21 @@ async function loadCart(){
  }
 
  try{
-  const {data:authData,error:authError}=
-   await db.auth.getUser();
-
-  if(authError)throw authError;
-
-  currentUser=authData?.user||null;
+  const {data:authData,error:authError}=await db.auth.getUser();
+  if(authError){
+   if(authError.message?.toLowerCase().includes("session missing")){
+    currentUser=null;
+   }else throw authError;
+  }else currentUser=authData?.user||null;
 
   if(!currentUser){
-   notice("Барои фармоиш аввал ворид шавед.");
-   $("orderItems").textContent=
-    "Ҳисоб ворид нашудааст.";
+   notice("Барои фармоиш аввал ворид шавед. Сабади шумо нигоҳ дошта мешавад.");
+   $("orderItems").replaceChildren(el("p","","Барои давом додани фармоиш ворид шавед."));
+   const login=el("a","back","🔐 Ворид шудан");
+   login.href="login.html";
+   login.style.cssText="display:inline-block;background:#ff6500;color:white;margin-top:12px";
+   $("orderItems").append(login);
+   $("deliveryList").textContent="Баъди воридшавӣ маълумот нишон дода мешавад.";
    return;
   }
 
@@ -872,31 +564,16 @@ async function loadCart(){
 
   if(!ids.length){
    $("orderItems").textContent="Сабад холӣ аст.";
-   $("deliveryList").textContent=
-    "Мағоза интихоб нашудааст.";
+   $("deliveryList").textContent="Мағоза интихоб нашудааст.";
    return;
   }
 
-  const {data,error}=await db
-   .from("vayo_products")
+  const {data,error}=await db.from("vayo_products")
    .select(`
-    id,
-    name,
-    stock,
-    active,
-    price,
-    regular_price,
-    sale_starts_at,
-    sale_ends_at,
-    image_url,
-    shop_id,
+    id,name,stock,active,price,regular_price,
+    sale_starts_at,sale_ends_at,image_url,shop_id,
     vayo_shops!inner(
-     id,
-     name,
-     status,
-     address,
-     delivery_type,
-     delivery_fee
+     id,name,status,address,delivery_type,delivery_fee
     )
    `)
    .in("id",ids)
@@ -905,260 +582,324 @@ async function loadCart(){
 
   if(error)throw error;
 
-  const byId=new Map(
-   (data||[]).map(product=>[
-    String(product.id),product
-   ])
-  );
-
+  const byId=new Map((data||[]).map(product=>[String(product.id),product]));
   cart=[];
   shops.clear();
   const now=Date.now();
 
   for(const entry of raw){
-   const product=byId.get(
-    String(entry.product_id)
-   );
+   const product=byId.get(String(entry.product_id));
+   if(!product||Number(product.stock)<=0||!product.vayo_shops)continue;
 
-   if(
-    !product||
-    Number(product.stock)<=0||
-    !product.vayo_shops
-   )continue;
-
-   const quantity=Math.min(
-    entry.quantity,Number(product.stock),100
-   );
+   const quantity=Math.min(entry.quantity,Number(product.stock),100);
    if(quantity<=0)continue;
 
-   const regular=Number(
-    product.regular_price??product.price
-   );
+   const regular=Number(product.regular_price??product.price);
    const sale=Number(product.price);
+   const starts=product.sale_starts_at?new Date(product.sale_starts_at).getTime():NaN;
+   const ends=product.sale_ends_at?new Date(product.sale_ends_at).getTime():NaN;
 
-   const starts=product.sale_starts_at
-    ?new Date(product.sale_starts_at).getTime()
-    :NaN;
-   const ends=product.sale_ends_at
-    ?new Date(product.sale_ends_at).getTime()
-    :NaN;
-
-   const saleActive=
-    Number.isFinite(starts)&&
-    Number.isFinite(ends)&&
-    starts<=now&&
-    ends>now&&
-    sale<regular;
-
+   const saleActive=Number.isFinite(starts)&&Number.isFinite(ends)&&
+    starts<=now&&ends>now&&sale<regular;
    const price=saleActive?sale:regular;
-
-   if(!Number.isFinite(price)||price<0)
-    continue;
+   if(!Number.isFinite(price)||price<0)continue;
 
    cart.push({
-    product_id:product.id,
-    name:product.name,
-    quantity,
-    price,
-    regular,
-    shop_id:product.shop_id,
-    image_url:product.image_url
+    product_id:product.id,name:product.name,quantity,price,regular,
+    shop_id:product.shop_id,image_url:product.image_url
    });
 
    if(!shops.has(product.shop_id)){
     const shop=product.vayo_shops;
     shops.set(product.shop_id,{
-     id:shop.id,
-     name:shop.name,
-     address:shop.address,
-     delivery_type:
-      shop.delivery_type||"external",
+     id:shop.id,name:shop.name,address:shop.address,
+     delivery_type:shop.delivery_type||"external",
      delivery_fee:shop.delivery_fee
     });
    }
   }
 
   if(!cart.length){
-   $("orderItems").textContent=
-    "Маҳсулоти дастрас нест.";
-   $("deliveryList").textContent=
-    "Мағоза интихоб нашудааст.";
+   $("orderItems").textContent="Маҳсулоти дастрас нест.";
+   $("deliveryList").textContent="Мағоза интихоб нашудааст.";
    return;
   }
 
   renderItems();
   renderDelivery();
-
+  await loadPaymentMethods();
   $("checkoutForm").classList.remove("hidden");
   $("paymentArea").classList.remove("hidden");
-
-  if(needsAddress&&map){
-   setTimeout(()=>map.invalidateSize(),250);
-  }
+  if(needsAddress&&map)setTimeout(()=>map.invalidateSize(),250);
 
  }catch(error){
-  notice(
-   "Хатои боргирии сабад: "+
-   (error.message||String(error))
-  );
-  $("orderItems").textContent=
-   "Боргирӣ номуваффақ шуд.";
-  $("deliveryList").textContent=
-   "Боргирӣ номуваффақ шуд.";
+  notice("Хатои боргирии сабад: "+(error.message||String(error)));
+  $("orderItems").textContent="Боргирӣ номуваффақ шуд.";
+  $("deliveryList").textContent="Боргирӣ номуваффақ шуд.";
  }
 }
 
 async function submitOrder(request){
- const {data,error}=await db.rpc(
-  "vayo_create_order",
-  {
-   p_customer_name:request.customer_name,
-   p_customer_phone:request.customer_phone,
-   p_delivery_address:request.delivery_address,
-   p_city:request.city,
-   p_items:request.items,
-   p_latitude:request.latitude,
-   p_longitude:request.longitude
-  }
- );
-
+ const {data,error}=await db.rpc("vayo_create_order",{
+  p_customer_name:request.customer_name,
+  p_customer_phone:request.customer_phone,
+  p_delivery_address:request.delivery_address,
+  p_city:request.city,
+  p_items:request.items,
+  p_latitude:request.latitude,
+  p_longitude:request.longitude
+ });
  if(error)throw error;
- if(!data)throw new Error(
-  "Рақами фармоиш барнагашт."
- );
+ if(!data)throw new Error("Рақами фармоиш барнагашт.");
  return data;
 }
 
-$("checkoutForm").addEventListener(
- "submit",async event=>{
-  event.preventDefault();
-  if(submitting)return;
+async function preparePayments(orderId,method){
+ const {data,error}=await db.rpc("vayo_prepare_order_payments",{
+  p_order_id:orderId,
+  p_payment_method:method
+ });
+ if(error)throw error;
+ if(!data?.length)throw new Error("Маълумоти пардохт сохта нашуд.");
+ return data;
+}
 
-  if(!currentUser||!cart.length){
-   notice("Барои фармоиш ворид шавед "+
-    "ва мол интихоб кунед.");
-   return;
+function addResultLinks(container){
+ const links=el("div","result-links");
+ const home=el("a","","🏠 Саҳифаи асосӣ");
+ home.href="../index.html";
+ const orders=el("a","","📦 Фармоишҳои ман");
+ orders.href="orders.html";
+ links.append(home,orders);
+ container.append(links);
+}
+
+async function showPaymentResult(orderId,method,payments){
+ $("checkoutLayout").classList.add("hidden");
+ const root=$("paymentResult");
+ root.classList.remove("hidden");
+ root.replaceChildren();
+
+ root.append(
+  el("h2","","✅ Фармоиш қабул шуд!"),
+  el("p","","Рақами фармоиш:"),
+  el("strong","",orderId)
+ );
+
+ if(method==="cash"){
+  root.append(el("p","muted",
+   "💵 Пардохт нақдӣ аст. Пулро ҳангоми гирифтани мол ба фурӯшанда ё намояндаи ӯ диҳед."));
+  addResultLinks(root);
+  root.scrollIntoView({behavior:"smooth"});
+  return;
+ }
+
+ root.append(
+  el("h2","","💳 Пардохт ба мағозаҳо"),
+  el("p","muted",
+   "Маблағи ҳар мағозаро алоҳида гузаронед. Баъд рақами амалиётро ворид кунед. Фурӯшанда баъди санҷидани маблағ пардохтро тасдиқ мекунад.")
+ );
+
+ const shopIds=[...new Set(payments.map(p=>p.shop_id))];
+ const {data:accounts,error}=await db
+  .from("vayo_shop_payment_accounts")
+  .select("shop_id,payment_type,account_number,account_name,active")
+  .in("shop_id",shopIds)
+  .eq("payment_type",method);
+
+ if(error){
+  root.append(el("div","message error",
+   "Рақамҳои қабулкунанда боргирӣ нашуданд: "+error.message));
+  addResultLinks(root);
+  return;
+ }
+
+ const byShop=new Map((accounts||[]).map(a=>[a.shop_id,a]));
+
+ for(const payment of payments){
+  const shop=shops.get(payment.shop_id);
+  const account=byShop.get(payment.shop_id);
+  const box=el("div","pay-card");
+
+  box.append(
+   el("h3","",shop?.name||"Мағоза"),
+   el("p","","Маблағ: "+money(payment.amount)),
+   el("p","","Усул: "+PAYMENT_NAMES[method])
+  );
+
+  if(account){
+   box.append(
+    el("p","muted","Рақами қабулкунанда:"),
+    el("div","pay-number",account.account_number),
+    el("p","","Номи қабулкунанда: "+(account.account_name||"Нишон дода нашудааст"))
+   );
+
+   const copy=document.createElement("button");
+   copy.type="button";
+   copy.className="small-btn";
+   copy.textContent="📋 Нусхабардории рақам";
+   copy.onclick=async()=>{
+    try{
+     await navigator.clipboard.writeText(account.account_number);
+     copy.textContent="✅ Нусха шуд";
+    }catch{
+     window.prompt("Рақамро нусхабардорӣ кунед:",account.account_number);
+    }
+   };
+   box.append(copy);
+  }else{
+   box.append(el("p","message error",
+    "Рақами қабулкунанда дастрас нест. Ҳоло маблағ нагузаронед."));
   }
 
-  if(
-   needsAddress&&
-   (!$("latitude").value||
-    !$("longitude").value)
-  ){
-   notice("Нуқтаи расониданро дар харита интихоб кунед.");
-   return;
+  const status=el("p","pay-status",
+   payment.status==="paid"?"✅ Пардохт тасдиқ шудааст":
+   payment.status==="reported"?"⏳ Интизори тасдиқи фурӯшанда":
+   payment.status==="rejected"?"❌ Пардохт рад шудааст":
+   "⏳ Интизори пардохт");
+  box.append(status);
+
+  if(account&&["pending","rejected"].includes(payment.status)){
+   const reference=document.createElement("input");
+   reference.placeholder="Рақами амалиёт ё маълумоти чек";
+   reference.maxLength=200;
+   reference.required=true;
+
+   const report=document.createElement("button");
+   report.type="button";
+   report.className="pay-submit";
+   report.textContent="✅ Ман пардохт кардам";
+
+   report.onclick=async()=>{
+    const ref=reference.value.trim();
+    if(!ref){
+     alert("Рақами амалиётро ворид кунед.");
+     return;
+    }
+    if(!window.confirm("Оё маблағро воқеан ба ҳисоби фурӯшанда гузаронидед?"))
+     return;
+
+    report.disabled=true;
+    report.textContent="Сабт мешавад...";
+
+    const {error:reportError}=await db.rpc("vayo_report_payment",{
+     p_payment_id:payment.id,
+     p_transaction_reference:ref
+    });
+
+    if(reportError){
+     alert("Хато: "+reportError.message);
+     report.disabled=false;
+     report.textContent="✅ Ман пардохт кардам";
+     return;
+    }
+
+    status.textContent="⏳ Пардохт хабар дода шуд. Интизори тасдиқи фурӯшанда.";
+    report.remove();
+    reference.remove();
+   };
+
+   box.append(el("label","","Рақами амалиёт"),reference,report);
   }
 
-  const fullName=$("fullName").value.trim();
-  const phone=$("phone").value.trim();
-  const city=$("city").value;
-  const address=$("address").value.trim();
-  const notes=$("notes").value.trim();
+  root.append(box);
+ }
 
-  if(
-   !fullName||!phone||!city||
-   (needsAddress&&!address)
-  ){
-   notice("Ҳамаи маълумоти заруриро пур кунед.");
-   return;
+ addResultLinks(root);
+ root.scrollIntoView({behavior:"smooth"});
+}
+
+$("checkoutForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ if(submitting)return;
+
+ if(!currentUser||!cart.length){
+  notice("Барои фармоиш ворид шавед ва мол интихоб кунед.");
+  return;
+ }
+
+ if(needsAddress&&(!$("latitude").value||!$("longitude").value)){
+  notice("Нуқтаи расониданро дар харита интихоб кунед.");
+  return;
+ }
+
+ const fullName=$("fullName").value.trim();
+ const phone=$("phone").value.trim();
+ const city=$("city").value;
+ const address=$("address").value.trim();
+ const notes=$("notes").value.trim();
+
+ if(!fullName||!phone||!city||(needsAddress&&!address)){
+  notice("Ҳамаи маълумоти заруриро пур кунед.");
+  return;
+ }
+
+ const method=pendingMethod||selectedPaymentMethod();
+ if(!availableMethods.includes(method)){
+  notice("Ин усули пардохт дастрас нест.");
+  return;
+ }
+
+ const fullAddress=needsAddress
+  ?(notes?address+"\nЭзоҳ барои курьер: "+notes:address)
+  :"Гирифтан аз мағоза (pickup)";
+
+ const request={
+  customer_name:fullName,
+  customer_phone:phone,
+  city,
+  delivery_address:fullAddress,
+  latitude:needsAddress?Number($("latitude").value):null,
+  longitude:needsAddress?Number($("longitude").value):null,
+  items:cart.map(product=>({
+   product_id:product.product_id,
+   quantity:product.quantity
+  }))
+ };
+
+ submitting=true;
+ $("orderBtn").disabled=true;
+ $("orderBtn").textContent="Фармоиш сабт мешавад...";
+
+ try{
+  if(!pendingOrderId){
+   pendingMethod=method;
+   pendingOrderId=await submitOrder(request);
   }
 
-  if($("paymentMethod").value!=="cash"){
-   notice("Ҳоло танҳо пардохти нақдӣ фаъол аст.");
-   return;
-  }
+  const payments=await preparePayments(pendingOrderId,pendingMethod);
+  const orderId=pendingOrderId;
 
-  const fullAddress=needsAddress
-   ?(notes
-     ?address+"\nЭзоҳ барои курьер: "+notes
-     :address)
-   :"Гирифтан аз мағоза (pickup)";
+  // Сабад танҳо баъди омода шудани сабти пардохт пок мешавад.
+  localStorage.removeItem(CART_KEY);
 
-  const request={
-   customer_name:fullName,
-   customer_phone:phone,
-   city,
-   delivery_address:fullAddress,
-   latitude:needsAddress
-    ?Number($("latitude").value):null,
-   longitude:needsAddress
-    ?Number($("longitude").value):null,
-   items:cart.map(product=>({
-    product_id:product.product_id,
-    quantity:product.quantity
-   }))
-  };
+  notice("Фармоиш сабт шуд. Рақами фармоиш: "+orderId,true);
+  await showPaymentResult(orderId,pendingMethod,payments);
 
-  submitting=true;
-  $("orderBtn").disabled=true;
-  $("orderBtn").textContent=
-   "Фармоиш сабт мешавад...";
-
-  try{
-   const orderId=await submitOrder(request);
-
-   localStorage.removeItem(CART_KEY);
-
+ }catch(error){
+  if(pendingOrderId){
    notice(
-    "✅ Фармоиш бомуваффақият сабт шуд!\n"+
-    "Рақами фармоиш: "+orderId,
-    true
-   );
-
-   $("checkoutLayout").replaceChildren();
-
-   const success=el(
-    "section","card order-success"
-   );
-
-   success.append(
-    el("h2","","✅ Фармоиш қабул шуд!"),
-    el("p","","Рақами фармоиш:"),
-    el("strong","",String(orderId)),
-    el("p","muted",
-     "💵 Пардохт: нақдӣ ҳангоми гирифтани мол. "+
-     "Пул мустақим ба фурӯшанда ё намояндаи "+
-     "расонидани ӯ дода мешавад.")
-   );
-
-   const link=el(
-    "a","back","Ба саҳифаи асосӣ"
-   );
-   link.href="../index.html";
-   link.style.cssText=
-    "display:inline-block;"+
-    "background:#ff6500;"+
-    "color:white;"+
-    "margin-top:20px";
-
-   const ordersLink=el(
-    "a","back","📦 Фармоишҳои ман"
-   );
-   ordersLink.href="orders.html";
-   ordersLink.style.cssText=
-    "display:inline-block;"+
-    "background:#192132;"+
-    "color:white;"+
-    "margin:12px 0 0 8px";
-
-   success.append(link,ordersLink);
-   $("checkoutLayout").append(success);
-
-  }catch(error){
-   notice(
-    "Хатои фармоиш: "+
+    "Фармоиш дар сервер сохта шудааст.\n"+
+    "Рақами фармоиш: "+pendingOrderId+"\n"+
+    "Аммо омодасозии пардохт анҷом нашуд.\n"+
+    "Тугмаи давом доданро пахш кунед; фармоиши нав сохта намешавад.\n"+
     (error.message||String(error))
    );
-  }finally{
-   submitting=false;
-   const button=$("orderBtn");
-   if(button){
-    button.disabled=false;
-    button.textContent="📦 Фармоиш додан";
-   }
+  }else{
+   pendingMethod=null;
+   notice("Хатои фармоиш: "+(error.message||String(error)));
+  }
+ }finally{
+  submitting=false;
+  const button=$("orderBtn");
+  if(button){
+   button.disabled=false;
+   button.textContent=pendingOrderId
+    ?"🔄 Давом додани пардохт"
+    :"📦 Фармоиш додан";
   }
  }
-);
+});
 
 loadCart();
 </script>
