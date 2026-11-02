@@ -1,0 +1,363 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAYO — Super Admin</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f5f9;color:#182235;font-family:Arial,sans-serif}
+header{background:#101827;color:white;padding:18px}
+.top{max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:24px;font-weight:800}
+.logo span{color:#ff6900}
+header a{color:white;text-decoration:none}
+main{max-width:1200px;margin:24px auto;padding:0 15px}
+h1{font-size:26px}
+h2{font-size:19px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:20px 0}
+.stat,.panel{background:white;border-radius:14px;padding:20px;box-shadow:0 3px 15px #00000009}
+.stat small{color:#667085}
+.stat strong{display:block;font-size:30px;margin-top:10px}
+.panel{margin-top:18px}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}
+input,select{padding:12px;border:1px solid #d9dfeb;border-radius:9px;font-size:14px}
+input{flex:1;min-width:170px}
+button{background:#ff6900;color:white;border:0;border-radius:8px;padding:10px 14px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+button.reject{background:#dc3545}
+button.pending{background:#64748b}
+button.refresh{background:#26364d}
+button.logout{background:#344256}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:800px}
+th,td{padding:13px;text-align:left;border-bottom:1px solid #edf0f5;font-size:14px;vertical-align:top}
+th{background:#f8fafc;color:#64748b}
+.actions{display:flex;gap:6px;flex-wrap:wrap}
+.status{padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
+.status.approved{background:#dcfce7;color:#166534}
+.status.pending{background:#fef3c7;color:#92400e}
+.status.rejected{background:#fee2e2;color:#991b1b}
+#message{display:none;padding:14px;border-radius:10px;margin:14px 0;overflow-wrap:anywhere}
+.ok{background:#dcfce7;color:#166534}
+.error{background:#fee2e2;color:#991b1b}
+#dashboard{display:none}
+.muted{color:#64748b;font-size:13px}
+.empty{text-align:center;padding:30px;color:#64748b}
+@media(max-width:750px){
+.stats{grid-template-columns:repeat(2,1fr)}
+.stat{padding:15px}
+.stat strong{font-size:25px}
+}
+</style>
+</head>
+<body>
+<header>
+ <div class="top">
+  <div class="logo">VAYO <span>SUPER ADMIN</span></div>
+  <div>
+   <a href="../index.html">Саҳифаи асосӣ</a>
+   <button id="logoutBtn" class="logout" style="display:none">
+    Баромадан
+   </button>
+  </div>
+ </div>
+</header>
+
+<main>
+ <h1>Маркази идоракунии VAYO</h1>
+ <p class="muted" id="accountInfo">Санҷиши иҷозат...</p>
+ <div id="message" role="status"></div>
+
+ <div id="dashboard">
+  <div class="stats">
+   <div class="stat">
+    <small>Ҳамаи мағозаҳо</small>
+    <strong id="total">0</strong>
+   </div>
+   <div class="stat">
+    <small>Интизори тасдиқ</small>
+    <strong id="pendingCount">0</strong>
+   </div>
+   <div class="stat">
+    <small>Тасдиқшуда</small>
+    <strong id="approvedCount">0</strong>
+   </div>
+   <div class="stat">
+    <small>Радшуда</small>
+    <strong id="rejectedCount">0</strong>
+   </div>
+  </div>
+
+  <section class="panel">
+   <h2>Идоракунии мағозаҳо</h2>
+   <div class="controls">
+    <input id="search" placeholder="Ном, шаҳр, телефон ё суроға">
+    <select id="filter">
+     <option value="all">Ҳамаи мағозаҳо</option>
+     <option value="pending">Интизори тасдиқ</option>
+     <option value="approved">Тасдиқшуда</option>
+     <option value="rejected">Радшуда</option>
+    </select>
+    <button class="refresh" id="refreshBtn">Навсозӣ</button>
+   </div>
+
+   <div class="tablewrap">
+    <table>
+     <thead>
+      <tr>
+       <th>Мағоза</th>
+       <th>Шаҳр ва суроға</th>
+       <th>Телефон</th>
+       <th>Расонидан</th>
+       <th>Ҳолат</th>
+       <th>Сана</th>
+       <th>Идоракунӣ</th>
+      </tr>
+     </thead>
+     <tbody id="shopRows"></tbody>
+    </table>
+   </div>
+  </section>
+
+  <section class="panel">
+   <h2>Таҳлил ва графикҳо</h2>
+   <p class="muted">
+    Дар қадами навбатӣ омори воқеии корбарон,
+    фармоишҳо, фурӯш ва графикҳои рӯзонаю
+    моҳонаро ба Supabase пайваст мекунем.
+   </p>
+  </section>
+ </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+"use strict";
+
+const SB_URL="https://rgminzzmlktkliliiupt.supabase.co";
+const SB_KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+const LOGIN_URL="login.html";
+const $=id=>document.getElementById(id);
+
+let db;
+let shops=[];
+
+function notify(text,success=false){
+ const el=$("message");
+ el.style.display="block";
+ el.className=success?"ok":"error";
+ el.textContent=text;
+}
+
+function make(tag,text){
+ const el=document.createElement(tag);
+ el.textContent=text==null?"":String(text);
+ return el;
+}
+
+function dateText(value){
+ if(!value)return "—";
+ return new Date(value).toLocaleDateString("tg-TJ");
+}
+
+function updateStats(){
+ $("total").textContent=shops.length;
+ $("pendingCount").textContent=
+  shops.filter(x=>x.status==="pending").length;
+ $("approvedCount").textContent=
+  shops.filter(x=>x.status==="approved").length;
+ $("rejectedCount").textContent=
+  shops.filter(x=>x.status==="rejected").length;
+}
+
+function addCell(tr,text){
+ const td=make("td",text);
+ tr.appendChild(td);
+ return td;
+}
+
+function addStatusButton(container,shop,status,label,cls){
+ const btn=make("button",label);
+ if(cls)btn.className=cls;
+ btn.disabled=shop.status===status;
+
+ btn.addEventListener("click",async()=>{
+  const confirmed=confirm(
+   `Мағозаи "${shop.name}" ба ҳолати "${label}" гузарад?`
+  );
+  if(!confirmed)return;
+
+  btn.disabled=true;
+  try{
+   const {error}=await db.rpc(
+    "vayo_admin_change_shop_status",
+    {
+     p_shop_id:shop.id,
+     p_status:status
+    }
+   );
+   if(error)throw error;
+
+   notify("Ҳолати мағоза бомуваффақият тағйир ёфт.",true);
+   await loadShops();
+  }catch(err){
+   notify(err.message||"Хатои тағйири ҳолат.");
+   btn.disabled=false;
+  }
+ });
+
+ container.appendChild(btn);
+}
+
+function renderShops(){
+ const tbody=$("shopRows");
+ tbody.replaceChildren();
+
+ const q=$("search").value.trim().toLowerCase();
+ const filter=$("filter").value;
+
+ const filtered=shops.filter(shop=>{
+  if(filter!=="all"&&shop.status!==filter)return false;
+
+  const text=[
+   shop.name,shop.city,shop.address,shop.phone
+  ].filter(Boolean).join(" ").toLowerCase();
+
+  return text.includes(q);
+ });
+
+ if(!filtered.length){
+  const tr=document.createElement("tr");
+  const td=make("td","Мағоза ёфт нашуд.");
+  td.colSpan=7;
+  td.className="empty";
+  tr.appendChild(td);
+  tbody.appendChild(tr);
+  return;
+ }
+
+ for(const shop of filtered){
+  const tr=document.createElement("tr");
+
+  const nameCell=addCell(tr,shop.name||"Беном");
+  const idText=make("div",shop.id);
+  idText.className="muted";
+  nameCell.appendChild(idText);
+
+  addCell(tr,[shop.city,shop.address].filter(Boolean).join(", ")||"—");
+  addCell(tr,shop.phone||"—");
+
+  const delivery={
+   own:"Расонидани мағоза",
+   external:"Расонидани беруна",
+   pickup:"Худаш мегирад"
+  };
+
+  addCell(
+   tr,
+   (delivery[shop.delivery_type]||shop.delivery_type||"—")+
+   " / "+(shop.delivery_fee||0)+" сомонӣ"
+  );
+
+  const statusCell=addCell(tr,"");
+  const statusEl=make("span",{
+   pending:"Интизор",
+   approved:"Тасдиқшуда",
+   rejected:"Радшуда"
+  }[shop.status]||shop.status);
+  statusEl.className="status "+shop.status;
+  statusCell.appendChild(statusEl);
+
+  addCell(tr,dateText(shop.created_at));
+
+  const actionCell=addCell(tr,"");
+  actionCell.className="actions";
+
+  addStatusButton(
+   actionCell,shop,"approved","Тасдиқ",""
+  );
+  addStatusButton(
+   actionCell,shop,"rejected","Рад","reject"
+  );
+  addStatusButton(
+   actionCell,shop,"pending","Интизор","pending"
+  );
+
+  tbody.appendChild(tr);
+ }
+}
+
+async function loadShops(){
+ const {data,error}=await db.rpc("vayo_admin_list_shops");
+ if(error)throw error;
+
+ shops=Array.isArray(data)?data:[];
+ updateStats();
+ renderShops();
+}
+
+async function init(){
+ try{
+  if(!window.supabase){
+   throw new Error("Китобхонаи Supabase боргирӣ нашуд.");
+  }
+
+  db=window.supabase.createClient(SB_URL,SB_KEY);
+
+  const {data:userData,error:userError}=
+   await db.auth.getUser();
+
+  if(userError)throw userError;
+
+  if(!userData?.user){
+   notify("Барои кушодани панели администратор ворид шавед.");
+   $("accountInfo").textContent="Ҳисоб ворид нашудааст.";
+   return;
+  }
+
+  $("accountInfo").textContent=
+   "Ҳисоб: "+userData.user.email;
+
+  const {data:isAdmin,error:adminError}=
+   await db.rpc("vayo_is_admin");
+
+  if(adminError)throw adminError;
+
+  if(isAdmin!==true){
+   notify("Шумо ҳуқуқи администратор надоред.");
+   return;
+  }
+
+  $("dashboard").style.display="block";
+  $("logoutBtn").style.display="inline-block";
+
+  await loadShops();
+
+ }catch(err){
+  notify(err.message||"Хато ҳангоми кушодани панел.");
+ }
+}
+
+$("search").addEventListener("input",renderShops);
+$("filter").addEventListener("change",renderShops);
+
+$("refreshBtn").addEventListener("click",async()=>{
+ try{
+  await loadShops();
+  notify("Маълумот навсозӣ шуд.",true);
+ }catch(err){
+  notify(err.message||"Хатои навсозӣ.");
+ }
+});
+
+$("logoutBtn").addEventListener("click",async()=>{
+ await db.auth.signOut();
+ location.href=LOGIN_URL;
+});
+
+init();
+</script>
+</body>
+</html>
