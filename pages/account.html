@@ -1,0 +1,315 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#7355ef">
+<title>VAYO Language — Ҳисоби ман</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+ --purple:#7355ef;--green:#18aa70;
+ --ink:#25213d;--bg:#f6f5fc;--line:#e7e3f3
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(120deg,#6247db,#a36cf4);color:white;padding:25px 16px}
+.wrap{max-width:680px;margin:auto;padding:16px}
+header a{color:white}
+.card{background:white;border:1px solid var(--line);border-radius:18px;padding:20px;margin:15px 0}
+input{display:block;width:100%;padding:14px;margin:10px 0;border:2px solid var(--line);border-radius:12px;font-size:16px}
+button{border:0;border-radius:12px;padding:13px 16px;font:inherit;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.55;cursor:default}
+.primary{background:var(--purple);color:white}
+.green{background:var(--green);color:white}
+.light{background:#eeeafa;color:var(--ink)}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin:14px 0}
+.hidden{display:none!important}
+.status{background:#eeeafa;border-radius:12px;padding:15px;white-space:pre-wrap;line-height:1.6}
+.info{background:#f7f5ff;padding:15px;border-radius:12px}
+small{color:#77748c;line-height:1.6}
+.links{display:flex;gap:12px;flex-wrap:wrap}
+.links a{color:var(--purple);font-weight:bold}
+</style>
+</head>
+<body>
+<header>
+ <div class="wrap">
+  <a href="language.html">← VAYO Language</a>
+  <h1>👤 Ҳисоби омӯзанда</h1>
+  <p>Сабти ном ва нигоҳдории XP дар интернет</p>
+ </div>
+</header>
+
+<main class="wrap">
+<section class="card" id="configCard">
+ <h2>🔗 Пайвастшавӣ ба Supabase</h2>
+ <input id="url" placeholder="Project URL: https://xxxxx.supabase.co" autocomplete="off">
+ <input id="key" placeholder="Publishable / anon key" autocomplete="off">
+ <button id="connect" class="primary">Пайваст шудан</button>
+ <p><small>Танҳо Publishable ё anon key-ро истифода кун. Secret key ва service_role-ро ҳеҷ гоҳ дар сомона нагузор.</small></p>
+</section>
+
+<section class="card hidden" id="authCard">
+ <h2>🔐 Воридшавӣ / Сабти ном</h2>
+ <input id="email" type="email" placeholder="Почтаи электронӣ" autocomplete="email">
+ <input id="password" type="password" placeholder="Парол (ҳадди ақал 6 аломат)" autocomplete="current-password">
+ <div class="actions">
+  <button id="login" class="primary">Ворид шудан</button>
+  <button id="signup" class="green">Сабти ном</button>
+  <button id="forgot" class="light">Паролро фаромӯш кардам</button>
+ </div>
+</section>
+
+<section class="card hidden" id="recoveryCard">
+ <h2>🔑 Пароли нав</h2>
+ <input id="newPassword" type="password" placeholder="Пароли нав (ҳадди ақал 6 аломат)">
+ <button id="changePassword" class="green">Нигоҳ доштани пароли нав</button>
+</section>
+
+<section class="card hidden" id="userCard">
+ <h2>🎉 Ҳисоби ман</h2>
+ <div class="info">
+  <p><b>Почта:</b> <span id="userEmail"></span></p>
+  <p><b>XP дар браузер:</b> <span id="localXp">0</span></p>
+  <p><b>XP дар Supabase:</b> <span id="cloudXp">—</span></p>
+  <p><b>Забон:</b> <span id="cloudLang">—</span></p>
+ </div>
+ <div class="actions">
+  <button id="sync" class="green">☁️ Синхронизатсияи XP</button>
+  <button id="refresh" class="light">🔄 Навсозӣ</button>
+  <button id="logout" class="light">Баромадан</button>
+ </div>
+ <p><small>Дар ин версия XP ва забон дастӣ синхронизатсия мешаванд. Дигар пешрафт ҳоло танҳо дар браузер аст.</small></p>
+</section>
+
+<section class="card">
+ <h2>📢 Ҳолати система</h2>
+ <div class="status" id="status" role="status">Project URL ва Publishable key-ро ворид кун.</div>
+</section>
+
+<section class="card">
+ <h2>📚 Қисмҳои омӯзиш</h2>
+ <div class="links">
+  <a href="language.html">Дарсҳо</a>
+  <a href="writing.html">Навиштан</a>
+  <a href="sentences.html">Ҷумлаҳо</a>
+  <a href="daily.html">Вазифаҳо</a>
+  <a href="profile.html">Профил</a>
+ </div>
+</section>
+</main>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const MAIN_KEY="vayo_language_v2";
+let client=null,user=null,cloud=null;
+let recovery=false;
+
+function status(s){$("status").textContent=s}
+function readLocal(){
+ try{
+  const x=JSON.parse(localStorage.getItem(MAIN_KEY));
+  return x&&typeof x==="object"?x:{};
+ }catch(e){return {}}
+}
+function writeLocal(data){
+ try{
+  localStorage.setItem(MAIN_KEY,JSON.stringify(data));
+  return true;
+ }catch(e){return false}
+}
+function getXp(){
+ return Math.max(0,Number(readLocal().xp)||0);
+}
+function getLang(){
+ const lang=readLocal().lang;
+ return ["de","en","ru","zh","ko"].includes(lang)?lang:"de";
+}
+function showUser(){
+ $("authCard").classList.add("hidden");
+ $("userCard").classList.remove("hidden");
+ $("userEmail").textContent=user.email||"";
+ $("localXp").textContent=getXp();
+}
+function showGuest(){
+ user=null;cloud=null;
+ $("authCard").classList.remove("hidden");
+ $("userCard").classList.add("hidden");
+ $("recoveryCard").classList.add("hidden");
+}
+function busy(on){
+ ["login","signup","forgot","sync","refresh","logout","changePassword"]
+ .forEach(id=>$(id).disabled=on);
+}
+function errorText(e){return e?.message||String(e)}
+async function connect(){
+ const url=$("url").value.trim().replace(/\/+$/,"");
+ const key=$("key").value.trim();
+
+ if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)){
+  status("❌ Project URL нодуруст аст.");return;
+ }
+ if(!key||key.startsWith("sb_secret_")||
+    key.toLowerCase().includes("service_role")){
+  status("❌ Танҳо Publishable ё anon key-ро истифода кун.");return;
+ }
+ if(!window.supabase){
+  status("❌ Китобхонаи Supabase бор нашуд.");return;
+ }
+ try{
+  client=window.supabase.createClient(url,key,{
+   auth:{
+    persistSession:true,
+    autoRefreshToken:true,
+    detectSessionInUrl:true
+   }
+  });
+  client.auth.onAuthStateChange((event,session)=>{
+   if(event==="PASSWORD_RECOVERY"){
+    recovery=true;
+    $("recoveryCard").classList.remove("hidden");
+    status("Пароли навро ворид кун.");
+   }
+   if(event==="SIGNED_OUT")showGuest();
+  });
+  const {data,error}=await client.auth.getUser();
+  if(error&&error.name!=="AuthSessionMissingError")throw error;
+  $("connect").disabled=true;
+  $("authCard").classList.remove("hidden");
+  status("✅ Supabase пайваст шуд.");
+  if(data?.user){
+   user=data.user;
+   showUser();
+   await refreshCloud();
+  }
+ }catch(e){
+  status("❌ "+errorText(e));
+ }
+}
+async function signup(){
+ if(!client)return;
+ const email=$("email").value.trim();
+ const password=$("password").value;
+ if(!email.includes("@")||password.length<6){
+  status("Почтаи дуруст ва пароли на камтар аз 6 аломат лозим.");return;
+ }
+ busy(true);
+ try{
+  const {data,error}=await client.auth.signUp({
+   email,password,
+   options:{emailRedirectTo:location.origin+location.pathname}
+  });
+  if(error)throw error;
+  if(data.session&&data.user){
+   user=data.user;showUser();
+   await refreshCloud();
+   status("✅ Ҳисоб фаъол шуд.");
+  }else{
+   status("📧 Почтаи худро санҷ ва тасдиқ кун. Баъд ворид шав.");
+  }
+ }catch(e){status("❌ "+errorText(e))}
+ finally{busy(false)}
+}
+async function login(){
+ if(!client)return;
+ busy(true);
+ try{
+  const {data,error}=await client.auth.signInWithPassword({
+   email:$("email").value.trim(),
+   password:$("password").value
+  });
+  if(error)throw error;
+  user=data.user;showUser();
+  await refreshCloud();
+  status("✅ Ворид шудӣ.");
+ }catch(e){status("❌ "+errorText(e))}
+ finally{busy(false)}
+}
+async function forgot(){
+ if(!client)return;
+ const email=$("email").value.trim();
+ if(!email.includes("@")){status("Аввал почтаи худро навис.");return}
+ try{
+  const {error}=await client.auth.resetPasswordForEmail(email,{
+   redirectTo:location.origin+location.pathname
+  });
+  if(error)throw error;
+  status("📧 Агар ин почта сабт шуда бошад, паёми барқароркунӣ меояд.");
+ }catch(e){status("❌ "+errorText(e))}
+}
+async function changePassword(){
+ if(!client||!recovery)return;
+ const password=$("newPassword").value;
+ if(password.length<6){status("Парол бояд ҳадди ақал 6 аломат дошта бошад.");return}
+ try{
+  const {error}=await client.auth.updateUser({password});
+  if(error)throw error;
+  recovery=false;
+  $("recoveryCard").classList.add("hidden");
+  status("✅ Парол иваз шуд.");
+ }catch(e){status("❌ "+errorText(e))}
+}
+async function refreshCloud(){
+ if(!client||!user)return;
+ const {data,error}=await client
+  .from("vayo_language_progress")
+  .select("xp,language")
+  .eq("user_id",user.id)
+  .maybeSingle();
+ if(error)throw error;
+ cloud=data;
+ $("cloudXp").textContent=cloud?cloud.xp:"Ҳоло нест";
+ $("cloudLang").textContent=cloud?cloud.language:"—";
+ $("localXp").textContent=getXp();
+}
+async function sync(){
+ if(!client||!user)return;
+ busy(true);
+ try{
+  await refreshCloud();
+  const xp=Math.max(getXp(),Number(cloud?.xp)||0);
+  const language=cloud?.language||getLang();
+  const {error}=await client
+   .from("vayo_language_progress")
+   .upsert({
+    user_id:user.id,xp,language,
+    updated_at:new Date().toISOString()
+   },{onConflict:"user_id"});
+  if(error)throw error;
+  const latest=readLocal();
+  latest.xp=Math.max(Number(latest.xp)||0,xp);
+  if(!latest.lang)latest.lang=language;
+  const saved=writeLocal(latest);
+  await refreshCloud();
+  status(saved?
+   "✅ XP бо Supabase ҳамоҳанг шуд.":
+   "⚠️ XP онлайн сабт шуд, вале дар браузер нигоҳ дошта нашуд.");
+ }catch(e){status("❌ "+errorText(e))}
+ finally{busy(false)}
+}
+async function logout(){
+ if(!client)return;
+ try{
+  const {error}=await client.auth.signOut();
+  if(error)throw error;
+  showGuest();
+  status("Аз ҳисоб баромадӣ.");
+ }catch(e){status("❌ "+errorText(e))}
+}
+$("connect").onclick=connect;
+$("signup").onclick=signup;
+$("login").onclick=login;
+$("forgot").onclick=forgot;
+$("changePassword").onclick=changePassword;
+$("sync").onclick=sync;
+$("logout").onclick=logout;
+$("refresh").onclick=async()=>{
+ try{await refreshCloud();status("Маълумот навсозӣ шуд.")}
+ catch(e){status("❌ "+errorText(e))}
+};
+</script>
+</body>
+</html>
