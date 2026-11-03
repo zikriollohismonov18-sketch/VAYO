@@ -4,16 +4,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#ef330b">
-<meta name="description" content="VAYO — бозори онлайни Тоҷикистон">
-<title>VAYO — Бозори онлайн</title>
-
+<meta name="theme-color" content="#f43a10">
+<meta name="description" content="VAYO Super App — бозор ва хизматрасониҳои Тоҷикистон">
+<title>VAYO — Super App</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 :root{
  --orange:#f43a10;
- --orange2:#ff7000;
+ --orange2:#ff7900;
  --red:#e82e20;
  --green:#078622;
  --ink:#202124;
@@ -27,10 +26,10 @@ html{scroll-behavior:smooth}
 body{
  margin:0;
  font-family:Arial,sans-serif;
- color:var(--ink);
  background:var(--bg);
+ color:var(--ink);
 }
-button,input,select{font:inherit}
+button,input{font:inherit}
 button{cursor:pointer}
 button:disabled{opacity:.5;cursor:not-allowed}
 a{text-decoration:none;color:inherit}
@@ -42,8 +41,8 @@ a{text-decoration:none;color:inherit}
  position:sticky;
  top:0;
  z-index:50;
- background:linear-gradient(110deg,#e92c0b,#ff5d00);
  color:white;
+ background:linear-gradient(110deg,#e92c0b,#ff5d00);
  box-shadow:0 3px 15px #0002;
 }
 .header-inner{
@@ -55,10 +54,10 @@ a{text-decoration:none;color:inherit}
  gap:12px;
 }
 .logo{
- color:white;
  font-size:35px;
  font-weight:900;
  letter-spacing:-2px;
+ color:white;
 }
 .search{
  display:flex;
@@ -78,7 +77,6 @@ a{text-decoration:none;color:inherit}
  padding:0 14px;
  color:#222;
  background:transparent;
- font-size:14px;
 }
 .camera-btn{
  width:40px;
@@ -114,7 +112,7 @@ a{text-decoration:none;color:inherit}
 }
 .language button.active{
  background:white;
- color:#ed330b;
+ color:var(--orange);
 }
 .desktop-links{
  display:flex;
@@ -153,20 +151,19 @@ a{text-decoration:none;color:inherit}
  background:white;
  color:var(--orange);
 }
-.cat-link{display:inline-flex;align-items:center}
 
 /* HERO */
 .hero{
  background:linear-gradient(110deg,#f32b08,#ff5d00 60%,#ff8b00);
  color:white;
  min-height:210px;
- position:relative;
- overflow:hidden;
  display:flex;
  align-items:center;
  justify-content:center;
  text-align:center;
  padding:30px 18px;
+ position:relative;
+ overflow:hidden;
 }
 .hero-content{position:relative;z-index:1}
 .hero-kicker{
@@ -177,17 +174,16 @@ a{text-decoration:none;color:inherit}
 .hero h1{
  margin:8px 0 12px;
  font-size:clamp(26px,4vw,46px);
- font-weight:900;
 }
 .hero p{font-size:15px}
 .hero-button{
  display:inline-block;
  background:#fff2a6;
  color:#bd2908;
- font-size:14px;
  font-weight:900;
  padding:12px 24px;
  border-radius:30px;
+ font-size:14px;
 }
 .hero-deco{
  position:absolute;
@@ -197,7 +193,68 @@ a{text-decoration:none;color:inherit}
 .hero-deco.left{left:8%;top:25%}
 .hero-deco.right{right:8%;top:25%}
 
-/* SERVICES */
+/* SERVICE HUB */
+.super-section{margin-top:22px}
+.super-heading{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ margin-bottom:14px;
+}
+.super-heading h2{
+ margin:0;
+ font-size:25px;
+ font-weight:900;
+}
+.super-grid{
+ display:grid;
+ grid-template-columns:repeat(6,minmax(0,1fr));
+ gap:12px;
+}
+.super-card{
+ background:white;
+ border:1px solid #eee;
+ border-radius:15px;
+ padding:20px 10px;
+ text-align:center;
+ min-width:0;
+}
+.super-icon{font-size:36px}
+.super-card h3{
+ margin:10px 0 6px;
+ font-size:15px;
+}
+.super-card p{
+ font-size:11px;
+ line-height:1.5;
+ color:var(--muted);
+ min-height:35px;
+}
+.super-status{
+ display:inline-block;
+ padding:7px 10px;
+ border-radius:20px;
+ font-size:11px;
+ font-weight:800;
+ background:#fff1e6;
+ color:#aa4500;
+}
+.super-status.ready{
+ background:#e6f7ea;
+ color:#087b24;
+}
+.super-note{
+ margin-top:14px;
+ padding:14px;
+ border-radius:12px;
+ background:#fff8ee;
+ border:1px solid #ffdfb8;
+ font-size:13px;
+ line-height:1.7;
+}
+
+/* SERVICE STRIP */
 .service-strip{
  display:grid;
  grid-template-columns:1fr 1fr;
@@ -235,8 +292,16 @@ a{text-decoration:none;color:inherit}
  gap:10px;
  margin-bottom:13px;
 }
-.section-title{margin:0;font-size:22px;font-weight:900}
-.section-more{color:var(--orange);font-size:13px;font-weight:800}
+.section-title{
+ margin:0;
+ font-size:22px;
+ font-weight:900;
+}
+.section-more{
+ color:var(--orange);
+ font-size:13px;
+ font-weight:800;
+}
 .featured{
  background:linear-gradient(180deg,#ffe8ea,#fff5f5);
  padding:15px;
@@ -289,7 +354,7 @@ a{text-decoration:none;color:inherit}
  position:absolute;
  top:8px;
  left:8px;
- background:#e82e20;
+ background:var(--red);
  color:white;
  padding:6px 8px;
  border-radius:6px;
@@ -501,8 +566,6 @@ a{text-decoration:none;color:inherit}
  max-width:90%;
  text-align:center;
 }
-
-/* BOTTOM NAV */
 .bottom-nav{display:none}
 .bottom-link{
  display:flex;
@@ -535,10 +598,18 @@ footer{
  font-size:12px;
  padding:35px 15px;
 }
+.footer-links{
+ display:flex;
+ flex-wrap:wrap;
+ gap:14px;
+ justify-content:center;
+ margin-top:12px;
+}
 
 /* RESPONSIVE */
 @media(max-width:1100px){
  .product-grid{grid-template-columns:repeat(4,1fr)}
+ .super-grid{grid-template-columns:repeat(3,1fr)}
 }
 @media(max-width:850px){
  .desktop-links{display:none}
@@ -565,13 +636,24 @@ footer{
  .hero-kicker{font-size:22px}
  .hero p{font-size:12px}
  .hero-deco{font-size:38px}
+ .super-grid{
+  grid-template-columns:repeat(2,1fr);
+  gap:8px;
+ }
+ .super-card{padding:14px 8px}
+ .super-card h3{font-size:13px}
+ .super-icon{font-size:30px}
+ .super-heading h2{font-size:20px}
  .service{padding:13px 10px}
  .service-title{font-size:13px}
  .service p{font-size:11px}
  .section-title{font-size:19px}
  .featured{padding:10px}
  .featured-title{font-size:18px}
- .product-grid{grid-template-columns:repeat(2,1fr);gap:5px}
+ .product-grid{
+  grid-template-columns:repeat(2,1fr);
+  gap:5px;
+ }
  .featured-grid{gap:7px}
  .product-card{border-radius:4px}
  .product-info{padding:9px}
@@ -608,7 +690,7 @@ footer{
    <button class="camera-btn" id="cameraBtn"
     type="button" title="Ҷустуҷӯ бо акс">📷</button>
    <button class="search-btn" id="searchBtn"
-    type="button" aria-label="Search">🔍</button>
+    type="button">🔍</button>
   </div>
 
   <div class="language">
@@ -618,24 +700,36 @@ footer{
   </div>
 
   <div class="desktop-links">
-   <a id="accountLink" href="./pages/login.html">👤 Воридшавӣ</a>
-   <a id="ordersLink" href="./pages/orders.html">📦 Фармоишҳо</a>
+   <a id="accountLink" href="./pages/login.html">
+    👤 Воридшавӣ
+   </a>
+   <a id="ordersLink" href="./pages/orders.html">
+    📦 Фармоишҳо
+   </a>
    <button id="cartBtn" type="button">
     🛒 <span id="cartLabel">Сабад</span>
     (<span id="count">0</span>)
    </button>
-   <a id="sellerLink" href="./pages/seller.html">🏪 Фурӯшанда</a>
+   <a id="sellerLink" href="./pages/seller.html">
+    🏪 Фурӯшанда
+   </a>
   </div>
  </div>
 
  <nav class="header-categories" id="categories">
-  <button class="cat active" data-category="all" data-i18n="all">Ҳама</button>
-  <button class="cat" data-category="Либос" data-i18n="clothes">Либос</button>
-  <button class="cat" data-category="Пойафзол" data-i18n="shoes">Пойафзол</button>
-  <button class="cat" data-category="Электроника" data-i18n="electronics">Электроника</button>
-  <button class="cat" data-category="Хона" data-i18n="house">Барои хона</button>
-  <button class="cat" data-category="Зебоӣ" data-i18n="beauty">Зебоӣ</button>
-  <a class="cat cat-link" href="./pages/promotions.html">
+  <button class="cat active" data-category="all"
+   data-i18n="all">Ҳама</button>
+  <button class="cat" data-category="Либос"
+   data-i18n="clothes">Либос</button>
+  <button class="cat" data-category="Пойафзол"
+   data-i18n="shoes">Пойафзол</button>
+  <button class="cat" data-category="Электроника"
+   data-i18n="electronics">Электроника</button>
+  <button class="cat" data-category="Хона"
+   data-i18n="house">Барои хона</button>
+  <button class="cat" data-category="Зебоӣ"
+   data-i18n="beauty">Зебоӣ</button>
+  <a class="cat" href="./pages/promotions.html">
    🔥 <span data-i18n="promotions">Аксияҳо</span>
   </a>
  </nav>
@@ -645,16 +739,38 @@ footer{
  <div class="hero-deco left">🛍️</div>
  <div class="hero-content">
   <div class="hero-kicker">🔥 VAYO SALE</div>
-  <h1 data-i18n="hero">Пешниҳодҳои беҳтаринро пайдо кунед!</h1>
-  <p data-i18n="heroText">Маҳсулоти гуногун бо нархҳои дастрас</p>
-  <a href="./pages/promotions.html" class="hero-button"
-   data-i18n="heroButton">Дидани аксияҳо ❯</a>
+  <h1 data-i18n="hero">
+   Пешниҳодҳои беҳтаринро пайдо кунед!
+  </h1>
+  <p data-i18n="heroText">
+   Маҳсулоти гуногун бо нархҳои дастрас
+  </p>
+  <a href="./pages/promotions.html"
+   class="hero-button" data-i18n="heroButton">
+   Дидани аксияҳо ❯
+  </a>
  </div>
  <div class="hero-deco right">🎁</div>
 </section>
 
 <main class="container">
 
+ <!-- SUPER APP -->
+ <section class="super-section" id="superApp">
+  <div class="super-heading">
+   <h2>🌍 VAYO Super App</h2>
+  </div>
+
+  <div class="super-grid" id="superGrid"></div>
+
+  <div class="super-note" id="superNote">
+   Комиссияи харидорон 0% мебошад.
+   Комиссияи фурӯшандагон ва хизматрасонҳо
+   2% аз амалиёти анҷомёфта аст.
+  </div>
+ </section>
+
+ <!-- DELIVERY -->
  <section class="service-strip">
   <div class="service">
    <div class="service-title green">
@@ -664,6 +780,7 @@ footer{
     Шарт ва нарх аз мағоза вобаста аст.
    </p>
   </div>
+
   <div class="service">
    <div class="service-title">
     📦 <span data-i18n="easyOrder">Фармоиши осон</span>
@@ -676,18 +793,22 @@ footer{
 
  <div class="trust-banner">
   🛡️ <span data-i18n="trust">
-   Нархҳо ва захираи маҳсулот ҳангоми фармоиш санҷида мешаванд
+   Нархҳо ва захираи маҳсулот ҳангоми
+   фармоиш санҷида мешаванд
   </span>
  </div>
 
+ <!-- FEATURED -->
  <section class="section featured">
   <div class="section-head">
    <h2 class="featured-title" data-i18n="top">
     Топ-маҳсулот ❯
    </h2>
-   <a class="section-more" href="./pages/promotions.html"
+   <a class="section-more"
+    href="./pages/promotions.html"
     data-i18n="allDeals">Ҳамаи аксияҳо</a>
   </div>
+
   <div class="featured-grid" id="featuredProducts">
    <div class="empty">...</div>
   </div>
@@ -695,6 +816,7 @@ footer{
 
  <div id="photoStatus" class="photo-status hidden"></div>
 
+ <!-- CATALOG -->
  <section class="section" id="catalog">
   <div class="tabs" id="catalogTabs">
    <button class="tab active" data-tab="all"
@@ -721,6 +843,7 @@ footer{
 
 </main>
 
+<!-- CART -->
 <div class="overlay hidden" id="overlay"></div>
 
 <aside class="cart-panel hidden" id="cartPanel">
@@ -737,15 +860,18 @@ footer{
  </div>
 
  <p class="cart-note" data-i18n="cartNote">
-  Нархи ниҳоии маҳсулот ва ҳаққи расонидан
-  ҳангоми фармоиш дар сервер ҳисоб карда мешаванд.
+  Нархи ниҳоӣ ва ҳаққи расонидан
+  ҳангоми фармоиш дар сервер ҳисоб мешаванд.
  </p>
 
  <a class="checkout" href="./pages/checkout.html">
-  📦 <span data-i18n="checkout">Гузаштан ба фармоиш</span>
+  📦 <span data-i18n="checkout">
+   Гузаштан ба фармоиш
+  </span>
  </a>
 </aside>
 
+<!-- MOBILE -->
 <nav class="bottom-nav">
  <a class="bottom-link active" href="./index.html">
   <span class="bottom-icon">🏠</span>
@@ -775,17 +901,14 @@ footer{
 <div id="toast" class="toast hidden" role="status"></div>
 
 <footer>
- © 2026 VAYO — <span data-i18n="footer">
- Бозори онлайни Тоҷикистон
- </span>
- <div style="margin-top:10px">
-  <a href="./pages/seller.html" data-i18n="forSellers">
-   Барои фурӯшандагон
-  </a>
-  ·
-  <a href="./pages/orders.html" data-i18n="myOrders">
-   Фармоишҳои ман
-  </a>
+ © 2026 VAYO —
+ <span data-i18n="footer">Бозори онлайни Тоҷикистон</span>
+
+ <div class="footer-links">
+  <a href="./pages/seller.html">🏪 Seller</a>
+  <a href="./pages/orders.html">📦 Orders</a>
+  <a href="./commissions.html">💰 Commissions</a>
+  <a href="./payments.html">💳 Payments</a>
  </div>
 </footer>
 
@@ -793,7 +916,6 @@ footer{
 "use strict";
 
 /* SUPABASE */
-
 const SB_URL="https://rgminzzmlktkliliiupt.supabase.co";
 const SB_KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
 
@@ -802,6 +924,7 @@ const CART_KEY="vayo_cart_v1";
 const LANG_KEY="vayo_language";
 
 let db=null;
+
 if(window.supabase?.createClient){
  db=window.supabase.createClient(SB_URL,SB_KEY);
  window.vayoDB=db;
@@ -822,185 +945,178 @@ let lang=localStorage.getItem(LANG_KEY)||"tg";
 if(!["tg","ru","en"].includes(lang))lang="tg";
 
 /* TRANSLATIONS */
-
 const translations={
-tg:{
- all:"Ҳама",
- clothes:"Либос",
- shoes:"Пойафзол",
- electronics:"Электроника",
- house:"Барои хона",
- beauty:"Зебоӣ",
- promotions:"Аксияҳо",
- hero:"Пешниҳодҳои беҳтаринро пайдо кунед!",
- heroText:"Маҳсулоти гуногун бо нархҳои дастрас",
- heroButton:"Дидани аксияҳо ❯",
- delivery:"Расонидан",
- deliveryText:"Шарт ва нарх аз мағоза вобаста аст.",
- easyOrder:"Фармоиши осон",
- easyText:"Маҳсулотро интихоб карда фармоиш диҳед.",
- trust:"Нархҳо ва захираи маҳсулот ҳангоми фармоиш санҷида мешаванд",
- top:"Топ-маҳсулот ❯",
- allDeals:"Ҳамаи аксияҳо",
- selected:"Интихобшуда",
- local:"Мағозаҳои маҳаллӣ",
- discounts:"🔥 Тахфифҳо",
- catalog:"Маҳсулоти VAYO",
- myCart:"Сабади шумо",
- total:"Ҳамагӣ:",
- checkout:"Гузаштан ба фармоиш",
- cartNote:"Нархи ниҳоӣ ва ҳаққи расонидан ҳангоми фармоиш дар сервер ҳисоб карда мешаванд.",
- home:"Асосӣ",
- categories:"Категорияҳо",
- orders:"Фармоишҳо",
- cart:"Сабад",
- profile:"Профил",
- footer:"Бозори онлайни Тоҷикистон",
- forSellers:"Барои фурӯшандагон",
- myOrders:"Фармоишҳои ман",
- search:"Ҷустуҷӯи маҳсулот...",
- buy:"Ба сабад",
- out:"Тамом шудааст",
- stock:"Дар анбор:",
- item:"маҳсулот",
- notFound:"Маҳсулот ёфт нашуд.",
- loading:"Маҳсулот бор шуда истодааст...",
- error:"Маҳсулот бор нашуд. Пайвасти Supabase ва иҷозатҳои хонданро санҷед.",
- emptyCart:"Сабади шумо холӣ аст.",
- added:"Маҳсулот ба сабад илова шуд!",
- noStock:"Ин маҳсулот дар анбор нест.",
- tooMany:"Миқдори бештар дар анбор нест.",
- photoWorking:"Аксҳои маҳсулот муқоиса мешаванд...",
- photoFound:"Маҳсулоти аз рӯйи тасвир монанд:",
- photoFail:"Муқоисаи аксҳо имконнопазир шуд.",
- photoNote:"Натиҷа аз рӯйи ранг ва шакли умумии акс аст.",
- photoClear:"Пок кардани ҷустуҷӯи акс",
- photoWait:"Аввал маҳсулот бор шавад.",
- photoInvalid:"Лутфан акси дуруст интихоб кунед.",
- login:"Воридшавӣ",
- account:"Ҳисоби ман",
- seller:"Фурӯшанда",
- localUnavailable:"Маълумоти мағозаҳои маҳаллӣ ҳоло пайваст нашудааст.",
- unknownPrice:"Нарх ҳангоми фармоиш санҷида мешавад"
-},
-ru:{
- all:"Все",
- clothes:"Одежда",
- shoes:"Обувь",
- electronics:"Электроника",
- house:"Для дома",
- beauty:"Красота",
- promotions:"Акции",
- hero:"Найдите лучшие предложения!",
- heroText:"Разные товары по доступным ценам",
- heroButton:"Смотреть акции ❯",
- delivery:"Доставка",
- deliveryText:"Условия и стоимость зависят от магазина.",
- easyOrder:"Простой заказ",
- easyText:"Выберите товар и оформите заказ.",
- trust:"Цены и наличие проверяются при оформлении заказа",
- top:"Популярные товары ❯",
- allDeals:"Все акции",
- selected:"Избранное",
- local:"Местные магазины",
- discounts:"🔥 Скидки",
- catalog:"Товары VAYO",
- myCart:"Ваша корзина",
- total:"Итого:",
- checkout:"Оформить заказ",
- cartNote:"Итоговая цена и доставка рассчитываются сервером при оформлении.",
- home:"Главная",
- categories:"Категории",
- orders:"Заказы",
- cart:"Корзина",
- profile:"Профиль",
- footer:"Интернет-магазин Таджикистана",
- forSellers:"Для продавцов",
- myOrders:"Мои заказы",
- search:"Поиск товаров...",
- buy:"В корзину",
- out:"Нет в наличии",
- stock:"В наличии:",
- item:"товаров",
- notFound:"Товары не найдены.",
- loading:"Загрузка товаров...",
- error:"Не удалось загрузить товары. Проверьте Supabase и права чтения.",
- emptyCart:"Ваша корзина пуста.",
- added:"Товар добавлен в корзину!",
- noStock:"Товара нет в наличии.",
- tooMany:"Недостаточно товара на складе.",
- photoWorking:"Сравниваем фотографии...",
- photoFound:"Товары с похожими изображениями:",
- photoFail:"Не удалось сравнить фотографии.",
- photoNote:"Результат основан на цвете и общей структуре изображения.",
- photoClear:"Сбросить поиск по фото",
- photoWait:"Дождитесь загрузки товаров.",
- photoInvalid:"Выберите корректное изображение.",
- login:"Войти",
- account:"Мой аккаунт",
- seller:"Продавец",
- localUnavailable:"Данные местных магазинов пока не подключены.",
- unknownPrice:"Цена проверяется при оформлении"
-},
-en:{
- all:"All",
- clothes:"Clothing",
- shoes:"Shoes",
- electronics:"Electronics",
- house:"Home",
- beauty:"Beauty",
- promotions:"Deals",
- hero:"Discover the best deals!",
- heroText:"Great products at affordable prices",
- heroButton:"Explore deals ❯",
- delivery:"Delivery",
- deliveryText:"Terms and fees depend on the store.",
- easyOrder:"Easy ordering",
- easyText:"Choose products and place an order.",
- trust:"Prices and stock are verified at checkout",
- top:"Top products ❯",
- allDeals:"All deals",
- selected:"Featured",
- local:"Local shops",
- discounts:"🔥 Discounts",
- catalog:"VAYO products",
- myCart:"Your cart",
- total:"Total:",
- checkout:"Checkout",
- cartNote:"Final prices and delivery fees are calculated by the server at checkout.",
- home:"Home",
- categories:"Categories",
- orders:"Orders",
- cart:"Cart",
- profile:"Profile",
- footer:"Tajikistan online marketplace",
- forSellers:"For sellers",
- myOrders:"My orders",
- search:"Search products...",
- buy:"Add to cart",
- out:"Sold out",
- stock:"In stock:",
- item:"products",
- notFound:"No products found.",
- loading:"Loading products...",
- error:"Unable to load products. Check Supabase and read permissions.",
- emptyCart:"Your cart is empty.",
- added:"Product added to cart!",
- noStock:"This product is out of stock.",
- tooMany:"Not enough stock available.",
- photoWorking:"Comparing product photos...",
- photoFound:"Products with similar images:",
- photoFail:"Could not compare product photos.",
- photoNote:"Results are based on color and overall image structure.",
- photoClear:"Clear photo search",
- photoWait:"Wait for products to load.",
- photoInvalid:"Please select a valid image.",
- login:"Sign in",
- account:"My account",
- seller:"Seller",
- localUnavailable:"Local store information is not connected yet.",
- unknownPrice:"Price will be verified at checkout"
-}
+ tg:{
+  all:"Ҳама",
+  clothes:"Либос",
+  shoes:"Пойафзол",
+  electronics:"Электроника",
+  house:"Барои хона",
+  beauty:"Зебоӣ",
+  promotions:"Аксияҳо",
+  hero:"Пешниҳодҳои беҳтаринро пайдо кунед!",
+  heroText:"Маҳсулоти гуногун бо нархҳои дастрас",
+  heroButton:"Дидани аксияҳо ❯",
+  delivery:"Расонидан",
+  deliveryText:"Шарт ва нарх аз мағоза вобаста аст.",
+  easyOrder:"Фармоиши осон",
+  easyText:"Маҳсулотро интихоб карда фармоиш диҳед.",
+  trust:"Нархҳо ва захираи маҳсулот ҳангоми фармоиш санҷида мешаванд",
+  top:"Топ-маҳсулот ❯",
+  allDeals:"Ҳамаи аксияҳо",
+  selected:"Интихобшуда",
+  local:"Мағозаҳои маҳаллӣ",
+  discounts:"🔥 Тахфифҳо",
+  catalog:"Маҳсулоти VAYO",
+  myCart:"Сабади шумо",
+  total:"Ҳамагӣ:",
+  checkout:"Гузаштан ба фармоиш",
+  cartNote:"Нархи ниҳоӣ ва ҳаққи расонидан дар сервер ҳисоб карда мешаванд.",
+  home:"Асосӣ",
+  categories:"Категорияҳо",
+  orders:"Фармоишҳо",
+  cart:"Сабад",
+  profile:"Профил",
+  footer:"Бозори онлайни Тоҷикистон",
+  search:"Ҷустуҷӯи маҳсулот...",
+  buy:"Ба сабад",
+  out:"Тамом шудааст",
+  stock:"Дар анбор:",
+  item:"маҳсулот",
+  notFound:"Маҳсулот ёфт нашуд.",
+  loading:"Маҳсулот бор шуда истодааст...",
+  error:"Маҳсулот бор нашуд. Пайвасти Supabase-ро санҷед.",
+  emptyCart:"Сабади шумо холӣ аст.",
+  added:"Маҳсулот ба сабад илова шуд!",
+  noStock:"Ин маҳсулот дар анбор нест.",
+  tooMany:"Миқдори бештар дар анбор нест.",
+  photoWorking:"Аксҳои маҳсулот муқоиса мешаванд...",
+  photoFound:"Маҳсулоти аз рӯйи тасвир монанд:",
+  photoFail:"Муқоисаи аксҳо имконнопазир шуд.",
+  photoNote:"Натиҷа аз рӯйи ранг ва шакли умумии акс аст.",
+  photoClear:"Пок кардани ҷустуҷӯи акс",
+  photoWait:"Аввал маҳсулот бор шавад.",
+  photoInvalid:"Лутфан акси дуруст интихоб кунед.",
+  login:"Воридшавӣ",
+  account:"Ҳисоби ман",
+  seller:"Фурӯшанда",
+  localUnavailable:"Маълумоти мағозаҳои маҳаллӣ ҳоло пайваст нашудааст.",
+  unknownPrice:"Нарх ҳангоми фармоиш санҷида мешавад"
+ },
+ ru:{
+  all:"Все",
+  clothes:"Одежда",
+  shoes:"Обувь",
+  electronics:"Электроника",
+  house:"Для дома",
+  beauty:"Красота",
+  promotions:"Акции",
+  hero:"Найдите лучшие предложения!",
+  heroText:"Разные товары по доступным ценам",
+  heroButton:"Смотреть акции ❯",
+  delivery:"Доставка",
+  deliveryText:"Условия и стоимость зависят от магазина.",
+  easyOrder:"Простой заказ",
+  easyText:"Выберите товар и оформите заказ.",
+  trust:"Цены и наличие проверяются при оформлении заказа",
+  top:"Популярные товары ❯",
+  allDeals:"Все акции",
+  selected:"Избранное",
+  local:"Местные магазины",
+  discounts:"🔥 Скидки",
+  catalog:"Товары VAYO",
+  myCart:"Ваша корзина",
+  total:"Итого:",
+  checkout:"Оформить заказ",
+  cartNote:"Итоговая цена и доставка рассчитываются сервером.",
+  home:"Главная",
+  categories:"Категории",
+  orders:"Заказы",
+  cart:"Корзина",
+  profile:"Профиль",
+  footer:"Интернет-магазин Таджикистана",
+  search:"Поиск товаров...",
+  buy:"В корзину",
+  out:"Нет в наличии",
+  stock:"В наличии:",
+  item:"товаров",
+  notFound:"Товары не найдены.",
+  loading:"Загрузка товаров...",
+  error:"Не удалось загрузить товары. Проверьте Supabase.",
+  emptyCart:"Ваша корзина пуста.",
+  added:"Товар добавлен в корзину!",
+  noStock:"Товара нет в наличии.",
+  tooMany:"Недостаточно товара на складе.",
+  photoWorking:"Сравниваем фотографии...",
+  photoFound:"Товары с похожими изображениями:",
+  photoFail:"Не удалось сравнить фотографии.",
+  photoNote:"Результат основан на цвете и структуре изображения.",
+  photoClear:"Сбросить поиск по фото",
+  photoWait:"Дождитесь загрузки товаров.",
+  photoInvalid:"Выберите корректное изображение.",
+  login:"Войти",
+  account:"Мой аккаунт",
+  seller:"Продавец",
+  localUnavailable:"Данные местных магазинов пока не подключены.",
+  unknownPrice:"Цена проверяется при оформлении"
+ },
+ en:{
+  all:"All",
+  clothes:"Clothing",
+  shoes:"Shoes",
+  electronics:"Electronics",
+  house:"Home",
+  beauty:"Beauty",
+  promotions:"Deals",
+  hero:"Discover the best deals!",
+  heroText:"Great products at affordable prices",
+  heroButton:"Explore deals ❯",
+  delivery:"Delivery",
+  deliveryText:"Terms and fees depend on the store.",
+  easyOrder:"Easy ordering",
+  easyText:"Choose products and place an order.",
+  trust:"Prices and stock are verified at checkout",
+  top:"Top products ❯",
+  allDeals:"All deals",
+  selected:"Featured",
+  local:"Local shops",
+  discounts:"🔥 Discounts",
+  catalog:"VAYO products",
+  myCart:"Your cart",
+  total:"Total:",
+  checkout:"Checkout",
+  cartNote:"Final prices and delivery fees are calculated on the server.",
+  home:"Home",
+  categories:"Categories",
+  orders:"Orders",
+  cart:"Cart",
+  profile:"Profile",
+  footer:"Tajikistan online marketplace",
+  search:"Search products...",
+  buy:"Add to cart",
+  out:"Sold out",
+  stock:"In stock:",
+  item:"products",
+  notFound:"No products found.",
+  loading:"Loading products...",
+  error:"Unable to load products. Check Supabase.",
+  emptyCart:"Your cart is empty.",
+  added:"Product added to cart!",
+  noStock:"This product is out of stock.",
+  tooMany:"Not enough stock available.",
+  photoWorking:"Comparing product photos...",
+  photoFound:"Products with similar images:",
+  photoFail:"Could not compare product photos.",
+  photoNote:"Results are based on color and image structure.",
+  photoClear:"Clear photo search",
+  photoWait:"Wait for products to load.",
+  photoInvalid:"Please select a valid image.",
+  login:"Sign in",
+  account:"My account",
+  seller:"Seller",
+  localUnavailable:"Local store information is not connected yet.",
+  unknownPrice:"Price will be verified at checkout"
+ }
 };
 
 function t(key){
@@ -1008,6 +1124,134 @@ function t(key){
  translations.tg[key]||key;
 }
 
+/* SUPER APP SERVICES */
+const services=[
+ {
+  id:"market",
+  icon:"🛍️",
+  name:{tg:"Бозор",ru:"Маркет",en:"Market"},
+  desc:{
+   tg:"Харид ва фурӯши маҳсулот",
+   ru:"Покупка и продажа товаров",
+   en:"Buy and sell products"
+  },
+  ready:true
+ },
+ {
+  id:"food",
+  icon:"🍔",
+  name:{
+   tg:"Расонидани хӯрок",
+   ru:"Доставка еды",
+   en:"Food Delivery"
+  },
+  desc:{
+   tg:"Тарабхонаҳо ва хӯрок",
+   ru:"Рестораны и еда",
+   en:"Restaurants and food"
+  },
+  ready:false
+ },
+ {
+  id:"taxi",
+  icon:"🚕",
+  name:{tg:"Таксӣ",ru:"Такси",en:"Taxi"},
+  desc:{
+   tg:"Сафар дар шаҳр",
+   ru:"Поездки по городу",
+   en:"City rides"
+  },
+  ready:false
+ },
+ {
+  id:"courier",
+  icon:"📦",
+  name:{tg:"Курьер",ru:"Курьер",en:"Courier"},
+  desc:{
+   tg:"Расонидани бастаҳо",
+   ru:"Доставка посылок",
+   en:"Parcel delivery"
+  },
+  ready:false
+ },
+ {
+  id:"rental",
+  icon:"🏠",
+  name:{tg:"Иҷора",ru:"Аренда",en:"Rental"},
+  desc:{
+   tg:"Хона, мошин ва таҷҳизот",
+   ru:"Жильё, авто и оборудование",
+   en:"Homes, cars and equipment"
+  },
+  ready:false
+ },
+ {
+  id:"language_ai",
+  icon:"📚",
+  name:{
+   tg:"Забономӯзии AI",
+   ru:"Изучение языков",
+   en:"AI Languages"
+  },
+  desc:{
+   tg:"Тоҷикӣ ва олмонӣ",
+   ru:"Таджикский и немецкий",
+   en:"Tajik and German"
+  },
+  ready:false
+ }
+];
+
+function renderServices(){
+ const root=$("superGrid");
+ root.replaceChildren();
+
+ for(const service of services){
+  const card=document.createElement("article");
+  card.className="super-card";
+
+  const icon=document.createElement("div");
+  icon.className="super-icon";
+  icon.textContent=service.icon;
+
+  const name=document.createElement("h3");
+  name.textContent=service.name[lang];
+
+  const desc=document.createElement("p");
+  desc.textContent=service.desc[lang];
+
+  const status=document.createElement("span");
+  status.className="super-status";
+
+  if(service.ready){
+   status.classList.add("ready");
+   status.textContent={
+    tg:"Фаъол",
+    ru:"Активно",
+    en:"Active"
+   }[lang];
+  }else{
+   status.textContent={
+    tg:"Дар ҳоли омодасозӣ",
+    ru:"В разработке",
+    en:"Coming soon"
+   }[lang];
+  }
+
+  card.append(icon,name,desc,status);
+  root.append(card);
+ }
+
+ const notes={
+  tg:"Комиссияи харидорон 0% аст. Фурӯшандагон ва хизматрасонҳо аз амалиёти анҷомёфта 2% комиссия месупоранд. Муҳлати пардохт 12 соат аст. Хизматрасониҳои нав ҳоло фармоиши воқеӣ қабул намекунанд.",
+  ru:"Комиссия покупателей — 0%. Продавцы и исполнители платят 2% с завершённых операций. Срок оплаты — 12 часов. Новые сервисы пока не принимают заказы.",
+  en:"Buyer platform commission is 0%. Sellers and providers pay 2% on completed transactions, due within 12 hours. New services are not accepting orders yet."
+ };
+
+ $("superNote").textContent=notes[lang];
+}
+
+/* LANGUAGE */
 function applyLanguage(){
  document.documentElement.lang=lang;
  document.title="VAYO — "+t("catalog");
@@ -1019,9 +1263,7 @@ function applyLanguage(){
 
  document.querySelectorAll("[data-lang]")
  .forEach(el=>{
-  el.classList.toggle(
-   "active",el.dataset.lang===lang
-  );
+  el.classList.toggle("active",el.dataset.lang===lang);
  });
 
  $("search").placeholder=t("search");
@@ -1032,22 +1274,23 @@ function applyLanguage(){
  $("ordersLink").textContent="📦 "+t("orders");
  $("sellerLink").textContent="🏪 "+t("seller");
 
+ renderServices();
  render();
  renderCart();
+
  if(photoRanks)updatePhotoStatus();
 }
 
 document.querySelectorAll("[data-lang]")
 .forEach(button=>{
- button.addEventListener("click",()=>{
+ button.onclick=()=>{
   lang=button.dataset.lang;
   localStorage.setItem(LANG_KEY,lang);
   applyLanguage();
- });
+ };
 });
 
 /* HELPERS */
-
 function money(value){
  return (Number(value)||0).toFixed(2)+" TJS";
 }
@@ -1092,6 +1335,7 @@ function normalizeCart(raw){
 
   if(!/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(id))
    continue;
+
   if(!Number.isInteger(quantity)||quantity<=0)
    continue;
 
@@ -1133,7 +1377,9 @@ function getRegular(p){
 function getDiscount(p){
  const current=getPrice(p);
  const regular=getRegular(p);
+
  if(regular<=current||regular<=0)return 0;
+
  return Math.max(0,Math.min(
   99,Math.round((1-current/regular)*100)
  ));
@@ -1155,8 +1401,7 @@ function featuredProducts(){
   .slice(0,2);
 }
 
-/* SEARCH DICTIONARY */
-
+/* SEARCH */
 const synonyms=[
  ["кроссовка","красовка","крассовка","кеды",
   "sneakers","shoes","обувь","пойафзол"],
@@ -1217,8 +1462,7 @@ function matchesSearch(product,query){
  return terms.some(term=>text.includes(term));
 }
 
-/* FILTER */
-
+/* FILTERS */
 function getFilteredProducts(){
  const query=$("search").value.trim();
 
@@ -1251,6 +1495,7 @@ function getFilteredProducts(){
   result=result.filter(p=>
    photoRanks.has(String(p.id))
   );
+
   result.sort((a,b)=>
    photoRanks.get(String(a.id))-
    photoRanks.get(String(b.id))
@@ -1261,7 +1506,6 @@ function getFilteredProducts(){
 }
 
 /* PRODUCT CARD */
-
 function createProductCard(p){
  const card=document.createElement("article");
  card.className="product-card";
@@ -1291,6 +1535,7 @@ function createProductCard(p){
  }
 
  const discount=getDiscount(p);
+
  if(discount>0){
   const badge=document.createElement("span");
   badge.className="sale-badge";
@@ -1331,7 +1576,7 @@ function createProductCard(p){
  buy.textContent=getStock(p)>0
   ?"🛒 "+t("buy"):t("out");
 
- buy.addEventListener("click",()=>addCart(p));
+ buy.onclick=()=>addCart(p);
 
  info.append(meta,buy);
  card.append(photo,info);
@@ -1339,6 +1584,12 @@ function createProductCard(p){
 }
 
 /* RENDER */
+function emptyNode(message){
+ const div=document.createElement("div");
+ div.className="empty";
+ div.textContent=message;
+ return div;
+}
 
 function renderFeatured(){
  const root=$("featuredProducts");
@@ -1359,13 +1610,6 @@ function renderFeatured(){
  items.forEach(p=>root.append(createProductCard(p)));
 }
 
-function emptyNode(message){
- const div=document.createElement("div");
- div.className="empty";
- div.textContent=message;
- return div;
-}
-
 function renderProducts(){
  const root=$("products");
  root.replaceChildren();
@@ -1381,6 +1625,7 @@ function renderProducts(){
  }
 
  const filtered=getFilteredProducts();
+
  $("resultCount").textContent=
   filtered.length+" "+t("item");
 
@@ -1408,7 +1653,6 @@ function render(){
 }
 
 /* CART */
-
 function addCart(p){
  const id=String(p.id);
  const stock=getStock(p);
@@ -1449,6 +1693,7 @@ function changeQuantity(id,change){
  const item=cart.find(
   x=>String(x.product_id)===String(id)
  );
+
  if(!item)return;
 
  const p=products.find(
@@ -1527,18 +1772,14 @@ function renderCart(){
 
   const minus=document.createElement("button");
   minus.textContent="−";
-  minus.onclick=()=>changeQuantity(
-   item.product_id,-1
-  );
+  minus.onclick=()=>changeQuantity(item.product_id,-1);
 
   const qty=document.createElement("span");
   qty.textContent=quantity;
 
   const plus=document.createElement("button");
   plus.textContent="+";
-  plus.onclick=()=>changeQuantity(
-   item.product_id,1
-  );
+  plus.onclick=()=>changeQuantity(item.product_id,1);
 
   controls.append(minus,qty,plus);
   detail.append(name,priceEl,controls);
@@ -1546,9 +1787,7 @@ function renderCart(){
   const remove=document.createElement("button");
   remove.className="remove";
   remove.textContent="✕";
-  remove.onclick=()=>removeFromCart(
-   item.product_id
-  );
+  remove.onclick=()=>removeFromCart(item.product_id);
 
   row.append(detail,remove);
   root.append(row);
@@ -1568,7 +1807,6 @@ function toggleCart(open){
 }
 
 /* PHOTO SEARCH */
-
 function imageFromFile(file){
  return new Promise((resolve,reject)=>{
   const url=URL.createObjectURL(file);
@@ -1578,10 +1816,12 @@ function imageFromFile(file){
    URL.revokeObjectURL(url);
    resolve(img);
   };
+
   img.onerror=()=>{
    URL.revokeObjectURL(url);
    reject(new Error("Image load error"));
   };
+
   img.src=url;
  });
 }
@@ -1611,10 +1851,7 @@ function imageFeatures(img){
 
  ctx.drawImage(img,0,0,12,12);
 
- const data=ctx.getImageData(
-  0,0,12,12
- ).data;
-
+ const data=ctx.getImageData(0,0,12,12).data;
  const features=[];
 
  for(let gy=0;gy<4;gy++){
@@ -1701,10 +1938,7 @@ async function searchByPhoto(file){
   const chosen=await imageFromFile(file);
   const target=imageFeatures(chosen);
 
-  const candidates=products.filter(
-   p=>getImage(p)
-  );
-
+  const candidates=products.filter(p=>getImage(p));
   const scores=[];
 
   for(let i=0;i<candidates.length;i+=6){
@@ -1746,21 +1980,17 @@ async function searchByPhoto(file){
   activeTab="all";
   $("search").value="";
 
-  document.querySelectorAll(
-   ".cat[data-category]"
-  ).forEach(el=>{
+  document.querySelectorAll(".cat[data-category]")
+  .forEach(el=>{
    el.classList.toggle(
-    "active",
-    el.dataset.category==="all"
+    "active",el.dataset.category==="all"
    );
   });
 
-  document.querySelectorAll(
-   ".tab[data-tab]"
-  ).forEach(el=>{
+  document.querySelectorAll(".tab[data-tab]")
+  .forEach(el=>{
    el.classList.toggle(
-    "active",
-    el.dataset.tab==="all"
+    "active",el.dataset.tab==="all"
    );
   });
 
@@ -1771,6 +2001,7 @@ async function searchByPhoto(file){
   );
 
   renderProducts();
+
   $("catalog").scrollIntoView({
    behavior:"smooth"
   });
@@ -1782,7 +2013,6 @@ async function searchByPhoto(file){
 }
 
 /* EVENTS */
-
 $("cartBtn").onclick=()=>toggleCart(true);
 $("mobileCart").onclick=()=>toggleCart(true);
 $("closeCart").onclick=()=>toggleCart(false);
@@ -1829,18 +2059,10 @@ document.querySelectorAll(".cat[data-category]")
 .forEach(button=>{
  button.onclick=()=>{
   category=button.dataset.category;
-  activeTab="all";
 
   document.querySelectorAll(".cat[data-category]")
   .forEach(el=>{
    el.classList.toggle("active",el===button);
-  });
-
-  document.querySelectorAll(".tab[data-tab]")
-  .forEach(el=>{
-   el.classList.toggle(
-    "active",el.dataset.tab==="all"
-   );
   });
 
   renderProducts();
@@ -1872,7 +2094,6 @@ $("mobileCategories").onclick=()=>{
 };
 
 /* SUPABASE PRODUCTS */
-
 async function loadProducts(){
  loading=true;
  loadError=false;
@@ -1889,8 +2110,6 @@ async function loadProducts(){
   const all=[];
   const pageSize=500;
 
-  // Read all pages instead of limiting search
-  // to only the first 100 products.
   for(let offset=0;offset<10000;offset+=pageSize){
    const {data,error}=await db
     .from("vayo_public_deals")
@@ -1919,16 +2138,15 @@ async function loadProducts(){
 }
 
 /* ACCOUNT */
-
 async function loadAccount(){
  if(!db)return;
 
  try{
   const {data,error}=await db.auth.getUser();
-
   if(error)return;
 
   signedIn=Boolean(data?.user);
+
   $("accountLink").textContent=
    "👤 "+t(signedIn?"account":"login");
 
@@ -1938,13 +2156,11 @@ async function loadAccount(){
 }
 
 /* START */
-
 saveCart();
 applyLanguage();
 loadProducts();
 loadAccount();
 
 </script>
-
 </body>
 </html>
