@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAYO Cooking — Омӯзиши пухтупаз</title>
+<style>
+:root{--orange:#f43a10;--bg:#fff8f3;--ink:#232323}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(110deg,#e92c0b,#ff7900);color:white;padding:18px 14px}
+header .wrap{max-width:1100px;margin:auto}
+header a{color:white;text-decoration:none;font-weight:bold}
+header h1{margin:16px 0 8px;font-size:30px}
+header p{margin:0 0 10px}
+main{max-width:1100px;margin:auto;padding:20px 12px}
+.search{width:100%;padding:15px;border:1px solid #ddd;border-radius:12px;font-size:16px}
+.categories{display:flex;gap:8px;overflow-x:auto;padding:15px 0}
+.categories button{border:1px solid #ffd0bb;background:white;border-radius:30px;padding:11px 16px;white-space:nowrap;cursor:pointer}
+.categories button.active{background:var(--orange);color:white}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:white;border-radius:16px;overflow:hidden;box-shadow:0 3px 14px #0001}
+.picture{height:145px;background:#fff0df;display:grid;place-items:center;font-size:65px}
+.info{padding:15px}
+.info h3{margin:0 0 10px}
+.meta{font-size:13px;color:#777}
+button.open{width:100%;border:0;border-radius:9px;background:var(--orange);color:white;padding:12px;margin-top:14px;font-weight:bold;cursor:pointer}
+.panel{background:white;border-radius:16px;padding:22px;margin-top:18px}
+.panel h2{margin-top:0}
+.panel li{line-height:1.8;margin-bottom:5px}
+.back{background:#222;color:white;border:0;border-radius:9px;padding:12px 18px;cursor:pointer}
+.note{background:#fff1df;padding:13px;border-radius:10px;line-height:1.7}
+footer{text-align:center;padding:25px;color:#888}
+@media(max-width:700px){.grid{grid-template-columns:repeat(2,1fr)}.picture{height:115px;font-size:48px}}
+@media(max-width:380px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+ <div class="wrap">
+  <a href="../index.html">← VAYO — Асосӣ</a>
+  <h1>👨‍🍳 VAYO Cooking</h1>
+  <p>Таомҳои миллӣ, питса, торт, шириниҳо ва омӯзиши пухтупаз</p>
+ </div>
+</header>
+
+<main>
+ <section id="catalog">
+  <h2>🍽️ Дастурҳои пухтупаз</h2>
+  <p>Таомро интихоб кун ва тарзи тайёр карданашро омӯз.</p>
+  <input id="search" class="search" placeholder="Ҷустуҷӯ: палав, торт, питса..." oninput="render()">
+  <div class="categories" id="categories"></div>
+  <p id="count"></p>
+  <div class="grid" id="grid"></div>
+ </section>
+ <section id="details" class="panel" hidden></section>
+</main>
+
+<footer>© 2026 VAYO Cooking</footer>
+
+<script>
+"use strict";
+
+const recipes=[
+{
+ name:"Оши палав",cat:"Миллӣ",icon:"🍚",time:90,servings:6,
+ ingredients:["Биринҷ — 1 кг","Гӯшти гов ё гӯсфанд — 700 г","Сабзӣ — 1 кг","Пиёз — 3 дона","Равған — 200 мл","Зира — 1 қошуқча","Намак — мувофиқи табъ","Об — ба қадри зарурӣ"],
+ steps:["Биринҷро чанд бор шуста, 30 дақиқа тар кун.","Гӯштро пора ва сабзиро дарозрӯя реза кун.","Равғанро дар дег гарм карда пиёзро бирён кун.","Гӯштро илова карда то сурх шудан бирён намо.","Сабзӣ, намак ва зираро илова кун.","Об рехта 35–45 дақиқа паз.","Биринҷро рӯйи маҳсулот ҳамвор гузор ва оби гарм илова кун.","Вақте об ҷаббида шуд, биринҷро ҷамъ карда бо сарпӯш 20–25 дақиқа дам деҳ."]
+},
+{
+ name:"Қурутоб",cat:"Миллӣ",icon:"🥣",time:35,servings:4,
+ ingredients:["Фатир — 2 дона","Қурут — 150 г","Об — 500 мл","Пиёз — 2 дона","Равған — 80 мл","Помидор — 2 дона","Бодиринг — 2 дона","Кабудӣ — 1 даста"],
+ steps:["Қурутро дар оби гарм ҳал кун.","Фатирро пора карда ба табақи калон андоз.","Оби қурутро гарм карда ба рӯйи фатир рез.","Пиёзро ҳалқа карда дар равған бирён кун.","Пиёзи гармро бо равғанаш илова намо.","Помидор, бодиринг ва кабудиро реза карда рӯйи қурутоб гузор."]
+},
+{
+ name:"Манту",cat:"Миллӣ",icon:"🥟",time:85,servings:5,
+ ingredients:["Орд — 600 г","Об — 280 мл","Тухм — 1 дона","Гӯшт — 600 г","Пиёз — 500 г","Равған — 60 г","Намак ва мурч"],
+ steps:["Аз орд, об, тухм ва намак хамир тайёр кун.","Хамирро 25 дақиқа дам деҳ.","Гӯшт ва пиёзро майда реза карда бо ҳанут омехта кун.","Хамирро тунук карда ба чоркунҷаҳо бур.","Ба ҳар пора қима гузошта канорҳоро маҳкам кун.","Мантуҳоро ба табақҳои равғанмолидаи мантуқасқон гузор.","Дар буғи ҷӯшон тақрибан 40–45 дақиқа паз."]
+},
+{
+ name:"Самбӯсаи танӯрӣ",cat:"Миллӣ",icon:"🥐",time:65,servings:6,
+ ingredients:["Орд — 500 г","Об — 250 мл","Гӯшт — 400 г","Пиёз — 350 г","Равған — 80 г","Намак, зира, мурч","Зардии тухм — 1 дона"],
+ steps:["Аз орд, об ва намак хамир тайёр кун.","Гӯшт, пиёз ва ҳанутро омехта кун.","Хамирро тунук карда ба қисмҳо тақсим намо.","Ба ҳар қисм қима гузошта секунҷа соз.","Рӯйи самбӯса зардии тухм мол.","Дар танӯри пешакӣ гармшудаи 200°C тақрибан 25–35 дақиқа то пухтани пурра паз."]
+},
+{
+ name:"Шӯрбои гӯштӣ",cat:"Миллӣ",icon:"🍲",time:100,servings:5,
+ ingredients:["Гӯшт — 600 г","Картошка — 5 дона","Сабзӣ — 2 дона","Пиёз — 2 дона","Помидор — 2 дона","Об — 2.5 л","Намак, мурч, кабудӣ"],
+ steps:["Гӯштро шуста ба деги обдор андоз.","Кафки рӯйи обро гирифта, гӯштро то нарм шудан паз.","Пиёз ва сабзиро илова кун.","Картошка ва помидори резашударо илова намо.","То пухтани сабзавот 20–30 дақиқа ҷӯшон.","Намак, мурч ва кабудӣ илова карда пешкаш кун."]
+},
+{
+ name:"Питсаи Маргарита",cat:"Питса",icon:"🍕",time:70,servings:4,
+ ingredients:["Орд — 400 г","Об — 240 мл","Хамиртуруш — 5 г","Равғани зайтун — 2 қошуқ","Намак — 1 қошуқча","Помидор ё соуси помидор — 200 г","Моцарелла — 200 г","Райҳон"],
+ steps:["Орд, об, хамиртуруш, намак ва равғанро омехта карда хамир соз.","Хамирро 40–60 дақиқа дар ҷои гарм нигоҳ дор.","Танӯрро то 230°C гарм кун.","Хамирро паҳн карда соуси помидор мол.","Панир ва райҳон илова кун.","12–18 дақиқа то пухтани хамир ва об шудани панир паз."]
+},
+{
+ name:"Питсаи мурғӣ",cat:"Питса",icon:"🍕",time:75,servings:4,
+ ingredients:["Хамири питса — 500 г","Гӯшти мурғи пухта — 250 г","Соуси помидор — 150 г","Панир — 200 г","Қаламфури булғорӣ — 1 дона","Пиёз — 1 дона"],
+ steps:["Танӯрро то 220°C гарм кун.","Хамирро ба шакли доира паҳн намо.","Соусро ба рӯйи хамир мол.","Мурғи пешакӣ пухта, пиёз ва қаламфурро гузор.","Панир пош.","15–20 дақиқа то пухтани хамир паз."]
+},
+{
+ name:"Торти шоколадӣ",cat:"Торт",icon:"🎂",time:90,servings:8,
+ ingredients:["Орд — 250 г","Шакар — 200 г","Тухм — 3 дона","Шир — 200 мл","Равған — 100 мл","Какао — 50 г","Разрыхлитель — 10 г","Қаймоқ — 300 мл","Шоколад — 150 г"],
+ steps:["Танӯрро то 175°C гарм кун.","Тухм ва шакарро хуб лат зан.","Шир ва равғанро илова кун.","Орд, какао ва разрыхлителро омехта карда ба хамир илова намо.","Ба қолаб рехта 30–40 дақиқа паз; бо чӯбча санҷ.","Бисквитро пурра хунук кун.","Қаймоқ ва шоколади гудохташудаи хунукшударо барои крем омехта кун.","Бисквитро қабат карда бо крем оро деҳ ва дар яхдон нигоҳ дор."]
+},
+{
+ name:"Торти Наполеон",cat:"Торт",icon:"🍰",time:150,servings:10,
+ ingredients:["Хамири қабатӣ — 1 кг","Шир — 1 л","Шакар — 220 г","Тухм — 3 дона","Орд — 80 г","Равғани маска — 150 г","Ванилин"],
+ steps:["Хамири қабатиро ба варақаҳои тунук ҷудо кун.","Ҳар қабатро дар 200°C то тиллоӣ шудан паз.","Ширро гарм кун.","Тухм, шакар ва ордро омехта карда ба шир тадриҷан илова намо.","Бо омехтакунии доимӣ то ғафс шудан гарм кун.","Кремро хунук карда равғани маска илова намо.","Қабатҳои пухтаро бо крем ҷамъ кун.","Рӯйи тортро бо резаҳои хамир оро дода чанд соат дар яхдон нигоҳ дор."]
+},
+{
+ name:"Печеньеи хонагӣ",cat:"Ширинӣ",icon:"🍪",time:40,servings:6,
+ ingredients:["Орд — 300 г","Равғани маска — 150 г","Шакар — 120 г","Тухм — 1 дона","Разрыхлитель — 5 г","Ванилин"],
+ steps:["Танӯрро то 180°C гарм кун.","Равған ва шакарро омехта кун.","Тухм ва ванилин илова намо.","Орд ва разрыхлителро илова карда хамир соз.","Аз хамир кулчаҳои хурд тайёр кун.","Дар табақи танӯр 12–18 дақиқа то тиллоӣ шудан паз."]
+},
+{
+ name:"Бургер",cat:"Фастфуд",icon:"🍔",time:35,servings:4,
+ ingredients:["Нони бургер — 4 дона","Қимаи гов — 500 г","Панир — 4 бурида","Помидор — 2 дона","Салат — 4 барг","Пиёз — 1 дона","Соус — 4 қошуқ","Намак ва мурч"],
+ steps:["Қимаро бо намак ва мурч омехта кун.","Аз қима чор котлет соз.","Котлетҳоро дар тоба аз ҳар тараф то пурра пухтан бирён кун.","Панирро рӯйи котлети гарм гузор.","Нонҳоро каме гарм кун.","Бо салат, помидор, пиёз, котлет ва соус бургерро ҷамъ кун."]
+},
+{
+ name:"Шаурмаи мурғӣ",cat:"Фастфуд",icon:"🌯",time:45,servings:4,
+ ingredients:["Лаваш — 4 дона","Филеи мурғ — 500 г","Карам — 200 г","Бодиринг — 2 дона","Помидор — 2 дона","Йогурти табиӣ — 150 г","Сирпиёз — 2 дона","Намак ва ҳанут"],
+ steps:["Мурғро ба пораҳои хурд бурида бо ҳанут пурра паз.","Карам, бодиринг ва помидорро реза кун.","Йогуртро бо сирпиёзи кӯфта омехта намо.","Ба лаваш соус мол.","Мурғ ва сабзавотро гузошта печон.","Шаурмаро дар тобаи хушк аз ду тараф каме гарм кун."]
+}
+];
+
+let selected="Ҳама";
+const cats=["Ҳама","Миллӣ","Питса","Торт","Ширинӣ","Фастфуд"];
+
+function render(){
+ const categoryRoot=document.getElementById("categories");
+ categoryRoot.replaceChildren();
+
+ cats.forEach(cat=>{
+  const b=document.createElement("button");
+  b.textContent=cat;
+  b.className=selected===cat?"active":"";
+  b.onclick=()=>{
+   selected=cat;
+   render();
+  };
+  categoryRoot.append(b);
+ });
+
+ const q=document.getElementById("search").value.trim().toLowerCase();
+ const found=recipes.map((r,i)=>({...r,index:i}))
+  .filter(r=>(selected==="Ҳама"||r.cat===selected)&&
+   (r.name.toLowerCase().includes(q)||r.cat.toLowerCase().includes(q)));
+
+ document.getElementById("count").textContent=
+  "Дастурҳои дастрас: "+found.length+" аз "+recipes.length;
+
+ const grid=document.getElementById("grid");
+ grid.replaceChildren();
+
+ if(!found.length){
+  const p=document.createElement("p");
+  p.textContent="Дастур ёфт нашуд.";
+  grid.append(p);
+ }
+
+ found.forEach(r=>{
+  const card=document.createElement("article");
+  card.className="card";
+
+  const picture=document.createElement("div");
+  picture.className="picture";
+  picture.textContent=r.icon;
+
+  const info=document.createElement("div");
+  info.className="info";
+
+  const title=document.createElement("h3");
+  title.textContent=r.name;
+
+  const meta=document.createElement("div");
+  meta.className="meta";
+  meta.textContent="⏱ "+r.time+" дақиқа · 👥 "+r.servings+" порсия";
+
+  const btn=document.createElement("button");
+  btn.className="open";
+  btn.textContent="Дидани дастур";
+  btn.onclick=()=>openRecipe(r.index);
+
+  info.append(title,meta,btn);
+  card.append(picture,info);
+  grid.append(card);
+ });
+}
+
+function addList(parent,items,ordered=false){
+ const list=document.createElement(ordered?"ol":"ul");
+ items.forEach(item=>{
+  const li=document.createElement("li");
+  li.textContent=item;
+  list.append(li);
+ });
+ parent.append(list);
+}
+
+function openRecipe(index){
+ const r=recipes[index];
+ if(!r)return;
+
+ document.getElementById("catalog").hidden=true;
+ const panel=document.getElementById("details");
+ panel.hidden=false;
+ panel.replaceChildren();
+
+ const back=document.createElement("button");
+ back.className="back";
+ back.textContent="← Бозгашт";
+ back.onclick=()=>{
+  panel.hidden=true;
+  document.getElementById("catalog").hidden=false;
+  window.scrollTo(0,0);
+ };
+
+ const title=document.createElement("h2");
+ title.textContent=r.icon+" "+r.name;
+
+ const meta=document.createElement("p");
+ meta.textContent="⏱ "+r.time+" дақиқа · 👥 "+r.servings+" порсия";
+
+ const ingredientsTitle=document.createElement("h3");
+ ingredientsTitle.textContent="🛒 Маҳсулоти зарурӣ";
+
+ const stepsTitle=document.createElement("h3");
+ stepsTitle.textContent="👨‍🍳 Тарзи тайёр кардан";
+
+ const note=document.createElement("p");
+ note.className="note";
+ note.textContent="Миқдор ва вақти пухтан тахминӣ мебошанд. Ҳангоми пухтани гӯшт ва мурғ ба пухтани пурраи онҳо диққат деҳ.";
+
+ panel.append(back,title,meta,ingredientsTitle);
+ addList(panel,r.ingredients);
+ panel.append(stepsTitle);
+ addList(panel,r.steps,true);
+ panel.append(note);
+
+ window.scrollTo(0,0);
+}
+
+render();
+</script>
+</body>
+</html>
