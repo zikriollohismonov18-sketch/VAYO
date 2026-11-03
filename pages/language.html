@@ -4,12 +4,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ff6500">
 <title>VAYO AI Teacher — Забономӯзӣ</title>
 <style>
-:root{--orange:#ff6500;--bg:#f5f6fa;--ink:#1c2535;--muted:#687386;--line:#e5e7ef}
+:root{
+ --orange:#ff6500;--bg:#f5f6fa;--ink:#1c2535;
+ --muted:#687386;--line:#e5e7ef;--green:#148a49
+}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,sans-serif}
-header{background:linear-gradient(120deg,#ff6500,#ff983a);color:white;padding:24px 16px}
+header{background:linear-gradient(120deg,#ff6500,#ff983a);color:white;padding:25px 16px}
 .wrap{max-width:1000px;margin:auto}
 h1{margin:0 0 8px;font-size:28px}
 header p{margin:0;line-height:1.6}
@@ -18,26 +22,26 @@ nav a{color:var(--orange);text-decoration:none;font-weight:bold}
 main{padding:20px 14px 60px}
 .card{background:white;border:1px solid var(--line);border-radius:17px;padding:18px;margin-bottom:16px}
 h2{margin:0 0 13px;font-size:21px}
-h3{margin:10px 0}
+h3{margin:20px 0 10px}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
-button,select,input{font:inherit}
+button,input{font:inherit}
 button{cursor:pointer;border:0;border-radius:11px;padding:12px 15px;font-weight:bold}
+button:focus-visible,input:focus-visible{outline:3px solid #ffb276}
 .primary{background:var(--orange);color:white}
 .secondary{background:#eef1f6;color:var(--ink)}
 .language{background:white;border:2px solid var(--line);text-align:left;padding:17px}
 .language.active{border-color:var(--orange);background:#fff4ec}
-.language .flag{font-size:28px;display:block;margin-bottom:8px}
+.flag{font-size:28px;display:block;margin-bottom:8px}
 .language small{display:block;color:var(--muted);margin-top:5px}
 .lesson{width:100%;text-align:left;background:#f8f9fc;border:1px solid var(--line);margin:5px 0}
 .lesson.active{border-color:var(--orange);background:#fff2e8}
 .lesson small{display:block;color:var(--muted);margin-top:4px}
 .row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
-.row>*{max-width:100%}
 table{border-collapse:collapse;width:100%;margin:12px 0}
 th,td{border-bottom:1px solid var(--line);padding:11px 7px;text-align:left}
 th{background:#fff4ec}
-.example{padding:13px;background:#f4f7ff;border-radius:12px;margin:9px 0;line-height:1.6}
-.teacher{padding:16px;background:#fff5ed;border-left:4px solid var(--orange);border-radius:10px;line-height:1.8}
+.example{padding:13px;background:#f4f7ff;border-radius:12px;margin:9px 0;line-height:1.7}
+.teacher{padding:16px;background:#fff5ed;border-left:4px solid var(--orange);border-radius:10px;line-height:1.9;white-space:pre-line}
 .muted{color:var(--muted)}
 .hidden{display:none}
 .answer{display:block;width:100%;margin:8px 0;padding:13px;border:1px solid var(--line);background:#fafbfe;text-align:left}
@@ -48,19 +52,27 @@ th{background:#fff4ec}
 .progress{height:12px;background:#e9edf3;border-radius:30px;overflow:hidden}
 .progress>div{height:100%;background:#20b568;width:0;transition:width .3s}
 input{padding:12px;border:1px solid var(--line);border-radius:10px;flex:1;min-width:150px}
-@media(max-width:550px){h1{font-size:23px}.card{padding:14px}th,td{font-size:14px}}
+.pill{display:inline-block;padding:5px 10px;background:#fff0e4;color:#b34b00;border-radius:30px;font-size:12px;font-weight:bold}
+.note{background:#fff8db;padding:12px;border-radius:10px;line-height:1.7}
+@media(max-width:550px){
+ h1{font-size:23px}.card{padding:14px}
+ th,td{font-size:14px}
+}
 </style>
 </head>
 <body>
 <header>
  <div class="wrap">
   <h1>📚 VAYO AI Teacher</h1>
-  <p>Муаллими забонҳо — бо дарс, мисол, овоз ва машқҳо</p>
+  <p>Омӯзиши панҷ забон бо шарҳи тоҷикӣ, мисол, овоз ва машқ</p>
  </div>
 </header>
-<nav><div class="wrap"><a href="../index.html">← Бозгашт ба VAYO</a></div></nav>
-<main class="wrap">
 
+<nav><div class="wrap">
+ <a href="../index.html">← Бозгашт ба VAYO</a>
+</div></nav>
+
+<main class="wrap">
 <section class="card">
  <h2>🌍 Забонро интихоб кунед</h2>
  <div id="languages" class="grid"></div>
@@ -74,26 +86,38 @@ input{padding:12px;border:1px solid var(--line);border-radius:10px;flex:1;min-wi
 </section>
 
 <section id="classroom" class="card hidden">
- <h2 id="lessonTitle"></h2>
+ <span class="pill">Муаллими VAYO</span>
+ <h2 id="lessonTitle" style="margin-top:12px"></h2>
+
+ <h3>👩‍🏫 Шарҳи пурраи дарс</h3>
  <div class="teacher" id="teacherText"></div>
+
  <div class="row" style="margin-top:12px">
   <button class="primary" onclick="speakExplanation()">🔊 Фаҳмондани дарс</button>
   <button class="secondary" onclick="stopSpeech()">■ Қатъ</button>
  </div>
 
- <h3>📖 Калимаҳои дарс</h3>
+ <h3>📖 Калимаҳо ва ибораҳо</h3>
  <div style="overflow-x:auto">
   <table>
-   <thead><tr><th>Забони хориҷӣ</th><th>Тоҷикӣ</th><th>Овоз</th></tr></thead>
+   <thead>
+    <tr><th>Забони хориҷӣ</th><th>Тоҷикӣ</th><th>Овоз</th></tr>
+   </thead>
    <tbody id="words"></tbody>
   </table>
  </div>
 
- <h3>💬 Мисолҳои мавзӯъ</h3>
+ <h3>💬 Мисолҳои ҳамин дарс</h3>
  <div id="examples"></div>
 
+ <h3>🎯 Машқи муаллим</h3>
+ <div class="note" id="practiceText"></div>
+
  <h3>🎤 Аз муаллим пурсед</h3>
- <p class="muted">Саволро бо тоҷикӣ нависед ё тавассути микрофон гӯед. Ҳоло ҷавобҳо аз шарҳҳои омодашудаи дарс гирифта мешаванд.</p>
+ <p class="muted">
+ Саволро нависед ё бо микрофон гӯед.
+ Дар ин версия муаллим аз маълумоти ҳамин дарс ҷавоб медиҳад.
+ </p>
  <div class="row">
   <input id="question" placeholder="Масалан: Ин калима чӣ маъно дорад?">
   <button class="primary" onclick="askTeacher()">Пурсидан</button>
@@ -104,10 +128,8 @@ input{padding:12px;border:1px solid var(--line);border-radius:10px;flex:1;min-wi
 
  <h3>📝 Санҷиши дарс</h3>
  <div id="quiz"></div>
- <p id="feedback"></p>
- <div class="row">
-  <button class="primary" onclick="nextLesson()">Дарси навбатӣ →</button>
- </div>
+ <p id="feedback" aria-live="polite"></p>
+ <button class="primary" onclick="nextLesson()">Дарси навбатӣ →</button>
 </section>
 </main>
 
@@ -135,7 +157,59 @@ const topics=[
  ["Суҳбати ҳаррӯза","Ҷумлаҳои одии рӯзмарра"]
 ];
 
-// Барои ҳар мавзӯъ панҷ калима/ибораи махсус мавҷуд аст.
+const detailedLessons=[
+ {
+  rule:"Дар вақти шиносоӣ аввал салом медиҳем, баъд номро мепурсем ва худро муаррифӣ мекунем. Дар бисёр забонҳо шакли расмӣ ва ғайрирасмии муроҷиат фарқ мекунад.",
+  practice:"Аввал салом диҳед. Баъд номи худро гӯед ва аз ҳамсуҳбат номашро пурсед.",
+  tip:"Ҳангоми шиносоӣ ҷумлаҳоро оҳиста ва равшан талаффуз кунед."
+ },
+ {
+  rule:"Дар ин мавзӯъ калимаҳои аъзои оиларо меомӯзем. Барои муаррифӣ метавонем бигӯем: «Ин модари ман аст». Дар забонҳои гуногун калимаҳои моликият ва шакли эҳтиром фарқ мекунанд.",
+  practice:"Падар, модар, бародар ва хоҳарро номбар кунед. Баъд як узви оилаатонро муаррифӣ кунед.",
+  tip:"Калимаҳоро бо мисоли оилаи худатон такрор кунед."
+ },
+ {
+  rule:"Рақамҳо барои гуфтани синну сол, нарх, рақами телефон ва шуморидани чизҳо истифода мешаванд. Дар баъзе забонҳо шакли рақам ҳангоми ҳисоб кардани одамон ва ашё тағйир меёбад.",
+  practice:"Аз як то се шуморед, баъд рақами даҳ ва синну соли худро гӯед.",
+  tip:"Рақамҳоро аввал ҷудогона ва баъд дар ҷумла машқ кунед."
+ },
+ {
+  rule:"Барои гуфтан ва пурсидани вақт калимаҳои имрӯз, пагоҳ ва ҳозир муҳиманд. Пурсидани соат дар ҳар забон сохтори махсус дорад.",
+  practice:"Бигӯед «имрӯз» ва «пагоҳ». Баъд савол диҳед: «Соат чанд аст?»",
+  tip:"Калимаҳои вақтро бо нақшаи ҳаррӯзаи худ пайваст кунед."
+ },
+ {
+  rule:"Дар мавзӯи хӯрок номи нӯшокиҳо ва таомҳоро меомӯзем. Барои фармоиш додан одатан шакли боадабонаи «ман мехоҳам» истифода мешавад.",
+  practice:"Номи об, нон, биринҷ ва чойро гӯед. Баъд об фармоиш диҳед.",
+  tip:"Кӯшиш кунед ибораҳоро дар ҳолати воқеии тарабхона тасаввур кунед."
+ },
+ {
+  rule:"Ҳангоми харид аввал нархро мепурсем. Баъд метавонем бигӯем, ки чиз қимат ё арзон аст ва хоҳиши харидани онро баён кунем.",
+  practice:"Нархи як маҳсулотро пурсед. Баъд бигӯед: «Ман инро харидан мехоҳам».",
+  tip:"Ҷумлаҳоро бо номи маҳсулоте, ки ҳар рӯз мехаред, такрор кунед."
+ },
+ {
+  rule:"Барои суҳбат дар ҷойи кор калимаҳои кор, роҳбар, кор кардан ва танаффус муҳиманд. Феълҳо дар баъзе забонҳо вобаста ба шахс ва замон тағйир меёбанд.",
+  practice:"Бигӯед, ки имрӯз кор мекунед. Баъд калимаи «танаффус»-ро истифода баред.",
+  tip:"Ҷумлаҳоро бо кори ҳаррӯзаи худ машқ кунед."
+ },
+ {
+  rule:"Барои ёфтани роҳ самтҳои чап, рост ва рост ба пешро меомӯзем. Саволи «Истгоҳ дар куҷост?» намунаи пурсидани ҷой мебошад.",
+  practice:"Самтҳои чап ва ростро гӯед. Баъд ҷойи истгоҳи қаторро пурсед.",
+  tip:"Ҳангоми машқ бо даст самтҳоро нишон диҳед."
+ },
+ {
+  rule:"Ҳангоми беморӣ бояд тавонем бигӯем, ки беморем ё кӯмак мехоҳем. Ин ибораҳо барои муроҷиат ба духтур ва ҳолатҳои зарурӣ муҳиманд.",
+  practice:"Калимаҳои духтур, бемор ва дардро такрор кунед. Баъд бигӯед: «Ман беморам».",
+  tip:"Барои ҳолатҳои фавқулода ибораи кӯмак пурсиданро дар хотир нигоҳ доред."
+ },
+ {
+  rule:"Дар суҳбати ҳаррӯза ташаккур, узрхоҳӣ, лутфан ва хайрухуш муҳиманд. Истифодаи онҳо ба гуфтугӯ эҳтиром ва хушмуомилагӣ мебахшад.",
+  practice:"Ташаккур гӯед, узр пурсед ва бо ҳамсуҳбат то пагоҳ хайрухуш кунед.",
+  tip:"Ин ибораҳоро ҳар рӯз истифода баред, то зуд дар хотир монанд."
+ }
+];
+
 const DATA={
 de:[
  [["Hallo","Салом"],["Guten Morgen","Субҳ ба хайр"],["Wie heißt du?","Номат чист?"],["Ich heiße Ali.","Номи ман Алӣ аст."],["Wie geht es dir?","Аҳволат чӣ хел?"]],
@@ -199,123 +273,230 @@ ko:[
 ]
 };
 
-let lang="de",current=0,answered=false;
+let lang="de";
+let current=0;
+let answered=false;
+let quizIndex=0;
+
 const $=id=>document.getElementById(id);
 const getLocale=()=>languages.find(x=>x.id===lang).locale;
 const progressKey=()=>`vayo_language_progress_${lang}`;
 
 function getProgress(){
- try{return JSON.parse(localStorage.getItem(progressKey())||"[]")}
- catch{return []}
+ try{
+  const value=JSON.parse(localStorage.getItem(progressKey())||"[]");
+  return Array.isArray(value)?value:[];
+ }catch(e){return []}
 }
 function saveProgress(n){
  const a=getProgress();
  if(!a.includes(n))a.push(n);
- localStorage.setItem(progressKey(),JSON.stringify(a));
+ try{localStorage.setItem(progressKey(),JSON.stringify(a))}
+ catch(e){console.warn("Progress not saved",e)}
 }
-
 function escapeHTML(s){
  return String(s).replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  "&":"&amp;","<":"&lt;",">":"&gt;",
+  '"':"&quot;","'":"&#39;"
  })[c]);
 }
 
 function renderLanguages(){
  $("languages").innerHTML=languages.map(l=>`
- <button class="language ${l.id===lang?"active":""}" onclick="selectLanguage('${l.id}')">
-  <span class="flag">${l.flag}</span>
-  <strong>${l.name}</strong>
-  <small>${l.id===lang?"✓ Интихоб шудааст":"Интихоб кунед"}</small>
+ <button class="language ${l.id===lang?"active":""}"
+ onclick="selectLanguage('${l.id}')">
+ <span class="flag">${l.flag}</span>
+ <strong>${l.name}</strong>
+ <small>${l.id===lang?"✓ Интихоб шудааст":"Интихоб кунед"}</small>
  </button>`).join("");
 }
+
 function selectLanguage(id){
  if(!DATA[id])return;
- stopSpeech();lang=id;current=0;
- renderLanguages();renderLessons();
+ stopSpeech();
+ lang=id;
+ current=0;
+ answered=false;
+ renderLanguages();
+ renderLessons();
  $("classroom").classList.add("hidden");
 }
+
 function renderLessons(){
  const done=getProgress();
- $("courseTitle").textContent="Дарсҳои "+languages.find(x=>x.id===lang).name;
- $("progressText").textContent=`${done.length} аз ${topics.length} дарс анҷом ёфт`;
- $("progressBar").style.width=(done.length/topics.length*100)+"%";
+ $("courseTitle").textContent=
+ "Дарсҳои "+languages.find(x=>x.id===lang).name;
+ $("progressText").textContent=
+ `${done.length} аз ${topics.length} дарс анҷом ёфт`;
+ $("progressBar").style.width=
+ (done.length/topics.length*100)+"%";
  $("lessons").innerHTML=topics.map((t,i)=>`
- <button class="lesson ${i===current?"active":""}" onclick="openLesson(${i})">
-  ${done.includes(i)?"✅":"📖"} Дарси ${i+1}: ${t[0]}
-  <small>${t[1]}</small>
+ <button class="lesson ${i===current?"active":""}"
+ onclick="openLesson(${i})">
+ ${done.includes(i)?"✅":"📖"} Дарси ${i+1}: ${t[0]}
+ <small>${t[1]}</small>
  </button>`).join("");
 }
+
+function explanation(){
+ const t=topics[current];
+ const w=DATA[lang][current];
+ const d=detailedLessons[current];
+ const languageName=languages.find(x=>x.id===lang).name;
+
+ let text=
+ `Салом, хонандаи азиз! Хуш омадед ба дарси ${current+1}.
+
+ Мо имрӯз забони ${languageName}-ро меомӯзем.
+ Мавзӯи дарси мо «${t[0]}» аст.
+
+ МАҚСАДИ ДАРС:
+ ${t[1]}.
+
+ ШАРҲИ МУАЛЛИМ:
+ ${d.rule}
+
+ КАЛИМАҲО ВА МИСОЛҲО:
+ `;
+
+ w.forEach((item,i)=>{
+  text+=`
+ Мисоли ${i+1}: «${item[0]}».
+ Маънои тоҷикӣ: «${item[1]}».
+ Ин ибораро гӯш кунед ва такрор намоед.
+ `;
+ });
+
+ text+=`
+ МАШҚИ ШУМО:
+ ${d.practice}
+
+ МАСЛИҲАТИ МУАЛЛИМ:
+ ${d.tip}
+
+ ХУЛОСА:
+ Акнун калимаҳои ин дарсро такрор кунед.
+ Агар чизеро нафаҳмидед, метавонед савол диҳед.
+ Пас аз омӯзиш ба санҷиши дарс гузаред.
+ `;
+ return text;
+}
+
 function openLesson(n){
  if(n<0||n>=topics.length)return;
- stopSpeech();current=n;answered=false;
+ stopSpeech();
+ current=n;
+ answered=false;
+ quizIndex=0;
+
  const words=DATA[lang][n];
  $("classroom").classList.remove("hidden");
- $("lessonTitle").textContent=`Дарси ${n+1} — ${topics[n][0]}`;
+ $("lessonTitle").textContent=
+ `Дарси ${n+1} — ${topics[n][0]}`;
  $("teacherText").textContent=explanation();
+ $("practiceText").textContent=
+ detailedLessons[n].practice;
+
  $("words").innerHTML=words.map((w,i)=>`
- <tr><td>${escapeHTML(w[0])}</td><td>${escapeHTML(w[1])}</td>
- <td><button class="secondary" onclick="speakWord(${i})">🔊</button></td></tr>`).join("");
+ <tr>
+ <td>${escapeHTML(w[0])}</td>
+ <td>${escapeHTML(w[1])}</td>
+ <td><button class="secondary"
+ onclick="speakWord(${i})">🔊</button></td>
+ </tr>`).join("");
+
  $("examples").innerHTML=words.map((w,i)=>`
  <div class="example">
- <b>Мисоли ${i+1}:</b> ${escapeHTML(w[0])}<br>
- <span class="muted">${escapeHTML(w[1])}</span>
- <button class="secondary" onclick="speakWord(${i})">🔊</button>
+ <b>Мисоли ${i+1}:</b>
+ <span>${escapeHTML(w[0])}</span><br>
+ <span class="muted">${escapeHTML(w[1])}</span><br>
+ <button class="secondary"
+ onclick="speakWord(${i})">🔊 Гӯш кардан</button>
  </div>`).join("");
+
  $("teacherAnswer").classList.add("hidden");
  $("question").value="";
  $("feedback").textContent="";
+ $("speechStatus").textContent="";
  renderQuiz();
  renderLessons();
  $("classroom").scrollIntoView({behavior:"smooth"});
 }
-function explanation(){
- const t=topics[current],w=DATA[lang][current];
- return `Салом, хонандаи азиз! Хуш омадед ба дарси ${current+1}.
- Мавзӯи имрӯзаи мо «${t[0]}» аст.
- ${t[1]}. Аввал ҳар як ибораро гӯш кунед ва такрор намоед.
- Масалан, «${w[0][0]}» маънои «${w[0][1]}»-ро дорад.
- Ибораи навбатӣ «${w[1][0]}» аст, яъне «${w[1][1]}».
- Боз як мисол: «${w[2][0]}» — «${w[2][1]}».
- Ҳоло ҳамаи панҷ ибораро омӯзед, баъд ба саволҳои ман ҷавоб диҳед.
- Агар нафаҳмед, савол диҳед.`;
-}
 
 function speak(text,locale){
  if(!("speechSynthesis" in window)){
-  $("speechStatus").textContent="Ин браузер хондани овозиро дастгирӣ намекунад.";
+  $("speechStatus").textContent=
+  "Ин браузер хондани овозиро дастгирӣ намекунад.";
   return;
  }
  speechSynthesis.cancel();
  const u=new SpeechSynthesisUtterance(text);
- u.lang=locale;u.rate=.85;
+ u.lang=locale;
+ u.rate=.85;
  speechSynthesis.speak(u);
 }
+
 function stopSpeech(){
- if("speechSynthesis" in window)speechSynthesis.cancel();
+ if("speechSynthesis" in window){
+  speechSynthesis.cancel();
+ }
 }
+
 function speakWord(i){
- speak(DATA[lang][current][i][0],getLocale());
+ const w=DATA[lang][current][i];
+ if(w)speak(w[0],getLocale());
 }
+
 function speakExplanation(){
  speak(explanation(),"tg-TJ");
 }
 
-function teacherReply(q){
- const s=q.toLowerCase().trim();
+function teacherReply(question){
+ const s=question.toLowerCase().trim();
  const words=DATA[lang][current];
+ const detail=detailedLessons[current];
+
  const found=words.find(w=>
- s.includes(w[0].toLowerCase())||
- (w[1].length>3&&s.includes(w[1].toLowerCase()))
+  s.includes(w[0].toLowerCase())||
+  (w[1].length>3&&s.includes(w[1].toLowerCase()))
  );
- if(found)return `«${found[0]}» ба тоҷикӣ «${found[1]}» аст. Барои машқ ин ибораро чанд бор такрор кунед.`;
- if(/мисол|намуна/.test(s))
-  return words.map(w=>`${w[0]} — ${w[1]}`).join(". ");
- if(/такрор|нафаҳм|фаҳмон|дубора/.test(s))
+
+ if(found){
+  return `«${found[0]}» ба тоҷикӣ «${found[1]}» аст.
+  Ин ибора ба мавзӯи «${topics[current][0]}» дахл дорад.
+  Барои машқ онро се бор такрор кунед.`;
+ }
+
+ if(/мисол|намуна/.test(s)){
+  return "Мисолҳои ҳамин дарс: "+
+  words.map(w=>`${w[0]} — ${w[1]}`).join(". ");
+ }
+
+ if(/қоида|грамматика|тартиб/.test(s)){
+  return detail.rule;
+ }
+
+ if(/машқ|тамрин/.test(s)){
+  return detail.practice;
+ }
+
+ if(/такрор|нафаҳм|фаҳмон|дубора/.test(s)){
   return explanation();
- if(/мавзӯъ|дарс/.test(s))
-  return `Мавзӯи мо «${topics[current][0]}» аст. ${topics[current][1]}.`;
- return `Ман ҳоло ҷавоби омодашуда ба ин савол надорам. Мавзӯи дарси мо «${topics[current][0]}» аст. Метавонед номи калимаеро пурсед ё бигӯед «мисол биёр». Барои ҷавоби озоди AI пайвасти сервер лозим мешавад.`;
+ }
+
+ if(/мавзӯъ|дарс/.test(s)){
+  return `Мавзӯи дарс «${topics[current][0]}» аст.
+  ${topics[current][1]}. ${detail.rule}`;
+ }
+
+ return `Саволи шуморо гирифтам.
+ Ҳоло ман танҳо ба саволҳои муайяни ҳамин дарс
+ ҷавоб дода метавонам.
+ Метавонед номи калима, «қоида», «мисол» ё
+ «машқ»-ро пурсед.
+ Барои ҷавобҳои озоди AI пайвасти сервер лозим аст.`;
 }
+
 function askTeacher(){
  const q=$("question").value.trim();
  if(!q)return;
@@ -324,66 +505,122 @@ function askTeacher(){
  $("teacherAnswer").classList.remove("hidden");
  speak(reply,"tg-TJ");
 }
+
 function listenQuestion(){
- const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
- if(!SpeechRecognition){
-  $("speechStatus").textContent="Микрофони шинохти овоз дар ин браузер дастгирӣ намешавад. Саволро нависед.";
+ const SR=window.SpeechRecognition||
+ window.webkitSpeechRecognition;
+
+ if(!SR){
+  $("speechStatus").textContent=
+  "Ин браузер шинохти овозро дастгирӣ намекунад. Саволро нависед.";
   return;
  }
- const r=new SpeechRecognition();
- r.lang="tg-TJ";r.interimResults=false;r.maxAlternatives=1;
- $("speechStatus").textContent="🎤 Гӯш карда истодаам...";
- r.onresult=e=>{
+
+ const recognition=new SR();
+ recognition.lang="tg-TJ";
+ recognition.interimResults=false;
+ recognition.maxAlternatives=1;
+
+ $("speechStatus").textContent=
+ "🎤 Гӯш карда истодаам...";
+
+ recognition.onresult=e=>{
   $("question").value=e.results[0][0].transcript;
   $("speechStatus").textContent="Савол қабул шуд.";
   askTeacher();
  };
- r.onerror=e=>$("speechStatus").textContent="Хатои микрофон: "+e.error;
- r.onend=()=>{
-  if($("speechStatus").textContent==="🎤 Гӯш карда истодаам...")
-   $("speechStatus").textContent="Шинохти овоз анҷом ёфт.";
+
+ recognition.onerror=e=>{
+  $("speechStatus").textContent=
+  "Хатои микрофон: "+e.error;
  };
- try{r.start()}catch(e){$("speechStatus").textContent=e.message}
+
+ recognition.onend=()=>{
+  if($("speechStatus").textContent===
+  "🎤 Гӯш карда истодаам..."){
+   $("speechStatus").textContent=
+   "Шинохти овоз анҷом ёфт.";
+  }
+ };
+
+ try{recognition.start()}
+ catch(e){
+  $("speechStatus").textContent=e.message;
+ }
 }
 
 function renderQuiz(){
- const w=DATA[lang][current];
- const right=current%w.length;
- const correct=w[right];
- const options=[...w.map(x=>x[1])];
- options.sort(()=>Math.random()-.5);
+ const words=DATA[lang][current];
+ const correct=words[quizIndex];
+ const options=words.map(w=>w[1]);
+
+ // Тасодуфӣ омехтани ҷавобҳо.
+ for(let i=options.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [options[i],options[j]]=[options[j],options[i]];
+ }
+
  $("quiz").innerHTML=`
- <p><b>«${escapeHTML(correct[0])}» чӣ маъно дорад?</b></p>
- ${options.map(o=>`<button class="answer" data-answer="${escapeHTML(o)}">${escapeHTML(o)}</button>`).join("")}`;
+ <p><b>Саволи ${quizIndex+1} аз ${words.length}:</b></p>
+ <p>«${escapeHTML(correct[0])}» чӣ маъно дорад?</p>
+ ${options.map(o=>`
+ <button class="answer"
+ data-answer="${escapeHTML(o)}">
+ ${escapeHTML(o)}
+ </button>`).join("")}`;
+
  $("quiz").querySelectorAll(".answer").forEach(btn=>{
-  btn.addEventListener("click",()=>checkAnswer(btn,correct[1]));
+  btn.addEventListener("click",()=>{
+   checkAnswer(btn,correct[1]);
+  });
  });
 }
+
 function checkAnswer(btn,correct){
  if(answered)return;
- const value=btn.dataset.answer;
- if(value===correct){
-  answered=true;
+
+ if(btn.dataset.answer===correct){
   btn.classList.add("correct");
-  $("feedback").textContent="✅ Дуруст! Дарс анҷом ёфт.";
-  saveProgress(current);
-  renderLessons();
+  $("feedback").textContent="✅ Ҷавоби дуруст!";
+
+  if(quizIndex+1<DATA[lang][current].length){
+   answered=true;
+   setTimeout(()=>{
+    quizIndex++;
+    answered=false;
+    $("feedback").textContent="";
+    renderQuiz();
+   },650);
+  }else{
+   answered=true;
+   saveProgress(current);
+   renderLessons();
+   $("feedback").textContent=
+   "🎉 Офарин! Шумо ҳамаи 5 саволро дуруст ҷавоб додед. Дарс анҷом ёфт.";
+  }
  }else{
   btn.classList.add("wrong");
-  $("feedback").textContent="❌ Нодуруст. Бори дигар кӯшиш кунед.";
+  $("feedback").textContent=
+  "❌ Ин ҷавоб дуруст нест. Боз кӯшиш кунед.";
  }
 }
+
 function nextLesson(){
- if(!answered){
-  $("feedback").textContent="Аввал ба саволи санҷиш ҷавоби дуруст диҳед.";
+ if(!getProgress().includes(current)){
+  $("feedback").textContent=
+  "Аввал ҳамаи 5 саволи санҷишро дуруст ҷавоб диҳед.";
   return;
  }
- if(current+1<topics.length)openLesson(current+1);
- else{
-  $("feedback").textContent="🎉 Табрик! Шумо ҳамаи 10 дарси ин забонро анҷом додед.";
+
+ if(current+1<topics.length){
+  openLesson(current+1);
+ }else{
+  $("feedback").textContent=
+  "🎉 Табрик! Ҳамаи 10 дарси ин забон анҷом ёфт.";
   window.scrollTo({top:0,behavior:"smooth"});
  }
 }
+
 renderLanguages();
 renderLessons();
 </script>
