@@ -23,8 +23,7 @@ body{
  background:var(--bg);
  color:var(--dark);
 }
-button,select{font:inherit}
-button{cursor:pointer;border:0}
+button{font:inherit;cursor:pointer;border:0}
 button:disabled{opacity:.45;cursor:not-allowed}
 .wrap{max-width:1050px;margin:auto;padding:0 15px}
 header{
@@ -47,7 +46,11 @@ header{
  padding:10px 14px;
  border-radius:13px;
 }
-.hero{display:flex;justify-content:space-between;align-items:center}
+.hero{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
 .hero h1{font-size:27px}
 .hero p{line-height:1.6}
 .mascot{font-size:65px}
@@ -93,7 +96,11 @@ h3{margin:15px 0 10px}
  background:#f0edff;
 }
 .flag{display:block;font-size:35px;margin-bottom:9px}
-.lang small{display:block;color:var(--muted);margin-top:6px}
+.lang small{
+ display:block;
+ color:var(--muted);
+ margin-top:6px;
+}
 .progress{
  height:13px;
  background:#e8e8f6;
@@ -124,8 +131,16 @@ h3{margin:15px 0 10px}
  line-height:1.5;
  min-height:38px;
 }
-.unitBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.btn{padding:12px 14px;border-radius:13px;font-weight:bold}
+.unitBtns{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:8px;
+}
+.btn{
+ padding:12px 14px;
+ border-radius:13px;
+ font-weight:bold;
+}
 .primary{background:var(--purple);color:white}
 .green{background:var(--green);color:white}
 .light{background:#eeedfc;color:var(--dark)}
@@ -155,27 +170,10 @@ h3{margin:15px 0 10px}
  color:var(--purple);
  margin-top:14px;
 }
-.wordHint{font-size:13px;color:var(--muted);margin:12px}
-.voiceButtons{
- display:flex;
- gap:9px;
- flex-wrap:wrap;
- justify-content:center;
- margin-top:14px;
-}
-.voicePanel{
- background:#f5f2ff;
- border:2px solid #ddd5ff;
- border-radius:17px;
- padding:16px;
-}
-.voiceSelect{
- width:100%;
- padding:12px;
- border:1px solid var(--line);
- border-radius:12px;
- margin:10px 0;
- background:white;
+.wordHint{
+ font-size:13px;
+ color:var(--muted);
+ margin:12px;
 }
 .quizOption{
  display:block;
@@ -196,7 +194,11 @@ h3{margin:15px 0 10px}
  background:#ffe9ec;
  border-color:var(--red);
 }
-.feedback{font-weight:bold;min-height:26px;margin:14px 0}
+.feedback{
+ font-weight:bold;
+ min-height:26px;
+ margin:14px 0;
+}
 .achievement{
  background:#fff8e7;
  border-radius:15px;
@@ -229,8 +231,8 @@ footer{
   <div class="hero">
    <div>
     <h1>Забон омӯз, ҷаҳонро кушо!</h1>
-    <p>Ҳар рӯз 10 дақиқа омӯзиш.<br>
-    Бо бозӣ, овоз ва мукофот.</p>
+    <p>Ҳар рӯз 10 дақиқа омӯзиш.
+    Бо бозӣ, машқ ва мукофот.</p>
    </div>
    <div class="mascot">🦊</div>
   </div>
@@ -240,48 +242,24 @@ footer{
 <main class="wrap">
 
 <div class="stats">
- <div class="stat"><b id="xp">0</b><small>⚡ XP</small></div>
- <div class="stat"><b id="hearts">❤️❤️❤️❤️❤️</b><small>Дилҳо</small></div>
- <div class="stat"><b id="streak">0 🔥</b><small>Рӯзҳои пайдарпай</small></div>
- <div class="stat"><b id="level">1</b><small>🏆 Сатҳ</small></div>
+ <div class="stat">
+  <b id="xp">0</b><small>⚡ XP</small>
+ </div>
+ <div class="stat">
+  <b id="hearts">❤️❤️❤️❤️❤️</b><small>Дилҳо</small>
+ </div>
+ <div class="stat">
+  <b id="streak">0 🔥</b>
+  <small>Рӯзҳои пайдарпай</small>
+ </div>
+ <div class="stat">
+  <b id="level">1</b><small>🏆 Сатҳ</small>
+ </div>
 </div>
 
 <section class="card" id="home">
  <h2>🌍 Кадом забонро меомӯзӣ?</h2>
  <div class="langs" id="languages"></div>
-</section>
-
-<section class="card" id="voicePanel">
- <h2>🎙️ Талаффузи олмонӣ</h2>
- <p>
-  Аввал сабти овози воқеии инсон истифода мешавад.
-  Агар сабт набошад, овози олмонии дастгоҳ
-  ҳамчун варианти эҳтиётӣ истифода мешавад.
- </p>
- <div class="voicePanel">
-  <label for="germanVoiceSelect">
-   <b>Овози эҳтиётии олмонӣ</b>
-  </label>
-  <select class="voiceSelect" id="germanVoiceSelect"
-   onchange="setGermanVoice(this.value)">
-  </select>
-  <div class="row">
-   <button class="btn primary"
-    onclick="speak('Guten Morgen!',false,'de-DE')">
-    🔊 Санҷиш
-   </button>
-   <button class="btn light"
-    onclick="speak('Guten Morgen!',true,'de-DE')">
-    🐢 Оҳиста
-   </button>
-   <button class="btn orange"
-    onclick="refreshVoices()">
-    🔄 Навсозӣ
-   </button>
-  </div>
-  <p id="voiceStatus" class="muted"></p>
-  <p id="audioStatus" class="muted" aria-live="polite"></p>
- </div>
 </section>
 
 <section class="card" id="course">
@@ -308,7 +286,7 @@ footer{
  <div id="lessonBody" style="margin-top:18px"></div>
  <p id="feedback" class="feedback" aria-live="polite"></p>
  <button id="continueBtn" class="btn primary"
-  onclick="continueLesson()">
+ onclick="continueLesson()">
   Давом додан →
  </button>
 </section>
@@ -333,11 +311,11 @@ footer{
 const $=id=>document.getElementById(id);
 
 const languages=[
- ["de","🇩🇪","Олмонӣ","de-DE"],
- ["en","🇬🇧","Англисӣ","en-GB"],
- ["ru","🇷🇺","Русӣ","ru-RU"],
- ["zh","🇨🇳","Чинӣ","zh-CN"],
- ["ko","🇰🇷","Кореягӣ","ko-KR"]
+ ["de","🇩🇪","Олмонӣ"],
+ ["en","🇬🇧","Англисӣ"],
+ ["ru","🇷🇺","Русӣ"],
+ ["zh","🇨🇳","Чинӣ"],
+ ["ko","🇰🇷","Кореягӣ"]
 ];
 
 const topics=[
@@ -354,7 +332,7 @@ const topics=[
 ];
 
 const explanations=[
- "Дар шиносоӣ аввал салом медиҳем, баъд номи ҳамсуҳбатро мепурсем. Ибораҳоро бо овоз такрор кун.",
+ "Дар шиносоӣ аввал салом медиҳем, баъд номи ҳамсуҳбатро мепурсем. Ибораҳоро хонда, маънояшонро дар хотир нигоҳ дор.",
  "Номи аъзои оиларо меомӯзӣ. Ҳар калимаро бо оилаи худат пайваст кун.",
  "Рақамҳо барои шуморидан, нарх ва синну сол заруранд.",
  "Калимаҳои вақт дар гуфтугӯи ҳаррӯза истифода мешаванд.",
@@ -430,6 +408,7 @@ ko:[
 };
 
 const DATA={};
+
 for(const id of Object.keys(raw)){
  DATA[id]=raw[id].map(unit=>
   unit.split("|").map(pair=>{
@@ -439,7 +418,8 @@ for(const id of Object.keys(raw)){
  );
 }
 
-// Нигоҳ доштани пешрафти версияҳои пешина
+// Калиди пешина нигоҳ дошта мешавад,
+// то XP ва дарсҳои анҷомёфта гум нашаванд.
 const STORAGE="vayo_language_v2";
 
 function load(){
@@ -448,16 +428,25 @@ function load(){
   if(x&&typeof x==="object")return x;
  }catch(e){}
  return {
-  lang:"de",xp:0,hearts:5,
-  streak:0,lastDay:"",done:{}
+  lang:"de",
+  xp:0,
+  hearts:5,
+  streak:0,
+  lastDay:"",
+  done:{}
  };
 }
 
 let state=load();
-if(!languages.some(l=>l[0]===state.lang))state.lang="de";
-if(!state.done||typeof state.done!=="object")state.done={};
+
+if(!languages.some(l=>l[0]===state.lang)){
+ state.lang="de";
+}
+if(!state.done||typeof state.done!=="object"){
+ state.done={};
+}
 state.xp=Number(state.xp)||0;
-state.hearts=Math.max(0,Math.min(5,Number(state.hearts)||0));
+state.hearts=Math.max(0,Math.min(5,Number(state.hearts)??5));
 
 let session=null;
 let lessonFinished=false;
@@ -472,8 +461,11 @@ function save(){
 
 function esc(s){
  return String(s).replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",
-  '"':"&quot;","'":"&#39;"
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
  })[c]);
 }
 
@@ -485,281 +477,6 @@ function shuffle(a){
  }
  return b;
 }
-
-function locale(){
- return languages.find(l=>l[0]===state.lang)[3];
-}
-
-// ======================================
-// VAYO — ОВОЗИ ВОҚЕИИ ОЛМОНӢ
-// ======================================
-
-// Файлҳои овозӣ дар ин папка нигоҳ дошта мешаванд:
-const AUDIO_ROOT="../assets/audio/de/";
-
-// Файлҳои 50 калима:
-// de-01-01.mp3 то de-10-05.mp3
-
-const VOICE_STORAGE="vayo_german_voice";
-
-const maleNames=[
- "conrad","markus","stefan",
- "daniel","thomas","florian","male"
-];
-
-let preferredGermanVoice="";
-let selectedGermanVoice=null;
-let activeAudio=null;
-let audioRequestId=0;
-
-try{
- preferredGermanVoice=
-  localStorage.getItem(VOICE_STORAGE)||"";
-}catch(e){}
-
-function setAudioStatus(message){
- const el=$("audioStatus");
- if(el)el.textContent=message;
-}
-
-function germanVoices(){
- if(!("speechSynthesis" in window))return [];
- return speechSynthesis.getVoices().filter(v=>
-  v.lang.toLowerCase().startsWith("de")
- );
-}
-
-function voiceScore(v){
- const name=v.name.toLowerCase();
- const lang=v.lang.toLowerCase();
- let score=0;
-
- if(lang==="de-de")score+=30;
-
- if(maleNames.some(n=>name.includes(n))){
-  score+=100;
- }
-
- if(/natural|neural|premium|enhanced/i.test(name)){
-  score+=25;
- }
-
- if(v.default)score+=5;
- return score;
-}
-
-function chooseGermanVoice(){
- const voices=germanVoices();
-
- if(!voices.length){
-  selectedGermanVoice=null;
-  return;
- }
-
- const saved=voices.find(v=>
-  v.name===preferredGermanVoice
- );
-
- if(saved){
-  selectedGermanVoice=saved;
-  return;
- }
-
- voices.sort((a,b)=>voiceScore(b)-voiceScore(a));
- selectedGermanVoice=voices[0];
-}
-
-function refreshVoices(){
- const select=$("germanVoiceSelect");
- if(!select)return;
-
- select.innerHTML="";
-
- if(!("speechSynthesis" in window)){
-  $("voiceStatus").textContent=
-   "Браузер овози синтетикиро дастгирӣ намекунад.";
-  return;
- }
-
- chooseGermanVoice();
-
- const voices=germanVoices();
- voices.sort((a,b)=>voiceScore(b)-voiceScore(a));
-
- if(!voices.length){
-  const o=document.createElement("option");
-  o.value="";
-  o.textContent="Овози олмонӣ ёфт нашуд";
-  select.appendChild(o);
-  $("voiceStatus").textContent=
-   "Овози олмониро дар дастгоҳ насб кун.";
-  return;
- }
-
- voices.forEach(v=>{
-  const o=document.createElement("option");
-  o.value=v.name;
-  o.textContent=v.name+" ("+v.lang+")";
-  if(selectedGermanVoice&&
-     selectedGermanVoice.name===v.name){
-   o.selected=true;
-  }
-  select.appendChild(o);
- });
-
- $("voiceStatus").textContent=
-  "Ин овоз танҳо ҳангоми набудани сабти воқеӣ истифода мешавад.";
-}
-
-function setGermanVoice(name){
- preferredGermanVoice=name;
- try{
-  localStorage.setItem(VOICE_STORAGE,name);
- }catch(e){}
- chooseGermanVoice();
-}
-
-function stopAudio(){
- audioRequestId++;
-
- if(activeAudio){
-  activeAudio.pause();
-  activeAudio.removeAttribute("src");
-  activeAudio.load();
-  activeAudio=null;
- }
-
- if("speechSynthesis" in window){
-  speechSynthesis.cancel();
- }
-}
-
-function speakFallback(text,slow=false,lang="de-DE"){
- if(!("speechSynthesis" in window)){
-  setAudioStatus(
-   "Сабти овозӣ мавҷуд нест ва браузер овоз надорад."
-  );
-  return;
- }
-
- speechSynthesis.cancel();
-
- const u=new SpeechSynthesisUtterance(text);
- u.lang=lang;
- u.volume=1;
- u.pitch=1;
- u.rate=slow?0.8:0.96;
-
- const voices=speechSynthesis.getVoices();
-
- if(lang.toLowerCase().startsWith("de")){
-  chooseGermanVoice();
-
-  if(selectedGermanVoice){
-   u.voice=selectedGermanVoice;
-   u.lang=selectedGermanVoice.lang;
-  }
- }else{
-  const match=voices.find(v=>
-   v.lang.toLowerCase()===lang.toLowerCase()
-  );
-  if(match)u.voice=match;
- }
-
- setAudioStatus(
-  "Овози эҳтиётии браузер истифода мешавад."
- );
-
- speechSynthesis.speak(u);
-}
-
-function getAudioFilename(unit,index){
- const a=String(unit+1).padStart(2,"0");
- const b=String(index+1).padStart(2,"0");
- return `de-${a}-${b}.mp3`;
-}
-
-function findGermanWord(text){
- const target=String(text).trim();
-
- for(let unit=0;unit<DATA.de.length;unit++){
-  for(let index=0;index<DATA.de[unit].length;index++){
-   if(DATA.de[unit][index][0]===target){
-    return {unit,index};
-   }
-  }
- }
-
- return null;
-}
-
-async function speak(text,slow=false,forcedLang=null){
- const lang=forcedLang||locale();
-
- stopAudio();
- const requestId=audioRequestId;
-
- // Забонҳои ғайриолмонӣ тағйир намеёбанд
- if(!lang.toLowerCase().startsWith("de")){
-  speakFallback(text,slow,lang);
-  return;
- }
-
- const word=findGermanWord(text);
-
- // Барои ибораҳои берун аз дарс
- if(!word){
-  speakFallback(text,slow,lang);
-  return;
- }
-
- const filename=getAudioFilename(
-  word.unit,word.index
- );
-
- const url=AUDIO_ROOT+filename;
-
- const audio=new Audio();
- activeAudio=audio;
- audio.preload="auto";
- audio.src=url;
- audio.playbackRate=slow?0.8:1;
-
- audio.onended=()=>{
-  if(requestId===audioRequestId){
-   setAudioStatus("Сабти овозӣ анҷом ёфт.");
-  }
- };
-
- audio.onerror=()=>{
-  if(requestId!==audioRequestId)return;
-  activeAudio=null;
-  speakFallback(text,slow,lang);
- };
-
- try{
-  setAudioStatus("Ҷустуҷӯи сабти воқеии олмонӣ...");
-  await audio.play();
-
-  if(requestId!==audioRequestId){
-   audio.pause();
-   return;
-  }
-
-  setAudioStatus(
-   "🔊 Сабти воқеии талаффузи олмонӣ"
-  );
- }catch(e){
-  if(requestId!==audioRequestId)return;
-
-  activeAudio=null;
-  speakFallback(text,slow,lang);
- }
-}
-
-// ======================================
-// АНҶОМИ СИСТЕМАИ ОВОЗ
-// ======================================
 
 function today(){
  const d=new Date();
@@ -773,15 +490,12 @@ function updateStreak(){
  if(state.lastDay){
   const previous=new Date(now+"T12:00:00");
   previous.setDate(previous.getDate()-1);
-
   const y=`${previous.getFullYear()}-${String(previous.getMonth()+1).padStart(2,"0")}-${String(previous.getDate()).padStart(2,"0")}`;
-
   state.streak=state.lastDay===y?
    (state.streak||0)+1:1;
  }else{
   state.streak=1;
  }
-
  state.lastDay=now;
 }
 
@@ -815,31 +529,23 @@ function render(){
  const done=completedCount(state.lang);
 
  $("courseTitle").textContent="📚 Забони "+name;
- $("progressText").textContent=
-  done+" аз 20 дарс анҷом ёфт";
+ $("progressText").textContent=done+" аз 20 дарс анҷом ёфт";
  $("progressFill").style.width=(done/20*100)+"%";
-
- $("voicePanel").classList.toggle(
-  "hidden",state.lang!=="de"
- );
 
  $("units").innerHTML=topics.map((t,i)=>{
   const a=i*2;
   const b=a+1;
-
   return `
    <div class="unit">
     <div class="unitIcon">${t[0]}</div>
     <h3>Бахши ${i+1}: ${t[1]}</h3>
     <p>${t[2]}</p>
     <div class="unitBtns">
-     <button
-      class="btn ${completed(state.lang,a)?"green":"primary"}"
+     <button class="btn ${completed(state.lang,a)?"green":"primary"}"
       onclick="startLesson(${a})">
       ${completed(state.lang,a)?"✓ ":""}Дарси ${a+1}
      </button>
-     <button
-      class="btn ${completed(state.lang,b)?"green":"orange"}"
+     <button class="btn ${completed(state.lang,b)?"green":"orange"}"
       onclick="startLesson(${b})">
       ${completed(state.lang,b)?"✓ ":""}Машқи ${b+1}
      </button>
@@ -880,7 +586,6 @@ function render(){
 
 function selectLang(id){
  if(!DATA[id])return;
- stopAudio();
  state.lang=id;
  save();
  closeLesson();
@@ -888,7 +593,6 @@ function selectLang(id){
 }
 
 function closeLesson(){
- stopAudio();
  $("lesson").classList.add("hidden");
  $("home").classList.remove("hidden");
  $("course").classList.remove("hidden");
@@ -913,7 +617,9 @@ function startLesson(n){
 
  session={
   n,unit,practice,words,
-  step:0,score:0,answered:false,
+  step:0,
+  score:0,
+  answered:false,
   question:null,
   questions:practice?makeQuestions(words):[]
  };
@@ -923,7 +629,6 @@ function startLesson(n){
 
  $("home").classList.add("hidden");
  $("course").classList.add("hidden");
- $("voicePanel").classList.add("hidden");
  $("lesson").classList.remove("hidden");
 
  $("lessonTitle").textContent=
@@ -940,8 +645,9 @@ function makeQuestions(words){
   q.push({type:"translate",index:i});
  });
 
+ // Ба ҷойи саволи овозӣ саволи матнӣ
  q.push({
-  type:"listen",
+  type:"translate",
   index:Math.floor(Math.random()*words.length)
  });
 
@@ -955,8 +661,6 @@ function makeQuestions(words){
 
 function showStep(){
  if(!session||lessonFinished)return;
-
- stopAudio();
 
  const s=session;
  $("feedback").textContent="";
@@ -994,7 +698,7 @@ function showStudyStep(){
     ${esc(topics[s.unit][2])}
 
     Дар ин дарс панҷ ибора меомӯзӣ.
-    Аввал овозро гӯш кун, баъд такрор намо.
+    Калимаҳо ва тарҷумаи онҳоро бодиққат хон.
    </div>`;
   return;
  }
@@ -1015,17 +719,7 @@ function showStudyStep(){
      ${esc(w[1])}
     </div>
     <div class="wordHint">
-     Гӯш кун ва се бор такрор намо.
-    </div>
-    <div class="voiceButtons">
-     <button class="btn primary"
-      onclick="speakCurrent(false)">
-      🔊 Гӯш кардан
-     </button>
-     <button class="btn light"
-      onclick="speakCurrent(true)">
-      🐢 Оҳиста
-     </button>
+     Калима ва тарҷумаи онро дар хотир нигоҳ дор.
     </div>
    </div>`;
   return;
@@ -1041,15 +735,6 @@ function showStudyStep(){
  $("continueBtn").textContent="Анҷом додани дарс ✓";
 }
 
-function speakCurrent(slow=false){
- if(!session)return;
-
- const i=session.step-1;
- if(session.words[i]){
-  speak(session.words[i][0],slow);
- }
-}
-
 function showQuestion(){
  const s=session;
 
@@ -1061,7 +746,6 @@ function showQuestion(){
  s.answered=false;
  const q=s.questions[s.step];
  s.question=q;
-
  const w=s.words[q.index];
 
  const choices=shuffle(s.words.map(x=>
@@ -1073,12 +757,9 @@ function showQuestion(){
  if(q.type==="translate"){
   title=`«${w[0]}» чӣ маъно дорад?`;
   hint="Ҷавоби дурустро интихоб кун.";
- }else if(q.type==="reverse"){
+ }else{
   title=`«${w[1]}» чӣ мешавад?`;
   hint="Тарҷумаи мувофиқро ёб.";
- }else{
-  title="🔊 Ибораро гӯш кун. Маънояш чист?";
-  hint="Тугмаи овозро пахш кун.";
  }
 
  $("lessonBody").innerHTML=`
@@ -1086,17 +767,6 @@ function showQuestion(){
    <b>🧩 Саволи ${s.step+1} аз ${s.questions.length}</b>
    <h3>${esc(title)}</h3>
    <p class="muted">${hint}</p>
-   ${q.type==="listen"?`
-    <div class="row">
-     <button class="btn primary"
-      onclick="speakQuestion(false)">
-      🔊 Гӯш кардан
-     </button>
-     <button class="btn light"
-      onclick="speakQuestion(true)">
-      🐢 Оҳиста
-     </button>
-    </div>`:""}
   </div>
   <div id="options"></div>
  `;
@@ -1113,14 +783,6 @@ function showQuestion(){
  });
 
  $("continueBtn").disabled=true;
-}
-
-function speakQuestion(slow=false){
- if(!session||!session.question)return;
- speak(
-  session.words[session.question.index][0],
-  slow
- );
 }
 
 function answerQuestion(button,value,correct){
@@ -1164,7 +826,6 @@ function continueLesson(){
 
  if(s.practice){
   if(!s.answered)return;
-
   s.step++;
   if(s.step>=s.questions.length){
    finishLesson();
@@ -1186,7 +847,6 @@ function finishLesson(){
  if(!s||lessonFinished)return;
 
  lessonFinished=true;
- stopAudio();
 
  const total=s.practice?s.questions.length:0;
  const passed=!s.practice||
@@ -1240,16 +900,8 @@ function finishLesson(){
  session=null;
 }
 
-// Оғози VAYO Language
+// Оғози барнома
 render();
-refreshVoices();
-
-if("speechSynthesis" in window){
- speechSynthesis.addEventListener(
-  "voiceschanged",
-  refreshVoices
- );
-}
 </script>
 </body>
 </html>
