@@ -1,0 +1,676 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#7355ef">
+<title>VAYO Language — Профил</title>
+<style>
+:root{
+ --purple:#7355ef;
+ --green:#21b478;
+ --bg:#f6f5fc;
+ --ink:#25213e;
+ --muted:#77748c;
+ --line:#e7e3f3;
+ --gold:#f2b63f
+}
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:var(--bg);
+ color:var(--ink)
+}
+header{
+ background:linear-gradient(125deg,#6247db,#a36cf4);
+ padding:24px 15px;
+ color:white
+}
+.wrap{max-width:850px;margin:auto;padding:15px}
+.back{
+ display:inline-block;
+ padding:10px 14px;
+ background:#ffffff25;
+ color:white;
+ text-decoration:none;
+ border-radius:12px
+}
+h1{margin:14px 0}
+.card{
+ background:white;
+ border:1px solid var(--line);
+ border-radius:18px;
+ padding:20px;
+ margin:15px 0
+}
+.center{text-align:center}
+.avatar{
+ width:105px;
+ height:105px;
+ border-radius:50%;
+ background:#eee9ff;
+ border:4px solid #d6cafa;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ font-size:48px;
+ margin:0 auto 12px;
+ overflow:hidden
+}
+.avatar img{
+ width:100%;
+ height:100%;
+ object-fit:cover
+}
+.stats{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:10px
+}
+.stat{text-align:center}
+.stat b{
+ display:block;
+ font-size:23px;
+ margin-bottom:7px
+}
+.stat small{color:var(--muted)}
+input,select{
+ width:100%;
+ padding:14px;
+ border:2px solid var(--line);
+ border-radius:12px;
+ font-size:16px;
+ margin:8px 0;
+ background:white
+}
+button{
+ border:0;
+ font:inherit;
+ cursor:pointer
+}
+.btn{
+ display:inline-block;
+ text-align:center;
+ padding:13px 17px;
+ border-radius:12px;
+ font-weight:bold;
+ text-decoration:none
+}
+.primary{background:var(--purple);color:white}
+.green{background:var(--green);color:white}
+.light{background:#eeeafa;color:var(--ink)}
+.progress{
+ height:14px;
+ background:#e9e6f5;
+ border-radius:20px;
+ overflow:hidden;
+ margin:12px 0
+}
+.fill{
+ height:100%;
+ background:var(--green);
+ width:0%;
+ transition:width .3s
+}
+.badges{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:12px
+}
+.badge{
+ padding:16px;
+ border:1px solid var(--line);
+ border-radius:15px;
+ text-align:center;
+ background:#faf9ff
+}
+.badge .emoji{
+ font-size:32px;
+ display:block;
+ margin-bottom:8px
+}
+.badge.locked{opacity:.45;filter:grayscale(1)}
+.badge strong{display:block;margin:7px 0}
+.badge small{color:var(--muted)}
+.links{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px
+}
+.links a{
+ text-align:center;
+ padding:14px 8px;
+ border-radius:12px;
+ text-decoration:none;
+ color:var(--ink);
+ background:#eeeafa;
+ font-weight:bold
+}
+.note{font-size:13px;color:var(--muted);line-height:1.6}
+#message{color:var(--green);font-weight:bold}
+@media(max-width:450px){
+ .stats{gap:6px}
+ .stat b{font-size:18px}
+ .card{padding:15px}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="wrap">
+ <a href="language.html" class="back">
+  ← VAYO Language
+ </a>
+ <h1>👤 Профили омӯзанда</h1>
+ <p>Пешрафти худро назорат кун!</p>
+</div>
+</header>
+
+<main class="wrap">
+
+<section class="card center">
+ <div class="avatar" id="avatar">👤</div>
+ <h2 id="displayName">Омӯзанда</h2>
+ <p id="displayLanguage"></p>
+ <p id="displayLevel"></p>
+</section>
+
+<div class="stats">
+ <div class="card stat">
+  <b id="xp">0</b>
+  <small>⚡ XP</small>
+ </div>
+ <div class="card stat">
+  <b id="streak">0</b>
+  <small>🔥 Рӯз</small>
+ </div>
+ <div class="card stat">
+  <b id="lessons">0</b>
+  <small>📚 Дарс</small>
+ </div>
+</div>
+
+<section class="card">
+ <h2>✏️ Таҳрири профил</h2>
+
+ <label for="name">Номи омӯзанда</label>
+ <input id="name" maxlength="40"
+ placeholder="Номи худро навис">
+
+ <label for="language">Забони омӯзиш</label>
+ <select id="language">
+  <option value="de">🇩🇪 Олмонӣ</option>
+  <option value="en">🇬🇧 Англисӣ</option>
+  <option value="ru">🇷🇺 Русӣ</option>
+  <option value="zh">🇨🇳 Чинӣ</option>
+  <option value="ko">🇰🇷 Кореягӣ</option>
+ </select>
+
+ <label for="level">Сатҳи ҳадаф</label>
+ <select id="level">
+  <option>A1</option>
+  <option>A2</option>
+  <option>B1</option>
+  <option>B2</option>
+  <option>C1</option>
+  <option>C2</option>
+ </select>
+
+ <label for="photo">Акси профил</label>
+ <input id="photo" type="file" accept="image/*">
+
+ <button id="saveProfile" class="btn primary"
+ style="width:100%;margin-top:12px">
+  💾 Нигоҳ доштани профил
+ </button>
+ <p id="message" role="status"></p>
+</section>
+
+<section class="card">
+ <h2>🏅 Сатҳи XP</h2>
+ <h3 id="rank">Навомӯз</h3>
+ <div class="progress">
+  <div id="xpBar" class="fill"></div>
+ </div>
+ <p id="xpText"></p>
+ <p class="note">
+  Ин сатҳи мукофотии XP мебошад, на
+  сертификати расмии A1–C2.
+ </p>
+</section>
+
+<section class="card">
+ <h2>🏆 Нишонҳои муваффақият</h2>
+ <div id="badges" class="badges"></div>
+</section>
+
+<section class="card">
+ <h2>📅 Фаъолияти 7 рӯзи охир</h2>
+ <div id="history"></div>
+ <p class="note">
+  Таърих аз вазифаҳои ҳаррӯзаи дар ҳамин
+  браузер сабтшуда гирифта мешавад.
+ </p>
+</section>
+
+<section class="card">
+ <h2>📚 Қисмҳои VAYO Language</h2>
+ <div class="links">
+  <a href="language.html">🌍 Дарсҳо</a>
+  <a href="writing.html">✍️ Навиштан</a>
+  <a href="sentences.html">🧩 Ҷумлаҳо</a>
+  <a href="daily.html">📅 Вазифаҳо</a>
+ </div>
+</section>
+
+<section class="card">
+ <h2>🔒 Нигоҳдории маълумот</h2>
+ <p class="note">
+  Профил ва пешрафт ҳоло танҳо дар ҳамин
+  браузер нигоҳ дошта мешаванд.
+  Барои ҳамоҳангсозӣ байни телефонҳо
+  баъдтар ҳисоби онлайн лозим мешавад.
+ </p>
+</section>
+
+</main>
+
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+
+const MAIN_KEY="vayo_language_v2";
+const DAILY_KEY="vayo_daily_v1";
+const PROFILE_KEY="vayo_language_profile_v1";
+
+function read(key){
+ try{
+  const value=JSON.parse(localStorage.getItem(key));
+  return value&&typeof value==="object"?value:{};
+ }catch(e){return {}}
+}
+
+function write(key,value){
+ try{
+  localStorage.setItem(key,JSON.stringify(value));
+  return true;
+ }catch(e){
+  $("message").textContent=
+   "Маълумот сабт нашуд. Ҷойи браузерро санҷ.";
+  return false;
+ }
+}
+
+const languages={
+ de:"🇩🇪 Олмонӣ",
+ en:"🇬🇧 Англисӣ",
+ ru:"🇷🇺 Русӣ",
+ zh:"🇨🇳 Чинӣ",
+ ko:"🇰🇷 Кореягӣ"
+};
+
+let profile=read(PROFILE_KEY);
+
+function getMain(){
+ return read(MAIN_KEY);
+}
+
+function getXP(){
+ return Math.max(0,Number(getMain().xp)||0);
+}
+
+function getDaily(){
+ const d=read(DAILY_KEY);
+ return d.days&&typeof d.days==="object"?d.days:{};
+}
+
+function localDate(date){
+ return date.getFullYear()+"-"+
+  String(date.getMonth()+1).padStart(2,"0")+"-"+
+  String(date.getDate()).padStart(2,"0");
+}
+
+function completedOn(entry){
+ return !!(
+  entry&&Array.isArray(entry.done)&&
+  entry.done.some(v=>v===true)
+ );
+}
+
+function getStreak(){
+ const days=getDaily();
+ const cursor=new Date();
+ let count=0;
+
+ if(!completedOn(days[localDate(cursor)])){
+  cursor.setDate(cursor.getDate()-1);
+ }
+
+ for(let i=0;i<3650;i++){
+  if(!completedOn(days[localDate(cursor)]))break;
+  count++;
+  cursor.setDate(cursor.getDate()-1);
+ }
+
+ return count;
+}
+
+function countLessons(){
+ const main=getMain();
+ const done=main.done;
+
+ if(!done||typeof done!=="object")return 0;
+
+ // Сохторҳои гуногуни пешрафтро
+ // бидуни тағйир додани маълумот мехонем.
+ const lang=profile.language||main.lang||"de";
+ const branch=done[lang]||done;
+
+ const seen=new Set();
+
+ function walk(value,path,depth){
+  if(depth>6)return;
+
+  if(value===true){
+   seen.add(path);
+   return;
+  }
+
+  if(Array.isArray(value)){
+   value.forEach((item,i)=>
+    walk(item,path+"/"+i,depth+1));
+   return;
+  }
+
+  if(value&&typeof value==="object"){
+   Object.entries(value).forEach(([key,item])=>
+    walk(item,path+"/"+key,depth+1));
+  }
+ }
+
+ walk(branch,"done",0);
+ return seen.size;
+}
+
+function getRank(xp){
+ const ranks=[
+  [0,"🌱 Навомӯз"],
+  [100,"🥉 Омӯзандаи фаъол"],
+  [500,"🥈 Омӯзандаи пешрафта"],
+  [1500,"🥇 Омӯзандаи моҳир"],
+  [3000,"💎 Устоди XP"],
+  [6000,"👑 Қаҳрамони VAYO"]
+ ];
+
+ let current=ranks[0];
+ let next=null;
+
+ for(let i=0;i<ranks.length;i++){
+  if(xp>=ranks[i][0]){
+   current=ranks[i];
+   next=ranks[i+1]||null;
+  }
+ }
+
+ return {current,next};
+}
+
+function renderAvatar(){
+ const avatar=$("avatar");
+ avatar.replaceChildren();
+
+ if(profile.photo&&
+    typeof profile.photo==="string"&&
+    profile.photo.startsWith("data:image/")){
+  const img=document.createElement("img");
+  img.src=profile.photo;
+  img.alt="Акси профил";
+  avatar.appendChild(img);
+ }else{
+  avatar.textContent="👤";
+ }
+}
+
+function renderBadges(){
+ const xp=getXP();
+ const streak=getStreak();
+ const lessons=countLessons();
+ const days=getDaily();
+
+ const allThree=Object.values(days).some(day=>
+  day&&Array.isArray(day.done)&&
+  day.done.length>=3&&
+  day.done.slice(0,3).every(Boolean)
+ );
+
+ const badges=[
+  ["🌱","Қадами аввал",xp>=5,
+   "Аввалин 5 XP"],
+  ["⚡","100 XP",xp>=100,
+   "100 XP ҷамъ кун"],
+  ["🏅","500 XP",xp>=500,
+   "500 XP ҷамъ кун"],
+  ["💎","1000 XP",xp>=1000,
+   "1000 XP ҷамъ кун"],
+  ["📚","10 дарс",lessons>=10,
+   "10 дарси сабтшуда"],
+  ["🔥","3 рӯз",streak>=3,
+   "3 рӯз пайдарпай"],
+  ["🏆","7 рӯз",streak>=7,
+   "7 рӯз пайдарпай"],
+  ["🎯","Ҳадафи рӯз",allThree,
+   "Се вазифаро дар як рӯз иҷро кун"]
+ ];
+
+ const root=$("badges");
+ root.replaceChildren();
+
+ badges.forEach(([emoji,title,unlocked,desc])=>{
+  const div=document.createElement("div");
+  div.className="badge"+(unlocked?"":" locked");
+
+  const e=document.createElement("span");
+  e.className="emoji";
+  e.textContent=emoji;
+
+  const t=document.createElement("strong");
+  t.textContent=title;
+
+  const d=document.createElement("small");
+  d.textContent=unlocked?
+   "✅ Кушода шуд":desc;
+
+  div.append(e,t,d);
+  root.appendChild(div);
+ });
+}
+
+function renderHistory(){
+ const days=getDaily();
+ const root=$("history");
+ root.replaceChildren();
+
+ for(let i=6;i>=0;i--){
+  const date=new Date();
+  date.setDate(date.getDate()-i);
+
+  const key=localDate(date);
+  const entry=days[key];
+
+  const completed=entry&&Array.isArray(entry.done)?
+   entry.done.filter(Boolean).length:0;
+
+  const row=document.createElement("div");
+  row.style.margin="12px 0";
+
+  const label=document.createElement("div");
+  label.textContent=
+   key+" — "+completed+"/3 вазифа";
+
+  const progress=document.createElement("div");
+  progress.className="progress";
+
+  const fill=document.createElement("div");
+  fill.className="fill";
+  fill.style.width=
+   Math.min(100,completed/3*100)+"%";
+
+  progress.appendChild(fill);
+  row.append(label,progress);
+  root.appendChild(row);
+ }
+}
+
+function render(){
+ const main=getMain();
+ const xp=getXP();
+ const streak=getStreak();
+ const lessons=countLessons();
+
+ const lang=profile.language||
+  (languages[main.lang]?main.lang:"de");
+
+ const level=profile.level||"A1";
+
+ $("displayName").textContent=
+  profile.name||"Омӯзанда";
+
+ $("displayLanguage").textContent=
+  languages[lang]||languages.de;
+
+ $("displayLevel").textContent=
+  "🎓 Сатҳи ҳадаф: "+level;
+
+ $("name").value=profile.name||"";
+ $("language").value=lang;
+ $("level").value=level;
+
+ $("xp").textContent=xp;
+ $("streak").textContent=streak;
+ $("lessons").textContent=lessons;
+
+ const rank=getRank(xp);
+ $("rank").textContent=rank.current[1];
+
+ if(rank.next){
+  const low=rank.current[0];
+  const high=rank.next[0];
+  const percent=(xp-low)/(high-low)*100;
+
+  $("xpBar").style.width=
+   Math.min(100,Math.max(0,percent))+"%";
+
+  $("xpText").textContent=
+   xp+" / "+high+
+   " XP — то сатҳи навбатӣ";
+ }else{
+  $("xpBar").style.width="100%";
+  $("xpText").textContent=
+   xp+" XP — сатҳи баландтарини XP!";
+ }
+
+ renderAvatar();
+ renderBadges();
+ renderHistory();
+}
+
+$("saveProfile").addEventListener("click",()=>{
+ const name=$("name").value.trim();
+
+ if(name.length<2){
+  $("message").textContent=
+   "Ном бояд ҳадди ақал 2 ҳарф дошта бошад.";
+  return;
+ }
+
+ const nextProfile={
+  ...profile,
+  name:name,
+  language:$("language").value,
+  level:$("level").value
+ };
+
+ if(!write(PROFILE_KEY,nextProfile))return;
+ profile=nextProfile;
+
+ // Забони интихобшударо ба ҳолати асосии
+ // VAYO ҳам сабт мекунем.
+ const main=getMain();
+ main.lang=profile.language;
+ write(MAIN_KEY,main);
+
+ $("message").textContent=
+  "✅ Профил нигоҳ дошта шуд!";
+
+ render();
+});
+
+$("photo").addEventListener("change",event=>{
+ const file=event.target.files[0];
+ if(!file)return;
+
+ if(!file.type.startsWith("image/")){
+  $("message").textContent=
+   "Танҳо файли акс интихоб кун.";
+  return;
+ }
+
+ if(file.size>2*1024*1024){
+  $("message").textContent=
+   "Акс бояд аз 2 MB хурд бошад.";
+  return;
+ }
+
+ const reader=new FileReader();
+
+ reader.onload=()=>{
+  const img=new Image();
+
+  img.onload=()=>{
+   const canvas=document.createElement("canvas");
+   canvas.width=160;
+   canvas.height=160;
+
+   const ctx=canvas.getContext("2d");
+   const size=Math.min(img.width,img.height);
+   const x=(img.width-size)/2;
+   const y=(img.height-size)/2;
+
+   ctx.drawImage(
+    img,x,y,size,size,
+    0,0,160,160
+   );
+
+   const photo=canvas.toDataURL(
+    "image/jpeg",0.75
+   );
+
+   const updated={...profile,photo};
+
+   if(write(PROFILE_KEY,updated)){
+    profile=updated;
+    $("message").textContent=
+     "✅ Акси профил нигоҳ дошта шуд!";
+    renderAvatar();
+   }
+  };
+
+  img.onerror=()=>{
+   $("message").textContent=
+    "Акс кушода нашуд.";
+  };
+
+  img.src=reader.result;
+ };
+
+ reader.readAsDataURL(file);
+});
+
+render();
+</script>
+</body>
+</html>
