@@ -76,6 +76,8 @@ th{background:#f8fafc;color:#64748b}
 .activity-bad{color:#dc2626;font-weight:bold}
 .activity-title{border-left:5px solid #ff6900}
 .order-warning{background:#fff7ed;border:1px solid #fed7aa;padding:13px;border-radius:10px;color:#9a3412;font-size:13px;margin:12px 0}
+.admin-link{display:inline-block;background:#ff6900;color:#fff;text-decoration:none;padding:12px 16px;border-radius:9px;font-weight:bold;margin:6px 8px 6px 0}
+.admin-link:hover{background:#e65e00}
 @media(max-width:850px){
 .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
 .charts,.form-grid{grid-template-columns:1fr}
@@ -91,7 +93,9 @@ th{background:#f8fafc;color:#64748b}
  <div class="top">
   <div class="logo">VAYO <span>SUPER ADMIN</span></div>
   <div>
-   <a href="index.html">Саҳифаи асосӣ</a>
+   <a href="index.html">🏠 Саҳифаи асосӣ</a>
+   <a href="payments.html">💳 Пардохтҳо</a>
+   <a href="commissions.html">💰 Комиссияҳо</a>
    <button id="logoutBtn" class="logout" style="display:none">Баромадан</button>
   </div>
  </div>
@@ -152,8 +156,18 @@ th{background:#f8fafc;color:#64748b}
   <div class="stat">
    <small>Комиссияи VAYO</small>
    <strong id="commissionDisplay">2%</strong>
-   <small>Танҳо аз амалиёти анҷомёфта ва пардохтшуда. Санҷиши серверии пардохт ҳанӯз пурра нест.</small>
+   <small>Аз амалиёти анҷомёфта ва пардохти тасдиқшуда</small>
   </div>
+ </div>
+
+ <div class="panel">
+  <h2>💰 Маркази молиявии VAYO</h2>
+  <p class="muted">
+   Идоракунии пардохтҳои фармоишҳо ва комиссияҳои 2%.
+   Пардохтро танҳо баъди санҷиши воқеӣ тасдиқ кунед.
+  </p>
+  <a class="admin-link" href="payments.html">💳 Идораи пардохтҳо</a>
+  <a class="admin-link" href="commissions.html">💰 Идораи комиссияҳо</a>
  </div>
 
  <div class="tabs">
