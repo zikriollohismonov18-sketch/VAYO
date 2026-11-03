@@ -1594,6 +1594,79 @@ loadAccount();
 })();
 </script>
 <!-- END VAYO FOOD -->
+<!-- VAYO SUPER ADMIN ACCESS -->
+<style>
+#vayoAdminAccess{
+  display:none;
+  position:fixed;
+  right:16px;
+  bottom:20px;
+  z-index:9999;
+  background:#172238;
+  color:white;
+  border:2px solid #ff6500;
+  border-radius:30px;
+  padding:13px 18px;
+  font:700 14px Arial,sans-serif;
+  text-decoration:none;
+  box-shadow:0 5px 18px #0004;
+}
+#vayoAdminAccess:focus-visible{
+  outline:3px solid #ff6500;
+  outline-offset:3px;
+}
+</style>
+
+<a id="vayoAdminAccess"
+   href="./super-admin.html">
+  🛡️ Super Admin
+</a>
+
+<script>
+(function(){
+  "use strict";
+
+  const URL="https://rgminzzmlktkliliiupt.supabase.co";
+  const KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+
+  async function checkAdmin(){
+    const button=document.getElementById("vayoAdminAccess");
+    button.style.display="none";
+
+    if(!window.supabase?.createClient)return;
+
+    try{
+      const client=window.supabase.createClient(URL,KEY,{
+        auth:{
+          storageKey:"vayo-admin-access-auth",
+          persistSession:true,
+          autoRefreshToken:true,
+          detectSessionInUrl:false
+        }
+      });
+
+      const {data:{user},error}=await client.auth.getUser();
+      if(error||!user)return;
+
+      const {data,isError}=await client
+        .from("vayo_admins")
+        .select("user_id")
+        .eq("user_id",user.id)
+        .maybeSingle();
+
+      if(!isError&&data){
+        button.style.display="block";
+      }
+    }catch(err){
+      console.warn("Admin access check:",err);
+    }
+  }
+
+  checkAdmin();
+})();
+</script>
+<!-- END VAYO SUPER ADMIN ACCESS -->
+
 
 
 </body>
