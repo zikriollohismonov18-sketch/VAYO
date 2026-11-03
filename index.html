@@ -5,1347 +5,796 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#f43a10">
-<meta name="description" content="VAYO Super App — бозор ва хизматрасониҳои Тоҷикистон">
+<meta name="description" content="VAYO Super App Тоҷикистон">
 <title>VAYO — Super App</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
-:root{
- --orange:#f43a10;
- --orange2:#ff7900;
- --red:#e82e20;
- --green:#078622;
- --ink:#202124;
- --muted:#777b83;
- --line:#e9e9e9;
- --bg:#f5f5f5;
- --white:#fff;
-}
+:root{--orange:#f43a10;--red:#e82e20;--green:#078622;--bg:#f6f7f9;--ink:#202124;--muted:#747986;--line:#e7e9ed}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
- margin:0;
- font-family:Arial,sans-serif;
- background:var(--bg);
- color:var(--ink);
-}
-button,input{font:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,sans-serif;padding-bottom:75px}
+button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 button:disabled{opacity:.5;cursor:not-allowed}
-a{text-decoration:none;color:inherit}
+a{color:inherit;text-decoration:none}
 .hidden{display:none!important}
-.container{max-width:1280px;margin:auto;padding:0 15px}
-
-/* HEADER */
-.site-header{
- position:sticky;
- top:0;
- z-index:50;
- color:white;
- background:linear-gradient(110deg,#e92c0b,#ff5d00);
- box-shadow:0 3px 15px #0002;
-}
-.header-inner{
- max-width:1280px;
- margin:auto;
- padding:12px 15px;
- display:flex;
- align-items:center;
- gap:12px;
-}
-.logo{
- font-size:35px;
- font-weight:900;
- letter-spacing:-2px;
- color:white;
-}
-.search{
- display:flex;
- align-items:center;
- flex:1;
- min-width:0;
- height:49px;
- padding:4px;
- background:white;
- border-radius:40px;
-}
-.search input{
- flex:1;
- min-width:0;
- border:0;
- outline:0;
- padding:0 14px;
- color:#222;
- background:transparent;
-}
-.camera-btn{
- width:40px;
- height:40px;
- border:0;
- background:transparent;
- font-size:23px;
-}
-.search-btn{
- height:40px;
- min-width:52px;
- border:0;
- border-radius:30px;
- background:#111;
- color:white;
- font-size:20px;
-}
-.language{
- display:flex;
- gap:3px;
- padding:4px;
- border-radius:25px;
- background:#ffffff22;
-}
-.language button{
- border:0;
- background:transparent;
- color:white;
- font-size:12px;
- font-weight:800;
- padding:8px;
- border-radius:20px;
-}
-.language button.active{
- background:white;
- color:var(--orange);
-}
-.desktop-links{
- display:flex;
- align-items:center;
- gap:13px;
-}
-.desktop-links a,
-.desktop-links button{
- background:transparent;
- color:white;
- border:0;
- font-size:12px;
- font-weight:800;
- white-space:nowrap;
-}
-.header-categories{
- max-width:1280px;
- margin:auto;
- display:flex;
- gap:8px;
- overflow-x:auto;
- padding:0 15px 11px;
- scrollbar-width:none;
-}
-.cat{
- border:1px solid #ffffff65;
- background:#ffffff1b;
- color:white;
- border-radius:25px;
- padding:9px 15px;
- font-size:13px;
- font-weight:800;
- white-space:nowrap;
-}
-.cat.active{
- background:white;
- color:var(--orange);
-}
-
-/* HERO */
-.hero{
- background:linear-gradient(110deg,#f32b08,#ff5d00 60%,#ff8b00);
- color:white;
- min-height:210px;
- display:flex;
- align-items:center;
- justify-content:center;
- text-align:center;
- padding:30px 18px;
- position:relative;
- overflow:hidden;
-}
-.hero-content{position:relative;z-index:1}
-.hero-kicker{
- color:#fff58b;
- font-weight:900;
- font-size:clamp(20px,3vw,35px);
-}
-.hero h1{
- margin:8px 0 12px;
- font-size:clamp(26px,4vw,46px);
-}
-.hero p{font-size:15px}
-.hero-button{
- display:inline-block;
- background:#fff2a6;
- color:#bd2908;
- font-weight:900;
- padding:12px 24px;
- border-radius:30px;
- font-size:14px;
-}
-.hero-deco{
- position:absolute;
- font-size:70px;
- opacity:.4;
-}
-.hero-deco.left{left:8%;top:25%}
-.hero-deco.right{right:8%;top:25%}
-
-/* SERVICE HUB */
-.super-section{margin-top:22px}
-.super-heading{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:12px;
- margin-bottom:14px;
-}
-.super-heading h2{
- margin:0;
- font-size:25px;
- font-weight:900;
-}
-.super-grid{
- display:grid;
- grid-template-columns:repeat(6,minmax(0,1fr));
- gap:12px;
-}
-.super-card{
- background:white;
- border:1px solid #eee;
- border-radius:15px;
- padding:20px 10px;
- text-align:center;
- min-width:0;
-}
-.super-icon{font-size:36px}
-.super-card h3{
- margin:10px 0 6px;
- font-size:15px;
-}
-.super-card p{
- font-size:11px;
- line-height:1.5;
- color:var(--muted);
- min-height:35px;
-}
-.super-status{
- display:inline-block;
- padding:7px 10px;
- border-radius:20px;
- font-size:11px;
- font-weight:800;
- background:#fff1e6;
- color:#aa4500;
-}
-.super-status.ready{
- background:#e6f7ea;
- color:#087b24;
-}
-.super-note{
- margin-top:14px;
- padding:14px;
- border-radius:12px;
- background:#fff8ee;
- border:1px solid #ffdfb8;
- font-size:13px;
- line-height:1.7;
-}
-
-/* SERVICE STRIP */
-.service-strip{
- display:grid;
- grid-template-columns:1fr 1fr;
- background:#fff0e4;
- border:1px solid #ffe4d0;
- border-radius:13px;
- overflow:hidden;
- margin-top:15px;
-}
-.service{padding:16px}
-.service:first-child{border-right:1px solid #e7d2c1}
-.service-title{font-size:17px;font-weight:900}
-.service-title.green{color:var(--green)}
-.service p{
- color:#69615b;
- font-size:13px;
- margin:8px 0 0;
-}
-.trust-banner{
- margin-top:13px;
- background:#07860a;
- color:white;
- padding:13px 18px;
- border-radius:9px;
- font-size:13px;
- font-weight:800;
-}
-
-/* PRODUCTS */
-.section{margin-top:20px}
-.section-head{
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:10px;
- margin-bottom:13px;
-}
-.section-title{
- margin:0;
- font-size:22px;
- font-weight:900;
-}
-.section-more{
- color:var(--orange);
- font-size:13px;
- font-weight:800;
-}
-.featured{
- background:linear-gradient(180deg,#ffe8ea,#fff5f5);
- padding:15px;
- border-radius:13px;
-}
-.featured-title{
- color:#b71d2a;
- font-size:20px;
- font-weight:900;
- margin:0;
-}
-.featured-grid{
- display:grid;
- grid-template-columns:repeat(2,minmax(0,1fr));
- gap:12px;
-}
-.product-grid{
- display:grid;
- grid-template-columns:repeat(5,minmax(0,1fr));
- gap:14px;
-}
-.product-card{
- background:white;
- border:1px solid #eee;
- border-radius:11px;
- overflow:hidden;
- min-width:0;
-}
-.product-photo{
- position:relative;
- width:100%;
- aspect-ratio:1/1.08;
- background:#f0f0f0;
- overflow:hidden;
-}
-.product-photo img{
- width:100%;
- height:100%;
- object-fit:cover;
- display:block;
-}
-.no-image{
- display:grid;
- place-items:center;
- height:100%;
- font-size:45px;
- color:#aaa;
-}
-.sale-badge{
- position:absolute;
- top:8px;
- left:8px;
- background:var(--red);
- color:white;
- padding:6px 8px;
- border-radius:6px;
- font-size:12px;
- font-weight:900;
-}
-.product-info{padding:11px}
-.product-name{
- font-size:13px;
- line-height:1.5;
- font-weight:700;
- min-height:39px;
- display:-webkit-box;
- -webkit-line-clamp:2;
- -webkit-box-orient:vertical;
- overflow:hidden;
-}
-.product-price{
- color:#e52e20;
- font-size:21px;
- font-weight:900;
- margin-top:8px;
-}
-.old-price{
- color:#888;
- text-decoration:line-through;
- font-size:12px;
- margin-top:4px;
-}
-.product-meta{
- color:#777;
- font-size:12px;
- margin-top:6px;
-}
-.buy{
- width:100%;
- margin-top:11px;
- border:0;
- background:linear-gradient(90deg,#ff4a0a,#ff7600);
- color:white;
- border-radius:9px;
- padding:11px 7px;
- font-weight:800;
- font-size:13px;
-}
-.empty{
- grid-column:1/-1;
- background:white;
- padding:35px 18px;
- text-align:center;
- color:#777;
- border-radius:12px;
- line-height:1.7;
-}
-.tabs{
- display:flex;
- align-items:center;
- gap:24px;
- background:white;
- overflow-x:auto;
- padding:15px 10px 0;
- scrollbar-width:none;
-}
-.tab{
- border:0;
- background:transparent;
- color:#888;
- white-space:nowrap;
- font-size:15px;
- font-weight:800;
- padding:0 3px 15px;
- border-bottom:4px solid transparent;
-}
-.tab.active{
- color:#111;
- border-bottom-color:#111;
-}
-.photo-status{
- background:#fff2e6;
- border:1px solid #ffd5b4;
- border-radius:10px;
- padding:13px;
- margin-top:15px;
- font-size:13px;
- color:#853900;
-}
-.photo-clear{
- border:0;
- background:transparent;
- color:#bc3500;
- font-weight:900;
- margin-left:10px;
-}
-
-/* CART */
-.overlay{
- position:fixed;
- inset:0;
- background:#0009;
- z-index:90;
-}
-.cart-panel{
- position:fixed;
- top:0;
- right:0;
- bottom:0;
- width:min(450px,100%);
- background:white;
- z-index:100;
- padding:20px;
- overflow-y:auto;
- box-shadow:-10px 0 35px #0003;
-}
-.cart-head{
- display:flex;
- justify-content:space-between;
- align-items:center;
- padding-bottom:15px;
- border-bottom:1px solid var(--line);
-}
-.cart-head h2{margin:0;font-size:22px}
-.close-cart{
- width:38px;
- height:38px;
- border:0;
- border-radius:50%;
- background:#eee;
- font-size:20px;
-}
-.cart-row{
- display:flex;
- gap:12px;
- padding:16px 0;
- border-bottom:1px solid var(--line);
-}
-.cart-img{
- width:70px;
- height:75px;
- object-fit:cover;
- border-radius:9px;
- background:#f1f1f1;
- flex-shrink:0;
-}
-.cart-detail{flex:1;min-width:0}
-.cart-name{font-weight:800;font-size:13px}
-.cart-price{
- font-weight:900;
- color:var(--red);
- margin:7px 0;
-}
-.qty-controls{
- display:flex;
- gap:8px;
- align-items:center;
- margin-top:9px;
-}
-.qty-controls button{
- width:30px;
- height:30px;
- border:1px solid #ddd;
- background:white;
- border-radius:7px;
- font-size:18px;
-}
-.qty-controls span{font-weight:800}
-.remove{
- border:0;
- background:#fff0eb;
- color:#d83220;
- padding:8px;
- border-radius:7px;
- align-self:start;
-}
-.cart-total{
- display:flex;
- justify-content:space-between;
- margin-top:22px;
- font-size:19px;
- font-weight:900;
-}
-.cart-total strong{color:var(--red)}
-.checkout{
- display:block;
- background:linear-gradient(100deg,#f43b0b,#ff8000);
- color:white;
- text-align:center;
- padding:15px;
- border-radius:12px;
- font-weight:900;
- margin-top:18px;
-}
-.cart-note{
- color:var(--muted);
- font-size:12px;
- line-height:1.6;
-}
-.toast{
- position:fixed;
- bottom:85px;
- left:50%;
- transform:translateX(-50%);
- background:#222;
- color:white;
- padding:12px 20px;
- border-radius:30px;
- z-index:150;
- font-size:13px;
- font-weight:700;
- max-width:90%;
- text-align:center;
-}
-.bottom-nav{display:none}
-.bottom-link{
- display:flex;
- flex-direction:column;
- align-items:center;
- justify-content:center;
- gap:5px;
- font-size:11px;
- font-weight:800;
- border:0;
- background:transparent;
- position:relative;
- min-width:0;
-}
-.bottom-icon{font-size:25px}
-.bottom-link.active{color:#e42f20}
-.cart-count{
- position:absolute;
- top:-5px;
- right:12%;
- background:#ff7900;
- color:white;
- font-size:11px;
- border-radius:20px;
- padding:2px 6px;
-}
-footer{
- color:#888;
- text-align:center;
- font-size:12px;
- padding:35px 15px;
-}
-.footer-links{
- display:flex;
- flex-wrap:wrap;
- gap:14px;
- justify-content:center;
- margin-top:12px;
-}
-
-/* RESPONSIVE */
-@media(max-width:1100px){
- .product-grid{grid-template-columns:repeat(4,1fr)}
- .super-grid{grid-template-columns:repeat(3,1fr)}
-}
-@media(max-width:850px){
- .desktop-links{display:none}
- .product-grid{grid-template-columns:repeat(3,1fr)}
-}
-@media(max-width:650px){
- body{padding-bottom:67px;background:white}
- .header-inner{
-  padding:8px 10px;
-  gap:6px;
-  flex-wrap:wrap;
- }
- .logo{font-size:24px}
- .language{order:2}
- .search{
-  order:3;
-  flex-basis:100%;
-  height:46px;
- }
- .header-categories{display:none}
- .container{padding:0 9px}
- .hero{min-height:175px;padding:22px 12px}
- .hero h1{font-size:26px}
- .hero-kicker{font-size:22px}
- .hero p{font-size:12px}
- .hero-deco{font-size:38px}
- .super-grid{
-  grid-template-columns:repeat(2,1fr);
-  gap:8px;
- }
- .super-card{padding:14px 8px}
- .super-card h3{font-size:13px}
- .super-icon{font-size:30px}
- .super-heading h2{font-size:20px}
- .service{padding:13px 10px}
- .service-title{font-size:13px}
- .service p{font-size:11px}
- .section-title{font-size:19px}
- .featured{padding:10px}
- .featured-title{font-size:18px}
- .product-grid{
-  grid-template-columns:repeat(2,1fr);
-  gap:5px;
- }
- .featured-grid{gap:7px}
- .product-card{border-radius:4px}
- .product-info{padding:9px}
- .product-name{font-size:12px}
- .product-price{font-size:19px}
- .buy{font-size:12px}
- .bottom-nav{
-  display:grid;
-  position:fixed;
-  grid-template-columns:repeat(5,1fr);
-  left:0;
-  right:0;
-  bottom:0;
-  height:65px;
-  background:white;
-  border-top:1px solid #e5e5e5;
-  z-index:80;
-  padding:8px 4px 5px;
- }
-}
+.container{max-width:1250px;margin:auto;padding:0 12px}
+header{background:linear-gradient(110deg,#e92c0b,#ff7100);color:#fff;position:sticky;top:0;z-index:30;box-shadow:0 3px 15px #0002}
+.header{max-width:1250px;margin:auto;padding:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:32px;font-weight:900;letter-spacing:-2px}
+.search{display:flex;align-items:center;flex:1;min-width:180px;background:#fff;border-radius:30px;padding:4px}
+.search input{flex:1;min-width:0;border:0;outline:0;padding:10px;background:transparent}
+.search button{border:0;background:transparent;font-size:20px;padding:8px}
+.search .go{background:#171717;color:#fff;border-radius:25px}
+.lang{display:flex;gap:4px}
+.lang button{border:0;border-radius:18px;padding:8px;background:#ffffff22;color:white;font-weight:bold}
+.lang button.active{background:#fff;color:var(--orange)}
+.header-links{display:flex;gap:12px;align-items:center;font-size:12px;font-weight:bold}
+.hero{background:linear-gradient(120deg,#ef320b,#ff7900);color:#fff;text-align:center;padding:30px 12px}
+.hero h1{font-size:clamp(25px,4vw,42px);margin:10px 0}
+.hero p{font-size:14px}
+.hero a{display:inline-block;background:#fff3aa;color:#a72a00;padding:12px 22px;border-radius:25px;font-weight:900;margin-top:8px}
+h2{font-size:22px;margin:24px 0 14px}
+.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
+.service{background:white;border:1px solid #eee;border-radius:14px;padding:17px 8px;text-align:center;cursor:pointer;transition:.2s;min-width:0}
+.service:hover,.service:focus-visible{transform:translateY(-2px);box-shadow:0 6px 18px #0002;outline:2px solid #ff7900}
+.service .emoji{font-size:32px}
+.service strong{display:block;font-size:13px;margin:9px 0 5px}
+.service small{display:block;font-size:11px;color:var(--muted);line-height:1.5;min-height:30px}
+.status{display:inline-block;font-size:10px;font-weight:bold;background:#fff1e6;color:#aa4500;padding:6px;border-radius:15px;margin-top:7px}
+.status.ready{background:#e6f7ea;color:#087b24}
+.note{background:#fff5e8;border:1px solid #ffdbb8;border-radius:12px;padding:14px;font-size:13px;line-height:1.7;margin:14px 0}
+.strip{display:grid;grid-template-columns:1fr 1fr;background:#fff0e4;border-radius:12px;margin:15px 0;overflow:hidden}
+.strip div{padding:15px}
+.strip div+div{border-left:1px solid #ead5c4}
+.strip p{font-size:12px;color:#666}
+.trust{background:var(--green);color:#fff;border-radius:9px;padding:13px;font-size:13px;font-weight:bold}
+.section{margin-top:22px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.section-head h2{margin:10px 0}
+.section-head a{color:var(--orange);font-size:13px;font-weight:bold}
+.featured{background:#fff0f1;padding:12px;border-radius:13px}
+.product-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.featured .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.product{background:white;border:1px solid #eee;border-radius:10px;overflow:hidden;min-width:0}
+.photo{aspect-ratio:1/1.05;background:#f0f0f0;position:relative;display:grid;place-items:center;font-size:45px}
+.photo img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.discount{position:absolute;top:7px;left:7px;background:#e82e20;color:white;padding:5px;border-radius:5px;font-size:12px;font-weight:bold}
+.product-body{padding:10px}
+.product-name{font-size:13px;font-weight:bold;line-height:1.5;min-height:39px}
+.price{font-size:20px;font-weight:900;color:var(--red);margin-top:7px}
+.old{font-size:12px;text-decoration:line-through;color:#888}
+.meta{font-size:12px;color:#777;margin-top:6px}
+.primary{background:linear-gradient(90deg,#f43a10,#ff7900);color:white;border:0;border-radius:9px;padding:12px;font-weight:bold}
+.product .primary{width:100%;margin-top:10px}
+.tabs{display:flex;gap:15px;overflow-x:auto;background:#fff;padding:12px;border-radius:9px}
+.tab{background:none;border:0;padding:8px;font-weight:bold;white-space:nowrap}
+.tab.active{color:var(--orange);border-bottom:3px solid var(--orange)}
+.empty{grid-column:1/-1;text-align:center;background:white;color:#777;padding:25px;border-radius:10px}
+.overlay{position:fixed;inset:0;background:#0009;z-index:80}
+.cart-panel{position:fixed;right:0;top:0;bottom:0;width:min(440px,100%);background:white;z-index:90;overflow:auto;padding:18px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cart-item{display:flex;gap:10px;border-bottom:1px solid #eee;padding:13px 0}
+.cart-item img{width:60px;height:65px;object-fit:cover;border-radius:8px}
+.cart-item .info{flex:1}
+.qty{display:flex;gap:10px;align-items:center;margin-top:8px}
+.qty button{border:1px solid #ddd;background:white;border-radius:6px;padding:5px 10px}
+.modal{position:fixed;inset:0;background:#000b;z-index:110;display:flex;align-items:center;justify-content:center;padding:12px}
+.modal-box{background:#fff;border-radius:17px;width:min(760px,100%);max-height:94vh;overflow-y:auto;padding:18px}
+.modal-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;padding-bottom:12px}
+.modal-head h2{margin:0;font-size:22px}
+.close{border:0;border-radius:50%;background:#eee;width:38px;height:38px;font-size:23px}
+.modal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:15px 0}
+.tile{background:#f7f8fa;border:1px solid #eee;border-radius:12px;padding:15px;text-align:center;font-size:13px;font-weight:bold}
+.field{width:100%;border:1px solid #d9dce2;border-radius:9px;padding:12px;margin:7px 0;background:white}
+.form-label{display:block;font-size:13px;font-weight:bold;margin-top:12px}
+.modal-note{background:#fff4e8;border-radius:10px;padding:12px;font-size:12px;line-height:1.7;color:#824000;margin-top:14px}
+.toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:#222;color:white;padding:12px 20px;border-radius:25px;z-index:150;font-size:13px;text-align:center}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #ddd;display:grid;grid-template-columns:repeat(5,1fr);z-index:50;height:65px}
+.bottom button,.bottom a{border:0;background:transparent;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:11px;gap:5px}
+.bottom span.icon{font-size:23px}
+footer{text-align:center;color:#777;font-size:12px;padding:30px 10px}
+footer a{margin:0 7px}
+@media(max-width:1050px){.grid{grid-template-columns:repeat(4,1fr)}.product-grid{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:700px){.header-links{display:none}.grid{grid-template-columns:repeat(3,1fr)}.product-grid{grid-template-columns:repeat(2,1fr);gap:6px}.service{padding:12px 5px}.service .emoji{font-size:28px}.service strong{font-size:12px}.service small{font-size:10px}.product-body{padding:8px}.product-name{font-size:12px}.price{font-size:18px}.hero{padding:23px 10px}.logo{font-size:26px}.search{order:3;flex-basis:100%}.lang{margin-left:auto}}
 </style>
 </head>
-
 <body>
 
-<header class="site-header">
- <div class="header-inner">
-  <a class="logo" href="./index.html">VAYO</a>
-
-  <div class="search">
-   <input id="search" type="search"
-    placeholder="Ҷустуҷӯи маҳсулот..."
-    aria-label="Search products">
-   <button class="camera-btn" id="cameraBtn"
-    type="button" title="Ҷустуҷӯ бо акс">📷</button>
-   <button class="search-btn" id="searchBtn"
-    type="button">🔍</button>
-  </div>
-
-  <div class="language">
-   <button data-lang="tg" class="active">TJ</button>
-   <button data-lang="ru">RU</button>
-   <button data-lang="en">EN</button>
-  </div>
-
-  <div class="desktop-links">
-   <a id="accountLink" href="./pages/login.html">
-    👤 Воридшавӣ
-   </a>
-   <a id="ordersLink" href="./pages/orders.html">
-    📦 Фармоишҳо
-   </a>
-   <button id="cartBtn" type="button">
-    🛒 <span id="cartLabel">Сабад</span>
-    (<span id="count">0</span>)
-   </button>
-   <a id="sellerLink" href="./pages/seller.html">
-    🏪 Фурӯшанда
-   </a>
-  </div>
- </div>
-
- <nav class="header-categories" id="categories">
-  <button class="cat active" data-category="all"
-   data-i18n="all">Ҳама</button>
-  <button class="cat" data-category="Либос"
-   data-i18n="clothes">Либос</button>
-  <button class="cat" data-category="Пойафзол"
-   data-i18n="shoes">Пойафзол</button>
-  <button class="cat" data-category="Электроника"
-   data-i18n="electronics">Электроника</button>
-  <button class="cat" data-category="Хона"
-   data-i18n="house">Барои хона</button>
-  <button class="cat" data-category="Зебоӣ"
-   data-i18n="beauty">Зебоӣ</button>
-  <a class="cat" href="./pages/promotions.html">
-   🔥 <span data-i18n="promotions">Аксияҳо</span>
-  </a>
- </nav>
+<header>
+<div class="header">
+<a href="./index.html" class="logo">VAYO</a>
+<div class="search">
+<input id="search" type="search" placeholder="Ҷустуҷӯи маҳсулот...">
+<button id="cameraBtn" title="Ҷустуҷӯ бо акс">📷</button>
+<button id="searchBtn" class="go">🔍</button>
+</div>
+<div class="lang">
+<button data-lang="tg" class="active">TJ</button>
+<button data-lang="ru">RU</button>
+<button data-lang="en">EN</button>
+</div>
+<div class="header-links">
+<a href="./pages/login.html" id="accountLink">👤 Воридшавӣ</a>
+<a href="./pages/orders.html">📦 Фармоишҳо</a>
+<button id="cartBtn" style="background:none;border:0;color:white">🛒 Сабад (<span id="count">0</span>)</button>
+<a href="./pages/seller.html">🏪 Фурӯшанда</a>
+</div>
+</div>
 </header>
 
 <section class="hero">
- <div class="hero-deco left">🛍️</div>
- <div class="hero-content">
-  <div class="hero-kicker">🔥 VAYO SALE</div>
-  <h1 data-i18n="hero">
-   Пешниҳодҳои беҳтаринро пайдо кунед!
-  </h1>
-  <p data-i18n="heroText">
-   Маҳсулоти гуногун бо нархҳои дастрас
-  </p>
-  <a href="./pages/promotions.html"
-   class="hero-button" data-i18n="heroButton">
-   Дидани аксияҳо ❯
-  </a>
- </div>
- <div class="hero-deco right">🎁</div>
+<div>🔥 VAYO SUPER APP</div>
+<h1 id="heroTitle">Ҳама чиз дар як ҷо!</h1>
+<p id="heroText">Бозор, таксӣ, хӯрок, хизматрасонӣ ва омӯзиш</p>
+<a href="#services">Хизматрасониҳо ❯</a>
 </section>
 
 <main class="container">
+<section id="services">
+<h2>🌍 VAYO Super App</h2>
+<div id="superGrid" class="grid"></div>
+<div class="note" id="commissionNote">
+Комиссияи харидорон 0%. Комиссияи иҷрокунандагон 2%.
+Пардохт ҳоло нақдӣ аст.
+</div>
+</section>
 
- <!-- SUPER APP -->
- <section class="super-section" id="superApp">
-  <div class="super-heading">
-   <h2>🌍 VAYO Super App</h2>
-  </div>
+<div class="strip">
+<div><strong>🚚 Расонидан</strong><p>Шарт ва нарх аз мағоза вобаста аст.</p></div>
+<div><strong>📦 Фармоиши осон</strong><p>Маҳсулотро интихоб карда фармоиш диҳед.</p></div>
+</div>
 
-  <div class="super-grid" id="superGrid"></div>
+<div class="trust">🛡️ Нархҳо ва захираи маҳсулот ҳангоми фармоиш санҷида мешаванд.</div>
 
-  <div class="super-note" id="superNote">
-   Комиссияи харидорон 0% мебошад.
-   Комиссияи фурӯшандагон ва хизматрасонҳо
-   2% аз амалиёти анҷомёфта аст.
-  </div>
- </section>
+<section class="section featured">
+<div class="section-head">
+<h2>🔥 Топ-маҳсулот</h2>
+<a href="./pages/promotions.html">Ҳамаи аксияҳо</a>
+</div>
+<div id="featuredProducts" class="product-grid"><div class="empty">Бор мешавад...</div></div>
+</section>
 
- <!-- DELIVERY -->
- <section class="service-strip">
-  <div class="service">
-   <div class="service-title green">
-    🚚 <span data-i18n="delivery">Расонидан</span>
-   </div>
-   <p data-i18n="deliveryText">
-    Шарт ва нарх аз мағоза вобаста аст.
-   </p>
-  </div>
+<div id="photoStatus" class="note hidden"></div>
 
-  <div class="service">
-   <div class="service-title">
-    📦 <span data-i18n="easyOrder">Фармоиши осон</span>
-   </div>
-   <p data-i18n="easyText">
-    Маҳсулотро интихоб карда фармоиш диҳед.
-   </p>
-  </div>
- </section>
-
- <div class="trust-banner">
-  🛡️ <span data-i18n="trust">
-   Нархҳо ва захираи маҳсулот ҳангоми
-   фармоиш санҷида мешаванд
-  </span>
- </div>
-
- <!-- FEATURED -->
- <section class="section featured">
-  <div class="section-head">
-   <h2 class="featured-title" data-i18n="top">
-    Топ-маҳсулот ❯
-   </h2>
-   <a class="section-more"
-    href="./pages/promotions.html"
-    data-i18n="allDeals">Ҳамаи аксияҳо</a>
-  </div>
-
-  <div class="featured-grid" id="featuredProducts">
-   <div class="empty">...</div>
-  </div>
- </section>
-
- <div id="photoStatus" class="photo-status hidden"></div>
-
- <!-- CATALOG -->
- <section class="section" id="catalog">
-  <div class="tabs" id="catalogTabs">
-   <button class="tab active" data-tab="all"
-    data-i18n="all">Ҳама</button>
-   <button class="tab" data-tab="featured"
-    data-i18n="selected">Интихобшуда</button>
-   <button class="tab" data-tab="local"
-    data-i18n="local">Мағозаҳои маҳаллӣ</button>
-   <button class="tab" data-tab="sale"
-    data-i18n="discounts">🔥 Тахфифҳо</button>
-  </div>
-
-  <div class="section-head" style="margin-top:18px">
-   <h2 class="section-title" data-i18n="catalog">
-    Маҳсулоти VAYO
-   </h2>
-   <span id="resultCount" class="section-more"></span>
-  </div>
-
-  <div class="product-grid" id="products">
-   <div class="empty">...</div>
-  </div>
- </section>
-
+<section class="section" id="catalog">
+<div class="tabs">
+<button class="tab active" data-tab="all">Ҳама</button>
+<button class="tab" data-tab="featured">Интихобшуда</button>
+<button class="tab" data-tab="local">Мағозаҳои маҳаллӣ</button>
+<button class="tab" data-tab="sale">🔥 Тахфифҳо</button>
+</div>
+<div class="section-head">
+<h2>🛍️ Маҳсулоти VAYO</h2>
+<span id="resultCount"></span>
+</div>
+<div id="products" class="product-grid"><div class="empty">Бор мешавад...</div></div>
+</section>
 </main>
 
-<!-- CART -->
-<div class="overlay hidden" id="overlay"></div>
-
-<aside class="cart-panel hidden" id="cartPanel">
- <div class="cart-head">
-  <h2>🛒 <span data-i18n="myCart">Сабади шумо</span></h2>
-  <button class="close-cart" id="closeCart">✕</button>
- </div>
-
- <div id="cartItems"></div>
-
- <div class="cart-total">
-  <span data-i18n="total">Ҳамагӣ:</span>
-  <strong id="total">0 сомонӣ</strong>
- </div>
-
- <p class="cart-note" data-i18n="cartNote">
-  Нархи ниҳоӣ ва ҳаққи расонидан
-  ҳангоми фармоиш дар сервер ҳисоб мешаванд.
- </p>
-
- <a class="checkout" href="./pages/checkout.html">
-  📦 <span data-i18n="checkout">
-   Гузаштан ба фармоиш
-  </span>
- </a>
+<div id="overlay" class="overlay hidden"></div>
+<aside id="cartPanel" class="cart-panel hidden">
+<div class="row">
+<h2>🛒 Сабади шумо</h2>
+<button id="closeCart" class="close">×</button>
+</div>
+<div id="cartItems"></div>
+<div class="row" style="margin-top:20px">
+<strong>Ҳамагӣ:</strong>
+<strong id="total">0 TJS</strong>
+</div>
+<p class="modal-note">Нарх ва захираи маҳсулот дар сервер ҳангоми фармоиш санҷида мешаванд.</p>
+<a href="./pages/checkout.html" class="primary" style="display:block;text-align:center;margin-top:15px">📦 Гузаштан ба фармоиш</a>
 </aside>
 
-<!-- MOBILE -->
-<nav class="bottom-nav">
- <a class="bottom-link active" href="./index.html">
-  <span class="bottom-icon">🏠</span>
-  <span data-i18n="home">Асосӣ</span>
- </a>
- <button class="bottom-link" id="mobileCategories">
-  <span class="bottom-icon">☷</span>
-  <span data-i18n="categories">Категорияҳо</span>
- </button>
- <a class="bottom-link" href="./pages/orders.html">
-  <span class="bottom-icon">🚚</span>
-  <span data-i18n="orders">Фармоишҳо</span>
- </a>
- <button class="bottom-link" id="mobileCart">
-  <span class="bottom-icon">🛒</span>
-  <span data-i18n="cart">Сабад</span>
-  <span class="cart-count" id="mobileCount">0</span>
- </button>
- <a class="bottom-link" id="mobileAccount"
-  href="./pages/login.html">
-  <span class="bottom-icon">👤</span>
-  <span data-i18n="profile">Профил</span>
- </a>
+<div id="serviceModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+<div class="modal-box">
+<div class="modal-head">
+<h2 id="modalTitle">VAYO</h2>
+<button class="close" id="closeModal" aria-label="Пӯшидан">×</button>
+</div>
+<p id="modalDesc"></p>
+<div id="modalItems" class="modal-grid"></div>
+<div id="modalContent"></div>
+<div id="modalNote" class="modal-note"></div>
+</div>
+</div>
+
+<nav class="bottom">
+<a href="./index.html"><span class="icon">🏠</span>Асосӣ</a>
+<button id="mobileServices"><span class="icon">☷</span>Хизматҳо</button>
+<a href="./pages/orders.html"><span class="icon">📦</span>Фармоишҳо</a>
+<button id="mobileCart"><span class="icon">🛒</span>Сабад <span id="mobileCount">0</span></button>
+<a href="./pages/login.html"><span class="icon">👤</span>Профил</a>
 </nav>
 
 <input id="photoInput" type="file" accept="image/*" hidden>
 <div id="toast" class="toast hidden" role="status"></div>
 
 <footer>
- © 2026 VAYO —
- <span data-i18n="footer">Бозори онлайни Тоҷикистон</span>
-
- <div class="footer-links">
-  <a href="./pages/seller.html">🏪 Seller</a>
-  <a href="./pages/orders.html">📦 Orders</a>
-  <a href="./commissions.html">💰 Commissions</a>
-  <a href="./payments.html">💳 Payments</a>
- </div>
+© 2026 VAYO — Super App Тоҷикистон
+<p>
+<a href="./pages/seller.html">Seller</a>
+<a href="./pages/orders.html">Orders</a>
+<a href="./commissions.html">Commissions</a>
+<a href="./payments.html">Payments</a>
+</p>
 </footer>
 
 <script>
 "use strict";
 
-/* SUPABASE */
 const SB_URL="https://rgminzzmlktkliliiupt.supabase.co";
 const SB_KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+const db=window.supabase?.createClient(SB_URL,SB_KEY)||null;
+window.vayoDB=db;
 
 const $=id=>document.getElementById(id);
 const CART_KEY="vayo_cart_v1";
 const LANG_KEY="vayo_language";
 
-let db=null;
-
-if(window.supabase?.createClient){
- db=window.supabase.createClient(SB_URL,SB_KEY);
- window.vayoDB=db;
-}
+let lang=localStorage.getItem(LANG_KEY)||"tg";
+if(!["tg","ru","en"].includes(lang))lang="tg";
 
 let products=[];
 let cart=[];
-let category="all";
 let activeTab="all";
 let loading=true;
 let loadError=false;
 let photoRanks=null;
 let photoRequest=0;
-let toastTimer=null;
+let toastTimer;
+let activeService=null;
 let signedIn=false;
 
-let lang=localStorage.getItem(LANG_KEY)||"tg";
-if(!["tg","ru","en"].includes(lang))lang="tg";
-
-/* TRANSLATIONS */
-const translations={
+const words={
  tg:{
-  all:"Ҳама",
-  clothes:"Либос",
-  shoes:"Пойафзол",
-  electronics:"Электроника",
-  house:"Барои хона",
-  beauty:"Зебоӣ",
-  promotions:"Аксияҳо",
-  hero:"Пешниҳодҳои беҳтаринро пайдо кунед!",
-  heroText:"Маҳсулоти гуногун бо нархҳои дастрас",
-  heroButton:"Дидани аксияҳо ❯",
-  delivery:"Расонидан",
-  deliveryText:"Шарт ва нарх аз мағоза вобаста аст.",
-  easyOrder:"Фармоиши осон",
-  easyText:"Маҳсулотро интихоб карда фармоиш диҳед.",
-  trust:"Нархҳо ва захираи маҳсулот ҳангоми фармоиш санҷида мешаванд",
-  top:"Топ-маҳсулот ❯",
-  allDeals:"Ҳамаи аксияҳо",
-  selected:"Интихобшуда",
-  local:"Мағозаҳои маҳаллӣ",
-  discounts:"🔥 Тахфифҳо",
-  catalog:"Маҳсулоти VAYO",
-  myCart:"Сабади шумо",
-  total:"Ҳамагӣ:",
-  checkout:"Гузаштан ба фармоиш",
-  cartNote:"Нархи ниҳоӣ ва ҳаққи расонидан дар сервер ҳисоб карда мешаванд.",
-  home:"Асосӣ",
-  categories:"Категорияҳо",
-  orders:"Фармоишҳо",
-  cart:"Сабад",
-  profile:"Профил",
-  footer:"Бозори онлайни Тоҷикистон",
+  active:"Фаъол",soon:"Дар ҳоли омодасозӣ",
+  demo:"Ин бахш ҳоло озмоишӣ аст. Фармоиши воқеӣ аз ин равзана қабул намешавад.",
+  cash:"Пардохти нақдӣ",
+  confirm:"Тасдиқи дутарафа",
   search:"Ҷустуҷӯи маҳсулот...",
-  buy:"Ба сабад",
-  out:"Тамом шудааст",
-  stock:"Дар анбор:",
-  item:"маҳсулот",
-  notFound:"Маҳсулот ёфт нашуд.",
+  buy:"Ба сабад",out:"Тамом шудааст",
+  stock:"Дар анбор:",empty:"Маҳсулот ёфт нашуд.",
   loading:"Маҳсулот бор шуда истодааст...",
-  error:"Маҳсулот бор нашуд. Пайвасти Supabase-ро санҷед.",
-  emptyCart:"Сабади шумо холӣ аст.",
-  added:"Маҳсулот ба сабад илова шуд!",
-  noStock:"Ин маҳсулот дар анбор нест.",
-  tooMany:"Миқдори бештар дар анбор нест.",
-  photoWorking:"Аксҳои маҳсулот муқоиса мешаванд...",
-  photoFound:"Маҳсулоти аз рӯйи тасвир монанд:",
-  photoFail:"Муқоисаи аксҳо имконнопазир шуд.",
-  photoNote:"Натиҷа аз рӯйи ранг ва шакли умумии акс аст.",
-  photoClear:"Пок кардани ҷустуҷӯи акс",
-  photoWait:"Аввал маҳсулот бор шавад.",
-  photoInvalid:"Лутфан акси дуруст интихоб кунед.",
-  login:"Воридшавӣ",
-  account:"Ҳисоби ман",
-  seller:"Фурӯшанда",
-  localUnavailable:"Маълумоти мағозаҳои маҳаллӣ ҳоло пайваст нашудааст.",
-  unknownPrice:"Нарх ҳангоми фармоиш санҷида мешавад"
+  error:"Пайвасти Supabase ё ҷадвали маҳсулотро санҷед.",
+  added:"Ба сабад илова шуд!",
+  full:"Миқдори бештар дар анбор нест."
  },
  ru:{
-  all:"Все",
-  clothes:"Одежда",
-  shoes:"Обувь",
-  electronics:"Электроника",
-  house:"Для дома",
-  beauty:"Красота",
-  promotions:"Акции",
-  hero:"Найдите лучшие предложения!",
-  heroText:"Разные товары по доступным ценам",
-  heroButton:"Смотреть акции ❯",
-  delivery:"Доставка",
-  deliveryText:"Условия и стоимость зависят от магазина.",
-  easyOrder:"Простой заказ",
-  easyText:"Выберите товар и оформите заказ.",
-  trust:"Цены и наличие проверяются при оформлении заказа",
-  top:"Популярные товары ❯",
-  allDeals:"Все акции",
-  selected:"Избранное",
-  local:"Местные магазины",
-  discounts:"🔥 Скидки",
-  catalog:"Товары VAYO",
-  myCart:"Ваша корзина",
-  total:"Итого:",
-  checkout:"Оформить заказ",
-  cartNote:"Итоговая цена и доставка рассчитываются сервером.",
-  home:"Главная",
-  categories:"Категории",
-  orders:"Заказы",
-  cart:"Корзина",
-  profile:"Профиль",
-  footer:"Интернет-магазин Таджикистана",
+  active:"Активно",soon:"В разработке",
+  demo:"Этот раздел пока демонстрационный. Реальные заказы здесь не принимаются.",
+  cash:"Оплата наличными",
+  confirm:"Двустороннее подтверждение",
   search:"Поиск товаров...",
-  buy:"В корзину",
-  out:"Нет в наличии",
-  stock:"В наличии:",
-  item:"товаров",
-  notFound:"Товары не найдены.",
+  buy:"В корзину",out:"Нет в наличии",
+  stock:"В наличии:",empty:"Товары не найдены.",
   loading:"Загрузка товаров...",
-  error:"Не удалось загрузить товары. Проверьте Supabase.",
-  emptyCart:"Ваша корзина пуста.",
-  added:"Товар добавлен в корзину!",
-  noStock:"Товара нет в наличии.",
-  tooMany:"Недостаточно товара на складе.",
-  photoWorking:"Сравниваем фотографии...",
-  photoFound:"Товары с похожими изображениями:",
-  photoFail:"Не удалось сравнить фотографии.",
-  photoNote:"Результат основан на цвете и структуре изображения.",
-  photoClear:"Сбросить поиск по фото",
-  photoWait:"Дождитесь загрузки товаров.",
-  photoInvalid:"Выберите корректное изображение.",
-  login:"Войти",
-  account:"Мой аккаунт",
-  seller:"Продавец",
-  localUnavailable:"Данные местных магазинов пока не подключены.",
-  unknownPrice:"Цена проверяется при оформлении"
+  error:"Проверьте Supabase и таблицу товаров.",
+  added:"Добавлено в корзину!",
+  full:"Недостаточно товара."
  },
  en:{
-  all:"All",
-  clothes:"Clothing",
-  shoes:"Shoes",
-  electronics:"Electronics",
-  house:"Home",
-  beauty:"Beauty",
-  promotions:"Deals",
-  hero:"Discover the best deals!",
-  heroText:"Great products at affordable prices",
-  heroButton:"Explore deals ❯",
-  delivery:"Delivery",
-  deliveryText:"Terms and fees depend on the store.",
-  easyOrder:"Easy ordering",
-  easyText:"Choose products and place an order.",
-  trust:"Prices and stock are verified at checkout",
-  top:"Top products ❯",
-  allDeals:"All deals",
-  selected:"Featured",
-  local:"Local shops",
-  discounts:"🔥 Discounts",
-  catalog:"VAYO products",
-  myCart:"Your cart",
-  total:"Total:",
-  checkout:"Checkout",
-  cartNote:"Final prices and delivery fees are calculated on the server.",
-  home:"Home",
-  categories:"Categories",
-  orders:"Orders",
-  cart:"Cart",
-  profile:"Profile",
-  footer:"Tajikistan online marketplace",
+  active:"Active",soon:"Coming soon",
+  demo:"This section is a prototype. Real orders are not accepted here.",
+  cash:"Cash payment",
+  confirm:"Two-sided confirmation",
   search:"Search products...",
-  buy:"Add to cart",
-  out:"Sold out",
-  stock:"In stock:",
-  item:"products",
-  notFound:"No products found.",
+  buy:"Add to cart",out:"Sold out",
+  stock:"In stock:",empty:"No products found.",
   loading:"Loading products...",
-  error:"Unable to load products. Check Supabase.",
-  emptyCart:"Your cart is empty.",
-  added:"Product added to cart!",
-  noStock:"This product is out of stock.",
-  tooMany:"Not enough stock available.",
-  photoWorking:"Comparing product photos...",
-  photoFound:"Products with similar images:",
-  photoFail:"Could not compare product photos.",
-  photoNote:"Results are based on color and image structure.",
-  photoClear:"Clear photo search",
-  photoWait:"Wait for products to load.",
-  photoInvalid:"Please select a valid image.",
-  login:"Sign in",
-  account:"My account",
-  seller:"Seller",
-  localUnavailable:"Local store information is not connected yet.",
-  unknownPrice:"Price will be verified at checkout"
+  error:"Check Supabase and the products table.",
+  added:"Added to cart!",
+  full:"Not enough stock."
  }
 };
 
-function t(key){
- return translations[lang][key]||
- translations.tg[key]||key;
-}
+const t=k=>words[lang]?.[k]||words.tg[k]||k;
+const names=(tg,ru,en)=>({tg,ru,en});
+const svc=(id,icon,tg,ru,en,items=[],ready=false,desc="")=>({
+ id,icon,name:names(tg,ru,en),items,ready,desc
+});
 
-/* SUPER APP SERVICES */
+/* ҲАМАИ ХИЗМАТРАСОНИҲО */
 const services=[
- {
-  id:"market",
-  icon:"🛍️",
-  name:{tg:"Бозор",ru:"Маркет",en:"Market"},
-  desc:{
-   tg:"Харид ва фурӯши маҳсулот",
-   ru:"Покупка и продажа товаров",
-   en:"Buy and sell products"
-  },
-  ready:true
- },
- {
-  id:"food",
-  icon:"🍔",
-  name:{
-   tg:"Расонидани хӯрок",
-   ru:"Доставка еды",
-   en:"Food Delivery"
-  },
-  desc:{
-   tg:"Тарабхонаҳо ва хӯрок",
-   ru:"Рестораны и еда",
-   en:"Restaurants and food"
-  },
-  ready:false
- },
- {
-  id:"taxi",
-  icon:"🚕",
-  name:{tg:"Таксӣ",ru:"Такси",en:"Taxi"},
-  desc:{
-   tg:"Сафар дар шаҳр",
-   ru:"Поездки по городу",
-   en:"City rides"
-  },
-  ready:false
- },
- {
-  id:"courier",
-  icon:"📦",
-  name:{tg:"Курьер",ru:"Курьер",en:"Courier"},
-  desc:{
-   tg:"Расонидани бастаҳо",
-   ru:"Доставка посылок",
-   en:"Parcel delivery"
-  },
-  ready:false
- },
- {
-  id:"rental",
-  icon:"🏠",
-  name:{tg:"Иҷора",ru:"Аренда",en:"Rental"},
-  desc:{
-   tg:"Хона, мошин ва таҷҳизот",
-   ru:"Жильё, авто и оборудование",
-   en:"Homes, cars and equipment"
-  },
-  ready:false
- },
- {
-  id:"language_ai",
-  icon:"📚",
-  name:{
-   tg:"Забономӯзии AI",
-   ru:"Изучение языков",
-   en:"AI Languages"
-  },
-  desc:{
-   tg:"Тоҷикӣ ва олмонӣ",
-   ru:"Таджикский и немецкий",
-   en:"Tajik and German"
-  },
-  ready:false
- }
+ svc("market","🛍️","Бозор","Маркет","Market",[
+  "Либос","Пойафзол","Электроника","Хона","Зебоӣ","Аксияҳо"
+ ],true,"Харид ва фурӯши маҳсулот"),
+
+ svc("food","🍔","Расонидани хӯрок","Доставка еды","Food delivery",[
+  "Тарабхонаҳо","Питса","Бургер","Таомҳои миллӣ","Фармоиши хӯрок"
+ ],false,"Тарабхонаҳо ва хӯрок"),
+
+ svc("taxi","🚕","Таксӣ","Такси","Taxi",[
+  "Таксии шаҳрӣ","Аз куҷо","Ба куҷо","Нархи сафар","Ронанда"
+ ],false,"Сафар дар шаҳр"),
+
+ svc("courier","📦","Курьер","Курьер","Courier",[
+  "Расонидани баста","Ҳуҷҷатҳо","Харид","Пайгирии фармоиш"
+ ],false,"Расонидани бастаҳо"),
+
+ svc("rental","🏠","Иҷора","Аренда","Rental",[
+  "Хона","Ҳуҷра","Мошин","Таҷҳизот"
+ ],false,"Иҷораи хона ва мошин"),
+
+ svc("language_ai","🌍","Забономӯзӣ","Изучение языков","Languages",[
+  "Тоҷикӣ","Олмонӣ","Англисӣ","Русӣ","Дарсҳо","Санҷишҳо"
+ ],false,"Омӯзиши забонҳо"),
+
+ svc("terminal","💳","Терминал","Терминал","Terminal",[
+  "Телефон","Интернет","Барқ","Об","Телевизион","Дигар хизматҳо"
+ ],false,"Терминали пардохт"),
+
+ svc("wallet","💰","Ҳамёни VAYO","Кошелёк VAYO","VAYO Wallet",[
+  "Бақия","Интиқоли пул","Қабули пул","Таърихи амалиёт"
+ ],false,"Ҳамёни электронӣ"),
+
+ svc("mobile","📱","Алоқаи мобилӣ","Мобильная связь","Mobile",[
+  "Tcell","MegaFon","Babilon-M","ZET-Mobile"
+ ],false,"Операторҳои мобилӣ"),
+
+ svc("internet","🌐","Интернет","Интернет","Internet",[
+  "Интернети хонагӣ","Интернети мобилӣ","Бастаҳо"
+ ],false,"Хизматрасониҳои интернет"),
+
+ svc("utilities","💡","Коммуналӣ","Коммунальные","Utilities",[
+  "Барқ","Об","Хизматрасонии хона","Ҳисобнома"
+ ],false,"Пардохтҳои коммуналӣ"),
+
+ svc("hotel","🏨","Меҳмонхона","Гостиницы","Hotels",[
+  "Меҳмонхонаҳо","Ҳуҷраҳо","Брон","Ҷустуҷӯ"
+ ],false,"Меҳмонхона ва брон"),
+
+ svc("tickets","🎫","Чиптаҳо","Билеты","Tickets",[
+  "Ҳавопаймо","Қатора","Автобус","Чорабиниҳо"
+ ],false,"Чиптаҳои сафар"),
+
+ svc("cargo","🚚","Карго","Карго","Cargo",[
+  "Чин — Тоҷикистон","Расонидани бор","Пайгирии бор","Боркашонӣ"
+ ],false,"Боркашонӣ"),
+
+ svc("cars","🚗","Мошинҳо","Автомобили","Cars",[
+  "Хариди мошин","Фурӯши мошин","Иҷора","Қисмҳои эҳтиётӣ"
+ ],false,"Бозори мошин"),
+
+ svc("jobs","💼","Ҷойи кор","Работа","Jobs",[
+  "Ҷойҳои корӣ","Корфармоён","Резюме","Коргарон"
+ ],false,"Ҷустуҷӯи кор"),
+
+ svc("health","🏥","Тиббӣ","Медицина","Health",[
+  "Табибон","Дармонгоҳҳо","Таҳлилҳо","Машварат"
+ ],false,"Хизматрасонии тиббӣ"),
+
+ svc("pharmacy","💊","Дорухона","Аптека","Pharmacy",[
+  "Дорухонаҳо","Маҳсулоти тиббӣ","Ҷустуҷӯи дору"
+ ],false,"Дорухонаҳо"),
+
+ svc("repair","🛠️","Усто","Мастера","Repair",[
+  "Барқчӣ","Сантехник","Таъмири хона","Таъмири техника"
+ ],false,"Усто ва таъмир"),
+
+ svc("beauty","💇","Зебоӣ","Красота","Beauty",[
+  "Сартарошхона","Салон","Ороиш","Хизматҳои зебоӣ"
+ ],false,"Салон ва зебоӣ"),
+
+ svc("cooking","👨‍🍳","Пухтупаз","Кулинария","Cooking",[
+  "Палав","Қурутоб","Манту","Самбӯса","Шӯрбо",
+  "Питса","Торт","Шириниҳо","Бургер"
+ ],true,"Омӯзиши пухтупаз"),
+
+ svc("library","📚","Китобхона","Библиотека","Library",[
+  "Китобҳои тоҷикӣ","Китобҳои олмонӣ","Адабиёт",
+  "Китобҳои дарсӣ","Китобҳои электронӣ"
+ ],false,"Китобхонаи электронӣ"),
+
+ svc("courses","🎓","Курсҳо","Курсы","Courses",[
+  "Забономӯзӣ","Барномасозӣ","Бизнес","Мактаб","Донишгоҳ"
+ ],false,"Омӯзиши онлайн"),
+
+ svc("agriculture","🌾","Кишоварзӣ","Сельское хозяйство","Agriculture",[
+  "Тухмӣ","Нуриҳо","Техника","Маҳсулоти кишоварзӣ"
+ ],false,"Кишоварзӣ"),
+
+ svc("ads","📢","Эълонҳо","Объявления","Classifieds",[
+  "Эълон гузоштан","Хариду фурӯш","Хизматрасонӣ"
+ ],false,"Эълонҳои мардумӣ"),
+
+ svc("deals","🎁","Аксияҳо","Акции","Deals",[
+  "Тахфифҳо","Маҳсулоти арзон","Пешниҳодҳои махсус"
+ ],true,"Аксияҳои VAYO"),
+
+ svc("videos","🎬","Видео","Видео","Videos",[
+  "Видеоҳои омӯзишӣ","Видеоҳои маҳсулот","Муаррифӣ"
+ ],false,"Видео ва омӯзиш")
 ];
 
+/* КӮМАКЧИҲО */
+function money(v){
+ return (Number(v)||0).toFixed(2)+" TJS";
+}
+
+function toast(message){
+ const node=$("toast");
+ node.textContent=message;
+ node.classList.remove("hidden");
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>node.classList.add("hidden"),3000);
+}
+
+function safeImage(value){
+ try{
+  const url=new URL(value);
+  return url.protocol==="https:"?url.href:"";
+ }catch{return "";}
+}
+
+function getPrice(p){
+ const n=Number(p.current_price??p.price??0);
+ return Number.isFinite(n)?Math.max(0,n):0;
+}
+
+function getRegular(p){
+ const n=Number(p.regular_price??getPrice(p));
+ return Number.isFinite(n)?Math.max(getPrice(p),n):getPrice(p);
+}
+
+function getStock(p){
+ return Math.max(0,Number(p.stock)||0);
+}
+
+function discount(p){
+ const r=getRegular(p),c=getPrice(p);
+ return r>c&&r>0?Math.round((1-c/r)*100):0;
+}
+
+function empty(message){
+ const d=document.createElement("div");
+ d.className="empty";
+ d.textContent=message;
+ return d;
+}
+
+/* ХИЗМАТРАСОНИҲО */
 function renderServices(){
  const root=$("superGrid");
  root.replaceChildren();
 
- for(const service of services){
-  const card=document.createElement("article");
-  card.className="super-card";
+ services.forEach(s=>{
+  const card=document.createElement("button");
+  card.type="button";
+  card.className="service";
 
-  const icon=document.createElement("div");
-  icon.className="super-icon";
-  icon.textContent=service.icon;
+  const emoji=document.createElement("div");
+  emoji.className="emoji";
+  emoji.textContent=s.icon;
 
-  const name=document.createElement("h3");
-  name.textContent=service.name[lang];
+  const name=document.createElement("strong");
+  name.textContent=s.name[lang];
 
-  const desc=document.createElement("p");
-  desc.textContent=service.desc[lang];
+  const desc=document.createElement("small");
+  desc.textContent=s.desc;
 
   const status=document.createElement("span");
-  status.className="super-status";
+  status.className="status"+(s.ready?" ready":"");
+  status.textContent=t(s.ready?"active":"soon");
 
-  if(service.ready){
-   status.classList.add("ready");
-   status.textContent={
-    tg:"Фаъол",
-    ru:"Активно",
-    en:"Active"
-   }[lang];
-  }else{
-   status.textContent={
-    tg:"Дар ҳоли омодасозӣ",
-    ru:"В разработке",
-    en:"Coming soon"
-   }[lang];
-  }
-
-  card.append(icon,name,desc,status);
+  card.append(emoji,name,desc,status);
+  card.onclick=()=>openService(s.id);
   root.append(card);
+ });
+}
+
+function closeService(){
+ $("serviceModal").classList.add("hidden");
+ activeService=null;
+ document.body.style.overflow="";
+}
+
+function openService(id){
+ const s=services.find(x=>x.id===id);
+ if(!s)return;
+
+ if(id==="market"){
+  closeService();
+  $("catalog").scrollIntoView({behavior:"smooth"});
+  return;
  }
 
- const notes={
-  tg:"Комиссияи харидорон 0% аст. Фурӯшандагон ва хизматрасонҳо аз амалиёти анҷомёфта 2% комиссия месупоранд. Муҳлати пардохт 12 соат аст. Хизматрасониҳои нав ҳоло фармоиши воқеӣ қабул намекунанд.",
-  ru:"Комиссия покупателей — 0%. Продавцы и исполнители платят 2% с завершённых операций. Срок оплаты — 12 часов. Новые сервисы пока не принимают заказы.",
-  en:"Buyer platform commission is 0%. Sellers and providers pay 2% on completed transactions, due within 12 hours. New services are not accepting orders yet."
+ if(id==="deals"){
+  closeService();
+  activeTab="sale";
+  updateTabs();
+  renderProducts();
+  $("catalog").scrollIntoView({behavior:"smooth"});
+  return;
+ }
+
+ activeService=id;
+ $("modalTitle").textContent=s.icon+" "+s.name[lang];
+ $("modalDesc").textContent=s.desc;
+
+ const root=$("modalItems");
+ root.replaceChildren();
+
+ s.items.forEach(item=>{
+  const div=document.createElement("div");
+  div.className="tile";
+  div.textContent=item;
+  root.append(div);
+ });
+
+ $("modalContent").replaceChildren();
+ $("modalNote").textContent=t("demo");
+ $("serviceModal").classList.remove("hidden");
+ document.body.style.overflow="hidden";
+
+ if(["taxi","food","courier","cargo","rental","hotel","repair"].includes(id)){
+  showServiceForm(s);
+ }
+
+ if(id==="cooking")showCooking();
+ if(id==="library")showLibrary();
+ if(id==="terminal"||id==="wallet")showPaymentPreview();
+}
+
+/* ФОРМАИ ХИЗМАТРАСОНӢ — ОЗМОИШӢ */
+function makeInput(label,placeholder,type="text"){
+ const wrap=document.createElement("div");
+
+ const title=document.createElement("label");
+ title.className="form-label";
+ title.textContent=label;
+
+ const input=document.createElement("input");
+ input.className="field";
+ input.type=type;
+ input.placeholder=placeholder;
+ input.required=true;
+
+ wrap.append(title,input);
+ return {wrap,input};
+}
+
+function showServiceForm(s){
+ const root=$("modalContent");
+
+ const heading=document.createElement("h3");
+ heading.textContent="📝 Маълумоти дархост";
+
+ const form=document.createElement("form");
+
+ const from=makeInput("Аз куҷо / Суроға","Душанбе");
+ const to=makeInput("Ба куҷо / Тафсилот","Суроға ё маълумот");
+ const phone=makeInput("Телефон","992XXXXXXXXX","tel");
+
+ const payment=document.createElement("div");
+ payment.className="note";
+ payment.textContent="💵 Усули пардохт: нақдӣ. Муштарӣ ва иҷрокунанда бояд ҳар ду гирифтани/супоридани пулро тасдиқ кунанд.";
+
+ const button=document.createElement("button");
+ button.className="primary";
+ button.type="submit";
+ button.textContent="Намоиши дархост (озмоишӣ)";
+
+ const result=document.createElement("div");
+ result.className="note hidden";
+
+ form.append(heading,from.wrap,to.wrap,phone.wrap,payment,button,result);
+
+ form.onsubmit=e=>{
+  e.preventDefault();
+
+  const a=from.input.value.trim();
+  const b=to.input.value.trim();
+  const p=phone.input.value.trim();
+
+  if(!a||!b||!p)return;
+
+  result.textContent="Дархости озмоишӣ: "+s.name.tg+
+   ". Аз: "+a+". Ба: "+b+
+   ". Телефон: "+p+
+   ". Ҳоло ба сервер фиристода нашуд. Барои фармоиши воқеӣ базаи хизматрасониҳо лозим аст.";
+
+  result.classList.remove("hidden");
  };
 
- $("superNote").textContent=notes[lang];
+ root.append(form);
 }
 
-/* LANGUAGE */
+/* ПАРДОХТИ НАҚДӢ */
+function showPaymentPreview(){
+ const root=$("modalContent");
+
+ const heading=document.createElement("h3");
+ heading.textContent="💵 Тартиби пардохти нақдӣ";
+
+ const steps=[
+  "1. Муштарӣ фармоиш медиҳад.",
+  "2. Иҷрокунанда фармоишро қабул мекунад.",
+  "3. Муштарӣ нақд месупорад.",
+  "4. Иҷрокунанда гирифтани пулро тасдиқ мекунад.",
+  "5. Муштарӣ супоридани пулро тасдиқ мекунад.",
+  "6. Баъди ду тасдиқи серверӣ фармоиш пардохтшуда ҳисоб мешавад."
+ ];
+
+ root.append(heading);
+
+ steps.forEach(step=>{
+  const div=document.createElement("div");
+  div.className="tile";
+  div.style.margin="7px 0";
+  div.style.textAlign="left";
+  div.textContent=step;
+  root.append(div);
+ });
+
+ const note=document.createElement("div");
+ note.className="modal-note";
+ note.textContent="Ҳоло интиқоли пул, бақияи воқеӣ ва тасдиқи серверӣ фаъол нестанд. Барои пешгирии тасдиқи қалбакӣ, ин амалҳо баъдтар бо Supabase Auth ва қоидаҳои RLS сохта мешаванд.";
+ root.append(note);
+}
+
+/* ПУХТУПАЗ */
+const recipes=[
+ {
+  name:"Палав",
+  ingredients:"Биринҷ, гӯшт, сабзӣ, пиёз, равған, намак ва зира",
+  steps:"1. Пиёзро бирён кунед. 2. Гӯшт ва сабзиро илова кунед. 3. Об, намак ва зира андозед. 4. Биринҷи шустаро илова кунед. 5. То пухтан дам диҳед."
+ },
+ {
+  name:"Қурутоб",
+  ingredients:"Қурут, фатир, пиёз, равған ва кабудӣ",
+  steps:"1. Қурутро бо оби гарм ҳал кунед. 2. Фатирро майда кунед. 3. Маҳлули қурутро резед. 4. Пиёзи бирён ва кабудӣ илова кунед."
+ },
+ {
+  name:"Манту",
+  ingredients:"Орд, об, гӯшт, пиёз, намак ва мурч",
+  steps:"1. Хамир тайёр кунед. 2. Гӯшт ва пиёзро реза кунед. 3. Хамирро тунук карда пур кунед. 4. Дар мантуқазон бо буғ тақрибан 40–45 дақиқа пазед."
+ },
+ {
+  name:"Самбӯса",
+  ingredients:"Хамир, гӯшт, пиёз, намак ва зира",
+  steps:"1. Хамирро тайёр кунед. 2. Қимаи гӯшт ва пиёзро омехта кунед. 3. Самбӯсаҳоро печонед. 4. Дар танӯр то пухтани пурра пазед."
+ },
+ {
+  name:"Шӯрбо",
+  ingredients:"Гӯшт, картошка, сабзӣ, пиёз, помидор ва намак",
+  steps:"1. Гӯштро бо об ҷӯшонед. 2. Кафкро гиред. 3. Сабзавотро илова кунед. 4. То мулоим шудани гӯшт ва сабзавот пазед."
+ },
+ {
+  name:"Питса",
+  ingredients:"Орд, хамиртуруш, об, намак, чошнӣ ва панир",
+  steps:"1. Хамирро тайёр карда дам диҳед. 2. Онро паҳн кунед. 3. Чошнӣ ва панир илова кунед. 4. Дар танӯри пешгарм то пухтан пазед."
+ },
+ {
+  name:"Торт",
+  ingredients:"Орд, тухм, шакар, шир, равған ва крем",
+  steps:"1. Тухм ва шакарро лат занед. 2. Ордро илова кунед. 3. Бисквитро пазед. 4. Пас аз хунук шудан бо крем оро диҳед."
+ },
+ {
+  name:"Бургер",
+  ingredients:"Нон, гӯшти қима, салат, помидор ва чошнӣ",
+  steps:"1. Аз қима котлет созед. 2. То пухтани пурра бирён кунед. 3. Нонро гарм кунед. 4. Сабзавот ва чошнӣ илова карда бургерро ҷамъ кунед."
+ }
+];
+
+function showCooking(){
+ const root=$("modalContent");
+ root.replaceChildren();
+
+ const title=document.createElement("h3");
+ title.textContent="👨‍🍳 Дастурҳои пухтупаз";
+
+ const search=document.createElement("input");
+ search.className="field";
+ search.placeholder="Ҷустуҷӯи таом...";
+
+ const list=document.createElement("div");
+
+ function draw(){
+  list.replaceChildren();
+
+  const q=search.value.toLowerCase().trim();
+
+  recipes.filter(r=>r.name.toLowerCase().includes(q))
+  .forEach(r=>{
+   const box=document.createElement("div");
+   box.className="tile";
+   box.style.textAlign="left";
+   box.style.margin="8px 0";
+
+   const h=document.createElement("h3");
+   h.textContent=r.name;
+
+   const ingredients=document.createElement("p");
+   ingredients.textContent="Маҳсулот: "+r.ingredients;
+
+   const steps=document.createElement("p");
+   steps.textContent=r.steps;
+   steps.style.lineHeight="1.8";
+
+   box.append(h,ingredients,steps);
+   list.append(box);
+  });
+ }
+
+ search.oninput=draw;
+ root.append(title,search,list);
+ draw();
+}
+
+function showLibrary(){
+ const root=$("modalContent");
+
+ const title=document.createElement("h3");
+ title.textContent="📚 Китобхонаи VAYO";
+
+ const input=document.createElement("input");
+ input.className="field";
+ input.placeholder="Ҷустуҷӯи китоб...";
+
+ const note=document.createElement("div");
+ note.className="modal-note";
+ note.textContent="Каталоги китобҳо ҳоло пайваст нашудааст. Барои хондани китобҳо бояд китобҳои иҷозатдодашуда ё дорои ҳуқуқи паҳнкунӣ ба база илова шаванд.";
+
+ root.append(title,input,note);
+}
+
+/* ЗАБОН */
 function applyLanguage(){
  document.documentElement.lang=lang;
- document.title="VAYO — "+t("catalog");
-
- document.querySelectorAll("[data-i18n]")
- .forEach(el=>{
-  el.textContent=t(el.dataset.i18n);
- });
-
- document.querySelectorAll("[data-lang]")
- .forEach(el=>{
-  el.classList.toggle("active",el.dataset.lang===lang);
- });
-
  $("search").placeholder=t("search");
- $("cameraBtn").title=t("photoFound");
- $("cartLabel").textContent=t("cart");
- $("accountLink").textContent=
-  "👤 "+t(signedIn?"account":"login");
- $("ordersLink").textContent="📦 "+t("orders");
- $("sellerLink").textContent="🏪 "+t("seller");
+
+ document.querySelectorAll("[data-lang]").forEach(b=>{
+  b.classList.toggle("active",b.dataset.lang===lang);
+ });
+
+ const hero={
+  tg:["Ҳама чиз дар як ҷо!","Бозор, таксӣ, хӯрок, хизматрасонӣ ва омӯзиш"],
+  ru:["Всё в одном приложении!","Маркет, такси, еда, услуги и обучение"],
+  en:["Everything in one app!","Market, taxi, food, services and learning"]
+ };
+
+ $("heroTitle").textContent=hero[lang][0];
+ $("heroText").textContent=hero[lang][1];
 
  renderServices();
- render();
+ renderProducts();
+ renderFeatured();
  renderCart();
 
- if(photoRanks)updatePhotoStatus();
+ if(activeService)openService(activeService);
 }
 
-document.querySelectorAll("[data-lang]")
-.forEach(button=>{
- button.onclick=()=>{
-  lang=button.dataset.lang;
+document.querySelectorAll("[data-lang]").forEach(b=>{
+ b.onclick=()=>{
+  lang=b.dataset.lang;
   localStorage.setItem(LANG_KEY,lang);
   applyLanguage();
  };
 });
 
-/* HELPERS */
-function money(value){
- return (Number(value)||0).toFixed(2)+" TJS";
-}
-
-function validImage(value){
- if(typeof value!=="string")return "";
- try{
-  const u=new URL(value);
-  return u.protocol==="https:"?u.href:"";
- }catch{
-  return "";
- }
-}
-
-function showToast(message){
- const node=$("toast");
- node.textContent=message;
- node.classList.remove("hidden");
- clearTimeout(toastTimer);
- toastTimer=setTimeout(()=>{
-  node.classList.add("hidden");
- },2600);
-}
-
+/* САБАДИ ПЕШИНА */
 function readCart(){
  try{
-  const data=JSON.parse(
-   localStorage.getItem(CART_KEY)||"[]"
-  );
+  const data=JSON.parse(localStorage.getItem(CART_KEY)||"[]");
   return Array.isArray(data)?data:[];
- }catch{
-  return [];
- }
+ }catch{return [];}
 }
 
 function normalizeCart(raw){
- const grouped=new Map();
+ const map=new Map();
 
  for(const item of raw){
   const id=String(item?.product_id||"");
-  const quantity=Number(item?.quantity);
+  const qty=Number(item?.quantity);
 
-  if(!/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(id))
-   continue;
+  if(!/^[0-9a-f]{8}-[0-9a-f-]{27,}$/i.test(id))continue;
+  if(!Number.isInteger(qty)||qty<=0)continue;
 
-  if(!Number.isInteger(quantity)||quantity<=0)
-   continue;
-
-  grouped.set(
-   id,
-   Math.min(100,(grouped.get(id)||0)+quantity)
-  );
+  map.set(id,Math.min(100,(map.get(id)||0)+qty));
  }
 
- return [...grouped].map(([product_id,quantity])=>({
+ return [...map].map(([product_id,quantity])=>({
   product_id,quantity
  }));
 }
@@ -1355,363 +804,45 @@ cart=normalizeCart(readCart());
 function saveCart(){
  localStorage.setItem(CART_KEY,JSON.stringify(cart));
 
- const count=cart.reduce(
-  (sum,item)=>sum+item.quantity,0
- );
-
- $("count").textContent=count;
- $("mobileCount").textContent=count;
+ const n=cart.reduce((sum,x)=>sum+x.quantity,0);
+ $("count").textContent=n;
+ $("mobileCount").textContent=n;
 }
 
-function getPrice(p){
- const n=Number(p.current_price??p.price??0);
- return Number.isFinite(n)?Math.max(0,n):0;
-}
-
-function getRegular(p){
- const current=getPrice(p);
- const n=Number(p.regular_price??current);
- return Number.isFinite(n)?Math.max(current,n):current;
-}
-
-function getDiscount(p){
- const current=getPrice(p);
- const regular=getRegular(p);
-
- if(regular<=current||regular<=0)return 0;
-
- return Math.max(0,Math.min(
-  99,Math.round((1-current/regular)*100)
- ));
-}
-
-function getStock(p){
- return Math.max(0,Number(p.stock)||0);
-}
-
-function getImage(p){
- return validImage(p.image_url);
-}
-
-function featuredProducts(){
- return products
-  .filter(p=>getStock(p)>0)
-  .slice()
-  .sort((a,b)=>getDiscount(b)-getDiscount(a))
-  .slice(0,2);
-}
-
-/* SEARCH */
-const synonyms=[
- ["кроссовка","красовка","крассовка","кеды",
-  "sneakers","shoes","обувь","пойафзол"],
- ["куртка","куртача","jacket","coat","пуховик"],
- ["либос","одежда","clothes","clothing","dress",
-  "платье","ҷома"],
- ["телефон","смартфон","phone","smartphone",
-  "мобильный"],
- ["сумка","халта","bag","handbag","рюкзак"],
- ["соат","часы","watch","clock"],
- ["гӯшмонак","наушники","headphones","earbuds"],
- ["компютер","компьютер","computer","laptop",
-  "ноутбук"],
- ["хона","дом","home","house"],
- ["косметика","beauty","makeup","зебоӣ"]
-];
-
-function normalize(value){
- return String(value||"")
-  .toLowerCase()
-  .normalize("NFKC")
-  .replace(/ё/g,"е")
-  .replace(/ҷ/g,"ч")
-  .replace(/ҳ/g,"х")
-  .replace(/қ/g,"к")
-  .replace(/ӯ/g,"у")
-  .replace(/ӣ/g,"и")
-  .replace(/[^\p{L}\p{N}]+/gu," ")
-  .trim();
-}
-
-function getSearchTerms(query){
- const q=normalize(query);
- if(!q)return [];
-
- const terms=new Set([q]);
-
- synonyms.forEach(group=>{
-  if(group.some(word=>normalize(word)===q)){
-   group.forEach(word=>terms.add(normalize(word)));
-  }
- });
-
- return [...terms];
-}
-
-function matchesSearch(product,query){
- const terms=getSearchTerms(query);
- if(!terms.length)return true;
-
- const text=normalize([
-  product.name,
-  product.category,
-  product.description,
-  product.shop_name
- ].filter(Boolean).join(" "));
-
- return terms.some(term=>text.includes(term));
-}
-
-/* FILTERS */
-function getFilteredProducts(){
- const query=$("search").value.trim();
-
- let result=products.filter(p=>{
-  const categoryMatch=
-   category==="all"||
-   String(p.category||"")===category;
-
-  let tabMatch=true;
-
-  if(activeTab==="sale"){
-   tabMatch=getDiscount(p)>0;
-  }
-
-  if(activeTab==="featured"){
-   tabMatch=featuredProducts().some(
-    f=>String(f.id)===String(p.id)
-   );
-  }
-
-  if(activeTab==="local"){
-   tabMatch=false;
-  }
-
-  return categoryMatch&&tabMatch&&
-   matchesSearch(p,query);
- });
-
- if(photoRanks instanceof Map){
-  result=result.filter(p=>
-   photoRanks.has(String(p.id))
-  );
-
-  result.sort((a,b)=>
-   photoRanks.get(String(a.id))-
-   photoRanks.get(String(b.id))
-  );
- }
-
- return result;
-}
-
-/* PRODUCT CARD */
-function createProductCard(p){
- const card=document.createElement("article");
- card.className="product-card";
-
- const photo=document.createElement("div");
- photo.className="product-photo";
-
- const image=getImage(p);
-
- function noImage(){
-  photo.replaceChildren();
-  const empty=document.createElement("div");
-  empty.className="no-image";
-  empty.textContent="🛍️";
-  photo.append(empty);
- }
-
- if(image){
-  const img=document.createElement("img");
-  img.src=image;
-  img.alt=String(p.name||"");
-  img.loading="lazy";
-  img.onerror=noImage;
-  photo.append(img);
- }else{
-  noImage();
- }
-
- const discount=getDiscount(p);
-
- if(discount>0){
-  const badge=document.createElement("span");
-  badge.className="sale-badge";
-  badge.textContent="−"+discount+"%";
-  photo.append(badge);
- }
-
- const info=document.createElement("div");
- info.className="product-info";
-
- const name=document.createElement("div");
- name.className="product-name";
- name.textContent=String(p.name||"VAYO");
-
- const price=document.createElement("div");
- price.className="product-price";
- price.textContent=money(getPrice(p));
-
- info.append(name,price);
-
- if(discount>0){
-  const old=document.createElement("div");
-  old.className="old-price";
-  old.textContent=money(getRegular(p));
-  info.append(old);
- }
-
- const meta=document.createElement("div");
- meta.className="product-meta";
- meta.textContent=getStock(p)>0
-  ?t("stock")+" "+getStock(p)
-  :t("out");
-
- const buy=document.createElement("button");
- buy.className="buy";
- buy.type="button";
- buy.disabled=getStock(p)<=0;
- buy.textContent=getStock(p)>0
-  ?"🛒 "+t("buy"):t("out");
-
- buy.onclick=()=>addCart(p);
-
- info.append(meta,buy);
- card.append(photo,info);
- return card;
-}
-
-/* RENDER */
-function emptyNode(message){
- const div=document.createElement("div");
- div.className="empty";
- div.textContent=message;
- return div;
-}
-
-function renderFeatured(){
- const root=$("featuredProducts");
- root.replaceChildren();
-
- if(loading){
-  root.append(emptyNode(t("loading")));
-  return;
- }
-
- const items=featuredProducts();
-
- if(!items.length){
-  root.append(emptyNode(t("notFound")));
-  return;
- }
-
- items.forEach(p=>root.append(createProductCard(p)));
-}
-
-function renderProducts(){
- const root=$("products");
- root.replaceChildren();
-
- if(loading){
-  root.append(emptyNode(t("loading")));
-  return;
- }
-
- if(loadError){
-  root.append(emptyNode(t("error")));
-  return;
- }
-
- const filtered=getFilteredProducts();
-
- $("resultCount").textContent=
-  filtered.length+" "+t("item");
-
- if(!filtered.length){
-  root.append(emptyNode(
-   activeTab==="local"
-    ?t("localUnavailable")
-    :t("notFound")
-  ));
-  return;
- }
-
- const fragment=document.createDocumentFragment();
-
- filtered.forEach(p=>{
-  fragment.append(createProductCard(p));
- });
-
- root.append(fragment);
-}
-
-function render(){
- renderFeatured();
- renderProducts();
-}
-
-/* CART */
 function addCart(p){
  const id=String(p.id);
  const stock=getStock(p);
 
- if(stock<=0){
-  showToast(t("noStock"));
-  return;
- }
+ if(stock<=0)return toast(t("out"));
 
- const existing=cart.find(
-  item=>String(item.product_id)===id
- );
+ const item=cart.find(x=>x.product_id===id);
 
- if(existing){
-  if(existing.quantity>=stock||
-     existing.quantity>=100){
-   showToast(t("tooMany"));
-   return;
-  }
-  existing.quantity++;
+ if(item){
+  if(item.quantity>=stock||item.quantity>=100)return toast(t("full"));
+  item.quantity++;
  }else{
   cart.push({product_id:id,quantity:1});
  }
 
  saveCart();
- showToast("✅ "+t("added"));
+ toast("✅ "+t("added"));
 }
 
-function removeFromCart(id){
- cart=cart.filter(
-  item=>String(item.product_id)!==String(id)
- );
+function removeCart(id){
+ cart=cart.filter(x=>x.product_id!==id);
  saveCart();
  renderCart();
 }
 
-function changeQuantity(id,change){
- const item=cart.find(
-  x=>String(x.product_id)===String(id)
- );
-
+function changeQty(id,delta){
+ const item=cart.find(x=>x.product_id===id);
  if(!item)return;
 
- const p=products.find(
-  x=>String(x.id)===String(id)
- );
+ const p=products.find(x=>String(x.id)===id);
+ const next=item.quantity+delta;
 
- const next=item.quantity+change;
- const stock=p?getStock(p):100;
-
- if(next<=0){
-  removeFromCart(id);
-  return;
- }
-
- if(next>stock||next>100){
-  showToast(t("tooMany"));
-  return;
- }
+ if(next<=0)return removeCart(id);
+ if(next>100||next>(p?getStock(p):100))return toast(t("full"));
 
  item.quantity=next;
  saveCart();
@@ -1722,77 +853,53 @@ function renderCart(){
  const root=$("cartItems");
  root.replaceChildren();
 
+ if(!cart.length)root.append(empty("Сабад холӣ аст."));
+
  let total=0;
 
- if(!cart.length){
-  root.append(emptyNode(t("emptyCart")));
- }
-
  cart.forEach(item=>{
-  const p=products.find(
-   x=>String(x.id)===String(item.product_id)
-  );
-
-  const quantity=Number(item.quantity)||0;
-  const price=p?getPrice(p):0;
-
+  const p=products.find(x=>String(x.id)===item.product_id);
   const row=document.createElement("div");
-  row.className="cart-row";
+  row.className="cart-item";
 
-  const image=p?getImage(p):"";
+  const img=document.createElement("img");
+  const url=p?safeImage(p.image_url):"";
+  if(url)img.src=url;
+  else img.alt="🛍️";
 
-  if(image){
-   const img=document.createElement("img");
-   img.className="cart-img";
-   img.src=image;
-   img.alt=String(p.name||"");
-   row.append(img);
-  }else{
-   const placeholder=document.createElement("div");
-   placeholder.className="cart-img no-image";
-   placeholder.textContent="🛍️";
-   row.append(placeholder);
-  }
+  const info=document.createElement("div");
+  info.className="info";
 
-  const detail=document.createElement("div");
-  detail.className="cart-detail";
-
-  const name=document.createElement("div");
-  name.className="cart-name";
+  const name=document.createElement("strong");
   name.textContent=p?.name||"VAYO";
 
-  const priceEl=document.createElement("div");
-  priceEl.className="cart-price";
-  priceEl.textContent=p
-   ?money(price*quantity)
-   :t("unknownPrice");
+  const price=document.createElement("p");
+  price.textContent=p?money(getPrice(p)*item.quantity):"Нарх санҷида мешавад";
 
   const controls=document.createElement("div");
-  controls.className="qty-controls";
+  controls.className="qty";
 
   const minus=document.createElement("button");
   minus.textContent="−";
-  minus.onclick=()=>changeQuantity(item.product_id,-1);
+  minus.onclick=()=>changeQty(item.product_id,-1);
 
   const qty=document.createElement("span");
-  qty.textContent=quantity;
+  qty.textContent=item.quantity;
 
   const plus=document.createElement("button");
   plus.textContent="+";
-  plus.onclick=()=>changeQuantity(item.product_id,1);
-
-  controls.append(minus,qty,plus);
-  detail.append(name,priceEl,controls);
+  plus.onclick=()=>changeQty(item.product_id,1);
 
   const remove=document.createElement("button");
-  remove.className="remove";
   remove.textContent="✕";
-  remove.onclick=()=>removeFromCart(item.product_id);
+  remove.onclick=()=>removeCart(item.product_id);
 
-  row.append(detail,remove);
+  controls.append(minus,qty,plus,remove);
+  info.append(name,price,controls);
+  row.append(img,info);
   root.append(row);
 
-  if(p)total+=price*quantity;
+  if(p)total+=getPrice(p)*item.quantity;
  });
 
  $("total").textContent=money(total);
@@ -1802,11 +909,185 @@ function toggleCart(open){
  $("cartPanel").classList.toggle("hidden",!open);
  $("overlay").classList.toggle("hidden",!open);
  document.body.style.overflow=open?"hidden":"";
-
  if(open)renderCart();
 }
 
-/* PHOTO SEARCH */
+/* МАҲСУЛОТ */
+function productCard(p){
+ const card=document.createElement("article");
+ card.className="product";
+
+ const photo=document.createElement("div");
+ photo.className="photo";
+ photo.textContent="🛍️";
+
+ const url=safeImage(p.image_url);
+ if(url){
+  const img=document.createElement("img");
+  img.src=url;
+  img.loading="lazy";
+  img.alt=String(p.name||"VAYO");
+  img.onerror=()=>img.remove();
+  photo.append(img);
+ }
+
+ if(discount(p)>0){
+  const badge=document.createElement("span");
+  badge.className="discount";
+  badge.textContent="−"+discount(p)+"%";
+  photo.append(badge);
+ }
+
+ const body=document.createElement("div");
+ body.className="product-body";
+
+ const name=document.createElement("div");
+ name.className="product-name";
+ name.textContent=String(p.name||"VAYO");
+
+ const price=document.createElement("div");
+ price.className="price";
+ price.textContent=money(getPrice(p));
+
+ body.append(name,price);
+
+ if(discount(p)>0){
+  const old=document.createElement("div");
+  old.className="old";
+  old.textContent=money(getRegular(p));
+  body.append(old);
+ }
+
+ const meta=document.createElement("div");
+ meta.className="meta";
+ meta.textContent=getStock(p)>0?t("stock")+" "+getStock(p):t("out");
+
+ const buy=document.createElement("button");
+ buy.className="primary";
+ buy.disabled=getStock(p)<=0;
+ buy.textContent=getStock(p)>0?"🛒 "+t("buy"):t("out");
+ buy.onclick=()=>addCart(p);
+
+ body.append(meta,buy);
+ card.append(photo,body);
+ return card;
+}
+
+function featuredProducts(){
+ return products.filter(p=>getStock(p)>0)
+  .slice().sort((a,b)=>discount(b)-discount(a))
+  .slice(0,2);
+}
+
+const synonyms=[
+ ["кроссовка","красовка","кеды","sneakers","shoes","обувь","пойафзол"],
+ ["куртка","jacket","coat","пуховик"],
+ ["либос","одежда","clothes","dress"],
+ ["телефон","смартфон","phone","smartphone"],
+ ["сумка","bag","рюкзак"],
+ ["соат","часы","watch"],
+ ["гӯшмонак","наушники","headphones"],
+ ["компютер","компьютер","computer","laptop"],
+ ["хона","дом","home"],
+ ["косметика","beauty","зебоӣ"]
+];
+
+function normalize(value){
+ return String(value||"").toLowerCase()
+  .normalize("NFKC")
+  .replace(/ё/g,"е").replace(/ҷ/g,"ч")
+  .replace(/ҳ/g,"х").replace(/қ/g,"к")
+  .replace(/ӯ/g,"у").replace(/ӣ/g,"и")
+  .replace(/[^\p{L}\p{N}]+/gu," ").trim();
+}
+
+function searchTerms(q){
+ const term=normalize(q);
+ if(!term)return [];
+
+ const terms=new Set([term]);
+
+ synonyms.forEach(group=>{
+  if(group.some(x=>normalize(x)===term)){
+   group.forEach(x=>terms.add(normalize(x)));
+  }
+ });
+
+ return [...terms];
+}
+
+function matchesSearch(p,q){
+ const terms=searchTerms(q);
+ if(!terms.length)return true;
+
+ const text=normalize([
+  p.name,p.category,p.description,p.shop_name
+ ].filter(Boolean).join(" "));
+
+ return terms.some(x=>text.includes(x));
+}
+
+function filteredProducts(){
+ const q=$("search").value.trim();
+
+ let items=products.filter(p=>{
+  if(activeTab==="sale"&&discount(p)<=0)return false;
+
+  if(activeTab==="featured"&&!featuredProducts().some(x=>String(x.id)===String(p.id)))return false;
+
+  if(activeTab==="local")return false;
+
+  return matchesSearch(p,q);
+ });
+
+ if(photoRanks instanceof Map){
+  items=items.filter(p=>photoRanks.has(String(p.id)));
+  items.sort((a,b)=>photoRanks.get(String(a.id))-photoRanks.get(String(b.id)));
+ }
+
+ return items;
+}
+
+function renderFeatured(){
+ const root=$("featuredProducts");
+ root.replaceChildren();
+
+ if(loading)return root.append(empty(t("loading")));
+
+ const items=featuredProducts();
+
+ if(!items.length)return root.append(empty(t("empty")));
+
+ items.forEach(p=>root.append(productCard(p)));
+}
+
+function renderProducts(){
+ const root=$("products");
+ root.replaceChildren();
+
+ if(loading)return root.append(empty(t("loading")));
+ if(loadError)return root.append(empty(t("error")));
+
+ const items=filteredProducts();
+
+ $("resultCount").textContent=items.length+" маҳсулот";
+
+ if(!items.length){
+  return root.append(empty(
+   activeTab==="local"?"Маълумоти мағозаҳои маҳаллӣ ҳоло пайваст нашудааст.":t("empty")
+  ));
+ }
+
+ items.forEach(p=>root.append(productCard(p)));
+}
+
+function updateTabs(){
+ document.querySelectorAll("[data-tab]").forEach(b=>{
+  b.classList.toggle("active",b.dataset.tab===activeTab);
+ });
+}
+
+/* ҶУСТУҶӮ БО АКС */
 function imageFromFile(file){
  return new Promise((resolve,reject)=>{
   const url=URL.createObjectURL(file);
@@ -1816,12 +1097,10 @@ function imageFromFile(file){
    URL.revokeObjectURL(url);
    resolve(img);
   };
-
   img.onerror=()=>{
    URL.revokeObjectURL(url);
    reject(new Error("Image load error"));
   };
-
   img.src=url;
  });
 }
@@ -1831,9 +1110,7 @@ function imageFromUrl(url){
   const img=new Image();
   img.crossOrigin="anonymous";
   img.onload=()=>resolve(img);
-  img.onerror=()=>reject(
-   new Error("CORS or image error")
-  );
+  img.onerror=()=>reject(new Error("CORS error"));
   img.src=url;
  });
 }
@@ -1843,14 +1120,10 @@ function imageFeatures(img){
  canvas.width=12;
  canvas.height=12;
 
- const ctx=canvas.getContext(
-  "2d",{willReadFrequently:true}
- );
-
+ const ctx=canvas.getContext("2d",{willReadFrequently:true});
  if(!ctx)throw new Error("Canvas unavailable");
 
  ctx.drawImage(img,0,0,12,12);
-
  const data=ctx.getImageData(0,0,12,12).data;
  const features=[];
 
@@ -1862,18 +1135,11 @@ function imageFeatures(img){
     for(let x=gx*3;x<gx*3+3;x++){
      const i=(y*12+x)*4;
      if(data[i+3]<20)continue;
-     r+=data[i];
-     g+=data[i+1];
-     b+=data[i+2];
-     n++;
+     r+=data[i];g+=data[i+1];b+=data[i+2];n++;
     }
    }
 
-   features.push(
-    r/Math.max(1,n),
-    g/Math.max(1,n),
-    b/Math.max(1,n)
-   );
+   features.push(r/Math.max(n,1),g/Math.max(n,1),b/Math.max(n,1));
   }
  }
 
@@ -1882,227 +1148,104 @@ function imageFeatures(img){
 
 function imageDistance(a,b){
  let total=0;
-
  for(let i=0;i<a.length;i++){
   const d=a[i]-b[i];
   total+=d*d;
  }
-
  return total/a.length;
 }
 
-function updatePhotoStatus(message){
- const status=$("photoStatus");
- status.replaceChildren();
+function clearPhoto(){
+ photoRequest++;
+ photoRanks=null;
+ $("photoInput").value="";
+ $("photoStatus").classList.add("hidden");
+ renderProducts();
+}
 
- const label=document.createElement("span");
- label.textContent=message||(
-  t("photoFound")+" "+t("photoNote")
- );
+function photoStatus(message){
+ const root=$("photoStatus");
+ root.replaceChildren();
+
+ const text=document.createElement("span");
+ text.textContent=message;
 
  const clear=document.createElement("button");
- clear.className="photo-clear";
- clear.textContent="✕ "+t("photoClear");
+ clear.textContent=" ✕ Пок кардан";
+ clear.style.border="0";
+ clear.style.background="transparent";
+ clear.style.color="#b30";
+ clear.onclick=clearPhoto;
 
- clear.onclick=()=>{
-  photoRequest++;
-  photoRanks=null;
-  $("photoInput").value="";
-  status.classList.add("hidden");
-  renderProducts();
- };
-
- status.append(label,clear);
- status.classList.remove("hidden");
+ root.append(text,clear);
+ root.classList.remove("hidden");
 }
 
 async function searchByPhoto(file){
- if(!file)return;
-
- if(!file.type.startsWith("image/")||
-    file.size>10*1024*1024){
-  showToast(t("photoInvalid"));
-  return;
+ if(!file?.type.startsWith("image/")||file.size>10*1024*1024){
+  return toast("Акси дуруст интихоб кунед.");
  }
 
- if(loading||loadError){
-  showToast(t("photoWait"));
-  return;
- }
+ if(loading||loadError)return toast("Аввал маҳсулот бор шавад.");
 
- const requestId=++photoRequest;
+ const request=++photoRequest;
  photoRanks=null;
- updatePhotoStatus(t("photoWorking"));
+ photoStatus("Аксҳо муқоиса мешаванд...");
 
  try{
-  const chosen=await imageFromFile(file);
-  const target=imageFeatures(chosen);
-
-  const candidates=products.filter(p=>getImage(p));
+  const target=imageFeatures(await imageFromFile(file));
+  const candidates=products.filter(p=>safeImage(p.image_url));
   const scores=[];
 
   for(let i=0;i<candidates.length;i+=6){
-   if(requestId!==photoRequest)return;
+   if(request!==photoRequest)return;
 
    const batch=candidates.slice(i,i+6);
 
-   const results=await Promise.all(
-    batch.map(async p=>{
-     try{
-      const img=await imageFromUrl(getImage(p));
-
-      return {
-       id:String(p.id),
-       score:imageDistance(
-        target,imageFeatures(img)
-       )
-      };
-     }catch{
-      return null;
-     }
-    })
-   );
+   const results=await Promise.all(batch.map(async p=>{
+    try{
+     const img=await imageFromUrl(safeImage(p.image_url));
+     return {id:String(p.id),score:imageDistance(target,imageFeatures(img))};
+    }catch{return null;}
+   }));
 
    scores.push(...results.filter(Boolean));
   }
 
-  if(requestId!==photoRequest)return;
+  if(request!==photoRequest)return;
 
   scores.sort((a,b)=>a.score-b.score);
 
-  photoRanks=new Map(
-   scores.slice(0,12).map(x=>[
-    x.id,x.score
-   ])
-  );
-
-  category="all";
+  photoRanks=new Map(scores.slice(0,12).map(x=>[x.id,x.score]));
   activeTab="all";
   $("search").value="";
+  updateTabs();
 
-  document.querySelectorAll(".cat[data-category]")
-  .forEach(el=>{
-   el.classList.toggle(
-    "active",el.dataset.category==="all"
-   );
-  });
-
-  document.querySelectorAll(".tab[data-tab]")
-  .forEach(el=>{
-   el.classList.toggle(
-    "active",el.dataset.tab==="all"
-   );
-  });
-
-  updatePhotoStatus(
-   scores.length
-    ?t("photoFound")+" "+t("photoNote")
-    :t("photoFail")
-  );
+  photoStatus(scores.length
+   ?"Маҳсулоти аз рӯйи ранг ва шакли акс монанд:"
+   :"Муқоисаи аксҳо имконнопазир шуд.");
 
   renderProducts();
-
-  $("catalog").scrollIntoView({
-   behavior:"smooth"
-  });
+  $("catalog").scrollIntoView({behavior:"smooth"});
 
  }catch(error){
-  console.error("VAYO photo search:",error);
-  updatePhotoStatus(t("photoFail"));
+  console.error(error);
+  photoStatus("Муқоисаи аксҳо имконнопазир шуд.");
  }
 }
 
-/* EVENTS */
-$("cartBtn").onclick=()=>toggleCart(true);
-$("mobileCart").onclick=()=>toggleCart(true);
-$("closeCart").onclick=()=>toggleCart(false);
-$("overlay").onclick=()=>toggleCart(false);
-
-document.addEventListener("keydown",event=>{
- if(event.key==="Escape")toggleCart(false);
-});
-
-$("search").addEventListener("input",()=>{
- photoRequest++;
- photoRanks=null;
- $("photoStatus").classList.add("hidden");
- renderProducts();
-});
-
-function submitSearch(){
- photoRequest++;
- photoRanks=null;
- $("photoStatus").classList.add("hidden");
- renderProducts();
- $("catalog").scrollIntoView({behavior:"smooth"});
-}
-
-$("searchBtn").onclick=submitSearch;
-
-$("search").addEventListener("keydown",event=>{
- if(event.key==="Enter"){
-  event.preventDefault();
-  submitSearch();
- }
-});
-
-$("cameraBtn").onclick=()=>{
- $("photoInput").click();
-};
-
-$("photoInput").addEventListener("change",event=>{
- const file=event.target.files?.[0];
- if(file)searchByPhoto(file);
-});
-
-document.querySelectorAll(".cat[data-category]")
-.forEach(button=>{
- button.onclick=()=>{
-  category=button.dataset.category;
-
-  document.querySelectorAll(".cat[data-category]")
-  .forEach(el=>{
-   el.classList.toggle("active",el===button);
-  });
-
-  renderProducts();
- };
-});
-
-document.querySelectorAll(".tab[data-tab]")
-.forEach(button=>{
- button.onclick=()=>{
-  activeTab=button.dataset.tab;
-
-  document.querySelectorAll(".tab[data-tab]")
-  .forEach(el=>{
-   el.classList.toggle("active",el===button);
-  });
-
-  renderProducts();
- };
-});
-
-$("mobileCategories").onclick=()=>{
- const nav=$("categories");
- const visible=nav.style.display==="flex";
- nav.style.display=visible?"none":"flex";
-
- if(!visible){
-  nav.scrollIntoView({behavior:"smooth"});
- }
-};
-
-/* SUPABASE PRODUCTS */
+/* SUPABASE */
 async function loadProducts(){
  loading=true;
  loadError=false;
- render();
+ renderFeatured();
+ renderProducts();
 
  if(!db){
   loading=false;
   loadError=true;
-  render();
+  renderFeatured();
+  renderProducts();
   return;
  }
 
@@ -2117,27 +1260,27 @@ async function loadProducts(){
     .range(offset,offset+pageSize-1);
 
    if(error)throw error;
-
    if(!Array.isArray(data)||!data.length)break;
 
    all.push(...data);
-
    if(data.length<pageSize)break;
   }
 
   products=all;
   loading=false;
-  render();
+  renderFeatured();
+  renderProducts();
+  renderCart();
 
  }catch(error){
   console.error("VAYO products:",error);
   loading=false;
   loadError=true;
-  render();
+  renderFeatured();
+  renderProducts();
  }
 }
 
-/* ACCOUNT */
 async function loadAccount(){
  if(!db)return;
 
@@ -2146,16 +1289,74 @@ async function loadAccount(){
   if(error)return;
 
   signedIn=Boolean(data?.user);
-
-  $("accountLink").textContent=
-   "👤 "+t(signedIn?"account":"login");
+  $("accountLink").textContent=signedIn?"👤 Ҳисоби ман":"👤 Воридшавӣ";
 
  }catch(error){
   console.error("VAYO auth:",error);
  }
 }
 
-/* START */
+/* ТУГМАҲО */
+$("cartBtn").onclick=()=>toggleCart(true);
+$("mobileCart").onclick=()=>toggleCart(true);
+$("closeCart").onclick=()=>toggleCart(false);
+$("overlay").onclick=()=>toggleCart(false);
+
+$("closeModal").onclick=closeService;
+
+$("serviceModal").addEventListener("click",e=>{
+ if(e.target===$("serviceModal"))closeService();
+});
+
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape"){
+  closeService();
+  toggleCart(false);
+ }
+});
+
+$("mobileServices").onclick=()=>{
+ closeService();
+ $("services").scrollIntoView({behavior:"smooth"});
+};
+
+$("search").addEventListener("input",()=>{
+ photoRequest++;
+ photoRanks=null;
+ $("photoStatus").classList.add("hidden");
+ renderProducts();
+});
+
+function submitSearch(){
+ clearPhoto();
+ $("catalog").scrollIntoView({behavior:"smooth"});
+}
+
+$("searchBtn").onclick=submitSearch;
+
+$("search").addEventListener("keydown",e=>{
+ if(e.key==="Enter"){
+  e.preventDefault();
+  submitSearch();
+ }
+});
+
+$("cameraBtn").onclick=()=>$("photoInput").click();
+
+$("photoInput").onchange=e=>{
+ const file=e.target.files?.[0];
+ if(file)searchByPhoto(file);
+};
+
+document.querySelectorAll("[data-tab]").forEach(b=>{
+ b.onclick=()=>{
+  activeTab=b.dataset.tab;
+  updateTabs();
+  renderProducts();
+ };
+});
+
+/* ОҒОЗ */
 saveCart();
 applyLanguage();
 loadProducts();
