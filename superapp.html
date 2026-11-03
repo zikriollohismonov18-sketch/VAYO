@@ -1,0 +1,1213 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ff6500">
+<meta name="description" content="VAYO — бозор, хӯрок, таксӣ, забономӯзӣ ва хизматрасониҳо дар як платформа барои Тоҷикистон.">
+<title>VAYO — Ҳама чиз дар як ҷо</title>
+
+<style>
+:root{
+ --orange:#ff6500;
+ --orange2:#ff8c34;
+ --red:#ed4141;
+ --ink:#192333;
+ --muted:#747e8d;
+ --line:#e8ebf0;
+ --bg:#f6f7fa;
+ --white:#fff;
+ --green:#119b65;
+ --shadow:0 8px 25px rgba(25,35,51,.07);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;
+ font-family:Arial,Helvetica,sans-serif;
+ background:var(--bg);
+ color:var(--ink);
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+button:focus-visible,a:focus-visible,input:focus-visible{
+ outline:3px solid #4a83ff;
+ outline-offset:2px;
+}
+.container{
+ width:min(1200px,calc(100% - 28px));
+ margin:auto;
+}
+.hidden{display:none!important}
+.topbar{
+ background:#1d2635;
+ color:white;
+ padding:9px 0;
+ font-size:12px;
+}
+.topbar .container{
+ display:flex;
+ justify-content:space-between;
+ gap:12px;
+ flex-wrap:wrap;
+}
+header{
+ background:linear-gradient(110deg,#ff6500,#ff913d);
+ color:white;
+ position:sticky;
+ top:0;
+ z-index:100;
+ box-shadow:0 5px 18px #00000014;
+}
+.headerMain{
+ display:flex;
+ align-items:center;
+ gap:14px;
+ padding:15px 0;
+}
+.logo{
+ font-size:32px;
+ font-weight:900;
+ letter-spacing:-1.5px;
+ color:white;
+ white-space:nowrap;
+}
+.logo span{
+ font-size:10px;
+ letter-spacing:1px;
+ display:block;
+ font-weight:600;
+}
+.searchWrap{
+ position:relative;
+ flex:1;
+ min-width:0;
+}
+.searchBox{
+ display:flex;
+ background:white;
+ border-radius:14px;
+ padding:5px;
+ gap:5px;
+ align-items:center;
+}
+.searchBox input{
+ border:0;
+ outline:0;
+ flex:1;
+ min-width:0;
+ padding:12px;
+ color:var(--ink);
+ background:transparent;
+}
+.searchBox button{
+ background:var(--ink);
+ color:white;
+ border:0;
+ padding:12px 17px;
+ border-radius:10px;
+ font-weight:bold;
+}
+.headerActions{
+ display:flex;
+ gap:8px;
+ align-items:center;
+}
+.iconButton{
+ background:#ffffff24;
+ color:white;
+ border:1px solid #ffffff40;
+ border-radius:12px;
+ padding:11px 13px;
+ white-space:nowrap;
+}
+.searchSuggestions{
+ position:absolute;
+ top:calc(100% + 7px);
+ left:0;
+ right:0;
+ background:white;
+ color:var(--ink);
+ border:1px solid var(--line);
+ border-radius:14px;
+ box-shadow:var(--shadow);
+ z-index:110;
+ overflow:hidden;
+}
+.suggestion{
+ width:100%;
+ border:0;
+ background:white;
+ text-align:left;
+ padding:13px 15px;
+ display:flex;
+ align-items:center;
+ gap:12px;
+ border-bottom:1px solid var(--line);
+}
+.suggestion:hover{background:#fff4eb}
+.suggestion span:first-child{font-size:23px}
+.suggestion small{
+ display:block;
+ color:var(--muted);
+ margin-top:4px;
+}
+.navbar{
+ background:white;
+ border-bottom:1px solid var(--line);
+}
+.navInner{
+ display:flex;
+ gap:8px;
+ overflow:auto;
+ padding:11px 0;
+ scrollbar-width:none;
+}
+.navInner::-webkit-scrollbar{display:none}
+.navInner a{
+ white-space:nowrap;
+ padding:10px 15px;
+ border-radius:20px;
+ font-size:13px;
+ font-weight:700;
+ background:#f5f6f9;
+}
+.navInner a:hover{background:#fff0e4;color:var(--orange)}
+.hero{
+ display:grid;
+ grid-template-columns:1.5fr 1fr;
+ gap:15px;
+ margin-top:20px;
+}
+.heroMain{
+ background:linear-gradient(125deg,#ff6500,#ff9c3f);
+ border-radius:24px;
+ padding:35px;
+ color:white;
+ min-height:265px;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+ position:relative;
+ overflow:hidden;
+}
+.heroMain:after{
+ content:"V";
+ position:absolute;
+ right:18px;
+ bottom:-90px;
+ font-size:300px;
+ font-weight:900;
+ opacity:.09;
+ pointer-events:none;
+}
+.heroMain h1{
+ font-size:clamp(27px,4vw,47px);
+ line-height:1.1;
+ margin:0 0 15px;
+ max-width:570px;
+}
+.heroMain p{
+ font-size:15px;
+ line-height:1.7;
+ max-width:510px;
+}
+.heroBtn{
+ display:inline-block;
+ width:max-content;
+ padding:13px 20px;
+ border-radius:12px;
+ background:white;
+ color:var(--orange);
+ font-weight:bold;
+ margin-top:10px;
+ border:0;
+}
+.heroSide{
+ background:#1f2939;
+ color:white;
+ border-radius:24px;
+ padding:26px;
+ display:flex;
+ flex-direction:column;
+ justify-content:center;
+}
+.heroSide h2{font-size:25px;margin:12px 0}
+.heroSide p{line-height:1.7;color:#d7dce4}
+.heroSide a{
+ background:#ffffff20;
+ border:1px solid #ffffff35;
+ padding:13px;
+ border-radius:12px;
+ text-align:center;
+ font-weight:bold;
+ margin-top:12px;
+}
+.section{margin-top:30px}
+.sectionHead{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ margin-bottom:16px;
+}
+.sectionHead h2{font-size:23px;margin:0}
+.sectionHead p{color:var(--muted);margin:6px 0 0;font-size:13px}
+.sectionHead button{
+ border:0;
+ background:#fff0e4;
+ color:var(--orange);
+ padding:10px 14px;
+ border-radius:12px;
+ font-weight:bold;
+}
+.categories{
+ display:grid;
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:13px;
+}
+.category{
+ background:white;
+ border:1px solid var(--line);
+ border-radius:18px;
+ padding:19px 13px;
+ text-align:center;
+ transition:.2s;
+ position:relative;
+ min-height:150px;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:8px;
+}
+.category:hover{
+ transform:translateY(-3px);
+ border-color:#ffc49a;
+ box-shadow:var(--shadow);
+}
+.catIcon{
+ width:62px;
+ height:62px;
+ border-radius:19px;
+ display:grid;
+ place-items:center;
+ font-size:31px;
+ background:#fff0e4;
+}
+.catName{font-weight:800;font-size:15px}
+.catDesc{font-size:12px;color:var(--muted);line-height:1.5}
+.status{
+ display:inline-block;
+ padding:4px 8px;
+ font-size:10px;
+ border-radius:20px;
+ font-weight:bold;
+}
+.status.ready{background:#e5f8ed;color:#128455}
+.status.soon{background:#f0f1f5;color:#77808e}
+.filterBar{
+ display:flex;
+ gap:8px;
+ overflow:auto;
+ padding:3px 0 13px;
+}
+.filterBar button{
+ border:1px solid var(--line);
+ background:white;
+ border-radius:20px;
+ padding:9px 15px;
+ white-space:nowrap;
+}
+.filterBar button.active{
+ background:var(--orange);
+ color:white;
+ border-color:var(--orange);
+}
+.quickGrid{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:14px;
+}
+.quickCard{
+ border-radius:19px;
+ padding:23px;
+ background:white;
+ border:1px solid var(--line);
+}
+.quickCard .emoji{font-size:33px}
+.quickCard h3{margin:12px 0 7px}
+.quickCard p{color:var(--muted);font-size:13px;line-height:1.6}
+.quickCard a,.quickCard button{
+ display:inline-block;
+ border:0;
+ background:#fff0e4;
+ color:var(--orange);
+ font-weight:bold;
+ padding:11px 15px;
+ border-radius:10px;
+ margin-top:7px;
+}
+.promo{
+ background:linear-gradient(115deg,#1e293b,#344660);
+ border-radius:22px;
+ padding:30px;
+ color:white;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:20px;
+}
+.promo h2{margin:0 0 9px}
+.promo p{margin:0;color:#d5dce5;line-height:1.6}
+.promo button{
+ background:#ffb33c;
+ border:0;
+ padding:13px 19px;
+ border-radius:12px;
+ font-weight:bold;
+ white-space:nowrap;
+}
+.empty{
+ text-align:center;
+ padding:35px;
+ background:white;
+ border:1px dashed var(--line);
+ border-radius:18px;
+ color:var(--muted);
+}
+.footer{
+ margin-top:40px;
+ background:#1c2635;
+ color:white;
+ padding:35px 0 100px;
+}
+.footerGrid{
+ display:grid;
+ grid-template-columns:2fr 1fr 1fr;
+ gap:25px;
+}
+.footer p,.footer a{
+ color:#bac3d0;
+ font-size:13px;
+ line-height:1.9;
+}
+.footer a{display:block}
+.footer h3{margin:0 0 12px}
+.mobileBottom{
+ position:fixed;
+ bottom:0;
+ left:0;
+ right:0;
+ background:white;
+ border-top:1px solid var(--line);
+ display:none;
+ grid-template-columns:repeat(5,1fr);
+ z-index:120;
+ padding:8px 4px max(8px,env(safe-area-inset-bottom));
+ box-shadow:0 -4px 20px #0000000d;
+}
+.mobileBottom button{
+ background:none;
+ border:0;
+ color:#687385;
+ font-size:10px;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ gap:4px;
+}
+.mobileBottom button span{font-size:23px}
+.mobileBottom button.active{color:var(--orange);font-weight:bold}
+.drawerBackdrop{
+ position:fixed;
+ inset:0;
+ background:#0009;
+ z-index:190;
+}
+.drawer{
+ position:fixed;
+ top:0;
+ bottom:0;
+ left:0;
+ width:min(350px,90vw);
+ background:white;
+ z-index:200;
+ transform:translateX(-105%);
+ transition:transform .25s;
+ overflow:auto;
+ box-shadow:10px 0 30px #0002;
+}
+.drawer.open{transform:translateX(0)}
+.drawerHead{
+ background:var(--orange);
+ color:white;
+ padding:22px;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+}
+.drawerHead strong{font-size:26px}
+.drawerHead button{
+ background:#ffffff2b;
+ border:0;
+ color:white;
+ border-radius:9px;
+ padding:9px 13px;
+}
+.drawerLinks{padding:14px}
+.drawerLinks button{
+ display:flex;
+ align-items:center;
+ gap:13px;
+ width:100%;
+ border:0;
+ background:white;
+ padding:13px 10px;
+ border-bottom:1px solid var(--line);
+ text-align:left;
+ font-weight:bold;
+ color:var(--ink);
+}
+.drawerLinks button span{font-size:23px}
+.toast{
+ position:fixed;
+ bottom:90px;
+ left:50%;
+ transform:translateX(-50%);
+ background:#1f2937;
+ color:white;
+ padding:14px 20px;
+ border-radius:13px;
+ z-index:300;
+ width:max-content;
+ max-width:calc(100% - 30px);
+ text-align:center;
+ box-shadow:var(--shadow);
+}
+@media(max-width:850px){
+ .hero{grid-template-columns:1fr}
+ .categories{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .quickGrid{grid-template-columns:repeat(2,1fr)}
+ .headerActions .accountLabel{display:none}
+}
+@media(max-width:600px){
+ .topbar{display:none}
+ .headerMain{gap:8px;padding:11px 0;flex-wrap:wrap}
+ .logo{font-size:27px}
+ .logo span{font-size:8px}
+ .searchWrap{order:3;flex-basis:100%}
+ .searchBox input{padding:10px}
+ .searchBox button{padding:11px}
+ .headerActions{margin-left:auto}
+ .iconButton{padding:9px 11px}
+ .navbar{display:none}
+ .hero{margin-top:13px}
+ .heroMain{min-height:220px;padding:25px}
+ .heroSide{padding:22px}
+ .categories{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+ .category{padding:14px 9px;min-height:145px}
+ .catIcon{width:53px;height:53px;font-size:28px}
+ .catName{font-size:14px}
+ .catDesc{font-size:11px}
+ .sectionHead h2{font-size:20px}
+ .quickGrid{grid-template-columns:1fr}
+ .promo{display:block;padding:24px}
+ .promo button{margin-top:15px}
+ .footerGrid{grid-template-columns:1fr}
+ .mobileBottom{display:grid}
+}
+</style>
+</head>
+
+<body>
+
+<div class="topbar">
+ <div class="container">
+  <span>🇹🇯 VAYO — Платформаи хизматрасониҳо барои Тоҷикистон</span>
+  <span>Тоҷикӣ · Сомонӣ (TJS) · Душанбе</span>
+ </div>
+</div>
+
+<header>
+ <div class="container headerMain">
+  <button class="iconButton" id="menuBtn" aria-label="Кушодани меню">☰</button>
+  <a class="logo" href="./index.html">
+   VAYO
+   <span>ҲАМА ЧИЗ ДАР ЯК ҶО</span>
+  </a>
+  <div class="searchWrap">
+   <div class="searchBox">
+    <input
+      id="searchInput"
+      type="search"
+      placeholder="Мол, таксӣ, усто, хона, хӯрок..."
+      autocomplete="off"
+      aria-label="Ҷустуҷӯи хизматрасониҳо">
+    <button id="searchBtn" aria-label="Ҷустуҷӯ">🔎</button>
+   </div>
+   <div id="suggestions" class="searchSuggestions hidden"></div>
+  </div>
+  <div class="headerActions">
+   <button class="iconButton" id="ordersBtn">📦</button>
+   <button class="iconButton" id="accountBtn">
+    👤 <span class="accountLabel">Ҳисоби ман</span>
+   </button>
+  </div>
+ </div>
+</header>
+
+<nav class="navbar">
+ <div class="container navInner">
+  <a href="#services">☰ Ҳамаи хизматҳо</a>
+  <a href="#services" data-open="market">🛍️ Бозор</a>
+  <a href="#services" data-open="food">🍔 Хӯрок</a>
+  <a href="#services" data-open="taxi">🚕 Таксӣ</a>
+  <a href="#services" data-open="language">📚 Забономӯзӣ</a>
+  <a href="#services" data-open="home">🏠 Хона</a>
+  <a href="#services" data-open="jobs">💼 Кор</a>
+  <a href="#services" data-open="services">🔧 Усто</a>
+ </div>
+</nav>
+
+<main class="container">
+
+<section class="hero">
+ <div class="heroMain">
+  <h1>Ҳама чизе, ки лозим аст, дар VAYO!</h1>
+  <p>
+   Хариди мол, фармоиши хӯрок, таксӣ, забономӯзӣ,
+   ҷустуҷӯи хона, кор ва хизматрасониҳо — дар як ҷо.
+  </p>
+  <a class="heroBtn" href="#services">Хизматҳоро бин →</a>
+ </div>
+
+ <div class="heroSide">
+  <div style="font-size:43px">🌍</div>
+  <h2>VAYO Super App</h2>
+  <p>
+   Як платформа барои харидорон, мағозаҳо,
+   ронандагон, курьерҳо ва соҳибони хизматрасониҳо.
+  </p>
+  <a href="#services">16 категорияро кушо →</a>
+ </div>
+</section>
+
+<section class="section" id="services">
+ <div class="sectionHead">
+  <div>
+   <h2>🧩 Ҳамаи хизматрасониҳо</h2>
+   <p>Категорияи лозимаро интихоб кунед.</p>
+  </div>
+  <button id="resetFilters">Ҳама</button>
+ </div>
+
+ <div class="filterBar" id="filterBar">
+  <button class="active" data-filter="all">Ҳама</button>
+  <button data-filter="shopping">Харид</button>
+  <button data-filter="transport">Нақлиёт</button>
+  <button data-filter="daily">Рӯзгор</button>
+  <button data-filter="education">Омӯзиш</button>
+  <button data-filter="business">Кор ва тиҷорат</button>
+ </div>
+
+ <div class="categories" id="categories"></div>
+ <div class="empty hidden" id="emptySearch">
+  😕 Хизматрасонӣ ёфт нашуд. Калимаи дигар нависед.
+ </div>
+</section>
+
+<section class="section" id="popular">
+ <div class="sectionHead">
+  <div>
+   <h2>⭐ Хизматҳои асосӣ</h2>
+   <p>Бахшҳое, ки барои VAYO таҳия мешаванд.</p>
+  </div>
+ </div>
+ <div class="quickGrid" id="quickGrid"></div>
+</section>
+
+<section class="section">
+ <div class="promo">
+  <div>
+   <h2>🏪 Соҳиби мағоза ё хизматрасонӣ ҳастед?</h2>
+   <p>
+    Дар оянда метавонед мағоза ё хизмати худро дар VAYO
+    сабт кунед ва аз муштариён фармоиш қабул намоед.
+   </p>
+  </div>
+  <button id="providerBtn">Маълумоти бештар</button>
+ </div>
+</section>
+
+<section class="section">
+ <div class="sectionHead">
+  <div>
+   <h2>💡 Чаро VAYO?</h2>
+   <p>Як платформа ба ҷойи даҳҳо барнома.</p>
+  </div>
+ </div>
+ <div class="quickGrid">
+  <div class="quickCard">
+   <div class="emoji">🔎</div>
+   <h3>Ҷустуҷӯи осон</h3>
+   <p>Хизматрасонии лозимаро аз як саҳифа пайдо мекунед.</p>
+  </div>
+  <div class="quickCard">
+   <div class="emoji">📱</div>
+   <h3>Барои телефон</h3>
+   <p>Тарҳи мутобиқ ба Android, iPhone ва компютер.</p>
+  </div>
+  <div class="quickCard">
+   <div class="emoji">🇹🇯</div>
+   <h3>Барои Тоҷикистон</h3>
+   <p>Забони тоҷикӣ ва имкони рушди хизматҳо дар шаҳрҳои кишвар.</p>
+  </div>
+ </div>
+</section>
+
+</main>
+
+<footer class="footer">
+ <div class="container footerGrid">
+  <div>
+   <h3 style="font-size:29px">VAYO</h3>
+   <p>
+    VAYO Super App — платформаи ягона барои
+    бозор, хӯрок, таксӣ, омӯзиш ва дигар хизматрасониҳо.
+   </p>
+   <p>© <span id="year"></span> VAYO. Ҳамаи ҳуқуқҳо ҳифз шудаанд.</p>
+  </div>
+  <div>
+   <h3>Хизматҳо</h3>
+   <a href="#services">Ҳамаи категорияҳо</a>
+   <a href="#popular">Хизматҳои асосӣ</a>
+   <a href="#services" data-open="language">Забономӯзӣ</a>
+  </div>
+  <div>
+   <h3>Платформа</h3>
+   <a href="#services">Ҷустуҷӯ</a>
+   <a href="#services">Хизматрасониҳо</a>
+   <a href="https://github.com/zikriollohismonov18-sketch/VAYO">GitHub</a>
+  </div>
+ </div>
+</footer>
+
+<div class="mobileBottom">
+ <button class="active" data-bottom="home">
+  <span>🏠</span>Асосӣ
+ </button>
+ <button data-bottom="services">
+  <span>🧩</span>Хизматҳо
+ </button>
+ <button data-bottom="search">
+  <span>🔎</span>Ҷустуҷӯ
+ </button>
+ <button data-bottom="orders">
+  <span>📦</span>Фармоиш
+ </button>
+ <button data-bottom="account">
+  <span>👤</span>Ҳисоб
+ </button>
+</div>
+
+<div class="drawerBackdrop hidden" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-label="Менюи VAYO">
+ <div class="drawerHead">
+  <strong>VAYO</strong>
+  <button id="closeMenu" aria-label="Пӯшидани меню">✕</button>
+ </div>
+ <div class="drawerLinks" id="drawerLinks"></div>
+</aside>
+
+<div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+/*
+ VAYO SUPER APP
+ Саҳифаи асосӣ.
+ Ҳар хизмат саҳифаи алоҳида дорад.
+
+ Агар файли хизматрасонӣ ҳанӯз сохта нашуда бошад,
+ active:false гузоред.
+ Ин ба корбар саҳифаи 404 нишон намедиҳад.
+*/
+
+const SERVICES=[
+ {
+  id:"market",
+  name:"VAYO Market",
+  short:"Бозор",
+  icon:"🛍️",
+  desc:"Либос, пойафзол, техника, мол ва мағозаҳо",
+  group:"shopping",
+  color:"#fff0e4",
+  url:"pages/market.html",
+  active:false,
+  keywords:"бозор мағоза мол маҳсулот либос пойафзол техника temu market магазин"
+ },
+ {
+  id:"food",
+  name:"VAYO Food",
+  short:"Хӯрок",
+  icon:"🍔",
+  desc:"Хӯрок, тарабхонаҳо ва расонидан",
+  group:"daily",
+  color:"#ffeded",
+  url:"pages/food.html",
+  active:false,
+  keywords:"хурок таом ресторан кафе доставка фармоиш food"
+ },
+ {
+  id:"taxi",
+  name:"VAYO Taxi",
+  short:"Таксӣ",
+  icon:"🚕",
+  desc:"Таксӣ, ронанда ва сафар дар шаҳр",
+  group:"transport",
+  color:"#fff6d8",
+  url:"pages/taxi.html",
+  active:false,
+  keywords:"такси мошин ронанда нақлиёт сафар taxi"
+ },
+ {
+  id:"language",
+  name:"VAYO Language",
+  short:"Забономӯзӣ",
+  icon:"📚",
+  desc:"Олмонӣ, англисӣ, русӣ, чинӣ ва кореягӣ",
+  group:"education",
+  color:"#efebff",
+  url:"pages/language.html",
+  active:true,
+  keywords:"забон немиси олмони англиси руси чини корея курс language duolingo"
+ },
+ {
+  id:"home",
+  name:"VAYO Home",
+  short:"Хона",
+  icon:"🏠",
+  desc:"Харид, фурӯш ва иҷораи хона",
+  group:"daily",
+  color:"#e8f5ff",
+  url:"pages/home.html",
+  active:false,
+  keywords:"хона квартира иҷора фурӯш манзил недвижимость"
+ },
+ {
+  id:"jobs",
+  name:"VAYO Jobs",
+  short:"Кор",
+  icon:"💼",
+  desc:"Ҷойҳои корӣ, коргар ва корфармо",
+  group:"business",
+  color:"#e9f9ef",
+  url:"pages/jobs.html",
+  active:false,
+  keywords:"кор вакансия маош коргар корфармо работа jobs"
+ },
+ {
+  id:"services",
+  name:"VAYO Services",
+  short:"Усто ва хизматҳо",
+  icon:"🔧",
+  desc:"Усто, барқчӣ, сантехник ва тозакунӣ",
+  group:"daily",
+  color:"#e9f4ff",
+  url:"pages/services.html",
+  active:false,
+  keywords:"усто таъмир сантехник электрик барқчи тозакуни"
+ },
+ {
+  id:"health",
+  name:"VAYO Health",
+  short:"Тиб",
+  icon:"💊",
+  desc:"Духтур, клиника ва дорухона",
+  group:"daily",
+  color:"#e7fbf3",
+  url:"pages/health.html",
+  active:false,
+  keywords:"духтур табиб дорухона клиника дору беморхона"
+ },
+ {
+  id:"cargo",
+  name:"VAYO Cargo",
+  short:"Карго",
+  icon:"🚚",
+  desc:"Интиқоли бор, бастаҳо ва логистика",
+  group:"transport",
+  color:"#eaf4ff",
+  url:"pages/cargo.html",
+  active:false,
+  keywords:"карго бор доставка посылка чин хитой интиқол cargo"
+ },
+ {
+  id:"tickets",
+  name:"VAYO Tickets",
+  short:"Чипта",
+  icon:"🎟️",
+  desc:"Чиптаи ҳавопаймо, автобус ва чорабиниҳо",
+  group:"transport",
+  color:"#fff0f5",
+  url:"pages/tickets.html",
+  active:false,
+  keywords:"чипта самолёт автобус билет парвоз сафар"
+ },
+ {
+  id:"hotels",
+  name:"VAYO Hotels",
+  short:"Меҳмонхона",
+  icon:"🏨",
+  desc:"Меҳмонхона, ҳуҷра ва брон",
+  group:"daily",
+  color:"#f1efff",
+  url:"pages/hotels.html",
+  active:false,
+  keywords:"меҳмонхона отель гостиница брон ҳуҷра hotel"
+ },
+ {
+  id:"auto",
+  name:"VAYO Auto",
+  short:"Мошин",
+  icon:"🚗",
+  desc:"Харидуфурӯши мошин, қисмҳо ва таъмир",
+  group:"shopping",
+  color:"#edf2ff",
+  url:"pages/auto.html",
+  active:false,
+  keywords:"мошин автомобил запчасть шина авто"
+ },
+ {
+  id:"education",
+  name:"VAYO Education",
+  short:"Таълим",
+  icon:"🎓",
+  desc:"Курсҳо, омӯзгорон ва омӯзиши касб",
+  group:"education",
+  color:"#e9f8fa",
+  url:"pages/education.html",
+  active:false,
+  keywords:"таълим омӯзгор мактаб курс донишгоҳ репетитор"
+ },
+ {
+  id:"beauty",
+  name:"VAYO Beauty",
+  short:"Зебоӣ",
+  icon:"💇",
+  desc:"Сартарошхона, салон ва хизматҳои зебоӣ",
+  group:"daily",
+  color:"#fff0f6",
+  url:"pages/beauty.html",
+  active:false,
+  keywords:"сартарош салон зебои парикмахер beauty"
+ },
+ {
+  id:"agro",
+  name:"VAYO Agro",
+  short:"Кишоварзӣ",
+  icon:"🌾",
+  desc:"Мева, сабзавот, чорво ва маҳсулоти деҳқонӣ",
+  group:"shopping",
+  color:"#f0f9e5",
+  url:"pages/agro.html",
+  active:false,
+  keywords:"деҳқон кишоварзи мева сабзавот чорво замин агро"
+ },
+ {
+  id:"ads",
+  name:"VAYO Ads",
+  short:"Эълонҳо",
+  icon:"📢",
+  desc:"Эълонҳои шахсӣ, харидуфурӯш ва хизматҳо",
+  group:"business",
+  color:"#fff5e7",
+  url:"pages/ads.html",
+  active:false,
+  keywords:"эълон реклама фурӯш харид объявления ads"
+ }
+];
+
+const $=id=>document.getElementById(id);
+
+let currentFilter="all";
+let currentSearch="";
+let toastTimer=null;
+
+function escapeHTML(value){
+ return String(value).replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#39;"
+ })[c]);
+}
+
+function normalize(text){
+ return String(text)
+  .toLocaleLowerCase()
+  .replace(/ё/g,"е")
+  .replace(/ӣ/g,"и")
+  .replace(/ӯ/g,"у")
+  .replace(/қ/g,"к")
+  .replace(/ҳ/g,"х")
+  .replace(/ҷ/g,"ч")
+  .replace(/ъ/g,"")
+  .trim();
+}
+
+function toast(message){
+ const box=$("toast");
+ box.textContent=message;
+ box.classList.remove("hidden");
+ clearTimeout(toastTimer);
+ toastTimer=setTimeout(()=>box.classList.add("hidden"),3500);
+}
+
+function matches(service,query){
+ if(!query)return true;
+ const words=normalize(query).split(/\s+/).filter(Boolean);
+ const haystack=normalize([
+  service.name,
+  service.short,
+  service.desc,
+  service.keywords
+ ].join(" "));
+ return words.every(word=>haystack.includes(word));
+}
+
+function filteredServices(){
+ return SERVICES.filter(s=>{
+  const groupMatch=currentFilter==="all"||s.group===currentFilter;
+  return groupMatch&&matches(s,currentSearch);
+ });
+}
+
+function categoryHTML(s){
+ return `
+  <a href="${s.active?escapeHTML(s.url):"#services"}"
+     class="category"
+     data-service="${escapeHTML(s.id)}">
+   <div class="catIcon" style="background:${s.color}">
+    ${s.icon}
+   </div>
+   <div class="catName">${escapeHTML(s.short)}</div>
+   <div class="catDesc">${escapeHTML(s.desc)}</div>
+   <span class="status ${s.active?"ready":"soon"}">
+    ${s.active?"Фаъол":"Ба наздикӣ"}
+   </span>
+  </a>
+ `;
+}
+
+function renderCategories(){
+ const items=filteredServices();
+ $("categories").innerHTML=items.map(categoryHTML).join("");
+ $("emptySearch").classList.toggle("hidden",items.length>0);
+}
+
+function renderQuick(){
+ const ids=["market","food","taxi","language","jobs","services"];
+ const items=ids.map(id=>SERVICES.find(s=>s.id===id)).filter(Boolean);
+
+ $("quickGrid").innerHTML=items.map(s=>`
+  <div class="quickCard">
+   <div class="emoji">${s.icon}</div>
+   <h3>${escapeHTML(s.name)}</h3>
+   <p>${escapeHTML(s.desc)}</p>
+   <a href="${s.active?escapeHTML(s.url):"#services"}"
+      data-service="${escapeHTML(s.id)}">
+    ${s.active?"Кушодан →":"Ба наздикӣ"}
+   </a>
+  </div>
+ `).join("");
+}
+
+function renderDrawer(){
+ $("drawerLinks").innerHTML=`
+  <button data-home="true"><span>🏠</span>Саҳифаи асосӣ</button>
+  ${SERVICES.map(s=>`
+   <button data-service="${escapeHTML(s.id)}">
+    <span>${s.icon}</span>${escapeHTML(s.short)}
+    ${s.active?"":" · Ба наздикӣ"}
+   </button>
+  `).join("")}
+ `;
+}
+
+function openService(id){
+ const service=SERVICES.find(s=>s.id===id);
+ if(!service)return;
+ closeDrawer();
+ if(service.active){
+  window.location.href=service.url;
+ }else{
+  toast("🚧 "+service.name+" ҳоло омода нест. Ба наздикӣ!");
+ }
+}
+
+function openDrawer(){
+ $("backdrop").classList.remove("hidden");
+ $("drawer").classList.add("open");
+ $("menuBtn").setAttribute("aria-expanded","true");
+ document.body.style.overflow="hidden";
+}
+
+function closeDrawer(){
+ $("backdrop").classList.add("hidden");
+ $("drawer").classList.remove("open");
+ $("menuBtn").setAttribute("aria-expanded","false");
+ document.body.style.overflow="";
+}
+
+function renderSuggestions(){
+ const q=$("searchInput").value.trim();
+ if(!q){
+  $("suggestions").classList.add("hidden");
+  $("suggestions").innerHTML="";
+  return;
+ }
+ const found=SERVICES.filter(s=>matches(s,q)).slice(0,6);
+ if(!found.length){
+  $("suggestions").classList.add("hidden");
+  return;
+ }
+ $("suggestions").innerHTML=found.map(s=>`
+  <button class="suggestion" data-service="${escapeHTML(s.id)}">
+   <span>${s.icon}</span>
+   <span>
+    <b>${escapeHTML(s.name)}</b>
+    <small>${escapeHTML(s.desc)}</small>
+   </span>
+  </button>
+ `).join("");
+ $("suggestions").classList.remove("hidden");
+}
+
+function search(){
+ currentSearch=$("searchInput").value.trim();
+ $("suggestions").classList.add("hidden");
+ currentFilter="all";
+ updateFilterButtons();
+ renderCategories();
+ $("services").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function updateFilterButtons(){
+ document.querySelectorAll("[data-filter]").forEach(btn=>{
+  btn.classList.toggle("active",btn.dataset.filter===currentFilter);
+ });
+}
+
+$("searchInput").addEventListener("input",()=>{
+ currentSearch=$("searchInput").value.trim();
+ renderCategories();
+ renderSuggestions();
+});
+
+$("searchInput").addEventListener("keydown",e=>{
+ if(e.key==="Enter")search();
+ if(e.key==="Escape")$("suggestions").classList.add("hidden");
+});
+
+$("searchBtn").onclick=search;
+
+$("filterBar").addEventListener("click",e=>{
+ const btn=e.target.closest("[data-filter]");
+ if(!btn)return;
+ currentFilter=btn.dataset.filter;
+ updateFilterButtons();
+ renderCategories();
+});
+
+$("resetFilters").onclick=()=>{
+ currentFilter="all";
+ currentSearch="";
+ $("searchInput").value="";
+ $("suggestions").classList.add("hidden");
+ updateFilterButtons();
+ renderCategories();
+};
+
+document.addEventListener("click",e=>{
+ const service=e.target.closest("[data-service]");
+ if(service){
+  e.preventDefault();
+  openService(service.dataset.service);
+  return;
+ }
+ const home=e.target.closest("[data-home]");
+ if(home){
+  closeDrawer();
+  window.scrollTo({top:0,behavior:"smooth"});
+ }
+ if(!e.target.closest(".searchWrap")){
+  $("suggestions").classList.add("hidden");
+ }
+});
+
+document.querySelectorAll("[data-open]").forEach(a=>{
+ a.addEventListener("click",e=>{
+  e.preventDefault();
+  openService(a.dataset.open);
+ });
+});
+
+$("menuBtn").onclick=openDrawer;
+$("closeMenu").onclick=closeDrawer;
+$("backdrop").onclick=closeDrawer;
+
+document.addEventListener("keydown",e=>{
+ if(e.key==="Escape")closeDrawer();
+});
+
+$("ordersBtn").onclick=()=>{
+ toast("📦 Панели ягонаи фармоишҳо ҳоло омода нест.");
+};
+
+$("accountBtn").onclick=()=>{
+ toast("👤 Ҳисоби ягонаи VAYO ҳоло пайваст нашудааст.");
+};
+
+$("providerBtn").onclick=()=>{
+ toast("🏪 Сабти соҳибони хизматрасонӣ дар марҳилаи таҳия аст.");
+};
+
+document.querySelectorAll("[data-bottom]").forEach(btn=>{
+ btn.onclick=()=>{
+  const action=btn.dataset.bottom;
+  document.querySelectorAll("[data-bottom]").forEach(b=>{
+   b.classList.toggle("active",b===btn);
+  });
+
+  if(action==="home"){
+   window.scrollTo({top:0,behavior:"smooth"});
+  }else if(action==="services"){
+   $("services").scrollIntoView({behavior:"smooth"});
+  }else if(action==="search"){
+   window.scrollTo({top:0,behavior:"smooth"});
+   $("searchInput").focus();
+  }else if(action==="orders"){
+   toast("📦 Панели фармоишҳо ҳоло омода нест.");
+  }else if(action==="account"){
+   toast("👤 Ҳисоби ягона ҳоло пайваст нашудааст.");
+  }
+ };
+});
+
+$("year").textContent=new Date().getFullYear();
+
+renderCategories();
+renderQuick();
+renderDrawer();
+
+console.log("VAYO Super App — 16 категория омода.");
+</script>
+
+</body>
+</html>
