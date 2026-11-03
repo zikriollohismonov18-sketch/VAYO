@@ -1,0 +1,472 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#7355ef">
+<title>VAYO — Вазифаҳои ҳаррӯза</title>
+<style>
+:root{
+ --purple:#7355ef;--green:#1eae70;
+ --bg:#f6f5fc;--ink:#26213e;
+ --line:#e6e2f3;--gold:#f4b544
+}
+*{box-sizing:border-box}
+body{
+ margin:0;background:var(--bg);
+ color:var(--ink);font-family:Arial,sans-serif
+}
+header{
+ background:linear-gradient(125deg,#6247db,#a36cf4);
+ color:white;padding:24px 16px
+}
+.wrap{max-width:780px;margin:auto;padding:15px}
+header h1{margin:12px 0}
+.back{
+ color:white;text-decoration:none;
+ background:#ffffff25;padding:10px 14px;
+ border-radius:12px;display:inline-block
+}
+.card{
+ background:white;border:1px solid var(--line);
+ border-radius:18px;padding:18px;margin:14px 0
+}
+.stats{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:10px
+}
+.stat{text-align:center}
+.stat b{display:block;font-size:23px}
+.stat small{color:#77758b}
+.task{
+ display:flex;align-items:center;gap:12px;
+ padding:15px;border:1px solid var(--line);
+ border-radius:14px;margin:12px 0
+}
+.task .emoji{font-size:28px}
+.task .content{flex:1}
+.task strong{display:block;margin-bottom:5px}
+.task small{color:#77758b}
+.done{background:#e9faef;border-color:#9be4b8}
+button{
+ cursor:pointer;border:0;font:inherit
+}
+.btn{
+ padding:13px 17px;border-radius:12px;
+ font-weight:bold
+}
+.primary{background:var(--purple);color:white}
+.green{background:var(--green);color:white}
+.light{background:#eeeafa;color:var(--ink)}
+.btn:disabled{opacity:.55;cursor:default}
+.progress{
+ height:13px;background:#eae7f5;
+ border-radius:20px;overflow:hidden;margin:15px 0
+}
+.fill{
+ width:0;height:100%;background:var(--green);
+ transition:width .2s
+}
+.question{
+ background:#f5f1ff;padding:20px;
+ border-radius:14px;margin:15px 0;
+ text-align:center
+}
+.option{
+ width:100%;padding:14px;text-align:left;
+ border:2px solid var(--line);
+ border-radius:12px;background:white;
+ margin:6px 0
+}
+.option:disabled{opacity:.7}
+.feedback{
+ margin:12px 0;padding:12px;
+ border-radius:12px;background:#eaf8f0
+}
+.hidden{display:none!important}
+.links{display:flex;gap:10px;flex-wrap:wrap}
+.links a{
+ padding:12px;border-radius:12px;
+ background:#eeeafa;text-decoration:none;
+ color:var(--ink);font-weight:bold
+}
+@media(max-width:440px){
+ .stat b{font-size:19px}
+ .task{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="wrap">
+  <a class="back" href="language.html">
+   ← VAYO Language
+  </a>
+  <h1>📅 Вазифаҳои ҳаррӯза</h1>
+  <p>Ҳар рӯз омӯз, XP гир ва пешрафт кун!</p>
+ </div>
+</header>
+
+<main class="wrap">
+
+<div class="stats">
+ <div class="card stat">
+  <b id="xp">0</b>
+  <small>⚡ XP</small>
+ </div>
+ <div class="card stat">
+  <b id="streak">0</b>
+  <small>🔥 Рӯз пайдарпай</small>
+ </div>
+ <div class="card stat">
+  <b id="completed">0/3</b>
+  <small>✅ Вазифаҳо</small>
+ </div>
+</div>
+
+<section class="card">
+ <h2>🎯 Ҳадафи имрӯз</h2>
+ <p id="today"></p>
+ <div class="progress">
+  <div class="fill" id="bar"></div>
+ </div>
+ <p id="progressText"></p>
+</section>
+
+<section class="card">
+ <h2>🏆 Се вазифаи рӯз</h2>
+ <div id="tasks"></div>
+</section>
+
+<section id="quiz" class="card hidden">
+ <h2 id="quizTitle">Машқи рӯз</h2>
+ <div class="progress">
+  <div id="quizBar" class="fill"></div>
+ </div>
+ <p id="quizCounter"></p>
+ <div class="question">
+  <h3 id="question"></h3>
+ </div>
+ <div id="options"></div>
+ <div id="feedback" class="feedback hidden"></div>
+ <button id="next" class="btn primary hidden">
+  Давом додан →
+ </button>
+ <button id="close" class="btn light">
+  Баргаштан
+ </button>
+</section>
+
+<section class="card">
+ <h2>🎁 Мукофоти рӯз</h2>
+ <p>Ҳамаи се вазифаро иҷро кун ва 30 XP-и иловагӣ гир.</p>
+ <button id="claim" class="btn green" disabled>
+  🎁 Гирифтани 30 XP
+ </button>
+ <p id="rewardStatus"></p>
+</section>
+
+<section class="card">
+ <h2>📚 Машқҳои дигар</h2>
+ <div class="links">
+  <a href="writing.html">✍️ Навиштан</a>
+  <a href="sentences.html">🧩 Ҷумла сохтан</a>
+  <a href="language.html">🌍 Дарсҳо</a>
+ </div>
+</section>
+
+</main>
+
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+const DAILY_KEY="vayo_daily_v1";
+const MAIN_KEY="vayo_language_v2";
+
+function read(key){
+ try{
+  const obj=JSON.parse(localStorage.getItem(key));
+  return obj&&typeof obj==="object"?obj:{};
+ }catch(e){return {}}
+}
+function save(key,value){
+ try{
+  localStorage.setItem(key,JSON.stringify(value));
+  return true;
+ }catch(e){
+  alert("Маълумот нигоҳ дошта нашуд. Ҷойи браузерро санҷ.");
+  return false;
+ }
+}
+function dateKey(date){
+ const y=date.getFullYear();
+ const m=String(date.getMonth()+1).padStart(2,"0");
+ const d=String(date.getDate()).padStart(2,"0");
+ return `${y}-${m}-${d}`;
+}
+const today=dateKey(new Date());
+const yesterdayDate=new Date();
+yesterdayDate.setDate(yesterdayDate.getDate()-1);
+const yesterday=dateKey(yesterdayDate);
+
+let daily=read(DAILY_KEY);
+if(!daily.days)daily.days={};
+if(!daily.days[today]){
+ daily.days[today]={done:[false,false,false],claimed:false};
+}
+let currentDay=daily.days[today];
+if(!Array.isArray(currentDay.done)){
+ currentDay.done=[false,false,false];
+}
+currentDay.done=[0,1,2].map(i=>currentDay.done[i]===true);
+
+const TASKS=[
+ {title:"Калимаҳои рӯз",desc:"5 саволи луғат",emoji:"📖",xp:10},
+ {title:"Тарҷумаи рӯз",desc:"5 саволи тарҷума",emoji:"🌍",xp:15},
+ {title:"Дониши забон",desc:"5 саволи грамматика",emoji:"🧠",xp:20}
+];
+
+const BANK=[
+ [
+  ["Калимаи олмонии «Об» кадом аст?",
+   ["Wasser","Brot","Haus"],0],
+  ["«Hello» чӣ маъно дорад?",
+   ["Раҳмат","Салом","Хайр"],1],
+  ["«Спасибо» чӣ маъно дорад?",
+   ["Ташаккур","Об","Кор"],0],
+  ["«안녕하세요» чӣ маъно дорад?",
+   ["Пагоҳ","Салом","Нон"],1],
+  ["«水» чӣ маъно дорад?",
+   ["Хона","Модар","Об"],2]
+ ],
+ [
+  ["«Ich arbeite heute.»-ро тарҷума кун.",
+   ["Ман имрӯз кор мекунам.","Ман пагоҳ меравам.","Ман хастаам."],0],
+  ["«I need help.» чӣ маъно дорад?",
+   ["Ман пул дорам.","Ман ба ёрӣ ниёз дорам.","Ман кор мекунам."],1],
+  ["«Я учу русский язык.» чӣ маъно дорад?",
+   ["Ман русӣ меомӯзам.","Ман кор мекунам.","Ман ба хона меравам."],0],
+  ["«我喝水。» чӣ маъно дорад?",
+   ["Ман нон мехӯрам.","Ман об менӯшам.","Ман мехобам."],1],
+  ["«저는 오늘 일해요.» чӣ маъно дорад?",
+   ["Ман имрӯз кор мекунам.","Ман фардо меравам.","Ман мехонам."],0]
+ ],
+ [
+  ["Ҷумлаи дурусти олмониро интихоб кун.",
+   ["Ich heute arbeite.","Ich arbeite heute.","Arbeiten ich heute."],1],
+  ["Ҷумлаи дурусти англисиро интихоб кун.",
+   ["She is happy.","She happy is.","Is she happy."],0],
+  ["Дар забони русӣ кадомаш дуруст аст?",
+   ["Я книга читаю.","Читаю я книгу.","Я читаю книгу."],2],
+  ["Кадом ҷумлаи чинӣ «Ман чинӣ меомӯзам» аст?",
+   ["我学习中文。","我喝水。","我回家。"],0],
+  ["Кадом ҷумлаи кореягӣ «Ман об менӯшам» аст?",
+   ["저는 집에 가요.","저는 물을 마셔요.","저는 오늘 일해요."],1]
+ ]
+];
+
+let activeTask=-1;
+let questionIndex=0;
+let correctCount=0;
+let answered=false;
+
+function getXP(){
+ return Number(read(MAIN_KEY).xp)||0;
+}
+
+function addXP(amount){
+ const main=read(MAIN_KEY);
+ main.xp=(Number(main.xp)||0)+amount;
+ return save(MAIN_KEY,main);
+}
+
+function countDone(){
+ return currentDay.done.filter(Boolean).length;
+}
+
+function streakCount(){
+ // Танҳо рӯзҳое ҳисоб мешаванд, ки ҳадди ақал
+ // як вазифаи онҳо иҷро шудааст.
+ let count=0;
+ let cursor=new Date();
+ if(countDone()===0)cursor.setDate(cursor.getDate()-1);
+ for(let i=0;i<3650;i++){
+  const key=dateKey(cursor);
+  const entry=daily.days[key];
+  if(!entry||!Array.isArray(entry.done)||
+     !entry.done.some(Boolean))break;
+  count++;
+  cursor.setDate(cursor.getDate()-1);
+ }
+ return count;
+}
+
+function render(){
+ $("xp").textContent=getXP();
+ $("streak").textContent=streakCount();
+ $("completed").textContent=countDone()+"/3";
+ $("today").textContent="Имрӯз: "+today;
+ $("bar").style.width=(countDone()/3*100)+"%";
+ $("progressText").textContent=
+  countDone()+" аз 3 вазифа иҷро шуд.";
+
+ const tasks=$("tasks");
+ tasks.replaceChildren();
+
+ TASKS.forEach((task,i)=>{
+  const item=document.createElement("div");
+  item.className="task"+(currentDay.done[i]?" done":"");
+
+  const emoji=document.createElement("span");
+  emoji.className="emoji";
+  emoji.textContent=task.emoji;
+
+  const content=document.createElement("div");
+  content.className="content";
+
+  const title=document.createElement("strong");
+  title.textContent=task.title;
+
+  const desc=document.createElement("small");
+  desc.textContent=task.desc+" • +"+task.xp+" XP";
+
+  content.append(title,desc);
+
+  const btn=document.createElement("button");
+  btn.className="btn "+(currentDay.done[i]?"green":"primary");
+  btn.textContent=currentDay.done[i]?"✓ Иҷро шуд":"Оғоз";
+  btn.disabled=currentDay.done[i];
+  btn.addEventListener("click",()=>startTask(i));
+
+  item.append(emoji,content,btn);
+  tasks.appendChild(item);
+ });
+
+ $("claim").disabled=countDone()!==3||currentDay.claimed;
+ $("claim").textContent=currentDay.claimed?
+  "✓ Мукофот гирифта шуд":
+  "🎁 Гирифтани 30 XP";
+
+ $("rewardStatus").textContent=currentDay.claimed?
+  "Мукофоти имрӯза гирифта шуд.":
+  countDone()===3?
+  "Ҳамаи вазифаҳо иҷро шуданд! Мукофотро гир.":
+  "Барои гирифтани мукофот се вазифаро иҷро кун.";
+}
+
+function startTask(i){
+ if(currentDay.done[i])return;
+ activeTask=i;
+ questionIndex=0;
+ correctCount=0;
+ $("quiz").classList.remove("hidden");
+ $("quizTitle").textContent=TASKS[i].emoji+" "+TASKS[i].title;
+ showQuestion();
+ $("quiz").scrollIntoView({behavior:"smooth"});
+}
+
+function showQuestion(){
+ if(activeTask<0)return;
+ if(questionIndex>=BANK[activeTask].length){
+  finishTask();
+  return;
+ }
+
+ answered=false;
+ const data=BANK[activeTask][questionIndex];
+ $("question").textContent=data[0];
+ $("quizCounter").textContent=
+  "Савол "+(questionIndex+1)+" аз 5";
+ $("quizBar").style.width=(questionIndex/5*100)+"%";
+ $("feedback").classList.add("hidden");
+ $("next").classList.add("hidden");
+
+ const options=$("options");
+ options.replaceChildren();
+
+ data[1].forEach((answer,i)=>{
+  const btn=document.createElement("button");
+  btn.className="option";
+  btn.textContent=answer;
+  btn.addEventListener("click",()=>choose(i));
+  options.appendChild(btn);
+ });
+}
+
+function choose(i){
+ if(answered)return;
+ answered=true;
+ const data=BANK[activeTask][questionIndex];
+ const correct=i===data[2];
+ if(correct)correctCount++;
+
+ const feedback=$("feedback");
+ feedback.classList.remove("hidden");
+ feedback.textContent=correct?
+  "✅ Ҷавоби дуруст!":
+  "❌ Ҷавоби дуруст: "+data[1][data[2]];
+
+ [...$("options").children].forEach(b=>b.disabled=true);
+ $("next").classList.remove("hidden");
+}
+
+function finishTask(){
+ const task=activeTask;
+ activeTask=-1;
+ $("quiz").classList.add("hidden");
+
+ // Барои иҷрои вазифа ҳадди ақал 3/5 дуруст лозим.
+ if(correctCount<3){
+  alert("Натиҷа: "+correctCount+
+   "/5. Барои гузаштан 3 ҷавоби дуруст лозим. Боз кӯшиш кун.");
+  return;
+ }
+
+ if(!currentDay.done[task]){
+  currentDay.done[task]=true;
+  if(!save(DAILY_KEY,daily)){
+   currentDay.done[task]=false;
+   return;
+  }
+  if(!addXP(TASKS[task].xp)){
+   alert("Вазифа иҷро шуд, аммо XP сабт нашуд.");
+  }
+ }
+
+ render();
+ alert("🎉 Офарин! "+correctCount+
+  "/5 дуруст. +"+TASKS[task].xp+" XP");
+}
+
+$("next").addEventListener("click",()=>{
+ if(!answered)return;
+ questionIndex++;
+ showQuestion();
+});
+
+$("close").addEventListener("click",()=>{
+ activeTask=-1;
+ $("quiz").classList.add("hidden");
+});
+
+$("claim").addEventListener("click",()=>{
+ if(countDone()!==3||currentDay.claimed)return;
+
+ currentDay.claimed=true;
+ if(!save(DAILY_KEY,daily)){
+  currentDay.claimed=false;
+  return;
+ }
+ if(!addXP(30)){
+  alert("Мукофот қайд шуд, аммо XP сабт нашуд.");
+ }
+ render();
+});
+
+render();
+</script>
+</body>
+</html>
