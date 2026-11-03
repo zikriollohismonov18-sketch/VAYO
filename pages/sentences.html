@@ -1,0 +1,628 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#7355ef">
+<title>VAYO — Ҷумла сохтан</title>
+<style>
+:root{
+ --purple:#7355ef;
+ --green:#20b276;
+ --red:#e84c68;
+ --ink:#25213c;
+ --bg:#f6f5fc;
+ --line:#e7e4f3
+}
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ color:var(--ink);
+ background:var(--bg)
+}
+header{
+ padding:22px 15px;
+ color:white;
+ background:linear-gradient(125deg,#6247db,#a36cf4)
+}
+.wrap{max-width:780px;margin:auto;padding:15px}
+header h1{margin:12px 0}
+.back{
+ color:white;
+ text-decoration:none;
+ display:inline-block;
+ padding:10px;
+ background:#ffffff25;
+ border-radius:10px
+}
+.card{
+ background:white;
+ border:1px solid var(--line);
+ border-radius:18px;
+ padding:18px;
+ margin:15px 0
+}
+.stats{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:10px
+}
+.stat{text-align:center}
+.stat b{font-size:22px;display:block}
+.stat small{color:#77758b}
+select{
+ width:100%;
+ padding:14px;
+ font-size:16px;
+ border:2px solid var(--line);
+ border-radius:12px;
+ background:white
+}
+button{
+ cursor:pointer;
+ font:inherit;
+ border:0
+}
+.btn{
+ padding:13px 17px;
+ border-radius:12px;
+ font-weight:bold
+}
+.primary{background:var(--purple);color:white}
+.green{background:var(--green);color:white}
+.light{background:#eeebfa;color:var(--ink)}
+.actions{
+ display:flex;
+ gap:10px;
+ flex-wrap:wrap;
+ margin-top:16px
+}
+.question{
+ background:#f4f1ff;
+ padding:25px 12px;
+ text-align:center;
+ border-radius:16px;
+ margin:18px 0
+}
+.question strong{
+ display:block;
+ margin-top:10px;
+ font-size:24px;
+ line-height:1.5
+}
+.answer{
+ min-height:90px;
+ padding:12px;
+ border:2px dashed #aaa0ed;
+ border-radius:14px;
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ align-items:center;
+ margin:15px 0
+}
+.words{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin:18px 0;
+ min-height:60px
+}
+.word{
+ padding:12px 15px;
+ border-radius:11px;
+ background:#ede9ff;
+ color:#282041;
+ border:1px solid #d6cff9;
+ font-weight:bold
+}
+.word:disabled{opacity:.3;cursor:default}
+.selected{background:#ded6ff}
+.progress{
+ height:12px;
+ border-radius:20px;
+ background:#e8e6f3;
+ overflow:hidden;
+ margin:15px 0
+}
+.fill{
+ height:100%;
+ background:var(--green);
+ width:0%;
+ transition:width .2s
+}
+.feedback{
+ padding:15px;
+ border-radius:12px;
+ margin-top:15px;
+ line-height:1.6
+}
+.correct{background:#e4f9ed;color:#166c46}
+.wrong{background:#ffe7ed;color:#982640}
+.hidden{display:none!important}
+button:focus-visible,select:focus-visible{
+ outline:3px solid #a99af7;
+ outline-offset:2px
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="wrap">
+  <a class="back" href="language.html">
+   ← VAYO Language
+  </a>
+  <h1>🧩 Ҷумла сохтан</h1>
+  <p>Калимаҳоро интихоб кун ва ҷумлаи дуруст соз!</p>
+ </div>
+</header>
+
+<main class="wrap">
+
+ <div class="stats">
+  <div class="card stat">
+   <b id="xp">0</b>
+   <small>⚡ XP</small>
+  </div>
+  <div class="card stat">
+   <b id="score">0</b>
+   <small>✅ Дуруст</small>
+  </div>
+  <div class="card stat">
+   <b id="counter">0/10</b>
+   <small>🧩 Савол</small>
+  </div>
+ </div>
+
+ <section class="card">
+  <h2>🌍 Забонро интихоб кун</h2>
+  <select id="language">
+   <option value="de">🇩🇪 Олмонӣ</option>
+   <option value="en">🇬🇧 Англисӣ</option>
+   <option value="ru">🇷🇺 Русӣ</option>
+   <option value="zh">🇨🇳 Чинӣ</option>
+   <option value="ko">🇰🇷 Кореягӣ</option>
+  </select>
+
+  <h3>🎓 Сатҳ</h3>
+  <select id="level">
+   <option value="A1">A1 — Оғозӣ</option>
+   <option value="A2">A2 — Ибтидоӣ</option>
+  </select>
+
+  <button id="start" class="btn primary"
+   style="width:100%;margin-top:16px">
+   ▶ Оғози машқ
+  </button>
+ </section>
+
+ <section id="exercise" class="card hidden">
+  <h2>🧩 Ҷумларо бисоз</h2>
+  <div class="progress">
+   <div id="bar" class="fill"></div>
+  </div>
+
+  <div class="question">
+   <small>Ба забони интихобшуда ҷумла соз:</small>
+   <strong id="question"></strong>
+  </div>
+
+  <h3>Ҷавоби ту:</h3>
+  <div id="answer" class="answer"></div>
+
+  <h3>Калимаҳо:</h3>
+  <div id="words" class="words"></div>
+
+  <div id="feedback" class="feedback hidden"></div>
+
+  <div class="actions">
+   <button id="undo" class="btn light">
+    ↩ Як калима баргардон
+   </button>
+   <button id="reset" class="btn light">
+    🔄 Аз нав
+   </button>
+  </div>
+
+  <div class="actions">
+   <button id="check" class="btn primary">
+    Санҷидан ✓
+   </button>
+   <button id="next" class="btn green hidden">
+    Давом додан →
+   </button>
+  </div>
+ </section>
+
+ <section id="result" class="card hidden">
+  <h2>🏆 Машқ анҷом ёфт!</h2>
+  <div class="question">
+   <strong id="finalScore"></strong>
+   <p id="finalMessage"></p>
+  </div>
+  <button id="again" class="btn primary"
+   style="width:100%">
+   🔄 Боз машқ кардан
+  </button>
+ </section>
+
+</main>
+
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+const KEY="vayo_language_v2";
+
+/*
+ Ҳар савол:
+ [тарҷумаи тоҷикӣ, массиви калимаҳо]
+
+ Барои чинӣ аломатҳо ба гурӯҳҳои маънодор
+ ҷудо шудаанд.
+*/
+
+const DATA={
+de:{
+ A1:[
+ ["Ман олмонӣ меомӯзам.",["Ich","lerne","Deutsch."]],
+ ["Ман дар Олмон зиндагӣ мекунам.",["Ich","wohne","in","Deutschland."]],
+ ["Ман имрӯз кор мекунам.",["Ich","arbeite","heute."]],
+ ["Ман об менӯшам.",["Ich","trinke","Wasser."]],
+ ["Ин модари ман аст.",["Das","ist","meine","Mutter."]],
+ ["Ман нон мехӯрам.",["Ich","esse","Brot."]],
+ ["Ман ба хона меравам.",["Ich","gehe","nach","Hause."]],
+ ["Номи ман Али аст.",["Ich","heiße","Ali."]],
+ ["Ман як мошин дорам.",["Ich","habe","ein","Auto."]],
+ ["Ман имрӯз вақт дорам.",["Ich","habe","heute","Zeit."]]
+ ],
+ A2:[
+ ["Ман дирӯз кор кардам.",["Ich","habe","gestern","gearbeitet."]],
+ ["Ман бояд имрӯз кор кунам.",["Ich","muss","heute","arbeiten."]],
+ ["Ман мехоҳам олмониамро беҳтар кунам.",["Ich","möchte","mein","Deutsch","verbessern."]],
+ ["Ман як манзили нав меҷӯям.",["Ich","suche","eine","neue","Wohnung."]],
+ ["Ман пагоҳ вақти қабул дорам.",["Ich","habe","morgen","einen","Termin."]],
+ ["Ман ба духтур рафтан мехоҳам.",["Ich","möchte","zum","Arzt","gehen."]],
+ ["Ман имрӯз барвақт бедор шудам.",["Ich","bin","heute","früh","aufgestanden."]],
+ ["Ман бояд ба бонк равам.",["Ich","muss","zur","Bank","gehen."]],
+ ["Ман ба ту пагоҳ занг мезанам.",["Ich","rufe","dich","morgen","an."]],
+ ["Ман бо қатора ба кор меравам.",["Ich","fahre","mit","dem","Zug","zur","Arbeit."]]
+ ]
+},
+en:{
+ A1:[
+ ["Ман англисӣ меомӯзам.",["I","am","learning","English."]],
+ ["Ман дар Лондон зиндагӣ мекунам.",["I","live","in","London."]],
+ ["Ман имрӯз кор мекунам.",["I","work","today."]],
+ ["Ман об менӯшам.",["I","drink","water."]],
+ ["Ин модари ман аст.",["This","is","my","mother."]],
+ ["Ман нон мехӯрам.",["I","eat","bread."]],
+ ["Ман ба хона меравам.",["I","am","going","home."]],
+ ["Номи ман Али аст.",["My","name","is","Ali."]],
+ ["Ман як мошин дорам.",["I","have","a","car."]],
+ ["Ман имрӯз вақт дорам.",["I","have","time","today."]]
+ ],
+ A2:[
+ ["Ман дирӯз кор кардам.",["I","worked","yesterday."]],
+ ["Ман бояд имрӯз кор кунам.",["I","have","to","work","today."]],
+ ["Ман мехоҳам англисиамро беҳтар кунам.",["I","want","to","improve","my","English."]],
+ ["Ман як манзили нав меҷӯям.",["I","am","looking","for","a","new","apartment."]],
+ ["Ман пагоҳ вақти қабул дорам.",["I","have","an","appointment","tomorrow."]],
+ ["Ман ба духтур рафтан мехоҳам.",["I","want","to","see","a","doctor."]],
+ ["Ман имрӯз барвақт бедор шудам.",["I","woke","up","early","today."]],
+ ["Ман бояд ба бонк равам.",["I","need","to","go","to","the","bank."]],
+ ["Ман ба ту пагоҳ занг мезанам.",["I","will","call","you","tomorrow."]],
+ ["Ман бо қатора ба кор меравам.",["I","go","to","work","by","train."]]
+ ]
+},
+ru:{
+ A1:[
+ ["Ман русӣ меомӯзам.",["Я","учу","русский","язык."]],
+ ["Ман дар Москва зиндагӣ мекунам.",["Я","живу","в","Москве."]],
+ ["Ман имрӯз кор мекунам.",["Я","сегодня","работаю."]],
+ ["Ман об менӯшам.",["Я","пью","воду."]],
+ ["Ин модари ман аст.",["Это","моя","мама."]],
+ ["Ман нон мехӯрам.",["Я","ем","хлеб."]],
+ ["Ман ба хона меравам.",["Я","иду","домой."]],
+ ["Номи ман Али аст.",["Меня","зовут","Али."]],
+ ["Ман як мошин дорам.",["У","меня","есть","машина."]],
+ ["Ман имрӯз вақт дорам.",["У","меня","сегодня","есть","время."]]
+ ],
+ A2:[
+ ["Ман дирӯз кор кардам.",["Я","вчера","работал."]],
+ ["Ман бояд имрӯз кор кунам.",["Я","должен","сегодня","работать."]],
+ ["Ман мехоҳам русиамро беҳтар кунам.",["Я","хочу","улучшить","свой","русский."]],
+ ["Ман як манзили нав меҷӯям.",["Я","ищу","новую","квартиру."]],
+ ["Ман пагоҳ вақти қабул дорам.",["У","меня","завтра","назначена","встреча."]],
+ ["Ман ба духтур рафтан мехоҳам.",["Я","хочу","пойти","к","врачу."]],
+ ["Ман имрӯз барвақт бедор шудам.",["Я","сегодня","рано","проснулся."]],
+ ["Ман бояд ба бонк равам.",["Мне","нужно","пойти","в","банк."]],
+ ["Ман ба ту пагоҳ занг мезанам.",["Я","позвоню","тебе","завтра."]],
+ ["Ман бо қатора ба кор меравам.",["Я","езжу","на","работу","на","поезде."]]
+ ]
+},
+zh:{
+ A1:[
+ ["Ман чинӣ меомӯзам.",["我","学习","中文。"]],
+ ["Ман дар Чин зиндагӣ мекунам.",["我","住","在","中国。"]],
+ ["Ман имрӯз кор мекунам.",["我","今天","工作。"]],
+ ["Ман об менӯшам.",["我","喝","水。"]],
+ ["Ин модари ман аст.",["这","是","我","的","妈妈。"]],
+ ["Ман нон мехӯрам.",["我","吃","面包。"]],
+ ["Ман ба хона меравам.",["我","回","家。"]],
+ ["Номи ман Али аст.",["我","叫","阿里。"]],
+ ["Ман як мошин дорам.",["我","有","一辆","车。"]],
+ ["Ман имрӯз вақт дорам.",["我","今天","有","时间。"]]
+ ],
+ A2:[
+ ["Ман дирӯз кор кардам.",["我","昨天","工作","了。"]],
+ ["Ман бояд имрӯз кор кунам.",["我","今天","必须","工作。"]],
+ ["Ман мехоҳам чиниамро беҳтар кунам.",["我","想","提高","我的","中文","水平。"]],
+ ["Ман як манзили нав меҷӯям.",["我","在","找","一套","新","公寓。"]],
+ ["Ман пагоҳ вақти қабул дорам.",["我","明天","有","预约。"]],
+ ["Ман ба духтур рафтан мехоҳам.",["我","想","去","看","医生。"]],
+ ["Ман имрӯз барвақт бедор шудам.",["我","今天","起得","很早。"]],
+ ["Ман бояд ба бонк равам.",["我","需要","去","银行。"]],
+ ["Ман ба ту пагоҳ занг мезанам.",["我","明天","给","你","打电话。"]],
+ ["Ман бо қатора ба кор меравам.",["我","坐","火车","去","上班。"]]
+ ]
+},
+ko:{
+ A1:[
+ ["Ман кореягӣ меомӯзам.",["저는","한국어를","배워요."]],
+ ["Ман дар Корея зиндагӣ мекунам.",["저는","한국에","살아요."]],
+ ["Ман имрӯз кор мекунам.",["저는","오늘","일해요."]],
+ ["Ман об менӯшам.",["저는","물을","마셔요."]],
+ ["Ин модари ман аст.",["이분은","제","어머니예요."]],
+ ["Ман нон мехӯрам.",["저는","빵을","먹어요."]],
+ ["Ман ба хона меравам.",["저는","집에","가요."]],
+ ["Номи ман Али аст.",["제","이름은","알리예요."]],
+ ["Ман як мошин дорам.",["저는","차가","있어요."]],
+ ["Ман имрӯз вақт дорам.",["저는","오늘","시간이","있어요."]]
+ ],
+ A2:[
+ ["Ман дирӯз кор кардам.",["저는","어제","일했어요."]],
+ ["Ман бояд имрӯз кор кунам.",["저는","오늘","일해야","해요."]],
+ ["Ман мехоҳам кореягиямро беҳтар кунам.",["저는","한국어","실력을","향상시키고","싶어요."]],
+ ["Ман як манзили нав меҷӯям.",["저는","새","아파트를","찾고","있어요."]],
+ ["Ман пагоҳ вақти қабул дорам.",["저는","내일","예약이","있어요."]],
+ ["Ман ба духтур рафтан мехоҳам.",["저는","병원에","가고","싶어요."]],
+ ["Ман имрӯз барвақт бедор шудам.",["저는","오늘","일찍","일어났어요."]],
+ ["Ман бояд ба бонк равам.",["저는","은행에","가야","해요."]],
+ ["Ман ба ту пагоҳ занг мезанам.",["제가","내일","전화할게요."]],
+ ["Ман бо қатора ба кор меравам.",["저는","기차를","타고","출근해요."]]
+ ]
+}
+};
+
+let questions=[];
+let index=0;
+let score=0;
+let chosen=[];
+let shuffled=[];
+let answered=false;
+
+function loadState(){
+ try{
+  const data=JSON.parse(localStorage.getItem(KEY));
+  return data&&typeof data==="object"?data:{};
+ }catch(e){return {}}
+}
+
+let state=loadState();
+
+function renderXP(){
+ const latest=loadState();
+ $("xp").textContent=Number(latest.xp)||0;
+}
+
+function shuffle(array){
+ const result=[...array];
+ for(let i=result.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [result[i],result[j]]=[result[j],result[i]];
+ }
+ return result;
+}
+
+function normalize(s){
+ return String(s)
+  .normalize("NFKC")
+  .trim()
+  .replace(/\s+/g," ")
+  .toLocaleLowerCase();
+}
+
+function start(){
+ const lang=$("language").value;
+ const level=$("level").value;
+
+ questions=shuffle(DATA[lang][level]);
+ index=0;
+ score=0;
+
+ $("score").textContent="0";
+ $("result").classList.add("hidden");
+ $("exercise").classList.remove("hidden");
+
+ showQuestion();
+}
+
+function showQuestion(){
+ if(index>=questions.length){
+  finish();
+  return;
+ }
+
+ chosen=[];
+ answered=false;
+
+ const current=questions[index];
+
+ // Ҳар калима ID-и алоҳида дорад.
+ // Калимаҳои такрорӣ ҳам дуруст кор мекунанд.
+ shuffled=shuffle(
+  current[1].map((word,i)=>({word,id:i}))
+ );
+
+ $("counter").textContent=
+  (index+1)+"/"+questions.length;
+
+ $("bar").style.width=
+  (index/questions.length*100)+"%";
+
+ $("question").textContent=current[0];
+
+ $("feedback").classList.add("hidden");
+ $("check").classList.remove("hidden");
+ $("next").classList.add("hidden");
+
+ renderWords();
+}
+
+function renderWords(){
+ const answer=$("answer");
+ const words=$("words");
+
+ answer.replaceChildren();
+ words.replaceChildren();
+
+ chosen.forEach((item,i)=>{
+  const btn=document.createElement("button");
+  btn.className="word selected";
+  btn.textContent=item.word;
+  btn.disabled=answered;
+  btn.addEventListener("click",()=>{
+   if(answered)return;
+   chosen.splice(i,1);
+   renderWords();
+  });
+  answer.appendChild(btn);
+ });
+
+ shuffled.forEach(item=>{
+  const btn=document.createElement("button");
+  btn.className="word";
+  btn.textContent=item.word;
+
+  const used=chosen.some(x=>x.id===item.id);
+  btn.disabled=used||answered;
+
+  btn.addEventListener("click",()=>{
+   if(answered)return;
+   chosen.push(item);
+   renderWords();
+  });
+
+  words.appendChild(btn);
+ });
+}
+
+function undo(){
+ if(answered)return;
+ chosen.pop();
+ renderWords();
+}
+
+function reset(){
+ if(answered)return;
+ chosen=[];
+ renderWords();
+}
+
+function check(){
+ if(answered)return;
+
+ if(chosen.length!==questions[index][1].length){
+  showFeedback(
+   "Аввал ҳамаи калимаҳоро интихоб кун.",
+   false
+  );
+  return;
+ }
+
+ answered=true;
+
+ const correct=questions[index][1].join(" ");
+ const userAnswer=chosen.map(x=>x.word).join(" ");
+ const success=
+  normalize(correct)===normalize(userAnswer);
+
+ if(success){
+  score++;
+
+  // XP-ро аз маълумоти охирин мехонем,
+  // то пешрафти саҳифаҳои дигар гум нашавад.
+  const latest=loadState();
+  latest.xp=(Number(latest.xp)||0)+5;
+
+  try{
+   localStorage.setItem(KEY,JSON.stringify(latest));
+  }catch(e){
+   console.warn("XP сабт нашуд",e);
+  }
+
+  showFeedback("✅ Дуруст! +5 XP",true);
+ }else{
+  showFeedback(
+   "❌ Ҷавоби дуруст: "+correct,
+   false
+  );
+ }
+
+ $("score").textContent=score;
+ $("check").classList.add("hidden");
+ $("next").classList.remove("hidden");
+
+ renderWords();
+ renderXP();
+}
+
+function showFeedback(message,success){
+ const el=$("feedback");
+ el.className="feedback "+(success?"correct":"wrong");
+ el.textContent=message;
+}
+
+function next(){
+ if(!answered)return;
+ index++;
+ showQuestion();
+}
+
+function finish(){
+ $("exercise").classList.add("hidden");
+ $("result").classList.remove("hidden");
+
+ $("counter").textContent=
+  questions.length+"/"+questions.length;
+
+ $("finalScore").textContent=
+  score+" / "+questions.length;
+
+ $("finalMessage").textContent=
+  score>=8?
+  "🌟 Офарин! Натиҷаи аъло!":
+  score>=5?
+  "👍 Хуб! Машқро идома деҳ.":
+  "📚 Боз машқ кун, натиҷа беҳтар мешавад.";
+}
+
+$("start").addEventListener("click",start);
+$("check").addEventListener("click",check);
+$("next").addEventListener("click",next);
+$("again").addEventListener("click",start);
+$("undo").addEventListener("click",undo);
+$("reset").addEventListener("click",reset);
+
+if(DATA[state.lang]){
+ $("language").value=state.lang;
+}
+
+renderXP();
+</script>
+</body>
+</html>
