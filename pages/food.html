@@ -1,0 +1,449 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAYO Food — Расонидани хӯрок</title>
+<style>
+:root{
+ --orange:#f43a10;
+ --bg:#f6f7f9;
+ --ink:#202124;
+ --muted:#747986;
+ --line:#e7e9ed;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:var(--bg);
+ color:var(--ink);
+}
+button,input{font:inherit}
+button{cursor:pointer}
+header{
+ background:linear-gradient(90deg,#f43a10,#ff7900);
+ color:white;
+ padding:18px;
+}
+.wrap{max-width:1000px;margin:auto;padding:15px}
+h1{font-size:25px;margin:0 0 6px}
+header p{margin:0;font-size:13px}
+.search{
+ width:100%;
+ border:1px solid var(--line);
+ padding:13px;
+ border-radius:12px;
+ margin:12px 0;
+}
+.grid{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:12px;
+}
+.card{
+ background:white;
+ border:1px solid var(--line);
+ border-radius:13px;
+ padding:14px;
+}
+.restaurant{
+ cursor:pointer;
+ text-align:left;
+ width:100%;
+}
+.restaurant .emoji{font-size:35px}
+.restaurant strong{display:block;margin:8px 0}
+.muted{color:var(--muted);font-size:12px}
+.price{font-weight:bold;color:var(--orange)}
+.btn{
+ border:0;
+ background:var(--orange);
+ color:white;
+ padding:11px 15px;
+ border-radius:9px;
+ font-weight:bold;
+}
+.btn:disabled{opacity:.5}
+.row{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+}
+.food{
+ display:flex;
+ gap:12px;
+ align-items:center;
+ margin:10px 0;
+}
+.food .emoji{font-size:38px}
+.food .details{flex:1}
+.cart{
+ background:white;
+ border:1px solid var(--line);
+ border-radius:13px;
+ padding:15px;
+ margin-top:20px;
+}
+.cart-line{
+ border-bottom:1px solid #eee;
+ padding:10px 0;
+}
+.qty{
+ display:flex;
+ align-items:center;
+ gap:9px;
+}
+.qty button{
+ background:#f2f2f2;
+ border:0;
+ border-radius:6px;
+ padding:7px 12px;
+}
+.hidden{display:none!important}
+.notice{
+ background:#fff2e8;
+ padding:13px;
+ border-radius:10px;
+ font-size:13px;
+ line-height:1.6;
+ margin:15px 0;
+}
+@media(min-width:750px){
+ .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🍔 VAYO Food</h1>
+<p>Расонидани хӯрок дар Тоҷикистон</p>
+</header>
+
+<main class="wrap">
+<div class="notice">
+💵 Пардохт нақдӣ аст. Комиссияи муштарӣ 0%.
+Комиссияи иҷрокунанда 2% баъди анҷоми фармоиш.
+</div>
+
+<section id="restaurantSection">
+<h2>🍽️ Тарабхонаҳо</h2>
+<input id="restaurantSearch" class="search"
+ placeholder="Ҷустуҷӯи тарабхона...">
+<div id="restaurants" class="grid"></div>
+</section>
+
+<section id="menuSection" class="hidden">
+<button id="backBtn" class="btn">← Тарабхонаҳо</button>
+<h2 id="restaurantTitle"></h2>
+<input id="foodSearch" class="search"
+ placeholder="Ҷустуҷӯи таом...">
+<div id="menu"></div>
+</section>
+
+<section class="cart">
+<h2>🛒 Сабади хӯрок</h2>
+<div id="cartItems"></div>
+<div class="row">
+<strong>Маблағи таомҳо:</strong>
+<strong id="subtotal">0.00 TJS</strong>
+</div>
+<p class="muted">Нархи расонидан баъд аз муайян кардани суроға ҳисоб мешавад.</p>
+<button id="orderBtn" class="btn" disabled>
+Давом додани фармоиш
+</button>
+<div id="orderNotice" class="notice hidden"></div>
+</section>
+</main>
+
+<script>
+"use strict";
+
+/*
+ Маълумоти зер танҳо намунавӣ аст.
+ Тарабхонаҳо ва нархҳо ҳанӯз аз Supabase гирифта намешаванд.
+*/
+
+const restaurants=[
+ {
+  id:"r1",
+  name:"Тарабхонаи намунавии 1",
+  emoji:"🍛",
+  city:"Душанбе",
+  menu:[
+   {id:"f1",name:"Палав",price:30,emoji:"🍚"},
+   {id:"f2",name:"Қурутоб",price:25,emoji:"🥘"},
+   {id:"f3",name:"Манту",price:28,emoji:"🥟"}
+  ]
+ },
+ {
+  id:"r2",
+  name:"Тарабхонаи намунавии 2",
+  emoji:"🍕",
+  city:"Душанбе",
+  menu:[
+   {id:"f4",name:"Питса",price:55,emoji:"🍕"},
+   {id:"f5",name:"Бургер",price:35,emoji:"🍔"},
+   {id:"f6",name:"Картошка фри",price:18,emoji:"🍟"}
+  ]
+ },
+ {
+  id:"r3",
+  name:"Тарабхонаи намунавии 3",
+  emoji:"🍗",
+  city:"Душанбе",
+  menu:[
+   {id:"f7",name:"Мурғи бирён",price:45,emoji:"🍗"},
+   {id:"f8",name:"Шӯрбо",price:22,emoji:"🍲"},
+   {id:"f9",name:"Самбӯса",price:12,emoji:"🥟"}
+  ]
+ }
+];
+
+const $=id=>document.getElementById(id);
+const CART_KEY="vayo_food_cart_v1";
+
+let selectedRestaurant=null;
+let cart=[];
+
+try{
+ const saved=JSON.parse(localStorage.getItem(CART_KEY)||"[]");
+ if(Array.isArray(saved)){
+  cart=saved.filter(x=>
+   typeof x.id==="string" &&
+   typeof x.restaurantId==="string" &&
+   Number.isInteger(x.qty) &&
+   x.qty>0 && x.qty<=100
+  );
+ }
+}catch{
+ cart=[];
+}
+
+function money(n){
+ return Number(n).toFixed(2)+" TJS";
+}
+
+function saveCart(){
+ localStorage.setItem(CART_KEY,JSON.stringify(cart));
+ renderCart();
+}
+
+function renderRestaurants(){
+ const root=$("restaurants");
+ root.replaceChildren();
+
+ const query=$("restaurantSearch").value
+  .trim().toLowerCase();
+
+ restaurants.filter(r=>
+  r.name.toLowerCase().includes(query) ||
+  r.city.toLowerCase().includes(query)
+ ).forEach(r=>{
+  const card=document.createElement("button");
+  card.className="card restaurant";
+
+  const icon=document.createElement("div");
+  icon.className="emoji";
+  icon.textContent=r.emoji;
+
+  const name=document.createElement("strong");
+  name.textContent=r.name;
+
+  const city=document.createElement("div");
+  city.className="muted";
+  city.textContent="📍 "+r.city;
+
+  card.append(icon,name,city);
+  card.onclick=()=>openRestaurant(r.id);
+  root.append(card);
+ });
+
+ if(!root.children.length){
+  const msg=document.createElement("p");
+  msg.textContent="Тарабхона ёфт нашуд.";
+  root.append(msg);
+ }
+}
+
+function openRestaurant(id){
+ selectedRestaurant=restaurants.find(r=>r.id===id);
+ if(!selectedRestaurant)return;
+
+ $("restaurantSection").classList.add("hidden");
+ $("menuSection").classList.remove("hidden");
+ $("restaurantTitle").textContent=selectedRestaurant.name;
+ $("foodSearch").value="";
+ renderMenu();
+}
+
+function renderMenu(){
+ const root=$("menu");
+ root.replaceChildren();
+
+ if(!selectedRestaurant)return;
+
+ const query=$("foodSearch").value
+  .trim().toLowerCase();
+
+ selectedRestaurant.menu.filter(item=>
+  item.name.toLowerCase().includes(query)
+ ).forEach(item=>{
+  const card=document.createElement("div");
+  card.className="card food";
+
+  const icon=document.createElement("div");
+  icon.className="emoji";
+  icon.textContent=item.emoji;
+
+  const details=document.createElement("div");
+  details.className="details";
+
+  const name=document.createElement("strong");
+  name.textContent=item.name;
+
+  const price=document.createElement("p");
+  price.className="price";
+  price.textContent=money(item.price);
+
+  details.append(name,price);
+
+  const button=document.createElement("button");
+  button.className="btn";
+  button.textContent="+";
+  button.setAttribute("aria-label","Илова кардани "+item.name);
+  button.onclick=()=>addItem(item);
+
+  card.append(icon,details,button);
+  root.append(card);
+ });
+}
+
+function addItem(item){
+ if(!selectedRestaurant)return;
+
+ if(cart.length &&
+    cart[0].restaurantId!==selectedRestaurant.id){
+  const ok=confirm(
+   "Сабад аз тарабхонаи дигар аст. Сабади пешинаро холӣ мекунем?"
+  );
+  if(!ok)return;
+  cart=[];
+ }
+
+ const existing=cart.find(x=>x.id===item.id);
+
+ if(existing){
+  if(existing.qty>=100)return;
+  existing.qty++;
+ }else{
+  cart.push({
+   id:item.id,
+   restaurantId:selectedRestaurant.id,
+   qty:1
+  });
+ }
+
+ saveCart();
+}
+
+function getItem(cartItem){
+ const restaurant=restaurants.find(
+  r=>r.id===cartItem.restaurantId
+ );
+ return restaurant?.menu.find(
+  x=>x.id===cartItem.id
+ );
+}
+
+function changeQty(id,delta){
+ const item=cart.find(x=>x.id===id);
+ if(!item)return;
+
+ const next=item.qty+delta;
+
+ if(next<=0){
+  cart=cart.filter(x=>x.id!==id);
+ }else if(next<=100){
+  item.qty=next;
+ }
+
+ saveCart();
+}
+
+function renderCart(){
+ const root=$("cartItems");
+ root.replaceChildren();
+
+ let total=0;
+
+ cart.forEach(entry=>{
+  const item=getItem(entry);
+  if(!item)return;
+
+  total+=item.price*entry.qty;
+
+  const line=document.createElement("div");
+  line.className="cart-line row";
+
+  const info=document.createElement("div");
+  const name=document.createElement("strong");
+  name.textContent=item.name;
+
+  const price=document.createElement("p");
+  price.textContent=money(item.price*entry.qty);
+  info.append(name,price);
+
+  const controls=document.createElement("div");
+  controls.className="qty";
+
+  const minus=document.createElement("button");
+  minus.textContent="−";
+  minus.onclick=()=>changeQty(entry.id,-1);
+
+  const qty=document.createElement("span");
+  qty.textContent=entry.qty;
+
+  const plus=document.createElement("button");
+  plus.textContent="+";
+  plus.onclick=()=>changeQty(entry.id,1);
+
+  controls.append(minus,qty,plus);
+  line.append(info,controls);
+  root.append(line);
+ });
+
+ if(!root.children.length){
+  root.textContent="Сабад холӣ аст.";
+ }
+
+ $("subtotal").textContent=money(total);
+ $("orderBtn").disabled=total<=0;
+}
+
+$("restaurantSearch").oninput=renderRestaurants;
+$("foodSearch").oninput=renderMenu;
+
+$("backBtn").onclick=()=>{
+ selectedRestaurant=null;
+ $("menuSection").classList.add("hidden");
+ $("restaurantSection").classList.remove("hidden");
+};
+
+$("orderBtn").onclick=()=>{
+ const notice=$("orderNotice");
+ notice.classList.remove("hidden");
+ notice.textContent=
+  "Сабад омода аст. Дар қадами навбатӣ суроға, телефон, " +
+  "ҳисоби корбар ва сабти бехатари фармоиш дар Supabase илова мешаванд. " +
+  "Ҳоло фармоиш ба тарабхона фиристода намешавад.";
+};
+
+renderRestaurants();
+renderCart();
+</script>
+</body>
+</html>
