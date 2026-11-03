@@ -3,174 +3,384 @@
 <html lang="tg">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#ff6500">
-<title>VAYO — Комиссияҳо</title>
+
+<title>VAYO — Идораи комиссияҳо</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-:root{
+:root {
   --orange:#ff6500;
-  --bg:#f6f7fb;
-  --ink:#1c2434;
+  --orange-dark:#e95600;
+  --background:#f6f7fb;
+  --white:#ffffff;
+  --ink:#192132;
   --muted:#697386;
   --line:#e6e9f0;
   --green:#13834b;
+  --green-bg:#ddf8e9;
   --red:#d83c3c;
+  --red-bg:#ffe4e4;
+  --yellow:#946200;
+  --yellow-bg:#fff2cf;
+  --blue:#2456a6;
+  --blue-bg:#e8f0ff;
+  --shadow:0 4px 20px rgba(20,30,50,.04);
 }
-*{box-sizing:border-box}
-body{
+
+* {
+  box-sizing:border-box;
+}
+
+html {
+  scroll-behavior:smooth;
+}
+
+body {
   margin:0;
-  font-family:Arial,sans-serif;
-  background:var(--bg);
+  font-family:Arial,Helvetica,sans-serif;
+  background:var(--background);
   color:var(--ink);
+  line-height:1.5;
 }
-header{
+
+header {
   background:var(--orange);
   color:white;
   padding:20px 16px;
 }
-.wrap{max-width:1100px;margin:auto}
-nav{
+
+.wrap {
+  max-width:1150px;
+  margin:auto;
+}
+
+header h1 {
+  margin:0 0 7px;
+  font-size:27px;
+}
+
+nav {
   display:flex;
+  gap:16px;
   flex-wrap:wrap;
-  gap:12px;
-  padding:14px 0;
+  margin-top:16px;
 }
-nav a{
+
+nav a {
   color:white;
-  text-decoration:none;
   font-weight:bold;
+  text-decoration:none;
 }
-main{padding:20px 14px 60px}
-.panel,.commission{
-  background:white;
+
+nav a:hover {
+  text-decoration:underline;
+}
+
+main {
+  padding:22px 14px 70px;
+}
+
+.panel,
+.commission,
+.debtor {
+  background:var(--white);
   border:1px solid var(--line);
   border-radius:15px;
-  padding:18px;
-  margin-bottom:15px;
+  padding:19px;
+  margin-bottom:16px;
+  box-shadow:var(--shadow);
 }
-h1{margin:0 0 8px}
-h2{margin-top:0}
-small,.muted{color:var(--muted)}
-input,select,button{
+
+h2 {
+  margin:0 0 15px;
+  font-size:21px;
+}
+
+h3 {
+  margin:0 0 12px;
+  font-size:17px;
+}
+
+p {
+  margin:9px 0;
+}
+
+.muted,
+small {
+  color:var(--muted);
+}
+
+.hidden {
+  display:none!important;
+}
+
+input,
+select,
+button {
   font:inherit;
-  padding:11px;
   border-radius:9px;
+  padding:11px;
 }
-input,select{
+
+input,
+select {
   border:1px solid #cdd3dd;
   width:100%;
   margin:6px 0;
+  background:white;
+  color:var(--ink);
 }
-button{
+
+input:focus,
+select:focus {
+  outline:2px solid #ffb98c;
+  border-color:var(--orange);
+}
+
+button {
   border:0;
   background:var(--orange);
   color:white;
   font-weight:bold;
   cursor:pointer;
   margin:5px 5px 5px 0;
+  transition:background .15s;
 }
-button:disabled{
+
+button:hover {
+  background:var(--orange-dark);
+}
+
+button:disabled {
   opacity:.5;
   cursor:not-allowed;
 }
-.secondary{background:#344054}
-.danger{background:var(--red)}
-.hidden{display:none!important}
-.status{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:20px;
-  background:#edf0f5;
-  font-size:13px;
-  font-weight:bold;
+
+.secondary {
+  background:#344054;
 }
-.paid{
-  background:#ddf8e9;
-  color:var(--green);
+
+.secondary:hover {
+  background:#202b3a;
 }
-.overdue{
-  background:#ffe4e4;
-  color:var(--red);
+
+.danger {
+  background:var(--red);
 }
-.reported{
-  background:#fff2cf;
-  color:#946200;
+
+.danger:hover {
+  background:#b92b2b;
 }
-.rejected{
-  background:#ffe4e4;
-  color:var(--red);
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
-  gap:12px;
-}
-.stat{
-  background:#fff6ef;
-  padding:15px;
-  border-radius:12px;
-}
-.stat strong{
-  display:block;
-  font-size:23px;
-  margin-top:6px;
-  overflow-wrap:anywhere;
-}
-.notice{
-  padding:12px;
-  border-radius:9px;
-  background:#eef3ff;
-  margin:12px 0;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-}
-.error{
-  background:#ffe9e9;
-  color:#a32222;
-}
-.success{
-  background:#e4f8eb;
-  color:#116b3c;
-}
-.row{
+
+.row {
   display:flex;
+  align-items:flex-start;
   justify-content:space-between;
   gap:12px;
   flex-wrap:wrap;
-  margin:8px 0;
+  margin:10px 0;
 }
-.row b,.row small{
+
+.row b,
+.row small,
+.row strong {
   overflow-wrap:anywhere;
 }
-.formbox{
-  padding:12px;
-  background:#f7f8fb;
+
+.grid {
+  display:grid;
+  grid-template-columns:repeat(
+    auto-fit,
+    minmax(190px,1fr)
+  );
+  gap:13px;
+}
+
+.stat {
+  background:#fff6ef;
+  padding:17px;
+  border-radius:12px;
+  border:1px solid #ffeadb;
+  min-width:0;
+}
+
+.stat strong {
+  display:block;
+  font-size:23px;
+  margin-top:8px;
+  overflow-wrap:anywhere;
+}
+
+.stat.red {
+  background:#fff0f0;
+  border-color:#ffd6d6;
+}
+
+.stat.green {
+  background:#ecfbf1;
+  border-color:#c9f1d8;
+}
+
+.stat.blue {
+  background:#eef4ff;
+  border-color:#d7e5ff;
+}
+
+.status {
+  display:inline-block;
+  padding:6px 11px;
+  border-radius:30px;
+  font-size:13px;
+  font-weight:bold;
+  background:#edf0f5;
+}
+
+.status.paid {
+  background:var(--green-bg);
+  color:var(--green);
+}
+
+.status.overdue {
+  background:var(--red-bg);
+  color:var(--red);
+}
+
+.status.reported {
+  background:var(--yellow-bg);
+  color:var(--yellow);
+}
+
+.status.rejected {
+  background:var(--red-bg);
+  color:var(--red);
+}
+
+.notice {
+  padding:14px;
   border-radius:10px;
-  margin-top:12px;
+  background:var(--blue-bg);
+  color:var(--blue);
+  margin:14px 0;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
 }
-.admin-actions{
+
+.notice.error {
+  background:#ffe9e9;
+  color:#a32222;
+}
+
+.notice.success {
+  background:#e4f8eb;
+  color:#116b3c;
+}
+
+.warning {
+  padding:14px;
+  border-radius:10px;
+  background:#fff4e6;
+  border:1px solid #ffd39b;
+  margin:12px 0;
+}
+
+.formbox {
+  padding:15px;
+  background:#f7f8fb;
+  border-radius:12px;
+  margin-top:14px;
+}
+
+.admin-actions {
   display:flex;
-  gap:8px;
   flex-wrap:wrap;
-  margin-top:12px;
+  gap:8px;
+  margin-top:15px;
 }
-.admin-actions button{
+
+.admin-actions button {
   flex:1;
   min-width:190px;
 }
-.warning{
-  background:#fff4e6;
-  border:1px solid #ffd39b;
-  border-radius:10px;
-  padding:12px;
+
+.debtor {
+  background:#fffafa;
+  border-color:#f2caca;
   margin:12px 0;
 }
-.section-title{
-  margin:0 0 16px;
-  font-size:21px;
+
+.debtor h3 {
+  color:#9d2828;
+}
+
+.toolbar {
+  display:grid;
+  grid-template-columns:2fr 1fr;
+  gap:12px;
+  align-items:end;
+}
+
+.toolbar label {
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.empty {
+  text-align:center;
+  padding:30px 15px;
+  color:var(--muted);
+  background:white;
+  border:1px dashed #d3d8e2;
+  border-radius:12px;
+}
+
+.section-heading {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.count {
+  display:inline-block;
+  padding:5px 10px;
+  background:#f1f3f7;
+  border-radius:20px;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.divider {
+  height:1px;
+  background:var(--line);
+  margin:15px 0;
+}
+
+@media(max-width:650px) {
+  header h1 {
+    font-size:23px;
+  }
+
+  .toolbar {
+    grid-template-columns:1fr;
+  }
+
+  .panel,
+  .commission {
+    padding:15px;
+  }
+
+  .stat strong {
+    font-size:20px;
+  }
+
+  .admin-actions button {
+    width:100%;
+  }
 }
 </style>
 </head>
@@ -179,14 +389,19 @@ button:disabled{
 
 <header>
   <div class="wrap">
+
     <h1>VAYO — Комиссияҳо</h1>
-    <div>Комиссияи платформа: 2%</div>
+
+    <div>
+      Системаи идоракунии комиссияи 2%
+    </div>
 
     <nav>
       <a href="./index.html">🏠 Бозор</a>
       <a href="./payments.html">💳 Пардохтҳо</a>
       <a href="./super-admin.html">🛡️ Суперадмин</a>
     </nav>
+
   </div>
 </header>
 
@@ -195,7 +410,12 @@ button:disabled{
 <!-- ВОРИДШАВӢ -->
 
 <section class="panel" id="loginPanel">
-  <h2>Воридшавӣ</h2>
+
+  <h2>🔐 Воридшавӣ</h2>
+
+  <p class="muted">
+    Бо ҳисоби VAYO ворид шавед.
+  </p>
 
   <input
     id="email"
@@ -211,59 +431,92 @@ button:disabled{
     autocomplete="current-password"
   >
 
-  <button id="loginBtn">Ворид шудан</button>
+  <button id="loginBtn">
+    Ворид шудан
+  </button>
+
 </section>
 
 <!-- ҲИСОБ -->
 
 <section class="panel hidden" id="accountPanel">
+
   <div class="row">
+
     <div>
       <b id="userEmail"></b>
-      <p class="muted">Ҳисоби VAYO</p>
+      <p class="muted" id="accountRole">
+        Ҳисоби VAYO
+      </p>
     </div>
 
     <div>
-      <button id="refreshBtn">🔄 Навсозӣ</button>
+      <button id="refreshBtn">
+        🔄 Навсозӣ
+      </button>
+
       <button id="logoutBtn" class="secondary">
         Баромадан
       </button>
     </div>
+
   </div>
+
 </section>
 
-<div id="message" class="notice hidden" role="status"></div>
+<div
+  id="message"
+  class="notice hidden"
+  role="status"
+></div>
 
 <!-- ПАНЕЛИ ФУРӮШАНДА -->
 
 <section id="sellerPanel" class="hidden">
 
   <div class="panel">
-    <h2>Комиссияҳои ман</h2>
+
+    <h2>💰 Комиссияҳои ман</h2>
 
     <div class="grid">
 
       <div class="stat">
         Қарзи пардохтнашуда
-        <strong id="pendingTotal">0 сомонӣ</strong>
+        <strong id="pendingTotal">
+          0 сомонӣ
+        </strong>
       </div>
 
-      <div class="stat">
+      <div class="stat red">
         Қарзи муҳлатгузашта
-        <strong id="overdueTotal">0 сомонӣ</strong>
+        <strong id="overdueTotal">
+          0 сомонӣ
+        </strong>
       </div>
 
-      <div class="stat">
+      <div class="stat green">
         Комиссияи пардохтшуда
-        <strong id="paidTotal">0 сомонӣ</strong>
+        <strong id="paidTotal">
+          0 сомонӣ
+        </strong>
       </div>
 
     </div>
 
-    <p id="blockedMessage"></p>
+    <div id="blockedMessage" class="notice"></div>
+
   </div>
 
-  <div id="sellerList"></div>
+  <div class="panel">
+
+    <div class="section-heading">
+      <h2>📋 Рӯйхати комиссияҳои ман</h2>
+      <span id="sellerCount" class="count">0</span>
+    </div>
+
+    <div id="sellerList"></div>
+
+  </div>
 
 </section>
 
@@ -271,51 +524,126 @@ button:disabled{
 
 <section id="adminPanel" class="hidden">
 
-  <!-- ҲИСОБОТИ УМУМӢ — НАВ -->
+  <!-- ҲИСОБОТИ УМУМӢ -->
 
   <div class="panel">
 
-    <h2 class="section-title">
-      📊 Ҳисоботи умумии комиссияҳои VAYO
-    </h2>
+    <h2>📊 Ҳисоботи умумии VAYO</h2>
 
     <div class="grid">
 
       <div class="stat">
         💰 Қарзи умумӣ
-        <strong id="adminPendingTotal">0 сомонӣ</strong>
+        <strong id="adminPendingTotal">
+          0 сомонӣ
+        </strong>
       </div>
 
-      <div class="stat">
-        ✅ Пардохтшуда
-        <strong id="adminPaidTotal">0 сомонӣ</strong>
+      <div class="stat green">
+        ✅ Комиссияи пардохтшуда
+        <strong id="adminPaidTotal">
+          0 сомонӣ
+        </strong>
       </div>
 
-      <div class="stat">
+      <div class="stat red">
         ⏰ Қарзи муҳлатгузашта
-        <strong id="adminOverdueTotal">0 сомонӣ</strong>
+        <strong id="adminOverdueTotal">
+          0 сомонӣ
+        </strong>
       </div>
 
-      <div class="stat">
+      <div class="stat red">
         👥 Хизматрасонҳои муҳлатгузашта
-        <strong id="adminBlockedProviders">0</strong>
+        <strong id="adminBlockedProviders">
+          0
+        </strong>
       </div>
 
-      <div class="stat">
+      <div class="stat blue">
         ⏳ Интизори тасдиқ
-        <strong id="adminReportedCount">0</strong>
+        <strong id="adminReportedCount">
+          0
+        </strong>
       </div>
 
       <div class="stat">
         📋 Комиссияҳои пардохтнашуда
-        <strong id="adminPendingCount">0</strong>
+        <strong id="adminPendingCount">
+          0
+        </strong>
       </div>
 
-      <div class="stat">
+      <div class="stat green">
         🧾 Комиссияҳои пардохтшуда
-        <strong id="adminPaidCount">0</strong>
+        <strong id="adminPaidCount">
+          0
+        </strong>
       </div>
 
+    </div>
+
+  </div>
+
+  <!-- РӮЙХАТИ ҚАРЗДОРОН -->
+
+  <div class="panel">
+
+    <div class="section-heading">
+
+      <h2>
+        🚫 Хизматрасонҳои қарздори муҳлатгузашта
+      </h2>
+
+      <span id="debtorCount" class="count">
+        0
+      </span>
+
+    </div>
+
+    <p class="muted">
+      Ин рӯйхат хизматрасонҳоеро нишон медиҳад,
+      ки муҳлати пардохти комиссияашон гузаштааст.
+    </p>
+
+    <div class="toolbar">
+
+      <div>
+        <label for="debtorSearch">
+          Ҷустуҷӯи хизматрасон
+        </label>
+
+        <input
+          id="debtorSearch"
+          type="search"
+          placeholder="ID-и хизматрасон..."
+        >
+      </div>
+
+      <div>
+        <label for="debtorSort">
+          Тартиб
+        </label>
+
+        <select id="debtorSort">
+          <option value="amount_desc">
+            Қарзи калонтарин
+          </option>
+
+          <option value="amount_asc">
+            Қарзи хурдтарин
+          </option>
+
+          <option value="oldest">
+            Муҳлати қадимтарин
+          </option>
+        </select>
+      </div>
+
+    </div>
+
+    <div id="overdueProvidersList">
+      Боргирӣ...
     </div>
 
   </div>
@@ -324,23 +652,74 @@ button:disabled{
 
   <div class="panel">
 
-    <h2>🛡️ Панели суперадмин</h2>
-
-    <p>
-      Дар ин ҷо метавонед комиссияҳои
-      ҳамаи хизматрасонҳоро идора кунед.
-    </p>
+    <h2>🛡️ Идораи комиссияҳо</h2>
 
     <div class="warning">
-      ⚠️ Пеш аз тасдиқи комиссия ҳатман санҷед,
+      ⚠️ Пеш аз тасдиқи пардохт ҳатман санҷед,
       ки маблағ воқеан ба ҳисоби VAYO ворид шудааст.
-      Агар маблағ нарасида бошад ё рақами амалиёт
-      нодуруст бошад, гузориши пардохтро рад кунед.
+      Агар маблағ нарасида бошад, гузоришро рад кунед.
     </div>
 
     <button id="adminRefreshBtn">
       🔄 Навсозии комиссияҳо
     </button>
+
+    <div class="divider"></div>
+
+    <div class="toolbar">
+
+      <div>
+        <label for="commissionSearch">
+          Ҷустуҷӯи комиссия
+        </label>
+
+        <input
+          id="commissionSearch"
+          type="search"
+          placeholder="Фармоиш, хизматрасон, рақами амалиёт..."
+        >
+      </div>
+
+      <div>
+        <label for="commissionFilter">
+          Ҳолати комиссия
+        </label>
+
+        <select id="commissionFilter">
+
+          <option value="all">
+            Ҳамаи комиссияҳо
+          </option>
+
+          <option value="reported">
+            Интизори тасдиқ
+          </option>
+
+          <option value="overdue">
+            Муҳлатгузашта
+          </option>
+
+          <option value="pending">
+            Пардохтнашуда
+          </option>
+
+          <option value="paid">
+            Пардохтшуда
+          </option>
+
+          <option value="rejected">
+            Пардохти радшуда
+          </option>
+
+        </select>
+      </div>
+
+    </div>
+
+    <p class="muted">
+      Натиҷаҳо:
+      <b id="adminResultCount">0</b>
+    </p>
 
   </div>
 
@@ -353,7 +732,9 @@ button:disabled{
 <script>
 "use strict";
 
-/* ПАЙВАСТШАВӢ БА SUPABASE */
+/* =====================================
+   SUPABASE
+===================================== */
 
 const SUPABASE_URL =
   "https://rgminzzmlktkliliiupt.supabase.co";
@@ -366,33 +747,46 @@ const db = window.supabase.createClient(
   SUPABASE_KEY
 );
 
+/* =====================================
+   STATE
+===================================== */
+
 const $ = id => document.getElementById(id);
 
 let currentUser = null;
 let isAdmin = false;
 
-/* ФУНКСИЯҲОИ ЁРИРАСОН */
+let adminCommissions = [];
+let overdueProviders = [];
 
-function money(value){
-  return Number(value || 0).toLocaleString("tg-TJ",{
+let loading = false;
+
+/* =====================================
+   HELPERS
+===================================== */
+
+function money(value) {
+  const number = Number(value || 0);
+
+  return number.toLocaleString("tg-TJ", {
     minimumFractionDigits:2,
     maximumFractionDigits:2
   }) + " сомонӣ";
 }
 
-function dateText(value){
-  if(!value)return "—";
+function dateText(value) {
+  if (!value) return "—";
 
-  const date=new Date(value);
+  const date = new Date(value);
 
-  if(Number.isNaN(date.getTime())){
+  if (Number.isNaN(date.getTime())) {
     return "—";
   }
 
   return date.toLocaleString("tg-TJ");
 }
 
-function escapeHtml(value){
+function escapeHtml(value) {
   return String(value ?? "").replace(
     /[&<>"']/g,
     ch => ({
@@ -405,136 +799,94 @@ function escapeHtml(value){
   );
 }
 
-function notify(text,type=""){
-  const element=$("message");
+function notify(text, type = "") {
+  const element = $("message");
 
-  element.textContent=text;
-  element.className="notice "+type;
+  element.textContent = text;
+  element.className = "notice " + type;
   element.classList.remove("hidden");
 }
 
-function clearMessage(){
+function clearMessage() {
   $("message").classList.add("hidden");
 }
 
-/* ҲОЛАТИ КОМИССИЯ */
+function isOverdue(c) {
+  return c.status === "pending" &&
+    new Date(c.due_at) <= new Date();
+}
 
-function statusText(c){
-
-  if(c.status==="paid"){
+function statusText(c) {
+  if (c.status === "paid") {
     return "✅ Пардохтшуда";
   }
 
-  if(c.payment_status==="reported"){
+  if (c.payment_status === "reported") {
     return "⏳ Интизори тасдиқи админ";
   }
 
-  if(c.payment_status==="rejected"){
+  if (c.payment_status === "rejected") {
     return "❌ Пардохт рад шудааст";
   }
 
-  if(new Date(c.due_at)<=new Date()){
+  if (isOverdue(c)) {
     return "⚠️ Муҳлат гузаштааст";
   }
 
   return "Интизори пардохт";
 }
 
-function isOverdue(c){
-  return c.status==="pending" &&
-    new Date(c.due_at)<=new Date();
+function statusClass(c) {
+  if (c.status === "paid") {
+    return "paid";
+  }
+
+  if (c.payment_status === "rejected") {
+    return "rejected";
+  }
+
+  if (c.payment_status === "reported") {
+    return "reported";
+  }
+
+  if (isOverdue(c)) {
+    return "overdue";
+  }
+
+  return "";
 }
 
-/* РАД КАРДАНИ ПАРДОХТ */
+/* =====================================
+   CONFIRM PAYMENT
+===================================== */
 
-async function rejectCommission(commissionId,button){
-
-  if(!isAdmin){
-    notify(
-      "Шумо ҳуқуқи рад кардани пардохтро надоред.",
-      "error"
-    );
+async function confirmCommission(id, button) {
+  if (!isAdmin) {
+    notify("Дастрасии админ лозим аст.", "error");
     return;
   }
 
-  if(!confirm(
-    "❌ Оё мехоҳед ин пардохти комиссияро рад кунед?\n\n"+
-    "Қарзи фурӯшанда боқӣ мемонад.\n"+
-    "Фурӯшанда метавонад пардохтро дубора гузориш диҳад."
-  )){
-    return;
-  }
-
-  button.disabled=true;
-
-  const oldText=button.textContent;
-  button.textContent="Рад карда мешавад...";
-
-  try{
-
-    const {error}=await db.rpc(
-      "vayo_admin_reject_commission",
-      {
-        p_commission_id:commissionId
-      }
-    );
-
-    if(error)throw error;
-
-    notify(
-      "✅ Гузориши пардохт рад карда шуд. "+
-      "Қарзи комиссия ҳанӯз пардохтнашуда аст.",
-      "success"
-    );
-
-    await loadData();
-
-  }catch(err){
-
-    notify(
-      "❌ Хато: "+err.message,
-      "error"
-    );
-
-  }finally{
-
-    button.disabled=false;
-    button.textContent=oldText;
-
-  }
-}
-
-/* ТАСДИҚИ ПАРДОХТ */
-
-async function confirmCommission(commissionId,button){
-
-  if(!isAdmin){
-    notify("Шумо администратор нестед.","error");
-    return;
-  }
-
-  if(!confirm(
-    "Оё маблағ воқеан ба ҳисоби VAYO ворид шудааст?\n\n"+
+  const answer = confirm(
+    "Оё маблағ воқеан ба ҳисоби VAYO ворид шудааст?\n\n" +
     "Танҳо баъди санҷиши пардохт тасдиқ кунед."
-  )){
-    return;
-  }
+  );
 
-  button.disabled=true;
+  if (!answer) return;
 
-  const oldText=button.textContent;
-  button.textContent="Тасдиқ мешавад...";
+  button.disabled = true;
 
-  try{
+  const previousText = button.textContent;
+  button.textContent = "Тасдиқ мешавад...";
 
-    const {error}=await db.rpc(
+  try {
+    const { error } = await db.rpc(
       "vayo_admin_confirm_commission",
       {
-        p_commission_id:commissionId
+        p_commission_id:id
       }
     );
 
-    if(error)throw error;
+    if (error) throw error;
 
     notify(
       "✅ Комиссия бомуваффақият тасдиқ шуд.",
@@ -543,57 +895,94 @@ async function confirmCommission(commissionId,button){
 
     await loadData();
 
-  }catch(err){
-
+  } catch (error) {
     notify(
-      "❌ Хато: "+err.message,
+      "Хато: " + error.message,
       "error"
     );
 
-  }finally{
-
-    button.disabled=false;
-    button.textContent=oldText;
-
+  } finally {
+    button.disabled = false;
+    button.textContent = previousText;
   }
 }
 
-/* КОРТИ КОМИССИЯ */
+/* =====================================
+   REJECT PAYMENT
+===================================== */
 
-function commissionCard(c,admin=false){
+async function rejectCommission(id, button) {
+  if (!isAdmin) {
+    notify("Дастрасии админ лозим аст.", "error");
+    return;
+  }
 
-  const paid=c.status==="paid";
-  const overdue=isOverdue(c);
+  const answer = confirm(
+    "Оё мехоҳед гузориши ин пардохтро рад кунед?\n\n" +
+    "Қарзи комиссия боқӣ мемонад."
+  );
 
-  const statusClass=paid
-    ?"paid"
-    :c.payment_status==="rejected"
-      ?"rejected"
-      :c.payment_status==="reported"
-        ?"reported"
-        :overdue
-          ?"overdue"
-          :"";
+  if (!answer) return;
 
-  const canReport=!admin &&
-    c.status==="pending" &&
-    ["unreported","rejected"].includes(
+  button.disabled = true;
+
+  const previousText = button.textContent;
+  button.textContent = "Рад карда мешавад...";
+
+  try {
+    const { error } = await db.rpc(
+      "vayo_admin_reject_commission",
+      {
+        p_commission_id:id
+      }
+    );
+
+    if (error) throw error;
+
+    notify(
+      "✅ Гузориши пардохт рад карда шуд.",
+      "success"
+    );
+
+    await loadData();
+
+  } catch (error) {
+    notify(
+      "Хато: " + error.message,
+      "error"
+    );
+
+  } finally {
+    button.disabled = false;
+    button.textContent = previousText;
+  }
+}
+
+/* =====================================
+   COMMISSION CARD
+===================================== */
+
+function commissionCard(c, admin = false) {
+  const canReport =
+    !admin &&
+    c.status === "pending" &&
+    ["unreported", "rejected"].includes(
       c.payment_status
     );
 
-  const canConfirm=admin &&
-    c.status==="pending" &&
-    c.payment_status==="reported";
+  const canConfirm =
+    admin &&
+    c.status === "pending" &&
+    c.payment_status === "reported";
 
-  const card=document.createElement("article");
+  const card = document.createElement("article");
+  card.className = "commission";
 
-  card.className="commission";
-
-  card.innerHTML=`
+  card.innerHTML = `
     <div class="row">
       <b>${escapeHtml(c.service_name)}</b>
 
-      <span class="status ${statusClass}">
+      <span class="status ${statusClass(c)}">
         ${statusText(c)}
       </span>
     </div>
@@ -604,8 +993,13 @@ function commissionCard(c,admin=false){
     </div>
 
     <div class="row">
-      <span>Комиссия (2%)</span>
+      <span>Комиссия</span>
       <b>${money(c.commission_amount)}</b>
+    </div>
+
+    <div class="row">
+      <span>Фоизи комиссия</span>
+      <b>${Number(c.commission_rate || 0.02) * 100}%</b>
     </div>
 
     <div class="row">
@@ -614,92 +1008,87 @@ function commissionCard(c,admin=false){
     </div>
 
     <div class="row">
+      <span>Санаи таъсис</span>
+      <b>${dateText(c.created_at)}</b>
+    </div>
+
+    <div class="row">
       <span>Рақами фармоиш</span>
       <small>${escapeHtml(c.order_id)}</small>
     </div>
 
-    ${admin?`
+    ${admin ? `
       <div class="row">
-        <span>Фурӯшанда</span>
+        <span>Хизматрасон</span>
         <small>${escapeHtml(c.provider_id)}</small>
       </div>
-    `:""}
+    ` : ""}
 
-    ${c.transaction_reference?`
+    ${c.transaction_reference ? `
       <div class="row">
         <span>Рақами амалиёт</span>
         <b>${escapeHtml(c.transaction_reference)}</b>
       </div>
-    `:""}
+    ` : ""}
 
-    ${c.payment_method?`
+    ${c.payment_method ? `
       <div class="row">
         <span>Усули пардохт</span>
         <b>${escapeHtml(c.payment_method)}</b>
       </div>
-    `:""}
+    ` : ""}
 
-    ${c.reported_at?`
+    ${c.reported_at ? `
       <div class="row">
         <span>Санаи гузориши пардохт</span>
         <b>${dateText(c.reported_at)}</b>
       </div>
-    `:""}
+    ` : ""}
 
-    ${c.paid_at?`
+    ${c.paid_at ? `
       <div class="row">
         <span>Санаи тасдиқи пардохт</span>
         <b>${dateText(c.paid_at)}</b>
       </div>
-    `:""}
+    ` : ""}
   `;
 
-  /* ФУРӮШАНДА: ГУЗОРИШИ ПАРДОХТ */
+  /* SELLER PAYMENT REPORT */
 
-  if(canReport){
+  if (canReport) {
+    const form = document.createElement("div");
+    form.className = "formbox";
 
-    const form=document.createElement("div");
-    form.className="formbox";
+    const title = document.createElement("h3");
+    title.textContent = "💳 Гузориши пардохти комиссия";
 
-    const title=document.createElement("b");
-    title.textContent="Гузориши пардохти комиссия";
-
-    const method=document.createElement("select");
+    const method = document.createElement("select");
 
     [
-      ["","Усули пардохтро интихоб кунед"],
-      ["alif","Alif"],
-      ["dushanbe_city","Душанбе Сити"],
-      ["bank_transfer","Интиқоли бонкӣ"],
-      ["cash","Нақд"]
-    ].forEach(([value,label])=>{
-
-      const option=document.createElement("option");
-
-      option.value=value;
-      option.textContent=label;
-
+      ["", "Усули пардохтро интихоб кунед"],
+      ["alif", "Alif"],
+      ["dushanbe_city", "Душанбе Сити"],
+      ["bank_transfer", "Интиқоли бонкӣ"],
+      ["cash", "Нақд"]
+    ].forEach(([value, label]) => {
+      const option = document.createElement("option");
+      option.value = value;
+      option.textContent = label;
       method.append(option);
-
     });
 
-    const reference=document.createElement("input");
+    const reference = document.createElement("input");
+    reference.placeholder = "Рақами амалиёт ё квитансия";
+    reference.maxLength = 200;
 
-    reference.placeholder=
-      "Рақами амалиёт ё квитансия";
+    const button = document.createElement("button");
+    button.textContent = "💳 Пардохт кардам";
 
-    reference.maxLength=200;
-
-    const btn=document.createElement("button");
-
-    btn.textContent="💳 Пардохт кардам";
-
-    btn.onclick=async()=>{
-
-      if(
+    button.onclick = async () => {
+      if (
         !method.value ||
-        reference.value.trim().length<3
-      ){
+        reference.value.trim().length < 3
+      ) {
         notify(
           "Усули пардохт ва рақами амалиётро ворид кунед.",
           "error"
@@ -707,17 +1096,16 @@ function commissionCard(c,admin=false){
         return;
       }
 
-      if(!confirm(
+      if (!confirm(
         "Оё шумо воқеан комиссияро пардохт кардед?"
-      )){
+      )) {
         return;
       }
 
-      btn.disabled=true;
+      button.disabled = true;
 
-      try{
-
-        const {error}=await db.rpc(
+      try {
+        const { error } = await db.rpc(
           "vayo_report_commission_payment",
           {
             p_commission_id:c.id,
@@ -727,327 +1115,537 @@ function commissionCard(c,admin=false){
           }
         );
 
-        if(error)throw error;
+        if (error) throw error;
 
         notify(
-          "✅ Гузориши пардохт фиристода шуд. "+
+          "Гузориши пардохт фиристода шуд. " +
           "Тасдиқи админро интизор шавед.",
           "success"
         );
 
         await loadData();
 
-      }catch(err){
+      } catch (error) {
+        notify(error.message, "error");
 
-        notify(err.message,"error");
-
-      }finally{
-
-        btn.disabled=false;
-
+      } finally {
+        button.disabled = false;
       }
     };
 
-    form.append(title,method,reference,btn);
+    form.append(title, method, reference, button);
     card.append(form);
-
   }
 
-  /* АДМИН: ТАСДИҚ Ё РАД КАРДАН */
+  /* ADMIN ACTIONS */
 
-  if(canConfirm){
+  if (canConfirm) {
+    const actions = document.createElement("div");
+    actions.className = "admin-actions";
 
-    const actions=document.createElement("div");
+    const confirmButton = document.createElement("button");
+    confirmButton.textContent = "✅ Тасдиқи пардохт";
 
-    actions.className="admin-actions";
-
-    const confirmBtn=document.createElement("button");
-
-    confirmBtn.textContent=
-      "✅ Тасдиқи гирифтани комиссия";
-
-    confirmBtn.onclick=()=>{
-      confirmCommission(c.id,confirmBtn);
+    confirmButton.onclick = () => {
+      confirmCommission(c.id, confirmButton);
     };
 
-    const rejectBtn=document.createElement("button");
+    const rejectButton = document.createElement("button");
+    rejectButton.className = "danger";
+    rejectButton.textContent = "❌ Рад кардани пардохт";
 
-    rejectBtn.textContent=
-      "❌ Рад кардани пардохт";
-
-    rejectBtn.className="danger";
-
-    rejectBtn.onclick=()=>{
-      rejectCommission(c.id,rejectBtn);
+    rejectButton.onclick = () => {
+      rejectCommission(c.id, rejectButton);
     };
 
-    actions.append(confirmBtn,rejectBtn);
-
+    actions.append(confirmButton, rejectButton);
     card.append(actions);
-
   }
 
   return card;
 }
 
-/* КОМИССИЯҲОИ ФУРӮШАНДА */
+/* =====================================
+   SELLER COMMISSIONS
+===================================== */
 
-async function loadSeller(){
-
-  const {data,error}=await db.rpc(
+async function loadSeller() {
+  const { data, error } = await db.rpc(
     "vayo_my_commissions"
   );
 
-  if(error)throw error;
+  if (error) throw error;
 
-  const rows=data||[];
+  const rows = data || [];
 
-  const pending=rows
-    .filter(c=>c.status==="pending")
+  const sum = predicate => rows
+    .filter(predicate)
     .reduce(
-      (sum,c)=>sum+
-      Number(c.commission_amount||0),
+      (total, c) =>
+        total + Number(c.commission_amount || 0),
       0
     );
 
-  const overdue=rows
-    .filter(isOverdue)
-    .reduce(
-      (sum,c)=>sum+
-      Number(c.commission_amount||0),
-      0
-    );
+  $("pendingTotal").textContent = money(
+    sum(c => c.status === "pending")
+  );
 
-  const paid=rows
-    .filter(c=>c.status==="paid")
-    .reduce(
-      (sum,c)=>sum+
-      Number(c.commission_amount||0),
-      0
-    );
+  $("overdueTotal").textContent = money(
+    sum(isOverdue)
+  );
 
-  $("pendingTotal").textContent=money(pending);
-  $("overdueTotal").textContent=money(overdue);
-  $("paidTotal").textContent=money(paid);
+  $("paidTotal").textContent = money(
+    sum(c => c.status === "paid")
+  );
 
-  $("blockedMessage").textContent=overdue>0
-    ? "⚠️ Шумо комиссияи муҳлатгузашта доред. "+
-      "Фурӯши нав маҳдуд шудааст."
-    : "✅ Ҳоло аз сабаби комиссияи муҳлатгузашта "+
-      "маҳдудият нест.";
+  const blocked = rows.some(isOverdue);
 
-  const list=$("sellerList");
+  const blockedMessage = $("blockedMessage");
 
+  blockedMessage.className = blocked
+    ? "notice error"
+    : "notice success";
+
+  blockedMessage.textContent = blocked
+    ? "⚠️ Шумо комиссияи муҳлатгузашта доред. " +
+      "Фурӯши нав метавонад маҳдуд бошад."
+    : "✅ Ҳоло комиссияи муҳлатгузашта нест.";
+
+  $("sellerCount").textContent = rows.length;
+
+  const list = $("sellerList");
   list.replaceChildren();
 
-  if(!rows.length){
-    list.textContent="Ҳоло комиссия вуҷуд надорад.";
+  if (!rows.length) {
+    list.innerHTML =
+      '<div class="empty">Ҳоло комиссия вуҷуд надорад.</div>';
     return;
   }
 
-  rows.forEach(c=>{
+  rows.forEach(c => {
     list.append(commissionCard(c));
   });
-
 }
 
-/* ҲИСОБОТИ УМУМИИ СУПЕРАДМИН — НАВ */
+/* =====================================
+   ADMIN SUMMARY
+===================================== */
 
-async function loadAdminSummary(){
+async function loadAdminSummary() {
+  if (!isAdmin) return;
 
-  if(!isAdmin)return;
-
-  const {data,error}=await db.rpc(
+  const { data, error } = await db.rpc(
     "vayo_admin_commission_summary"
   );
 
-  if(error)throw error;
+  if (error) throw error;
 
-  const summary=data||{};
+  const s = data || {};
 
-  $("adminPendingTotal").textContent=
-    money(summary.total_pending);
+  $("adminPendingTotal").textContent =
+    money(s.total_pending);
 
-  $("adminPaidTotal").textContent=
-    money(summary.total_paid);
+  $("adminPaidTotal").textContent =
+    money(s.total_paid);
 
-  $("adminOverdueTotal").textContent=
-    money(summary.total_overdue);
+  $("adminOverdueTotal").textContent =
+    money(s.total_overdue);
 
-  $("adminBlockedProviders").textContent=
-    Number(summary.blocked_providers||0);
+  $("adminBlockedProviders").textContent =
+    Number(s.blocked_providers || 0);
 
-  $("adminReportedCount").textContent=
-    Number(summary.reported_count||0);
+  $("adminReportedCount").textContent =
+    Number(s.reported_count || 0);
 
-  $("adminPendingCount").textContent=
-    Number(summary.pending_count||0);
+  $("adminPendingCount").textContent =
+    Number(s.pending_count || 0);
 
-  $("adminPaidCount").textContent=
-    Number(summary.paid_count||0);
-
+  $("adminPaidCount").textContent =
+    Number(s.paid_count || 0);
 }
 
-/* КОМИССИЯҲОИ СУПЕРАДМИН */
+/* =====================================
+   OVERDUE PROVIDERS
+===================================== */
 
-async function loadAdmin(){
+async function loadOverdueProviders() {
+  if (!isAdmin) return;
 
-  const {data,error}=await db.rpc(
+  const { data, error } = await db.rpc(
+    "vayo_admin_overdue_providers"
+  );
+
+  if (error) throw error;
+
+  overdueProviders = data || [];
+
+  renderOverdueProviders();
+}
+
+function renderOverdueProviders() {
+  const list = $("overdueProvidersList");
+  list.replaceChildren();
+
+  const search = $("debtorSearch")
+    .value.trim().toLowerCase();
+
+  const sort = $("debtorSort").value;
+
+  let rows = overdueProviders.filter(p => {
+    return String(p.provider_id || "")
+      .toLowerCase()
+      .includes(search);
+  });
+
+  rows = [...rows];
+
+  if (sort === "amount_desc") {
+    rows.sort(
+      (a, b) =>
+        Number(b.overdue_amount || 0) -
+        Number(a.overdue_amount || 0)
+    );
+  }
+
+  if (sort === "amount_asc") {
+    rows.sort(
+      (a, b) =>
+        Number(a.overdue_amount || 0) -
+        Number(b.overdue_amount || 0)
+    );
+  }
+
+  if (sort === "oldest") {
+    rows.sort(
+      (a, b) =>
+        new Date(a.oldest_due_at) -
+        new Date(b.oldest_due_at)
+    );
+  }
+
+  $("debtorCount").textContent = rows.length;
+
+  if (!rows.length) {
+    list.innerHTML = `
+      <div class="empty">
+        Ҳоло хизматрасони мувофиқ ёфт нашуд.
+      </div>
+    `;
+    return;
+  }
+
+  rows.forEach(p => {
+    const card = document.createElement("article");
+    card.className = "debtor";
+
+    card.innerHTML = `
+      <h3>🚫 Хизматрасони қарздор</h3>
+
+      <div class="row">
+        <span>ID-и хизматрасон</span>
+        <small>${escapeHtml(p.provider_id)}</small>
+      </div>
+
+      <div class="row">
+        <span>Шумораи комиссияҳои муҳлатгузашта</span>
+        <b>${Number(p.overdue_commissions || 0)}</b>
+      </div>
+
+      <div class="row">
+        <span>Маблағи умумии қарз</span>
+        <strong style="color:#d83c3c">
+          ${money(p.overdue_amount)}
+        </strong>
+      </div>
+
+      <div class="row">
+        <span>Қадимтарин муҳлати пардохт</span>
+        <b>${dateText(p.oldest_due_at)}</b>
+      </div>
+    `;
+
+    const button = document.createElement("button");
+    button.className = "secondary";
+    button.textContent = "🔎 Дидани комиссияҳо";
+
+    button.onclick = () => {
+      $("commissionSearch").value =
+        String(p.provider_id || "");
+
+      $("commissionFilter").value = "all";
+
+      renderAdminCommissions();
+
+      $("commissionSearch").scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+      });
+    };
+
+    card.append(button);
+    list.append(card);
+  });
+}
+
+/* =====================================
+   ADMIN COMMISSIONS
+===================================== */
+
+async function loadAdmin() {
+  if (!isAdmin) return;
+
+  const { data, error } = await db.rpc(
     "vayo_admin_commissions"
   );
 
-  if(error)throw error;
+  if (error) throw error;
 
-  const list=$("adminList");
+  adminCommissions = data || [];
 
+  renderAdminCommissions();
+}
+
+function renderAdminCommissions() {
+  const list = $("adminList");
   list.replaceChildren();
 
-  if(!data?.length){
-    list.textContent="Ҳоло комиссия вуҷуд надорад.";
+  const search = $("commissionSearch")
+    .value.trim().toLowerCase();
+
+  const filter = $("commissionFilter").value;
+
+  let rows = adminCommissions.filter(c => {
+    const searchable = [
+      c.id,
+      c.order_id,
+      c.provider_id,
+      c.service_name,
+      c.transaction_reference,
+      c.payment_method
+    ].map(v => String(v ?? "").toLowerCase())
+     .join(" ");
+
+    if (!searchable.includes(search)) {
+      return false;
+    }
+
+    if (filter === "all") return true;
+
+    if (filter === "paid") {
+      return c.status === "paid";
+    }
+
+    if (filter === "pending") {
+      return c.status === "pending";
+    }
+
+    if (filter === "overdue") {
+      return isOverdue(c);
+    }
+
+    if (filter === "reported") {
+      return c.status === "pending" &&
+        c.payment_status === "reported";
+    }
+
+    if (filter === "rejected") {
+      return c.payment_status === "rejected";
+    }
+
+    return true;
+  });
+
+  $("adminResultCount").textContent = rows.length;
+
+  if (!rows.length) {
+    list.innerHTML = `
+      <div class="empty">
+        Комиссияи мувофиқ ёфт нашуд.
+      </div>
+    `;
     return;
   }
 
-  data.forEach(c=>{
-    list.append(commissionCard(c,true));
+  rows.forEach(c => {
+    list.append(commissionCard(c, true));
   });
-
 }
 
-/* НАВСОЗИИ МАЪЛУМОТ */
+/* =====================================
+   LOAD ALL DATA
+===================================== */
 
-async function loadData(){
+async function loadData() {
+  if (!currentUser || loading) return;
 
-  if(!currentUser)return;
+  loading = true;
 
-  try{
+  $("refreshBtn").disabled = true;
+  $("adminRefreshBtn").disabled = true;
 
+  try {
     await loadSeller();
 
-    if(isAdmin){
+    if (isAdmin) {
       await loadAdminSummary();
+      await loadOverdueProviders();
       await loadAdmin();
     }
 
-  }catch(err){
-
+  } catch (error) {
     notify(
-      "Хатогӣ ҳангоми гирифтани маълумот: "+
-      err.message,
+      "Хатогӣ ҳангоми гирифтани маълумот: " +
+      error.message,
       "error"
     );
 
+  } finally {
+    loading = false;
+
+    $("refreshBtn").disabled = false;
+    $("adminRefreshBtn").disabled = false;
   }
 }
 
-/* САНҶИШИ ҲИСОБ */
+/* =====================================
+   SESSION
+===================================== */
 
-async function showSession(){
+async function showSession() {
+  try {
+    const { data, error } = await db.auth.getUser();
 
-  const {data:{user},error}=
-    await db.auth.getUser();
+    const user = data?.user;
 
-  if(error||!user){
+    if (error || !user) {
+      currentUser = null;
+      isAdmin = false;
 
-    currentUser=null;
-    isAdmin=false;
+      $("loginPanel").classList.remove("hidden");
+      $("accountPanel").classList.add("hidden");
+      $("sellerPanel").classList.add("hidden");
+      $("adminPanel").classList.add("hidden");
 
-    $("loginPanel").classList.remove("hidden");
-    $("accountPanel").classList.add("hidden");
-    $("sellerPanel").classList.add("hidden");
-    $("adminPanel").classList.add("hidden");
+      return;
+    }
 
-    return;
+    currentUser = user;
+
+    $("userEmail").textContent =
+      user.email || user.id;
+
+    $("loginPanel").classList.add("hidden");
+    $("accountPanel").classList.remove("hidden");
+    $("sellerPanel").classList.remove("hidden");
+
+    const adminResult = await db.rpc("vayo_is_admin");
+
+    if (adminResult.error) {
+      isAdmin = false;
+      notify(adminResult.error.message, "error");
+    } else {
+      isAdmin = adminResult.data === true;
+    }
+
+    $("accountRole").textContent = isAdmin
+      ? "🛡️ Суперадмини VAYO"
+      : "Ҳисоби хизматрасони VAYO";
+
+    $("adminPanel").classList.toggle(
+      "hidden",
+      !isAdmin
+    );
+
+    await loadData();
+
+  } catch (error) {
+    notify(error.message, "error");
   }
-
-  currentUser=user;
-
-  $("userEmail").textContent=
-    user.email||user.id;
-
-  $("loginPanel").classList.add("hidden");
-  $("accountPanel").classList.remove("hidden");
-  $("sellerPanel").classList.remove("hidden");
-
-  const adminResult=await db.rpc("vayo_is_admin");
-
-  if(adminResult.error){
-    isAdmin=false;
-    notify(adminResult.error.message,"error");
-  }else{
-    isAdmin=adminResult.data===true;
-  }
-
-  $("adminPanel").classList.toggle(
-    "hidden",
-    !isAdmin
-  );
-
-  await loadData();
 }
 
-/* ВОРИДШАВӢ */
+/* =====================================
+   LOGIN
+===================================== */
 
-$("loginBtn").onclick=async()=>{
+$("loginBtn").onclick = async () => {
+  const email = $("email").value.trim();
+  const password = $("password").value;
 
-  const email=$("email").value.trim();
-  const password=$("password").value;
-
-  if(!email||!password){
-
+  if (!email || !password) {
     notify(
       "Email ва паролро ворид кунед.",
       "error"
     );
-
     return;
   }
 
-  $("loginBtn").disabled=true;
+  $("loginBtn").disabled = true;
 
-  try{
-
-    const {error}=await db.auth.signInWithPassword({
+  try {
+    const { error } = await db.auth.signInWithPassword({
       email,
       password
     });
 
-    if(error)throw error;
+    if (error) throw error;
 
     clearMessage();
-
     await showSession();
 
-  }catch(err){
+  } catch (error) {
+    notify(error.message, "error");
 
-    notify(err.message,"error");
-
-  }finally{
-
-    $("loginBtn").disabled=false;
-
+  } finally {
+    $("loginBtn").disabled = false;
   }
 };
 
-/* БАРОМАДАН */
+/* =====================================
+   LOGOUT
+===================================== */
 
-$("logoutBtn").onclick=async()=>{
+$("logoutBtn").onclick = async () => {
+  const { error } = await db.auth.signOut();
 
-  const {error}=await db.auth.signOut();
-
-  if(error){
-    notify(error.message,"error");
+  if (error) {
+    notify(error.message, "error");
     return;
   }
 
   location.reload();
 };
 
-/* ТУГМАҲОИ НАВСОЗӢ */
+/* =====================================
+   EVENTS
+===================================== */
 
-$("refreshBtn").onclick=loadData;
-$("adminRefreshBtn").onclick=loadData;
+$("refreshBtn").onclick = loadData;
 
-/* ОҒОЗ */
+$("adminRefreshBtn").onclick = loadData;
+
+$("debtorSearch").addEventListener(
+  "input",
+  renderOverdueProviders
+);
+
+$("debtorSort").addEventListener(
+  "change",
+  renderOverdueProviders
+);
+
+$("commissionSearch").addEventListener(
+  "input",
+  renderAdminCommissions
+);
+
+$("commissionFilter").addEventListener(
+  "change",
+  renderAdminCommissions
+);
+
+/* =====================================
+   START
+===================================== */
 
 showSession();
 
