@@ -23,7 +23,8 @@ body{
  background:var(--bg);
  color:var(--dark);
 }
-button{font:inherit;cursor:pointer;border:0}
+button,select{font:inherit}
+button{cursor:pointer;border:0}
 button:disabled{opacity:.45;cursor:not-allowed}
 .wrap{max-width:1050px;margin:auto;padding:0 15px}
 header{
@@ -100,6 +101,28 @@ h3{margin:15px 0 10px}
  display:block;
  color:var(--muted);
  margin-top:6px;
+}
+.levels{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:10px;
+}
+.levelBtn{
+ background:#f9f8ff;
+ border:2px solid var(--line);
+ border-radius:15px;
+ padding:14px 8px;
+ text-align:center;
+}
+.levelBtn b{
+ display:block;
+ font-size:23px;
+ margin-bottom:5px;
+}
+.levelBtn small{color:var(--muted)}
+.levelBtn.active{
+ background:#efebff;
+ border-color:var(--purple);
 }
 .progress{
  height:13px;
@@ -205,6 +228,48 @@ h3{margin:15px 0 10px}
  padding:14px;
  margin:10px 0;
 }
+.topicHeader{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:8px;
+}
+.topicNumber{
+ background:#eeebff;
+ color:var(--purple);
+ border-radius:10px;
+ padding:7px 10px;
+ font-weight:bold;
+}
+.topicLessons{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:8px;
+ margin-top:12px;
+}
+.topicLesson{
+ border:1px solid var(--line);
+ border-radius:11px;
+ background:#f5f5fa;
+ color:var(--muted);
+ padding:10px;
+ text-align:left;
+ font-size:12px;
+}
+.topicLesson.ready{
+ background:#edeaff;
+ color:var(--purple);
+ border-color:#c9bfff;
+ cursor:pointer;
+}
+.notice{
+ background:#fff7e5;
+ border:1px solid #f5dfac;
+ border-radius:14px;
+ padding:13px;
+ color:#815d1b;
+ line-height:1.6;
+}
 footer{
  text-align:center;
  color:var(--muted);
@@ -213,6 +278,7 @@ footer{
 }
 @media(max-width:600px){
  .stats{grid-template-columns:repeat(2,1fr)}
+ .levels{grid-template-columns:repeat(3,1fr)}
  .hero h1{font-size:23px}
  .mascot{font-size:48px}
  .card{padding:14px}
@@ -246,14 +312,15 @@ footer{
   <b id="xp">0</b><small>⚡ XP</small>
  </div>
  <div class="stat">
-  <b id="hearts">❤️❤️❤️❤️❤️</b><small>Дилҳо</small>
+  <b id="hearts">❤️❤️❤️❤️❤️</b>
+  <small>Дилҳо</small>
  </div>
  <div class="stat">
   <b id="streak">0 🔥</b>
   <small>Рӯзҳои пайдарпай</small>
  </div>
  <div class="stat">
-  <b id="level">1</b><small>🏆 Сатҳ</small>
+  <b id="level">1</b><small>🏆 Сатҳи XP</small>
  </div>
 </div>
 
@@ -262,14 +329,23 @@ footer{
  <div class="langs" id="languages"></div>
 </section>
 
+<section class="card" id="levelSection">
+ <h2>🎓 Сатҳи забонро интихоб кун</h2>
+ <p class="muted">
+  Аз A1 то C2. Барои ҳар сатҳ 20 мавзӯъ.
+ </p>
+ <div class="levels" id="levels"></div>
+</section>
+
 <section class="card" id="course">
  <h2 id="courseTitle">Роҳи омӯзиш</h2>
  <p id="progressText" class="muted"></p>
  <div class="progress">
   <div id="progressFill" class="fill"></div>
  </div>
- <h3>🗺️ Харитаи дарсҳо</h3>
- <div class="units" id="units"></div>
+ <h3>🗺️ Харитаи мавзӯъҳо</h3>
+ <div id="courseNotice" class="notice"></div>
+ <div class="units" id="units" style="margin-top:15px"></div>
 </section>
 
 <section class="card hidden" id="lesson">
@@ -303,7 +379,7 @@ footer{
 
 </main>
 
-<footer>VAYO Language • Бе AI • Бе API-и пулакӣ</footer>
+<footer>VAYO Language • Бе овоз • Бе API-и пулакӣ</footer>
 
 <script>
 "use strict";
@@ -317,6 +393,168 @@ const languages=[
  ["zh","🇨🇳","Чинӣ"],
  ["ko","🇰🇷","Кореягӣ"]
 ];
+
+const LEVELS=[
+ ["A1","Оғозӣ"],
+ ["A2","Ибтидоӣ"],
+ ["B1","Миёна"],
+ ["B2","Миёнаи боло"],
+ ["C1","Пешрафта"],
+ ["C2","Олӣ"]
+];
+
+// Мавзӯъҳои нави ҳамаи сатҳҳо.
+// Ин сохтор барои ҳамаи панҷ забон истифода мешавад.
+
+const LEVEL_TOPICS={
+A1:[
+ "Салом ва хайрухуш",
+ "Шиносоӣ ва ном",
+ "Оила ва хешовандон",
+ "Рақамҳо",
+ "Рангҳо",
+ "Рӯзҳои ҳафта",
+ "Моҳҳо ва фаслҳо",
+ "Соат ва вақт",
+ "Хӯрок ва нӯшокиҳо",
+ "Мева ва сабзавот",
+ "Либос ва пойафзол",
+ "Хона ва ҳуҷраҳо",
+ "Ашёи рӯзгор",
+ "Кор ва касбҳо",
+ "Мактаб ва омӯзиш",
+ "Нақлиёт",
+ "Самтҳо ва роҳ",
+ "Харид ва нарх",
+ "Обу ҳаво",
+ "Суҳбати одии ҳаррӯза"
+],
+A2:[
+ "Реҷаи ҳаррӯза",
+ "Нақшаҳои оянда",
+ "Таҷрибаҳои гузашта",
+ "Сафар ва истироҳат",
+ "Меҳмонхона",
+ "Фармоиши хӯрок",
+ "Духтур ва саломатӣ",
+ "Дорухона",
+ "Кор ва вазифаҳо",
+ "Мусоҳибаи корӣ",
+ "Иҷораи хона",
+ "Бонк ва пул",
+ "Почта ва ҳуҷҷатҳо",
+ "Телефон ва интернет",
+ "Варзиш ва саломатӣ",
+ "Дӯстон ва муносибатҳо",
+ "Таълим ва курсҳо",
+ "Шаҳр ва хизматрасониҳо",
+ "Қоидаҳо ва иҷозатҳо",
+ "Муоширати ҳаррӯза"
+],
+B1:[
+ "Баёни фикри шахсӣ",
+ "Сабаб ва натиҷа",
+ "Муқоиса ва интихоб",
+ "Нақл кардани таҷриба",
+ "Нақшаҳои касбӣ",
+ "Мактуби расмӣ",
+ "Мактуби ғайрирасмӣ",
+ "Мусоҳибаи корӣ",
+ "Муҳити кор",
+ "Маориф ва донишгоҳ",
+ "Сафар ва фарҳанг",
+ "Муҳити зист",
+ "Саломатӣ ва ҷомеа",
+ "Технология",
+ "Хабарҳо ва расонаҳо",
+ "Қонунҳои рӯзмарра",
+ "Ҳалли мушкилот",
+ "Баҳси одӣ",
+ "Презентатсияи кӯтоҳ",
+ "Омодагӣ ба имтиҳони B1"
+],
+B2:[
+ "Баҳс ва далеловарӣ",
+ "Таҳлили афзалиятҳо",
+ "Таҳлили камбудиҳо",
+ "Иқтисод ва тиҷорат",
+ "Бозори меҳнат",
+ "Технология ва AI",
+ "Муҳити зист ва иқлим",
+ "Маориф ва ҷомеа",
+ "Фарҳанг ва анъанаҳо",
+ "Сиёсат ва ҷомеа",
+ "Тандурустӣ",
+ "Хабарҳои мураккаб",
+ "Матнҳои илмӣ",
+ "Муоширати касбӣ",
+ "Мактубҳои расмӣ",
+ "Музокирот",
+ "Презентатсияи касбӣ",
+ "Ҳалли баҳсҳо",
+ "Ифодаҳои мураккаб",
+ "Омодагӣ ба имтиҳони B2"
+],
+C1:[
+ "Забони академӣ",
+ "Таҳлили матнҳои илмӣ",
+ "Навиштани эссе",
+ "Аргументатсияи пешрафта",
+ "Иқтисоди байналмилалӣ",
+ "Илм ва инноватсия",
+ "Ҷомеа ва фарҳанг",
+ "Қонун ва идоракунӣ",
+ "Психология ва муносибатҳо",
+ "Фалсафа ва ахлоқ",
+ "Таҳлили расонаҳо",
+ "Мубоҳисаи касбӣ",
+ "Музокироти мураккаб",
+ "Забони расмии корӣ",
+ "Презентатсияи илмӣ",
+ "Хулосабарорӣ",
+ "Маъноҳои пинҳонии матн",
+ "Услубҳои навиштан",
+ "Ислоҳи хатогиҳои мураккаб",
+ "Омодагӣ ба имтиҳони C1"
+],
+C2:[
+ "Фаҳмиши амиқи матн",
+ "Адабиёти классикӣ",
+ "Адабиёти муосир",
+ "Ифодаҳои маҷозӣ",
+ "Ибораҳои устувор",
+ "Зарофатҳои забонӣ",
+ "Услуби илмӣ",
+ "Услуби ҳуқуқӣ",
+ "Услуби адабӣ",
+ "Услуби рӯзноманигорӣ",
+ "Таҳлили фалсафӣ",
+ "Таҳлили иҷтимоӣ",
+ "Баҳси сатҳи баланд",
+ "Нутқи касбӣ",
+ "Навиштани мақола",
+ "Таҳрири матн",
+ "Тарҷумаи мураккаб",
+ "Маъноҳои нозуки калимаҳо",
+ "Муоширати сатҳи олӣ",
+ "Омодагӣ ба имтиҳони C2"
+]
+};
+
+const LESSON_TYPES=[
+ "Луғати асосӣ",
+ "Ибораҳои муҳим",
+ "Грамматика",
+ "Хониши матн",
+ "Тарҷума",
+ "Сохтани ҷумла",
+ "Муколама",
+ "Машқи интихобӣ",
+ "Такрор",
+ "Санҷиши мавзӯъ"
+];
+
+// Дарсҳои аслии VAYO нигоҳ дошта мешаванд.
 
 const topics=[
  ["👋","Салом ва шиносоӣ","Салом, ном ва аҳволпурсӣ"],
@@ -408,7 +646,6 @@ ko:[
 };
 
 const DATA={};
-
 for(const id of Object.keys(raw)){
  DATA[id]=raw[id].map(unit=>
   unit.split("|").map(pair=>{
@@ -418,8 +655,7 @@ for(const id of Object.keys(raw)){
  );
 }
 
-// Калиди пешина нигоҳ дошта мешавад,
-// то XP ва дарсҳои анҷомёфта гум нашаванд.
+// Пешрафти пешина нигоҳ дошта мешавад.
 const STORAGE="vayo_language_v2";
 
 function load(){
@@ -438,7 +674,6 @@ function load(){
 }
 
 let state=load();
-
 if(!languages.some(l=>l[0]===state.lang)){
  state.lang="de";
 }
@@ -446,7 +681,16 @@ if(!state.done||typeof state.done!=="object"){
  state.done={};
 }
 state.xp=Number(state.xp)||0;
-state.hearts=Math.max(0,Math.min(5,Number(state.hearts)??5));
+state.hearts=Math.max(
+ 0,Math.min(5,Number(state.hearts??5))
+);
+
+// Сатҳи интихобшуда алоҳида нигоҳ дошта мешавад.
+let selectedLevel="A1";
+try{
+ const saved=localStorage.getItem("vayo_selected_cefr");
+ if(LEVEL_TOPICS[saved])selectedLevel=saved;
+}catch(e){}
 
 let session=null;
 let lessonFinished=false;
@@ -486,7 +730,6 @@ function today(){
 function updateStreak(){
  const now=today();
  if(state.lastDay===now)return;
-
  if(state.lastDay){
   const previous=new Date(now+"T12:00:00");
   previous.setDate(previous.getDate()-1);
@@ -510,6 +753,22 @@ function completedCount(id){
  ).filter(Boolean).length;
 }
 
+function selectLang(id){
+ if(!DATA[id])return;
+ state.lang=id;
+ save();
+ closeLesson();
+}
+
+function selectLevel(id){
+ if(!LEVEL_TOPICS[id])return;
+ selectedLevel=id;
+ try{
+  localStorage.setItem("vayo_selected_cefr",id);
+ }catch(e){}
+ closeLesson();
+}
+
 function render(){
  $("xp").textContent=state.xp;
  $("hearts").textContent="❤️".repeat(state.hearts)||"♡";
@@ -521,50 +780,135 @@ function render(){
    onclick="selectLang('${l[0]}')">
    <span class="flag">${l[1]}</span>
    ${l[2]}
-   <small>${completedCount(l[0])}/20 дарс</small>
+   <small>${completedCount(l[0])}/20 дарси аслӣ</small>
+  </button>
+ `).join("");
+
+ $("levels").innerHTML=LEVELS.map(l=>`
+  <button class="levelBtn ${selectedLevel===l[0]?"active":""}"
+   onclick="selectLevel('${l[0]}')">
+   <b>${l[0]}</b>
+   <small>${l[1]}</small>
   </button>
  `).join("");
 
  const name=languages.find(l=>l[0]===state.lang)[2];
  const done=completedCount(state.lang);
 
- $("courseTitle").textContent="📚 Забони "+name;
- $("progressText").textContent=done+" аз 20 дарс анҷом ёфт";
+ $("courseTitle").textContent=
+  "📚 Забони "+name+" — "+selectedLevel;
+
+ $("progressText").textContent=
+  "Дарсҳои аслии анҷомёфта: "+done+" аз 20";
+
  $("progressFill").style.width=(done/20*100)+"%";
 
- $("units").innerHTML=topics.map((t,i)=>{
-  const a=i*2;
-  const b=a+1;
-  return `
-   <div class="unit">
-    <div class="unitIcon">${t[0]}</div>
-    <h3>Бахши ${i+1}: ${t[1]}</h3>
-    <p>${t[2]}</p>
-    <div class="unitBtns">
-     <button class="btn ${completed(state.lang,a)?"green":"primary"}"
-      onclick="startLesson(${a})">
-      ${completed(state.lang,a)?"✓ ":""}Дарси ${a+1}
-     </button>
-     <button class="btn ${completed(state.lang,b)?"green":"orange"}"
-      onclick="startLesson(${b})">
-      ${completed(state.lang,b)?"✓ ":""}Машқи ${b+1}
-     </button>
-    </div>
-   </div>`;
- }).join("");
+ $("courseNotice").textContent=
+  selectedLevel==="A1"?
+  "Дарсҳои аслии VAYO дар поён дастрасанд. Мавзӯъҳои нави A1 низ илова шудаанд.":
+  "Нақшаи мавзӯъҳои "+selectedLevel+
+  " омода аст. Луғат, грамматика ва тестҳои ин сатҳ ҳанӯз пур карда нашудаанд.";
 
+ renderTopics();
+ renderSummary();
+}
+
+function renderTopics(){
+ const list=LEVEL_TOPICS[selectedLevel];
+
+ let html="";
+
+ if(selectedLevel==="A1"){
+  html+=`
+   <div class="unit" style="grid-column:1/-1">
+    <h3>📗 Дарсҳои аслии VAYO</h3>
+    <p>10 мавзӯъ, 20 дарси коркунанда</p>
+   </div>
+  `;
+
+  topics.forEach((t,i)=>{
+   const a=i*2;
+   const b=a+1;
+   html+=`
+    <div class="unit">
+     <div class="unitIcon">${t[0]}</div>
+     <h3>Бахши ${i+1}: ${esc(t[1])}</h3>
+     <p>${esc(t[2])}</p>
+     <div class="unitBtns">
+      <button
+       class="btn ${completed(state.lang,a)?"green":"primary"}"
+       onclick="startLesson(${a})">
+       ${completed(state.lang,a)?"✓ ":""}Дарси ${a+1}
+      </button>
+      <button
+       class="btn ${completed(state.lang,b)?"green":"orange"}"
+       onclick="startLesson(${b})">
+       ${completed(state.lang,b)?"✓ ":""}Машқи ${b+1}
+      </button>
+     </div>
+    </div>`;
+  });
+ }
+
+ html+=`
+  <div class="unit" style="grid-column:1/-1">
+   <h3>📚 Мавзӯъҳои сатҳи ${selectedLevel}</h3>
+   <p>20 мавзӯъ × 10 зердарс</p>
+  </div>
+ `;
+
+ list.forEach((topic,i)=>{
+  html+=`
+   <div class="unit">
+    <div class="topicHeader">
+     <span class="topicNumber">${selectedLevel} • ${i+1}</span>
+     <span class="muted">📖 10 зердарс</span>
+    </div>
+    <h3>${esc(topic)}</h3>
+    <p>Нақшаи омӯзиши мавзӯъ</p>
+    <div class="topicLessons">
+     ${LESSON_TYPES.map((type,j)=>`
+      <button class="topicLesson"
+       onclick="showPlannedLesson(${i},${j})">
+       ${j+1}. ${esc(type)}
+      </button>
+     `).join("")}
+    </div>
+   </div>
+  `;
+ });
+
+ $("units").innerHTML=html;
+}
+
+function showPlannedLesson(topicIndex,lessonIndex){
+ const topic=LEVEL_TOPICS[selectedLevel][topicIndex];
+ const lesson=LESSON_TYPES[lessonIndex];
+
+ alert(
+  "📚 "+selectedLevel+" — "+topic+"\n\n"+
+  "Зердарс: "+lesson+"\n\n"+
+  "Ин зердарс ҳоло дар ҳоли омодасозӣ аст. "+
+  "Маводи омӯзишӣ баъд илова мешавад."
+ );
+}
+
+function renderSummary(){
  const total=Object.keys(state.done).filter(
-  k=>state.done[k]
+  k=>k.match(/^(de|en|ru|zh|ko)_\d+$/)&&state.done[k]
  ).length;
 
  $("summary").innerHTML=`
-  <p>📖 Дарсҳои анҷомёфта:
+  <p>📖 Дарсҳои аслии анҷомёфта:
    <b>${total}</b> аз 100</p>
   <p>⚡ XP: <b>${state.xp}</b></p>
-  <p>🏆 Сатҳ:
+  <p>🏆 Сатҳи XP:
    <b>${Math.floor(state.xp/200)+1}</b></p>
+  <p>🎓 Сатҳи интихобшуда:
+   <b>${selectedLevel}</b></p>
   <p class="muted">
-   Пешрафт дар ҳамин браузер нигоҳ дошта мешавад.
+   Пешрафти дарсҳои аслӣ дар ҳамин браузер
+   нигоҳ дошта мешавад.
   </p>
  `;
 
@@ -584,17 +928,10 @@ function render(){
  `).join("");
 }
 
-function selectLang(id){
- if(!DATA[id])return;
- state.lang=id;
- save();
- closeLesson();
- render();
-}
-
 function closeLesson(){
  $("lesson").classList.add("hidden");
  $("home").classList.remove("hidden");
+ $("levelSection").classList.remove("hidden");
  $("course").classList.remove("hidden");
  session=null;
  lessonFinished=false;
@@ -628,6 +965,7 @@ function startLesson(n){
  $("continueBtn").onclick=continueLesson;
 
  $("home").classList.add("hidden");
+ $("levelSection").classList.add("hidden");
  $("course").classList.add("hidden");
  $("lesson").classList.remove("hidden");
 
@@ -645,7 +983,6 @@ function makeQuestions(words){
   q.push({type:"translate",index:i});
  });
 
- // Ба ҷойи саволи овозӣ саволи матнӣ
  q.push({
   type:"translate",
   index:Math.floor(Math.random()*words.length)
