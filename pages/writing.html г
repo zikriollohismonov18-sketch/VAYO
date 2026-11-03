@@ -1,0 +1,553 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#7355ef">
+<title>VAYO — Машқи навиштан</title>
+<style>
+:root{
+ --purple:#7355ef;
+ --green:#22ae73;
+ --red:#e85269;
+ --bg:#f5f5fd;
+ --ink:#24213e;
+ --line:#e7e4f3
+}
+*{box-sizing:border-box}
+body{
+ margin:0;
+ background:var(--bg);
+ color:var(--ink);
+ font-family:Arial,sans-serif
+}
+header{
+ background:linear-gradient(120deg,#5e4bdc,#a36af5);
+ color:white;
+ padding:24px 15px
+}
+.wrap{max-width:750px;margin:auto;padding:15px}
+header h1{margin:10px 0}
+a{color:inherit}
+.back{
+ display:inline-block;
+ padding:10px 14px;
+ border-radius:12px;
+ background:#ffffff26;
+ text-decoration:none
+}
+.card{
+ background:white;
+ border:1px solid var(--line);
+ border-radius:18px;
+ padding:18px;
+ margin:15px 0
+}
+.stats{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:10px
+}
+.stat{text-align:center}
+.stat b{display:block;font-size:22px}
+small{color:#77758b}
+select,input{
+ width:100%;
+ padding:15px;
+ border:2px solid var(--line);
+ border-radius:12px;
+ font-size:17px;
+ background:white
+}
+input:focus{
+ outline:none;
+ border-color:var(--purple)
+}
+button{
+ border:0;
+ cursor:pointer;
+ font:inherit
+}
+.btn{
+ padding:14px;
+ border-radius:12px;
+ font-weight:bold
+}
+.primary{background:var(--purple);color:white}
+.green{background:var(--green);color:white}
+.light{background:#efecfa;color:var(--ink)}
+.actions{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+ margin-top:15px
+}
+.question{
+ background:#f6f3ff;
+ padding:25px 15px;
+ border-radius:16px;
+ text-align:center;
+ margin:20px 0
+}
+.question strong{
+ font-size:25px;
+ line-height:1.5
+}
+.feedback{
+ padding:15px;
+ border-radius:12px;
+ margin:15px 0;
+ line-height:1.6;
+ display:none
+}
+.correct{background:#e5f9ee;color:#176b48}
+.wrong{background:#ffe8ed;color:#9b2841}
+.progress{
+ background:#e9e7f5;
+ height:12px;
+ border-radius:20px;
+ overflow:hidden
+}
+.fill{
+ background:var(--green);
+ height:100%;
+ width:0%;
+ transition:width .2s
+}
+.hidden{display:none!important}
+#answer{margin-top:12px}
+@media(max-width:450px){
+ .stats{grid-template-columns:repeat(3,1fr)}
+ .stat b{font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="wrap">
+ <a class="back" href="language.html">
+  ← VAYO Language
+ </a>
+ <h1>✍️ Машқи навиштан</h1>
+ <p>Калимаҳоро омӯз ва худат навис!</p>
+</div>
+</header>
+
+<main class="wrap">
+
+<div class="stats">
+ <div class="card stat">
+  <b id="xp">0</b>
+  <small>⚡ XP</small>
+ </div>
+ <div class="card stat">
+  <b id="score">0</b>
+  <small>✅ Дуруст</small>
+ </div>
+ <div class="card stat">
+  <b id="counter">0/10</b>
+  <small>📝 Савол</small>
+ </div>
+</div>
+
+<section class="card">
+ <h2>🌍 Забонро интихоб кун</h2>
+ <select id="language">
+  <option value="de">🇩🇪 Олмонӣ</option>
+  <option value="en">🇬🇧 Англисӣ</option>
+  <option value="ru">🇷🇺 Русӣ</option>
+  <option value="zh">🇨🇳 Чинӣ</option>
+  <option value="ko">🇰🇷 Кореягӣ</option>
+ </select>
+
+ <h3>🎓 Сатҳи машқ</h3>
+ <select id="level">
+  <option value="A1">A1 — Оғозӣ</option>
+  <option value="A2">A2 — Ибтидоӣ</option>
+ </select>
+
+ <button id="start" class="btn primary"
+ style="width:100%;margin-top:15px">
+  ▶ Оғози машқ
+ </button>
+</section>
+
+<section class="card hidden" id="exercise">
+ <h2>📝 Ҷавобро навис</h2>
+ <div class="progress">
+  <div class="fill" id="bar"></div>
+ </div>
+ <div class="question">
+  <small>Ба забони интихобшуда тарҷума кун:</small>
+  <div style="margin-top:15px">
+   <strong id="question"></strong>
+  </div>
+ </div>
+ <input id="answer"
+  placeholder="Ҷавобро дар ин ҷо навис..."
+  autocomplete="off"
+  autocapitalize="off">
+
+ <div id="feedback" class="feedback"></div>
+
+ <div class="actions">
+  <button class="btn primary" id="check">
+   Санҷидан ✓
+  </button>
+  <button class="btn green hidden" id="next">
+   Давом додан →
+  </button>
+ </div>
+</section>
+
+<section class="card hidden" id="result">
+ <h2>🏆 Машқ анҷом ёфт!</h2>
+ <div class="question">
+  <strong id="finalScore"></strong>
+  <p id="finalMessage"></p>
+ </div>
+ <button id="again" class="btn primary"
+ style="width:100%">
+  🔄 Боз машқ кардан
+ </button>
+</section>
+
+</main>
+
+<script>
+"use strict";
+
+const $=id=>document.getElementById(id);
+
+const KEY="vayo_language_v2";
+
+function load(){
+ try{
+  return JSON.parse(localStorage.getItem(KEY))||{};
+ }catch(e){
+  return {};
+ }
+}
+
+const state=load();
+
+if(!state.done)state.done={};
+if(!Number.isFinite(Number(state.xp)))state.xp=0;
+state.xp=Number(state.xp)||0;
+
+const DATA={
+de:{
+ A1:[
+ ["Hallo","Салом"],
+ ["Guten Morgen","Субҳ ба хайр"],
+ ["Danke","Ташаккур"],
+ ["Bitte","Марҳамат"],
+ ["Wasser","Об"],
+ ["Brot","Нон"],
+ ["Mutter","Модар"],
+ ["Vater","Падар"],
+ ["Arbeit","Кор"],
+ ["Heute","Имрӯз"],
+ ["Morgen","Пагоҳ"],
+ ["Ich bin krank.","Ман беморам."],
+ ["Wie heißt du?","Номат чист?"],
+ ["Wie geht es dir?","Аҳволат чӣ хел?"],
+ ["Wo ist der Bahnhof?","Истгоҳи қатора дар куҷост?"]
+ ],
+ A2:[
+ ["Ich muss heute arbeiten.","Ман бояд имрӯз кор кунам."],
+ ["Ich suche eine Wohnung.","Ман манзил меҷӯям."],
+ ["Ich habe einen Termin.","Ман вақти қабул дорам."],
+ ["Ich möchte ein Zimmer reservieren.","Ман мехоҳам ҳуҷра банд кунам."],
+ ["Ich lerne Deutsch.","Ман олмонӣ меомӯзам."],
+ ["Ich brauche Hilfe.","Ман ба ёрӣ ниёз дорам."],
+ ["Ich habe gestern gearbeitet.","Ман дирӯз кор кардам."],
+ ["Wie hoch ist die Miete?","Иҷорапулӣ чанд аст?"],
+ ["Ich muss Geld überweisen.","Ман бояд пул интиқол диҳам."],
+ ["Können Sie das wiederholen?","Метавонед инро такрор кунед?"]
+ ]
+},
+en:{
+ A1:[
+ ["Hello","Салом"],
+ ["Good morning","Субҳ ба хайр"],
+ ["Thank you","Ташаккур"],
+ ["Please","Лутфан"],
+ ["Water","Об"],
+ ["Bread","Нон"],
+ ["Mother","Модар"],
+ ["Father","Падар"],
+ ["Work","Кор"],
+ ["Today","Имрӯз"],
+ ["Tomorrow","Пагоҳ"],
+ ["I am sick.","Ман беморам."],
+ ["What is your name?","Номат чист?"],
+ ["How are you?","Аҳволат чӣ хел?"],
+ ["Where is the station?","Истгоҳ дар куҷост?"]
+ ],
+ A2:[
+ ["I have to work today.","Ман бояд имрӯз кор кунам."],
+ ["I am looking for an apartment.","Ман манзил меҷӯям."],
+ ["I have an appointment.","Ман вақти қабул дорам."],
+ ["I would like to book a room.","Ман мехоҳам ҳуҷра банд кунам."],
+ ["I am learning English.","Ман англисӣ меомӯзам."],
+ ["I need help.","Ман ба ёрӣ ниёз дорам."],
+ ["I worked yesterday.","Ман дирӯз кор кардам."],
+ ["How much is the rent?","Иҷорапулӣ чанд аст?"],
+ ["I need to transfer money.","Ман бояд пул интиқол диҳам."],
+ ["Could you repeat that?","Метавонед инро такрор кунед?"]
+ ]
+},
+ru:{
+ A1:[
+ ["Привет","Салом"],
+ ["Доброе утро","Субҳ ба хайр"],
+ ["Спасибо","Ташаккур"],
+ ["Пожалуйста","Марҳамат"],
+ ["Вода","Об"],
+ ["Хлеб","Нон"],
+ ["Мать","Модар"],
+ ["Отец","Падар"],
+ ["Работа","Кор"],
+ ["Сегодня","Имрӯз"],
+ ["Завтра","Пагоҳ"],
+ ["Я болею.","Ман беморам."],
+ ["Как тебя зовут?","Номат чист?"],
+ ["Как дела?","Аҳволат чӣ хел?"],
+ ["Где вокзал?","Истгоҳи қатора дар куҷост?"]
+ ],
+ A2:[
+ ["Я должен сегодня работать.","Ман бояд имрӯз кор кунам."],
+ ["Я ищу квартиру.","Ман манзил меҷӯям."],
+ ["У меня назначена встреча.","Ман вақти қабул дорам."],
+ ["Я хочу забронировать номер.","Ман мехоҳам ҳуҷра банд кунам."],
+ ["Я учу русский язык.","Ман русӣ меомӯзам."],
+ ["Мне нужна помощь.","Ман ба ёрӣ ниёз дорам."],
+ ["Я вчера работал.","Ман дирӯз кор кардам."],
+ ["Сколько стоит аренда?","Иҷорапулӣ чанд аст?"],
+ ["Мне нужно перевести деньги.","Ман бояд пул интиқол диҳам."],
+ ["Можете это повторить?","Метавонед инро такрор кунед?"]
+ ]
+},
+zh:{
+ A1:[
+ ["你好","Салом"],
+ ["早上好","Субҳ ба хайр"],
+ ["谢谢","Ташаккур"],
+ ["请","Лутфан"],
+ ["水","Об"],
+ ["面包","Нон"],
+ ["妈妈","Модар"],
+ ["爸爸","Падар"],
+ ["工作","Кор"],
+ ["今天","Имрӯз"],
+ ["明天","Пагоҳ"],
+ ["我生病了。","Ман беморам."],
+ ["你叫什么名字？","Номат чист?"],
+ ["你好吗？","Аҳволат чӣ хел?"],
+ ["火车站在哪儿？","Истгоҳи қатора дар куҷост?"]
+ ],
+ A2:[
+ ["我今天必须工作。","Ман бояд имрӯз кор кунам."],
+ ["我在找公寓。","Ман манзил меҷӯям."],
+ ["我有预约。","Ман вақти қабул дорам."],
+ ["我想预订一个房间。","Ман мехоҳам ҳуҷра банд кунам."],
+ ["我在学习中文。","Ман чинӣ меомӯзам."],
+ ["我需要帮助。","Ман ба ёрӣ ниёз дорам."],
+ ["我昨天工作了。","Ман дирӯз кор кардам."],
+ ["房租多少钱？","Иҷорапулӣ чанд аст?"],
+ ["我需要转账。","Ман бояд пул интиқол диҳам."],
+ ["你能再说一遍吗？","Метавонед инро такрор кунед?"]
+ ]
+},
+ko:{
+ A1:[
+ ["안녕하세요","Салом"],
+ ["좋은 아침이에요","Субҳ ба хайр"],
+ ["감사합니다","Ташаккур"],
+ ["부탁합니다","Лутфан"],
+ ["물","Об"],
+ ["빵","Нон"],
+ ["어머니","Модар"],
+ ["아버지","Падар"],
+ ["일","Кор"],
+ ["오늘","Имрӯз"],
+ ["내일","Пагоҳ"],
+ ["저는 아파요.","Ман беморам."],
+ ["이름이 뭐예요?","Номат чист?"],
+ ["잘 지내세요?","Аҳволат чӣ хел?"],
+ ["기차역이 어디예요?","Истгоҳи қатора дар куҷост?"]
+ ],
+ A2:[
+ ["오늘 일해야 해요.","Ман бояд имрӯз кор кунам."],
+ ["아파트를 찾고 있어요.","Ман манзил меҷӯям."],
+ ["예약이 있어요.","Ман вақти қабул дорам."],
+ ["방을 예약하고 싶어요.","Ман мехоҳам ҳуҷра банд кунам."],
+ ["한국어를 배우고 있어요.","Ман кореягӣ меомӯзам."],
+ ["도움이 필요해요.","Ман ба ёрӣ ниёз дорам."],
+ ["어제 일했어요.","Ман дирӯз кор кардам."],
+ ["월세가 얼마예요?","Иҷорапулӣ чанд аст?"],
+ ["돈을 송금해야 해요.","Ман бояд пул интиқол диҳам."],
+ ["다시 말씀해 주시겠어요?","Метавонед инро такрор кунед?"]
+ ]
+}
+};
+
+let questions=[];
+let index=0;
+let score=0;
+let answered=false;
+
+function shuffle(a){
+ const result=[...a];
+ for(let i=result.length-1;i>0;i--){
+  const j=Math.floor(Math.random()*(i+1));
+  [result[i],result[j]]=[result[j],result[i]];
+ }
+ return result;
+}
+
+function normalize(s){
+ return String(s)
+ .trim()
+ .normalize("NFKC")
+ .toLocaleLowerCase()
+ .replace(/[.!?。！？,،]/g,"")
+ .replace(/\s+/g," ");
+}
+
+function renderXP(){
+ $("xp").textContent=state.xp;
+}
+
+function start(){
+ const lang=$("language").value;
+ const level=$("level").value;
+
+ questions=shuffle(DATA[lang][level]).slice(0,10);
+ index=0;
+ score=0;
+
+ $("result").classList.add("hidden");
+ $("exercise").classList.remove("hidden");
+ $("score").textContent=0;
+
+ showQuestion();
+}
+
+function showQuestion(){
+ if(index>=questions.length){
+  finish();
+  return;
+ }
+
+ answered=false;
+
+ $("counter").textContent=
+ (index+1)+"/"+questions.length;
+
+ $("bar").style.width=
+ (index/questions.length*100)+"%";
+
+ $("question").textContent=questions[index][1];
+ $("answer").value="";
+ $("answer").disabled=false;
+
+ $("feedback").style.display="none";
+ $("check").classList.remove("hidden");
+ $("next").classList.add("hidden");
+
+ $("answer").focus();
+}
+
+function check(){
+ if(answered)return;
+
+ const input=$("answer").value;
+ if(!input.trim()){
+  $("feedback").style.display="block";
+  $("feedback").className="feedback wrong";
+  $("feedback").textContent="Аввал ҷавобро навис.";
+  return;
+ }
+
+ answered=true;
+ $("answer").disabled=true;
+
+ const correct=questions[index][0];
+ const success=normalize(input)===normalize(correct);
+
+ $("feedback").style.display="block";
+
+ if(success){
+  score++;
+  state.xp+=5;
+
+  try{
+   localStorage.setItem(KEY,JSON.stringify(state));
+  }catch(e){
+   console.warn("XP нигоҳ дошта нашуд",e);
+  }
+
+  $("feedback").className="feedback correct";
+  $("feedback").textContent="✅ Дуруст! +5 XP";
+ }else{
+  $("feedback").className="feedback wrong";
+  $("feedback").textContent=
+   "❌ Ҷавоби дуруст: "+correct;
+ }
+
+ $("score").textContent=score;
+ renderXP();
+
+ $("check").classList.add("hidden");
+ $("next").classList.remove("hidden");
+}
+
+function next(){
+ if(!answered)return;
+ index++;
+ showQuestion();
+}
+
+function finish(){
+ $("exercise").classList.add("hidden");
+ $("result").classList.remove("hidden");
+
+ $("counter").textContent=questions.length+
+ "/"+questions.length;
+
+ $("bar").style.width="100%";
+
+ $("finalScore").textContent=
+ score+" / "+questions.length;
+
+ $("finalMessage").textContent=
+ score>=8?
+ "🌟 Офарин! Натиҷаи аъло!":
+ score>=5?
+ "👍 Хуб! Машқро идома деҳ.":
+ "📚 Боз машқ кун, натиҷа беҳтар мешавад.";
+}
+
+$("start").addEventListener("click",start);
+$("check").addEventListener("click",check);
+$("next").addEventListener("click",next);
+$("again").addEventListener("click",start);
+
+$("answer").addEventListener("keydown",e=>{
+ if(e.key!=="Enter")return;
+ if(answered)next();
+ else check();
+});
+
+if(DATA[state.lang]){
+ $("language").value=state.lang;
+}
+
+renderXP();
+</script>
+</body>
+</html>
