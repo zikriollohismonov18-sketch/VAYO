@@ -6,25 +6,62 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#7355ef">
 <title>VAYO Language — Забономӯзӣ</title>
+
 <style>
 :root{
- --main:#7355ef;--dark:#24213e;--muted:#77758b;
- --bg:#f5f5fd;--line:#e7e4f3;--green:#21ae73;
- --red:#ed5369;--gold:#f7b63c
+ --main:#7355ef;
+ --dark:#24213e;
+ --muted:#77758b;
+ --bg:#f5f5fd;
+ --line:#e7e4f3;
+ --green:#21ae73;
+ --red:#ed5369;
+ --gold:#f7b63c;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--dark)}
-button{font:inherit;cursor:pointer;border:0}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:var(--bg);
+ color:var(--dark);
+}
+button,input{font:inherit}
+button{cursor:pointer;border:0}
 button:disabled{opacity:.5;cursor:not-allowed}
-header{background:linear-gradient(120deg,#5e4bdc,#a36af5);color:white;padding:24px 15px}
+header{
+ background:linear-gradient(120deg,#5e4bdc,#a36af5);
+ color:white;
+ padding:24px 15px;
+}
 .wrap{max-width:1050px;margin:auto;padding:0 14px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.top{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+}
 .logo{font-size:24px;font-weight:900}
-.back{color:white;text-decoration:none;background:#ffffff26;padding:11px;border-radius:12px}
+.back{
+ color:white;
+ text-decoration:none;
+ background:#ffffff26;
+ padding:11px;
+ border-radius:12px;
+}
 header h1{margin:19px 0 8px}
 header p{opacity:.9}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
-.stat,.card{background:white;border:1px solid var(--line);border-radius:18px;padding:16px}
+.stats{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:10px;
+ margin:16px 0;
+}
+.stat,.card{
+ background:white;
+ border:1px solid var(--line);
+ border-radius:18px;
+ padding:16px;
+}
 .stat{text-align:center}
 .stat b{font-size:23px;display:block}
 small,.muted{color:var(--muted)}
@@ -35,37 +72,118 @@ h3{margin:10px 0}
 .langs{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}
 .levels{grid-template-columns:repeat(3,1fr)}
 .topics{grid-template-columns:repeat(auto-fit,minmax(255px,1fr))}
-.choice{padding:14px;background:#faf9ff;border:2px solid var(--line);border-radius:14px;text-align:center}
-.choice.active{border-color:var(--main);background:#eeebff}
+.choice{
+ padding:14px;
+ background:#faf9ff;
+ border:2px solid var(--line);
+ border-radius:14px;
+ text-align:center;
+}
+.choice.active{
+ border-color:var(--main);
+ background:#eeebff;
+}
 .flag{font-size:30px;display:block;margin-bottom:8px}
 .choice b{display:block}
-.topic{border:1px solid var(--line);border-radius:15px;padding:15px;background:#fdfcff}
-.topic p{color:var(--muted);font-size:13px;line-height:1.5}
+.topic{
+ border:1px solid var(--line);
+ border-radius:15px;
+ padding:15px;
+ background:#fdfcff;
+}
+.topic p{
+ color:var(--muted);
+ font-size:13px;
+ line-height:1.5;
+}
 .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .btn{border-radius:12px;padding:12px;font-weight:bold}
 .primary{background:var(--main);color:white}
 .green{background:var(--green);color:white}
 .light{background:#eeebfa;color:var(--dark)}
-.progress{height:12px;background:#e9e7f5;border-radius:20px;overflow:hidden;margin:12px 0}
-.fill{height:100%;background:var(--green);width:0%;transition:width .2s}
+.danger{background:var(--red);color:white}
+.progress{
+ height:12px;
+ background:#e9e7f5;
+ border-radius:20px;
+ overflow:hidden;
+ margin:12px 0;
+}
+.fill{
+ height:100%;
+ background:var(--green);
+ width:0%;
+ transition:width .2s;
+}
 .hidden{display:none!important}
-.study{background:#f8f6ff;border:1px solid #e7e1ff;border-radius:16px;padding:19px;margin:13px 0;line-height:1.7;overflow-wrap:anywhere}
+.study{
+ background:#f8f6ff;
+ border:1px solid #e7e1ff;
+ border-radius:16px;
+ padding:19px;
+ margin:13px 0;
+ line-height:1.7;
+ overflow-wrap:anywhere;
+}
 .study strong{font-size:22px}
-.translation{font-size:18px;color:#654bcd;margin-top:8px}
-.option{display:block;width:100%;background:#faf9ff;border:2px solid var(--line);border-radius:13px;padding:14px;text-align:left;margin:9px 0;overflow-wrap:anywhere}
+.translation{
+ font-size:18px;
+ color:#654bcd;
+ margin-top:8px;
+}
+.option{
+ display:block;
+ width:100%;
+ background:#faf9ff;
+ border:2px solid var(--line);
+ border-radius:13px;
+ padding:14px;
+ text-align:left;
+ margin:9px 0;
+}
 .option.correct{background:#e4f9ed;border-color:var(--green)}
 .option.wrong{background:#ffe8ed;border-color:var(--red)}
-.option.selected{background:#eae4ff;border-color:var(--main)}
-.notice{padding:13px;border-radius:12px;background:#fff7e6;color:#785a23;line-height:1.6;margin:10px 0}
-.badgeLine{padding:12px;background:#fff8e9;border-radius:12px;margin:8px 0}
-.lessonTop{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.notice{
+ padding:13px;
+ border-radius:12px;
+ background:#fff7e6;
+ color:#785a23;
+ line-height:1.6;
+ margin:10px 0;
+}
+.badgeLine{
+ padding:12px;
+ background:#fff8e9;
+ border-radius:12px;
+ margin:8px 0;
+}
+.lessonTop{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:10px;
+}
+.field{
+ width:100%;
+ padding:13px;
+ border:1px solid var(--line);
+ border-radius:12px;
+ margin:7px 0;
+}
+.cloudStatus{
+ padding:12px;
+ background:#f5f3ff;
+ border-radius:12px;
+ margin:10px 0;
+ overflow-wrap:anywhere;
+}
 #feedback{font-weight:bold;line-height:1.6}
-.examGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-.examStat{background:#f7f5ff;padding:15px;border-radius:12px;text-align:center}
-.examStat b{display:block;font-size:22px;color:var(--main)}
-.certificate{border:3px solid var(--gold);border-radius:16px;padding:20px;text-align:center;background:#fffaf0;margin:15px 0}
-#examTimer{font-weight:bold;color:var(--main)}
-footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
+footer{
+ text-align:center;
+ padding:25px;
+ color:var(--muted);
+ font-size:13px;
+}
 @media(max-width:600px){
  .stats{grid-template-columns:repeat(2,1fr)}
  .topics{grid-template-columns:1fr}
@@ -73,6 +191,7 @@ footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
 }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -95,6 +214,27 @@ footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
  <div class="stat"><b id="xpLevel">1</b><small>🏆 Сатҳи XP</small></div>
 </div>
 
+<section class="card" id="cloudSection">
+ <h2>☁️ VAYO Language — Ҳисоби ман</h2>
+ <div id="cloudStatus" class="cloudStatus">Пайвастшавӣ санҷида мешавад...</div>
+ <div id="authFields">
+  <input id="email" class="field" type="email" placeholder="Email" autocomplete="email">
+  <input id="password" class="field" type="password" placeholder="Парол" autocomplete="current-password">
+  <div class="actions">
+   <button class="btn primary" id="loginBtn">Воридшавӣ</button>
+   <button class="btn light" id="registerBtn">Сабти ном</button>
+  </div>
+  <button class="btn light" id="resetBtn" style="margin-top:9px;width:100%">Паролро фаромӯш кардед?</button>
+ </div>
+ <div id="accountFields" class="hidden">
+  <p id="accountEmail"></p>
+  <div class="actions">
+   <button class="btn green" id="syncBtn">☁️ Нигоҳдории XP</button>
+   <button class="btn light" id="logoutBtn">Баромадан</button>
+  </div>
+ </div>
+</section>
+
 <section class="card" id="home">
  <h2>🌍 Забонро интихоб кун</h2>
  <div id="languages" class="langs"></div>
@@ -110,19 +250,19 @@ footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
  <p id="progressText" class="muted"></p>
  <div class="progress"><div class="fill" id="progressFill"></div></div>
  <div id="notice"></div>
- <div class="topics" id="topics" style="margin-top:15px"></div>
+ <div id="topics" class="topics"></div>
 </section>
 
 <section class="card hidden" id="lesson">
  <div class="lessonTop">
-  <button type="button" class="btn light" id="closeLessonBtn">← Баргаштан</button>
-  <span id="counter" class="muted"></span>
+  <button class="btn light" id="closeLessonBtn">← Баргаштан</button>
+  <span id="counter"></span>
  </div>
  <h2 id="lessonTitle" style="margin-top:18px"></h2>
  <div class="progress"><div class="fill" id="lessonFill"></div></div>
  <div id="lessonBody"></div>
- <p id="feedback" aria-live="polite"></p>
- <button type="button" id="nextBtn" class="btn primary">Давом додан →</button>
+ <p id="feedback"></p>
+ <button class="btn primary" id="nextBtn">Давом додан →</button>
 </section>
 
 <section class="card" id="generalExams">
@@ -130,31 +270,16 @@ footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
  <div id="examInformation"></div>
 </section>
 
-<section class="card hidden" id="examScreen">
- <div class="lessonTop">
-  <button type="button" class="btn light" id="cancelExamBtn">← Баргаштан</button>
-  <span id="examTimer">30:00</span>
- </div>
- <h2 id="examTitle" style="margin-top:18px"></h2>
- <p id="examCounter" class="muted"></p>
- <div class="progress"><div class="fill" id="examFill"></div></div>
- <div id="examBody"></div>
- <div class="actions">
-  <button type="button" id="examPrevious" class="btn light">← Қаблӣ</button>
-  <button type="button" id="examNext" class="btn primary">Саволи навбатӣ →</button>
- </div>
-</section>
-
 <section class="card" id="reviewSection">
  <h2>🔁 Калимаҳои душвор</h2>
  <p id="mistakeCount" class="muted"></p>
- <button type="button" id="reviewBtn" class="btn primary">Такрор кардан</button>
+ <button class="btn primary" id="reviewBtn">Такрор кардан</button>
 </section>
 
 <section class="card" id="heartSection">
  <h2>❤️ Барқарор кардани дилҳо</h2>
  <p id="heartInfo" class="muted"></p>
- <button type="button" id="heartBtn" class="btn light">Машқи барқароркунӣ</button>
+ <button class="btn light" id="heartBtn">Машқи барқароркунӣ</button>
 </section>
 
 <section class="card" id="awardsSection">
@@ -168,7 +293,8 @@ footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
 </section>
 
 </main>
-<footer>VAYO Language • Омӯзиши интерактивӣ • A1 ва A2</footer>
+
+<footer>VAYO Language • Омӯзиши интерактивӣ • A1–C2</footer>
 
 <script>
 "use strict";
@@ -184,24 +310,24 @@ const LANGUAGES=[
 ];
 
 const LEVELS=[
- ["A1","Оғозӣ"],["A2","Ибтидоӣ"],
- ["B1","Миёна"],["B2","Миёнаи боло"],
- ["C1","Пешрафта"],["C2","Олӣ"]
+ ["A1","Оғозӣ"],
+ ["A2","Ибтидоӣ"],
+ ["B1","Миёна"],
+ ["B2","Миёнаи боло"],
+ ["C1","Пешрафта"],
+ ["C2","Олӣ"]
 ];
 
-const LEVEL_TOPICS={
+const TOPICS={
  A1:[
  "Салом ва шиносоӣ","Оила","Рақамҳо","Вақт",
- "Хӯрок","Харид","Кор","Роҳ","Саломатӣ",
- "Суҳбати ҳаррӯза"
+ "Хӯрок","Харид","Кор","Роҳ","Саломатӣ","Суҳбати ҳаррӯза"
  ],
  A2:[
- "Реҷаи ҳаррӯза","Нақшаҳои оянда",
- "Таҷрибаҳои гузашта","Сафар ва истироҳат",
- "Меҳмонхона","Фармоиши хӯрок",
- "Духтур ва саломатӣ","Дорухона",
- "Кор ва вазифаҳо","Мусоҳибаи корӣ",
- "Иҷораи хона","Бонк ва пул",
+ "Реҷаи ҳаррӯза","Нақшаҳои оянда","Таҷрибаҳои гузашта",
+ "Сафар ва истироҳат","Меҳмонхона","Фармоиши хӯрок",
+ "Духтур ва саломатӣ","Дорухона","Кор ва вазифаҳо",
+ "Мусоҳибаи корӣ","Иҷораи хона","Бонк ва пул",
  "Почта ва ҳуҷҷатҳо","Телефон ва интернет",
  "Варзиш ва саломатӣ","Дӯстон ва муносибатҳо",
  "Таълим ва курсҳо","Шаҳр ва хизматрасониҳо",
@@ -212,8 +338,6 @@ const LEVEL_TOPICS={
  C1:["Забони академӣ","Матнҳои илмӣ","Эссе","Аргументатсия","Иқтисод","Инноватсия","Ҷомеа","Қонун","Психология","Фалсафа","Расонаҳо","Мубоҳиса","Музокирот","Забони расмӣ","Презентатсияи илмӣ","Хулосабарорӣ","Маъноҳои пинҳонӣ","Услуби навиштан","Таҳрир","Омодагӣ ба C1"],
  C2:["Матнҳои мураккаб","Адабиёт","Ифодаҳои маҷозӣ","Ибораҳои устувор","Зарофатҳои забонӣ","Услуби илмӣ","Услуби ҳуқуқӣ","Услуби адабӣ","Рӯзноманигорӣ","Фалсафа","Ҷомеашиносӣ","Мубоҳиса","Нутқи касбӣ","Мақола","Таҳрир","Тарҷума","Маъноҳои нозук","Муоширати олӣ","Таҳлил","Омодагӣ ба C2"]
 };
-
-/* ===== A1: 5 забон, 10 мавзӯъ ===== */
 
 const A1_RAW={
 de:[
@@ -280,8 +404,8 @@ ko:[
 
 function parsePairs(raw){
  return raw.split("|").map(item=>{
-  const p=item.indexOf("=");
-  return [item.slice(0,p),item.slice(p+1)];
+  const i=item.indexOf("=");
+  return [item.slice(0,i),item.slice(i+1)];
  });
 }
 
@@ -289,8 +413,6 @@ const A1={};
 for(const lang in A1_RAW){
  A1[lang]=A1_RAW[lang].map(parsePairs);
 }
-
-/* ===== A2 ===== */
 
 const A2_TJ=[
 ["барвақт хестан","наҳорӣ кардан","ба кор рафтан","Ман ҳар рӯз барвақт мехезам.","Баъди наҳорӣ ба кор меравам."],
@@ -557,36 +679,34 @@ en:[
 ["Should","Барои маслиҳат истифода мешавад.","You should rest.","Беҳтар аст истироҳат кунӣ."]
 ],
 ru:[
-["Прошедшее время","Шакли гузашта аз ҷинс ва шумора вобаста аст.","Я вчера работал.","Ман дирӯз кор кардам (гӯяндаи мард)."],
+["Прошедшее время","Шакли гузашта аз ҷинс ва шумора вобаста аст.","Я вчера работал.","Ман дирӯз кор кардам."],
 ["Будущее время","Ояндаи феъли нокомил бо буду ва масдар сохта мешавад.","Я буду учиться.","Ман таҳсил хоҳам кард."],
 ["Потому что","Барои баёни сабаб истифода мешавад.","Я дома, потому что болею.","Ман дар хонаам, зеро беморам."],
-["Родительный падеж","Барои ифодаи набудан ва баъди баъзе пешояндҳо истифода мешавад.","У меня нет времени.","Ман вақт надорам."],
+["Родительный падеж","Барои ифодаи набудан истифода мешавад.","У меня нет времени.","Ман вақт надорам."],
 ["Дательный падеж","Метавонад гирандаи амалро нишон диҳад.","Я помогаю другу.","Ман ба дӯстам ёрӣ медиҳам."]
 ],
 zh:[
 ["了","Метавонад анҷом ёфтани амалро нишон диҳад.","我买了书。","Ман китоб харидам."],
-["要","Вобаста ба контекст ният, хоҳиш ё заруратро нишон медиҳад.","我明天要工作。","Ман пагоҳ кор карданӣ ҳастам."],
-["因为…所以…","Барои пайвастани сабаб ва натиҷа истифода мешавад.","因为下雨，所以我不出去。","Азбаски борон меборад, берун намебароям."],
+["要","Ният, хоҳиш ё заруратро нишон медиҳад.","我明天要工作。","Ман пагоҳ кор карданӣ ҳастам."],
+["因为…所以…","Сабаб ва натиҷаро пайваст мекунад.","因为下雨，所以我不出去。","Азбаски борон меборад, берун намебароям."],
 ["比","Барои муқоиса истифода мешавад.","今天比昨天冷。","Имрӯз аз дирӯз хунуктар аст."],
 ["正在","Амалеро нишон медиҳад, ки ҳоло идома дорад.","我正在学习。","Ман ҳоло таҳсил карда истодаам."]
 ],
 ko:[
-["았/었어요","Шакли одобонаи ғайрирасмии замони гузашта.","어제 일했어요.","Ман дирӯз кор кардам."],
-["(으)ㄹ 거예요","Барои нақша ё пешбинии оянда истифода мешавад.","내일 공부할 거예요.","Ман пагоҳ таҳсил мекунам."],
-["아서/어서","Метавонад сабаб ва натиҷаро пайваст кунад.","아파서 집에 있어요.","Азбаски беморам, дар хонаам."],
-["보다","Барои муқоиса истифода мешавад.","오늘은 어제보다 추워요.","Имрӯз аз дирӯз хунуктар аст."],
-["고 싶어요","Барои баёни хоҳиши анҷом додани амал.","한국어를 배우고 싶어요.","Ман мехоҳам кореягӣ омӯзам."]
+["았/었어요","Шакли одобонаи замони гузашта.","어제 일했어요.","Ман дирӯз кор кардам."],
+["(으)ㄹ 거예요","Барои нақша ё пешбинии оянда.","내일 공부할 거예요.","Ман пагоҳ таҳсил мекунам."],
+["아서/어서","Сабаб ва натиҷаро пайваст мекунад.","아파서 집에 있어요.","Азбаски беморам, дар хонаам."],
+["보다","Барои муқоиса.","오늘은 어제보다 추워요.","Имрӯз аз дирӯз хунуктар аст."],
+["고 싶어요","Барои баёни хоҳиш.","한국어를 배우고 싶어요.","Ман мехоҳам кореягӣ омӯзам."]
 ]
 };
 
 const A2={};
-
 for(const lang of Object.keys(A2_WORDS)){
  A2[lang]=A2_WORDS[lang].map((raw,i)=>{
   const words=raw.split("|");
   const sentences=A2_SENTENCES[lang][i].split("|");
   const tj=A2_TJ[i];
-
   return {
    words:words.map((w,j)=>[w,tj[j]]),
    sentences:sentences.map((s,j)=>[s,tj[j+3]]),
@@ -595,7 +715,7 @@ for(const lang of Object.keys(A2_WORDS)){
  });
 }
 
-/* ===== Нигоҳдории пешрафти пешина ===== */
+/* ===== Нигоҳдории маълумот ===== */
 
 const OLD_KEY="vayo_language_v2";
 const EXTRA_KEY="vayo_language_extended_v1";
@@ -604,8 +724,9 @@ const EXAM_KEY="vayo_language_exams_v1";
 
 function readJSON(key,fallback){
  try{
-  const v=JSON.parse(localStorage.getItem(key)||"null");
-  return v&&typeof v==="object"&&!Array.isArray(v)?v:fallback;
+  const value=JSON.parse(localStorage.getItem(key)||"null");
+  return value&&typeof value==="object"&&!Array.isArray(value)
+   ?value:fallback;
  }catch(e){
   return fallback;
  }
@@ -614,15 +735,12 @@ function readJSON(key,fallback){
 const state=readJSON(OLD_KEY,{
  lang:"de",xp:0,hearts:5,streak:0,lastDay:"",done:{}
 });
-
 const extra=readJSON(EXTRA_KEY,{
  done:{},level:"A1",mistakes:{}
 });
-
 const heartState=readJSON(HEART_KEY,{
  lastRefill:Date.now()
 });
-
 const examResults=readJSON(EXAM_KEY,{
  passed:{},history:[]
 });
@@ -635,40 +753,32 @@ if(!examResults.passed||typeof examResults.passed!=="object")examResults.passed=
 if(!Array.isArray(examResults.history))examResults.history=[];
 
 state.xp=Math.max(0,Number(state.xp)||0);
-state.hearts=Number.isFinite(Number(state.hearts))?
- Math.max(0,Math.min(5,Number(state.hearts))):5;
+state.hearts=Math.max(0,Math.min(5,Number(state.hearts)||0));
 state.streak=Math.max(0,Number(state.streak)||0);
 
-let selectedLevel=LEVELS.some(l=>l[0]===extra.level)?
- extra.level:"A1";
-
+let selectedLevel=TOPICS[extra.level]?extra.level:"A1";
 let session=null;
 let finished=false;
-let generalExam=null;
-let generalExamTimer=null;
-let generalExamFinished=false;
+let cloud=null;
+let cloudUser=null;
 
 function save(){
  try{
-  localStorage.setItem(OLD_KEY,JSON.stringify(state));
   extra.level=selectedLevel;
+  localStorage.setItem(OLD_KEY,JSON.stringify(state));
   localStorage.setItem(EXTRA_KEY,JSON.stringify(extra));
   localStorage.setItem(HEART_KEY,JSON.stringify(heartState));
- }catch(e){
-  console.warn("Нигоҳдорӣ дастрас нест",e);
- }
+ }catch(e){console.warn(e)}
 }
 
-function saveExamResults(){
+function saveExams(){
  try{
   localStorage.setItem(EXAM_KEY,JSON.stringify(examResults));
- }catch(e){
-  console.warn("Натиҷаи имтиҳон нигоҳ дошта нашуд",e);
- }
+ }catch(e){console.warn(e)}
 }
 
-function esc(v){
- return String(v).replace(/[&<>"']/g,c=>({
+function esc(value){
+ return String(value).replace(/[&<>"']/g,c=>({
   "&":"&amp;","<":"&lt;",">":"&gt;",
   '"':"&quot;","'":"&#39;"
  })[c]);
@@ -683,41 +793,35 @@ function shuffle(items){
  return a;
 }
 
-function dayKey(d){
- return d.getFullYear()+"-"+
- String(d.getMonth()+1).padStart(2,"0")+"-"+
- String(d.getDate()).padStart(2,"0");
+function todayKey(){
+ const d=new Date();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")
+  +"-"+String(d.getDate()).padStart(2,"0");
 }
 
 function updateStreak(){
- const today=dayKey(new Date());
+ const today=todayKey();
  if(state.lastDay===today)return;
-
  const yesterday=new Date();
  yesterday.setDate(yesterday.getDate()-1);
-
- state.streak=state.lastDay===dayKey(yesterday)?
-  state.streak+1:1;
-
+ const y=yesterday.getFullYear()+"-"
+  +String(yesterday.getMonth()+1).padStart(2,"0")+"-"
+  +String(yesterday.getDate()).padStart(2,"0");
+ state.streak=state.lastDay===y?state.streak+1:1;
  state.lastDay=today;
 }
 
 function refillHearts(){
  const now=Date.now();
- const hour=3600000;
- const previous=Number(heartState.lastRefill)||now;
-
+ const last=Number(heartState.lastRefill)||now;
  if(state.hearts>=5){
   heartState.lastRefill=now;
   return;
  }
-
- const gained=Math.floor(Math.max(0,now-previous)/hour);
-
+ const gained=Math.floor(Math.max(0,now-last)/3600000);
  if(gained>0){
   state.hearts=Math.min(5,state.hearts+gained);
-  heartState.lastRefill=previous+gained*hour;
-  if(state.hearts>=5)heartState.lastRefill=now;
+  heartState.lastRefill=last+gained*3600000;
   save();
  }
 }
@@ -731,20 +835,20 @@ function loseHeart(){
 
 function gainHeart(){
  state.hearts=Math.min(5,state.hearts+1);
- if(state.hearts>=5)heartState.lastRefill=Date.now();
+ if(state.hearts===5)heartState.lastRefill=Date.now();
  save();
 }
 
-function keyFor(lang,level,topic,type){
+function lessonKey(lang,level,topic,type){
  return lang+"_"+level+"_"+topic+"_"+type;
 }
 
 function isDone(lang,level,topic,type){
  if(level==="A1"){
-  return !!state.done[lang+"_"+(topic*2+type)]||
-   !!extra.done[keyFor(lang,level,topic,type)];
+  return !!state.done[lang+"_"+(topic*2+type)]
+   ||!!extra.done[lessonKey(lang,level,topic,type)];
  }
- return !!extra.done[keyFor(lang,level,topic,type)];
+ return !!extra.done[lessonKey(lang,level,topic,type)];
 }
 
 function lessonTypes(level){
@@ -752,160 +856,120 @@ function lessonTypes(level){
 }
 
 function doneCount(lang,level){
- let n=0;
- const topics=LEVEL_TOPICS[level]||[];
-
- for(let i=0;i<topics.length;i++){
+ let count=0;
+ for(let i=0;i<TOPICS[level].length;i++){
   for(let j=0;j<lessonTypes(level);j++){
-   if(isDone(lang,level,i,j))n++;
+   if(isDone(lang,level,i,j))count++;
   }
  }
- return n;
+ return count;
 }
 
-function totalLessons(level){
- return (LEVEL_TOPICS[level]||[]).length*lessonTypes(level);
-}
-
-/* ===== Намоиши саҳифа ===== */
-
-function showMainSections(show){
+function showMain(show){
  [
   "home","levelSection","course","generalExams",
-  "reviewSection","heartSection","awardsSection",
-  "summarySection"
+  "reviewSection","heartSection","awardsSection","summarySection"
  ].forEach(id=>$(id).classList.toggle("hidden",!show));
-}
-
-function selectLang(lang){
- if(!A1[lang])return;
- state.lang=lang;
- save();
- closeLesson();
-}
-
-function selectLevel(level){
- if(!LEVEL_TOPICS[level])return;
- selectedLevel=level;
- save();
- closeLesson();
 }
 
 function renderStats(){
  refillHearts();
-
  $("xp").textContent=state.xp;
  $("hearts").textContent="❤️ "+state.hearts;
  $("streak").textContent="🔥 "+state.streak;
  $("xpLevel").textContent=Math.floor(state.xp/200)+1;
-
- $("heartInfo").textContent=state.hearts===5?
-  "Ҳамаи 5 дил омодаанд.":
-  "Ҳар соат 1 дил барқарор мешавад. Бо машқи дуруст ҳам дил гирифтан мумкин аст.";
+ $("heartInfo").textContent=state.hearts===5
+  ?"Ҳамаи 5 дил омодаанд."
+  :"Ҳар соат як дил барқарор мешавад.";
 }
 
 function render(){
  renderStats();
 
  $("languages").innerHTML=LANGUAGES.map(l=>`
-  <button type="button" class="choice ${state.lang===l[0]?"active":""}"
+  <button class="choice ${state.lang===l[0]?"active":""}"
    data-lang="${l[0]}">
-   <span class="flag">${l[1]}</span><b>${l[2]}</b>
+   <span class="flag">${l[1]}</span>
+   <b>${l[2]}</b>
   </button>
  `).join("");
 
  $("levels").innerHTML=LEVELS.map(l=>`
-  <button type="button" class="choice ${selectedLevel===l[0]?"active":""}"
+  <button class="choice ${selectedLevel===l[0]?"active":""}"
    data-level="${l[0]}">
-   <b style="font-size:22px">${l[0]}</b><small>${l[1]}</small>
+   <b style="font-size:22px">${l[0]}</b>
+   <small>${l[1]}</small>
   </button>
  `).join("");
 
  const name=LANGUAGES.find(l=>l[0]===state.lang)[2];
  const done=doneCount(state.lang,selectedLevel);
- const total=totalLessons(selectedLevel);
+ const total=TOPICS[selectedLevel].length*lessonTypes(selectedLevel);
 
  $("courseTitle").textContent="📚 "+name+" — "+selectedLevel;
- $("progressText").textContent=total?
-  "Анҷомёфта: "+done+" аз "+total:"Нақшаи мавзӯъҳо";
+ $("progressText").textContent=total
+  ?"Анҷомёфта: "+done+" аз "+total
+  :"Нақшаи мавзӯъҳо";
  $("progressFill").style.width=total?(done/total*100)+"%":"0%";
 
- $("notice").innerHTML=selectedLevel==="A1"?
-  '<div class="notice">📗 A1: 10 мавзӯъ ва 20 дарс барои ҳар забон.</div>':
-  selectedLevel==="A2"?
-  '<div class="notice">📘 A2: 20 мавзӯъ. Ҳар мавзӯъ 5 қисм дорад: луғат, ҷумлаҳо, грамматика, машқ ва имтиҳон.</div>':
-  '<div class="notice">🔒 Дарсҳои ин сатҳ ҳоло омода нестанд.</div>';
+ $("notice").innerHTML=selectedLevel==="A1"
+  ?'<div class="notice">📗 A1: 10 мавзӯъ, омӯзиш ва тест.</div>'
+  :selectedLevel==="A2"
+  ?'<div class="notice">📘 A2: 20 мавзӯъ, луғат, ҷумлаҳо, грамматика, машқ ва имтиҳон.</div>'
+  :'<div class="notice">🔒 Дарсҳои ин сатҳ ҳоло омода нестанд.</div>';
 
  renderTopics();
  renderSummary();
- renderGeneralExams();
+ renderExamInformation();
 }
 
 function renderTopics(){
- const names=LEVEL_TOPICS[selectedLevel]||[];
- const types=selectedLevel==="A1"?
-  ["📖 Омӯзиш","🧩 Тест"]:
-  ["📖 Луғат","💬 Ҷумлаҳо","📚 Грамматика","🔄 Машқ","🏆 Имтиҳон"];
+ const types=selectedLevel==="A1"
+  ?["📖 Омӯзиш","🧩 Тест"]
+  :["📖 Луғат","💬 Ҷумлаҳо","📚 Грамматика","🔄 Машқ","🏆 Имтиҳон"];
 
- $("topics").innerHTML=names.map((name,i)=>{
+ $("topics").innerHTML=TOPICS[selectedLevel].map((name,i)=>{
   const available=["A1","A2"].includes(selectedLevel);
+  const buttons=available?types.map((label,j)=>`
+   <button class="btn ${isDone(state.lang,selectedLevel,i,j)?"green":"primary"}"
+    data-topic="${i}" data-type="${j}">
+    ${isDone(state.lang,selectedLevel,i,j)?"✓ ":""}${label}
+   </button>
+  `).join(""):'<span class="muted">🔒 Дар ҳоли омодасозӣ</span>';
 
-  const buttons=available?
-   types.map((label,j)=>`
-    <button type="button"
-     class="btn ${isDone(state.lang,selectedLevel,i,j)?"green":"primary"}"
-     data-topic="${i}" data-type="${j}">
-     ${isDone(state.lang,selectedLevel,i,j)?"✓ ":""}${label}
-    </button>
-   `).join(""):
-   '<span class="muted">🔒 Дар ҳоли омодасозӣ</span>';
-
-  const complete=Array.from(
-   {length:lessonTypes(selectedLevel)},
-   (_,j)=>isDone(state.lang,selectedLevel,i,j)
-  ).filter(Boolean).length;
-
-  return `
-   <div class="topic">
-    <h3>${i+1}. ${esc(name)}</h3>
-    <p>${available?
-      complete+"/"+lessonTypes(selectedLevel)+" дарс анҷом ёфтааст":
-      "Мавзӯи нақшавӣ"}</p>
-    <div class="actions">${buttons}</div>
-   </div>
-  `;
+  return `<div class="topic">
+   <h3>${i+1}. ${esc(name)}</h3>
+   <p>${available?"Дарсҳои интерактивӣ":"Мавзӯи нақшавӣ"}</p>
+   <div class="actions">${buttons}</div>
+  </div>`;
  }).join("");
 }
 
 function renderSummary(){
  const a1=LANGUAGES.reduce((n,l)=>n+doneCount(l[0],"A1"),0);
  const a2=LANGUAGES.reduce((n,l)=>n+doneCount(l[0],"A2"),0);
-
  const mistakes=Object.values(extra.mistakes)
   .filter(x=>x&&x.lang===state.lang).length;
-
- const examsPassed=Object.keys(examResults.passed).length;
+ const passed=Object.keys(examResults.passed).length;
 
  $("summary").innerHTML=`
   <p>📗 A1: <b>${a1}/100</b> дарс</p>
   <p>📘 A2: <b>${a2}/500</b> зердарс</p>
-  <p>🎓 Имтиҳонҳои умумии гузашта: <b>${examsPassed}</b></p>
+  <p>🎓 Имтиҳонҳои гузашта: <b>${passed}</b></p>
   <p>⚡ XP: <b>${state.xp}</b></p>
   <p>🔥 Рӯзҳои пайдарпай: <b>${state.streak}</b></p>
-  <p class="muted">Пешрафт дар ҳамин браузер нигоҳ дошта мешавад.</p>
+  <p class="muted">Пешрафт дар браузер нигоҳ дошта мешавад.</p>
  `;
 
- $("mistakeCount").textContent=
-  mistakes+" савол барои такрор дар забони интихобшуда.";
+ $("mistakeCount").textContent=mistakes+" савол барои такрор.";
 
  const awards=[
   [a1+a2>=1,"🌟 Қадами аввал"],
   [a1+a2>=10,"🥉 Даҳ дарс"],
   [a1+a2>=50,"🥈 Панҷоҳ дарс"],
   [a1+a2>=100,"🥇 Сад дарс"],
-  [state.streak>=7,"🔥 Ҳафт рӯзи пайдарпай"],
-  [examsPassed>=1,"🎓 Аввалин имтиҳони умумӣ"],
-  [examsPassed>=2,"🏆 Ду имтиҳони умумӣ"]
+  [state.streak>=7,"🔥 Ҳафт рӯз"],
+  [passed>=1,"🎓 Аввалин имтиҳон"]
  ];
 
  $("achievements").innerHTML=awards.map(a=>`
@@ -915,960 +979,522 @@ function renderSummary(){
  `).join("");
 }
 
-/* ===== Дарсҳо ===== */
-
-function closeLesson(){
- session=null;
- finished=false;
-
- $("lesson").classList.add("hidden");
- showMainSections(true);
-
- $("nextBtn").disabled=false;
- $("nextBtn").textContent="Давом додан →";
- $("feedback").textContent="";
-
- render();
-}
-
-function startLesson(topic,type){
- const level=selectedLevel;
+function renderExamInformation(){
  const lang=state.lang;
-
- if(!["A1","A2"].includes(level))return;
- if(!Number.isInteger(topic)||topic<0||
-    topic>=LEVEL_TOPICS[level].length)return;
- if(!Number.isInteger(type)||type<0||
-    type>=lessonTypes(level))return;
-
- refillHearts();
-
- if(state.hearts<=0){
-  alert("❤️ Дилҳо тамом шудаанд. Машқи барқароркуниро истифода бар.");
+ const level=selectedLevel;
+ if(!["A1","A2"].includes(level)){
+  $("examInformation").innerHTML='<p class="muted">Имтиҳон ҳоло дастрас нест.</p>';
   return;
  }
+ const total=TOPICS[level].length*lessonTypes(level);
+ const done=doneCount(lang,level);
+ const key=lang+"_"+level;
+ $("examInformation").innerHTML=`
+  <p>Дарсҳои анҷомёфта: <b>${done}/${total}</b></p>
+  <p>Имтиҳони умумӣ аз 20 савол иборат аст.</p>
+  <p>${examResults.passed[key]?"✅ Ин сатҳ гузашта шудааст.":""}</p>
+  <button class="btn primary" id="startExamBtn">🎓 Оғози имтиҳон</button>
+ `;
+ $("startExamBtn").onclick=()=>startGeneralExam();
+}
 
+/* ===== Дарсҳо ===== */
+
+function startLesson(topic,type){
+ if(!["A1","A2"].includes(selectedLevel))return;
+ refillHearts();
+ if(state.hearts<=0){
+  alert("❤️ Дилҳо тамом шудаанд.");
+  return;
+ }
  session={
-  lang,level,topic,type,
+  lang:state.lang,
+  level:selectedLevel,
+  topic,type,
   step:0,score:0,answered:false,
-  questions:[],review:false,heartPractice:false
+  review:false,heartPractice:false,exam:false,
+  questions:[]
  };
-
+ if(type===1&&selectedLevel==="A1"){
+  session.questions=buildQuiz(state.lang,"A1",topic);
+ }
+ if(type>=3&&selectedLevel==="A2"){
+  session.questions=buildQuiz(state.lang,"A2",topic);
+  if(type===3)session.questions=session.questions.slice(0,5);
+ }
  finished=false;
-
- if(level==="A1"&&type===1){
-  session.questions=buildA1Quiz(lang,topic);
- }
-
- if(level==="A2"&&type>=3){
-  session.questions=buildA2Quiz(lang,topic,type);
- }
-
- openLessonScreen();
-}
-
-function openLessonScreen(){
- if(!session)return;
-
- showMainSections(false);
- $("examScreen").classList.add("hidden");
- $("lesson").classList.remove("hidden");
-
- $("lessonTitle").textContent=session.heartPractice?
-  "❤️ Машқи барқароркунии дил":
-  session.review?
-  "🔁 Такрори калимаҳои душвор":
-  session.level+" — "+LEVEL_TOPICS[session.level][session.topic];
-
- showStep();
- $("lesson").scrollIntoView({behavior:"smooth",block:"start"});
-}
-
-function buildA1Quiz(lang,topic){
- const words=A1[lang][topic];
- const all=A1[lang].flat();
-
- return shuffle(words).map(w=>({
-  question:"«"+w[0]+"» чӣ маъно дорад?",
-  correct:w[1],
-  pool:all.map(x=>x[1]),
-  id:lang+"|"+w[0]
- }));
-}
-
-function buildA2Quiz(lang,topic,type){
- const data=A2[lang][topic];
- const all=A2[lang];
-
- const wordPool=all.flatMap(x=>x.words.map(w=>w[1]));
- const sentencePool=all.flatMap(x=>x.sentences.map(s=>s[1]));
- const grammarPool=GRAMMAR[lang].map(g=>g[3]);
-
- const questions=[
-  ...data.words.map(w=>({
-   question:"«"+w[0]+"» чӣ маъно дорад?",
-   correct:w[1],pool:wordPool,id:lang+"|"+w[0]
-  })),
-  ...data.sentences.map(s=>({
-   question:"Ин ҷумла чӣ маъно дорад? "+s[0],
-   correct:s[1],pool:sentencePool,id:lang+"|"+s[0]
-  })),
-  {
-   question:"Маънои мисоли грамматикӣ: "+data.grammar[2],
-   correct:data.grammar[3],
-   pool:grammarPool,
-   id:lang+"|"+data.grammar[2]
-  }
- ];
-
- return type===3?
-  shuffle(questions).slice(0,5):
-  shuffle(questions);
-}
-
-function choicesFor(q){
- const others=[...new Set(q.pool||[])]
-  .filter(x=>x&&x!==q.correct);
-
- return shuffle([
-  q.correct,
-  ...shuffle(others).slice(0,3)
- ]);
-}
-
-function isQuizSession(s){
- return !!(
-  s.review||
-  s.heartPractice||
-  (s.level==="A1"&&s.type===1)||
-  (s.level==="A2"&&s.type>=3)
- );
-}
-
-function showStep(){
- if(!session||finished)return;
-
- $("feedback").textContent="";
- $("nextBtn").disabled=false;
- $("nextBtn").textContent="Давом додан →";
-
- if(isQuizSession(session)){
-  showQuiz();
- }else{
-  showStudy();
- }
+ openLesson();
 }
 
 function studyCards(s){
  if(s.level==="A1"){
-  return A1[s.lang][s.topic].map(w=>({
-   front:w[0],back:w[1]
-  }));
+  return A1[s.lang][s.topic].map(w=>({front:w[0],back:w[1]}));
  }
-
  const data=A2[s.lang][s.topic];
-
- if(s.type===0){
-  return data.words.map(w=>({front:w[0],back:w[1]}));
- }
-
- if(s.type===1){
-  return data.sentences.map(w=>({front:w[0],back:w[1]}));
- }
-
+ if(s.type===0)return data.words.map(w=>({front:w[0],back:w[1]}));
+ if(s.type===1)return data.sentences.map(w=>({front:w[0],back:w[1]}));
  return [
   {front:data.grammar[0],back:data.grammar[1]},
   {front:data.grammar[2],back:data.grammar[3]}
  ];
 }
 
-function showStudy(){
- const s=session;
- const cards=studyCards(s);
+function buildQuiz(lang,level,topic){
+ let pairs=[];
+ if(level==="A1"){
+  pairs=A1[lang][topic];
+ }else{
+  const data=A2[lang][topic];
+  pairs=[...data.words,...data.sentences,
+   [data.grammar[2],data.grammar[3]]];
+ }
+ const pool=level==="A1"
+  ?A1[lang].flat().map(w=>w[1])
+  :A2[lang].flatMap(d=>[
+   ...d.words.map(w=>w[1]),
+   ...d.sentences.map(w=>w[1]),
+   d.grammar[3]
+  ]);
+ return shuffle(pairs).map(w=>({
+  question:"«"+w[0]+"» чӣ маъно дорад?",
+  correct:w[1],
+  pool,
+  id:lang+"|"+w[0]
+ }));
+}
 
- if(s.step>=cards.length){
+function openLesson(){
+ showMain(false);
+ $("lesson").classList.remove("hidden");
+ $("lessonTitle").textContent=session.exam
+  ?"🎓 Имтиҳони умумӣ"
+  :session.review
+  ?"🔁 Калимаҳои душвор"
+  :session.heartPractice
+  ?"❤️ Машқи барқароркунӣ"
+  :session.level+" — "+TOPICS[session.level][session.topic];
+ showStep();
+ $("lesson").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+function isQuiz(){
+ return session.exam||session.review||session.heartPractice
+  ||(session.level==="A1"&&session.type===1)
+  ||(session.level==="A2"&&session.type>=3);
+}
+
+function showStep(){
+ if(!session||finished)return;
+ $("feedback").textContent="";
+ $("nextBtn").disabled=false;
+ $("nextBtn").textContent="Давом додан →";
+ if(isQuiz())showQuiz();
+ else showStudy();
+}
+
+function showStudy(){
+ const cards=studyCards(session);
+ if(session.step>=cards.length){
   finishLesson();
   return;
  }
-
- const card=cards[s.step];
-
- $("counter").textContent=(s.step+1)+" / "+cards.length;
- $("lessonFill").style.width=(s.step/cards.length*100)+"%";
-
+ const c=cards[session.step];
+ $("counter").textContent=(session.step+1)+" / "+cards.length;
+ $("lessonFill").style.width=(session.step/cards.length*100)+"%";
  $("lessonBody").innerHTML=`
   <div class="study" style="text-align:center">
-   <strong>${esc(card.front)}</strong>
-   <div class="translation">${esc(card.back)}</div>
+   <strong>${esc(c.front)}</strong>
+   <div class="translation">${esc(c.back)}</div>
    <p class="muted">Хон ва дар хотир нигоҳ дор.</p>
   </div>
  `;
-
- if(s.step===cards.length-1){
+ if(session.step===cards.length-1){
   $("nextBtn").textContent="Анҷом додан ✓";
  }
 }
 
 function showQuiz(){
- const s=session;
-
- if(s.step>=s.questions.length){
+ if(session.step>=session.questions.length){
   finishLesson();
   return;
  }
-
- const q=s.questions[s.step];
- s.answered=false;
-
- $("counter").textContent=(s.step+1)+" / "+s.questions.length;
- $("lessonFill").style.width=(s.step/s.questions.length*100)+"%";
-
+ const q=session.questions[session.step];
+ session.answered=false;
+ const options=shuffle([
+  q.correct,
+  ...shuffle([...new Set(q.pool)]
+   .filter(x=>x!==q.correct)).slice(0,3)
+ ]);
+ $("counter").textContent=(session.step+1)+" / "+session.questions.length;
+ $("lessonFill").style.width=(session.step/session.questions.length*100)+"%";
  $("lessonBody").innerHTML=`
-  <div class="study">
-   <h3>🧩 Саволи ${s.step+1}</h3>
-   <strong>${esc(q.question)}</strong>
-  </div>
-  <div id="options"></div>
+  <div class="study"><strong>${esc(q.question)}</strong></div>
+  ${options.map(o=>`
+   <button class="option" data-answer="${esc(o)}">${esc(o)}</button>
+  `).join("")}
  `;
-
- const box=$("options");
-
- choicesFor(q).forEach(value=>{
-  const button=document.createElement("button");
-  button.type="button";
-  button.className="option";
-  button.textContent=value;
-  button.addEventListener("click",()=>answerQuestion(button,value,q));
-  box.appendChild(button);
- });
-
  $("nextBtn").disabled=true;
+ $("lessonBody").querySelectorAll("[data-answer]").forEach(btn=>{
+  btn.onclick=()=>answerQuiz(btn.dataset.answer);
+ });
 }
 
-function answerQuestion(button,value,q){
- if(!session||session.answered||finished)return;
-
+function answerQuiz(answer){
+ if(!session||session.answered)return;
+ const q=session.questions[session.step];
+ const correct=answer===q.correct;
  session.answered=true;
- const right=value===q.correct;
-
- if(right){
+ if(correct){
   session.score++;
+  $("feedback").textContent="✅ Дуруст!";
   delete extra.mistakes[q.id];
-  $("feedback").textContent="✅ Офарин!";
  }else{
-  if(!session.heartPractice)loseHeart();
-
+  $("feedback").textContent="❌ Ҷавоби дуруст: "+q.correct;
   extra.mistakes[q.id]={
    lang:session.lang,
    question:q.question,
    correct:q.correct,
-   pool:q.pool
+   pool:q.pool,
+   id:q.id
   };
-
-  $("feedback").textContent="❌ Ҷавоби дуруст: "+q.correct;
+  if(!session.exam&&!session.heartPractice)loseHeart();
  }
-
- $("options").querySelectorAll("button").forEach(b=>{
-  b.disabled=true;
-  if(b.textContent===q.correct)b.classList.add("correct");
+ $("lessonBody").querySelectorAll("[data-answer]").forEach(btn=>{
+  btn.disabled=true;
+  if(btn.dataset.answer===q.correct)btn.classList.add("correct");
+  else if(btn.dataset.answer===answer)btn.classList.add("wrong");
  });
-
- if(!right)button.classList.add("wrong");
-
  $("nextBtn").disabled=false;
- $("nextBtn").textContent=
-  session.step===session.questions.length-1?
-  "Натиҷаро дидан →":"Давом додан →";
-
  save();
  renderStats();
 }
 
-/* ===== ИСЛОҲИ АСОСИИ ТУГМА ===== */
-
 function nextStep(){
+ if(!session)return;
  if(finished){
   closeLesson();
   return;
  }
-
- if(!session)return;
-
- const s=session;
-
- if(isQuizSession(s)){
-  if(!s.answered)return;
-
-  s.step++;
-
-  if(s.step>=s.questions.length){
-   finishLesson();
-  }else{
-   showStep();
-  }
-  return;
- }
-
- const cards=studyCards(s);
- s.step++;
-
- if(s.step>=cards.length){
-  finishLesson();
- }else{
-  showStep();
- }
+ if(isQuiz()&&!session.answered)return;
+ session.step++;
+ showStep();
 }
 
 function finishLesson(){
  if(!session||finished)return;
-
  finished=true;
  const s=session;
- const quiz=isQuizSession(s);
- const total=s.questions.length;
- const passed=!quiz||s.score>=Math.ceil(total*.7);
+ const quiz=isQuiz();
+ const total=quiz?s.questions.length:studyCards(s).length;
+ const percentage=quiz?Math.round(s.score/Math.max(1,total)*100):100;
+ let earned=0;
 
- let reward=0;
-
- if(passed&&!s.review&&!s.heartPractice){
-  const already=isDone(s.lang,s.level,s.topic,s.type);
-
-  if(!already){
-   reward=quiz?40:20;
-   state.xp+=reward;
-
-   if(s.level==="A1"){
-    state.done[s.lang+"_"+(s.topic*2+s.type)]=true;
-   }else{
-    extra.done[keyFor(s.lang,s.level,s.topic,s.type)]=true;
-   }
+ if(s.heartPractice){
+  if(percentage>=80){
+   gainHeart();
+   earned=5;
   }
-
-  updateStreak();
+ }else if(s.review){
+  earned=Math.round(s.score*2);
+ }else if(s.exam){
+  const key=s.lang+"_"+s.level;
+  const passed=percentage>=70;
+  examResults.history.push({
+   key,percentage,date:new Date().toISOString()
+  });
+  if(passed){
+   examResults.passed[key]=true;
+   earned=100;
+  }
+  saveExams();
+ }else{
+  const key=lessonKey(s.lang,s.level,s.topic,s.type);
+  if(!isDone(s.lang,s.level,s.topic,s.type)){
+   extra.done[key]=true;
+   earned=quiz?20:10;
+  }
  }
 
- if(passed&&s.heartPractice)gainHeart();
- if(passed&&quiz&&!s.heartPractice)gainHeart();
-
+ if(earned>0){
+  state.xp+=earned;
+  updateStreak();
+ }
  save();
+ renderStats();
 
  $("lessonFill").style.width="100%";
- $("counter").textContent="Анҷом";
-
  $("lessonBody").innerHTML=`
   <div class="study" style="text-align:center">
-   <div style="font-size:50px">${passed?"🏆":"💪"}</div>
-   <h2>${passed?"Табрик!":"Боз кӯшиш кун!"}</h2>
-   <p>${quiz?
-    "Ҷавобҳои дуруст: "+s.score+" аз "+total:
-    "Дарс анҷом ёфт."}</p>
-   <h2>${passed?
-    s.heartPractice?"+1 ❤️":"+"+reward+" XP":
-    "Барои гузаштан 70% лозим аст"}</h2>
+   <h2>🎉 Анҷом ёфт!</h2>
+   <p>Натиҷа: <b>${percentage}%</b></p>
+   <p>⚡ +${earned} XP</p>
+   ${s.exam?`<p>${percentage>=70?"✅ Имтиҳон гузашт!":"❌ Барои гузаштан 70% лозим аст."}</p>`:""}
   </div>
  `;
-
- $("feedback").textContent=passed?
-  "🌟 Омӯзишро давом деҳ.":
-  "Машқро дубора супор.";
-
+ $("feedback").textContent="";
  $("nextBtn").disabled=false;
- $("nextBtn").textContent="Ба мавзӯъҳо →";
+ $("nextBtn").textContent="Ба дарсҳо баргаштан →";
+ if(cloudUser)syncProgress().catch(console.warn);
+}
 
- renderStats();
- renderSummary();
+function closeLesson(){
+ session=null;
+ finished=false;
+ $("lesson").classList.add("hidden");
+ showMain(true);
+ render();
 }
 
 function startReview(){
- const items=Object.entries(extra.mistakes)
-  .filter(([id,v])=>v&&v.lang===state.lang)
-  .map(([id,v])=>({...v,id}))
-  .filter(q=>q.question&&q.correct&&Array.isArray(q.pool));
-
+ const items=Object.values(extra.mistakes)
+  .filter(x=>x&&x.lang===state.lang);
  if(!items.length){
-  alert("Ҳоло саволи душвор барои такрор нест.");
+  alert("Ҳоло калимаи душвор нест.");
   return;
  }
-
  session={
-  lang:state.lang,level:selectedLevel,topic:0,type:0,
+  lang:state.lang,level:selectedLevel,
   step:0,score:0,answered:false,
-  review:true,heartPractice:false,
+  review:true,heartPractice:false,exam:false,
   questions:shuffle(items).slice(0,15)
  };
-
  finished=false;
- openLessonScreen();
+ openLesson();
 }
 
 function startHeartPractice(){
- refillHearts();
-
- if(state.hearts>=5){
-  alert("❤️ Ҳамаи дилҳо пур ҳастанд.");
-  return;
- }
-
- const lang=state.lang;
- const all=A1[lang].flat();
-
- const questions=shuffle(all).slice(0,5).map(w=>({
+ const pool=A1[state.lang].flat();
+ const questions=shuffle(pool).slice(0,5).map(w=>({
   question:"«"+w[0]+"» чӣ маъно дорад?",
   correct:w[1],
-  pool:all.map(x=>x[1]),
-  id:lang+"|"+w[0]
+  pool:pool.map(x=>x[1]),
+  id:state.lang+"|"+w[0]
  }));
-
  session={
-  lang,level:"A1",topic:0,type:1,
+  lang:state.lang,level:"A1",
   step:0,score:0,answered:false,
-  review:false,heartPractice:true,
+  review:false,heartPractice:true,exam:false,
   questions
  };
-
  finished=false;
- openLessonScreen();
-}
-
-/* ===== ИМТИҲОНҲОИ УМУМӢ ===== */
-
-const EXAM_CONFIG={
- A1:{count:30,minutes:30,pass:70,reward:150},
- A2:{count:50,minutes:45,pass:75,reward:300}
-};
-
-function examKey(lang,level){
- return lang+"_"+level;
-}
-
-function examUnlocked(lang,level){
- const total=totalLessons(level);
- return total>0&&doneCount(lang,level)===total;
-}
-
-function createExamQuestion(text,correct,pool,category){
- const others=shuffle(
-  [...new Set(pool)].filter(x=>x&&x!==correct)
- ).slice(0,3);
-
- return {
-  text,correct,
-  options:shuffle([correct,...others]),
-  category
- };
-}
-
-function buildGeneralA1(lang){
- const all=A1[lang].flat();
- const pool=all.map(w=>w[1]);
-
- const vocabulary=shuffle(all.map(w=>
-  createExamQuestion(
-   "«"+w[0]+"» чӣ маъно дорад?",
-   w[1],pool,"Луғат"
-  )
- )).slice(0,10);
-
- const sentenceItems=all.filter(w=>
-  /[.!?？。]/.test(w[0])||
-  w[0].trim().split(/\s+/).length>=3
- );
-
- const sentencePool=sentenceItems.map(w=>w[1]);
-
- const sentences=shuffle(sentenceItems.map(w=>
-  createExamQuestion(
-   "Ҷумларо тарҷума кун: "+w[0],
-   w[1],sentencePool,"Ҷумлаҳо"
-  )
- )).slice(0,10);
-
- const comprehension=shuffle(all.map(w=>
-  createExamQuestion(
-   "Тарҷумаи дурустро интихоб кун: "+w[0],
-   w[1],pool,"Фаҳмиши ибора"
-  )
- )).slice(0,10);
-
- return shuffle([
-  ...vocabulary,...sentences,...comprehension
- ]);
-}
-
-function buildGeneralA2(lang){
- const topics=A2[lang];
- const words=topics.flatMap(t=>t.words);
- const sentences=topics.flatMap(t=>t.sentences);
-
- const wordPool=words.map(w=>w[1]);
- const sentencePool=sentences.map(s=>s[1]);
- const grammarPool=GRAMMAR[lang].map(g=>g[3]);
-
- const vocabulary=shuffle(words.map(w=>
-  createExamQuestion(
-   "«"+w[0]+"» чӣ маъно дорад?",
-   w[1],wordPool,"Луғат"
-  )
- )).slice(0,15);
-
- const sentenceQuestions=shuffle(sentences.map(s=>
-  createExamQuestion(
-   "Ҷумларо тарҷума кун: "+s[0],
-   s[1],sentencePool,"Ҷумлаҳо"
-  )
- )).slice(0,15);
-
- const grammarQuestions=topics.map(t=>{
-  const g=t.grammar;
-  return createExamQuestion(
-   "Маънои мисоли грамматикӣ: "+g[2],
-   g[3],grammarPool,"Грамматика"
-  );
- });
-
- return shuffle([
-  ...vocabulary,...sentenceQuestions,...grammarQuestions
- ]);
-}
-
-function renderGeneralExams(){
- const box=$("examInformation");
- const level=selectedLevel;
- const lang=state.lang;
- const config=EXAM_CONFIG[level];
-
- if(!config){
-  box.innerHTML=`
-   <div class="notice">
-    Имтиҳонҳои умумӣ ҳоло барои A1 ва A2 фаъоланд.
-    Сатҳҳои B1–C2 дар ҳоли омодасозӣ мебошанд.
-   </div>
-  `;
-  return;
- }
-
- const done=doneCount(lang,level);
- const total=totalLessons(level);
- const unlocked=examUnlocked(lang,level);
- const passed=examResults.passed[examKey(lang,level)];
-
- box.innerHTML=`
-  <p>📚 Дарсҳои анҷомёфта: <b>${done}/${total}</b></p>
-  <div class="progress">
-   <div class="fill" style="width:${total?done/total*100:0}%"></div>
-  </div>
-  <div class="examGrid">
-   <div class="examStat"><b>${config.count}</b><small>Савол</small></div>
-   <div class="examStat"><b>${config.minutes} дақ.</b><small>Вақт</small></div>
-   <div class="examStat"><b>${config.pass}%</b><small>Ҳадди гузариш</small></div>
-   <div class="examStat"><b>+${config.reward}</b><small>XP барои бори аввал</small></div>
-  </div>
-
-  ${passed?`
-   <div class="notice">
-    🏆 Имтиҳон гузашта шудааст!
-    Натиҷаи беҳтарин: <b>${passed.percent}%</b>
-   </div>
-  `:""}
-
-  ${unlocked?`
-   <button type="button" id="startExamBtn"
-    class="btn primary" style="width:100%;margin-top:14px">
-    🏆 Оғози имтиҳони умумии ${level}
-   </button>
-  `:`
-   <div class="notice">
-    🔒 Имтиҳони умумии ${level} баста аст.
-    Аввал ҳамаи ${total} дарсро анҷом деҳ.
-    Боқимонда: <b>${total-done}</b> дарс.
-   </div>
-  `}
- `;
-}
-
-function examClock(seconds){
- const m=Math.floor(seconds/60);
- const s=seconds%60;
- return String(m).padStart(2,"0")+":"+
-  String(s).padStart(2,"0");
-}
-
-function stopGeneralTimer(){
- if(generalExamTimer!==null){
-  clearInterval(generalExamTimer);
-  generalExamTimer=null;
- }
+ openLesson();
 }
 
 function startGeneralExam(){
  const level=selectedLevel;
- const lang=state.lang;
- const config=EXAM_CONFIG[level];
-
- if(!config)return;
-
- if(!examUnlocked(lang,level)){
-  alert("🔒 Аввал ҳамаи дарсҳои "+level+"-ро анҷом деҳ.");
-  return;
+ if(!["A1","A2"].includes(level))return;
+ let questions=[];
+ for(let i=0;i<TOPICS[level].length;i++){
+  questions.push(...buildQuiz(state.lang,level,i));
  }
-
- const questions=level==="A1"?
-  buildGeneralA1(lang):buildGeneralA2(lang);
-
- if(questions.length!==config.count){
-  alert("Маълумоти саволҳои имтиҳон нопурра аст.");
-  return;
- }
-
- stopGeneralTimer();
-
- generalExam={
-  level,lang,questions,
-  index:0,answers:{},
-  deadline:Date.now()+config.minutes*60000,
-  remaining:config.minutes*60
+ session={
+  lang:state.lang,level,
+  step:0,score:0,answered:false,
+  review:false,heartPractice:false,exam:true,
+  questions:shuffle(questions).slice(0,20)
  };
-
- generalExamFinished=false;
-
- showMainSections(false);
- $("lesson").classList.add("hidden");
- $("examScreen").classList.remove("hidden");
-
- $("examPrevious").classList.remove("hidden");
- $("examNext").textContent="Саволи навбатӣ →";
-
- renderGeneralQuestion();
-
- generalExamTimer=setInterval(()=>{
-  if(!generalExam){
-   stopGeneralTimer();
-   return;
-  }
-
-  generalExam.remaining=Math.max(
-   0,Math.ceil((generalExam.deadline-Date.now())/1000)
-  );
-
-  $("examTimer").textContent=examClock(generalExam.remaining);
-
-  if(generalExam.remaining<=0){
-   finishGeneralExam(true);
-  }
- },1000);
-
- $("examScreen").scrollIntoView({behavior:"smooth"});
+ finished=false;
+ openLesson();
 }
 
-function renderGeneralQuestion(){
- if(!generalExam||generalExamFinished)return;
+/* ===== Тугмаҳо ===== */
 
- const e=generalExam;
- const q=e.questions[e.index];
- const selected=e.answers[e.index];
-
- $("examTitle").textContent="🎓 Имтиҳони умумии "+e.level;
- $("examCounter").textContent=
-  "Саволи "+(e.index+1)+" аз "+e.questions.length;
- $("examTimer").textContent=examClock(e.remaining);
- $("examFill").style.width=
-  ((e.index+1)/e.questions.length*100)+"%";
-
- $("examBody").innerHTML=`
-  <div class="study">
-   <small>${esc(q.category)}</small>
-   <h3>${esc(q.text)}</h3>
-  </div>
-  <div id="generalExamOptions"></div>
- `;
-
- const options=$("generalExamOptions");
-
- q.options.forEach(value=>{
-  const button=document.createElement("button");
-  button.type="button";
-  button.className="option";
-  button.textContent=value;
-
-  if(selected===value)button.classList.add("selected");
-
-  button.addEventListener("click",()=>{
-   if(!generalExam||generalExamFinished)return;
-   generalExam.answers[generalExam.index]=value;
-   renderGeneralQuestion();
-  });
-
-  options.appendChild(button);
- });
-
- $("examPrevious").disabled=e.index===0;
- $("examNext").textContent=
-  e.index===e.questions.length-1?
-  "Имтиҳонро анҷом додан ✓":
-  "Саволи навбатӣ →";
-}
-
-function previousGeneralQuestion(){
- if(!generalExam||generalExamFinished)return;
- if(generalExam.index===0)return;
-
- generalExam.index--;
- renderGeneralQuestion();
-}
-
-function nextGeneralQuestion(){
- if(generalExamFinished){
-  closeGeneralExam();
-  return;
- }
-
- if(!generalExam)return;
-
- if(generalExam.index<generalExam.questions.length-1){
-  generalExam.index++;
-  renderGeneralQuestion();
-  return;
- }
-
- const answered=Object.keys(generalExam.answers).length;
-
- if(answered<generalExam.questions.length){
-  if(!confirm(
-   "Шумо ба "+answered+" аз "+
-   generalExam.questions.length+
-   " савол ҷавоб додед. Имтиҳонро анҷом медиҳед?"
-  ))return;
- }
-
- finishGeneralExam(false);
-}
-
-function finishGeneralExam(timedOut=false){
- if(!generalExam||generalExamFinished)return;
-
- stopGeneralTimer();
- generalExamFinished=true;
-
- const e=generalExam;
- const config=EXAM_CONFIG[e.level];
-
- let correct=0;
- const errors=[];
- const categories={};
-
- e.questions.forEach((q,i)=>{
-  const answer=e.answers[i];
-
-  if(!categories[q.category]){
-   categories[q.category]={correct:0,total:0};
-  }
-
-  categories[q.category].total++;
-
-  if(answer===q.correct){
-   correct++;
-   categories[q.category].correct++;
-  }else{
-   errors.push({
-    text:q.text,
-    answer:answer===undefined?"Ҷавоб дода нашуд":answer,
-    correct:q.correct
-   });
-  }
- });
-
- const percent=Math.round(correct/e.questions.length*100);
- const passed=percent>=config.pass;
- const id=examKey(e.lang,e.level);
- const previous=examResults.passed[id];
-
- let reward=0;
-
- if(passed){
-  if(!previous){
-   reward=config.reward;
-   state.xp+=reward;
-  }
-
-  if(!previous||percent>previous.percent){
-   examResults.passed[id]={
-    percent,correct,total:e.questions.length,
-    date:new Date().toISOString()
-   };
-  }
-
-  updateStreak();
- }
-
- examResults.history.push({
-  lang:e.lang,level:e.level,percent,correct,
-  total:e.questions.length,passed,timedOut,
-  date:new Date().toISOString()
- });
-
- examResults.history=examResults.history.slice(-100);
-
- saveExamResults();
+$("languages").onclick=e=>{
+ const btn=e.target.closest("[data-lang]");
+ if(!btn)return;
+ state.lang=btn.dataset.lang;
  save();
-
- const categoryHTML=Object.entries(categories)
-  .map(([name,data])=>`
-   <p>${esc(name)}: <b>${data.correct}/${data.total}</b></p>
-  `).join("");
-
- const errorHTML=errors.map((error,i)=>`
-  <div class="study">
-   <b>${i+1}. ${esc(error.text)}</b>
-   <p>Ҷавоби ту: ${esc(error.answer)}</p>
-   <p>Ҷавоби дуруст: <b>${esc(error.correct)}</b></p>
-  </div>
- `).join("");
-
- $("examTitle").textContent=passed?
-  "🏆 Имтиҳон гузашта шуд!":"📚 Боз омодагӣ бин";
-
- $("examCounter").textContent="Натиҷаи имтиҳон";
- $("examTimer").textContent=timedOut?"Вақт тамом":"Анҷом";
- $("examFill").style.width="100%";
-
- const langName=LANGUAGES.find(l=>l[0]===e.lang)[2];
-
- $("examBody").innerHTML=`
-  <div class="study" style="text-align:center">
-   <div style="font-size:50px">${passed?"🏆":"📖"}</div>
-   <h2>${percent}%</h2>
-   <p>Ҷавобҳои дуруст:
-    <b>${correct}/${e.questions.length}</b></p>
-   <p>${passed?
-    "Табрик! Имтиҳонро гузаштед.":
-    "Барои гузаштан "+config.pass+"% лозим аст."}</p>
-   <h3>+${reward} XP</h3>
-  </div>
-
-  <h3>📊 Натиҷа аз рӯйи қисмҳо</h3>
-  ${categoryHTML}
-
-  ${passed?`
-   <div class="certificate">
-    <div style="font-size:45px">🎓</div>
-    <h2>VAYO LANGUAGE</h2>
-    <h3>Шаҳодатномаи дохилӣ</h3>
-    <p>Имтиҳони умумии
-     <b>${esc(langName)} — ${e.level}</b>
-     бомуваффақият гузашта шуд.</p>
-    <h2>${percent}%</h2>
-    <small>
-     Ин шаҳодатномаи омӯзишии VAYO аст,
-     на сертификати расмии CEFR.
-    </small>
-   </div>
-  `:""}
-
-  <h3>📝 Ҷавобҳои нодуруст</h3>
-  ${errors.length?errorHTML:
-   "<p>Ҳамаи ҷавобҳо дурустанд!</p>"}
- `;
-
- $("examPrevious").classList.add("hidden");
- $("examNext").textContent="Ба дарсҳо баргаштан →";
-
- renderStats();
- renderSummary();
-}
-
-function closeGeneralExam(){
- stopGeneralTimer();
-
- generalExam=null;
- generalExamFinished=false;
-
- $("examScreen").classList.add("hidden");
- $("lesson").classList.add("hidden");
-
- showMainSections(true);
- $("examPrevious").classList.remove("hidden");
-
  render();
+};
+
+$("levels").onclick=e=>{
+ const btn=e.target.closest("[data-level]");
+ if(!btn)return;
+ selectedLevel=btn.dataset.level;
+ save();
+ render();
+};
+
+$("topics").onclick=e=>{
+ const btn=e.target.closest("[data-topic]");
+ if(!btn)return;
+ startLesson(Number(btn.dataset.topic),Number(btn.dataset.type));
+};
+
+$("closeLessonBtn").onclick=closeLesson;
+$("nextBtn").onclick=nextStep;
+$("reviewBtn").onclick=startReview;
+$("heartBtn").onclick=startHeartPractice;
+
+/* ===== Supabase ===== */
+
+const SUPABASE_URL="https://rgminzzmlktkliliiupt.supabase.co";
+const SUPABASE_KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+
+function cloudMessage(message){
+ $("cloudStatus").textContent=message;
 }
 
-function cancelGeneralExam(){
- if(generalExam&&!generalExamFinished){
-  if(!confirm(
-   "Имтиҳонро қатъ мекунед? Ҷавобҳои ин кӯшиш нигоҳ дошта намешаванд."
-  ))return;
- }
-
- closeGeneralExam();
+function updateAccountUI(){
+ const logged=!!cloudUser;
+ $("authFields").classList.toggle("hidden",logged);
+ $("accountFields").classList.toggle("hidden",!logged);
+ $("accountEmail").textContent=logged?cloudUser.email:"";
+ if(logged)cloudMessage("✅ Пайваст шуд: "+cloudUser.email);
+ else cloudMessage("☁️ Ба ҳисоби VAYO ворид шавед.");
 }
 
-/* ===== ПАЙВАСТИ БЕХАТАРИ ТУГМАҲО ===== */
+async function login(){
+ if(!cloud)return cloudMessage("❌ Supabase дастрас нест.");
+ const email=$("email").value.trim();
+ const password=$("password").value;
+ if(!email||!password)return cloudMessage("Email ва паролро ворид кунед.");
+ cloudMessage("⏳ Воридшавӣ...");
+ const {data,error}=await cloud.auth.signInWithPassword({email,password});
+ if(error)return cloudMessage("❌ "+error.message);
+ cloudUser=data.user;
+ updateAccountUI();
+ await loadProgress();
+}
 
-$("nextBtn").addEventListener("click",nextStep);
-$("closeLessonBtn").addEventListener("click",closeLesson);
-$("reviewBtn").addEventListener("click",startReview);
-$("heartBtn").addEventListener("click",startHeartPractice);
-
-$("examPrevious").addEventListener("click",previousGeneralQuestion);
-$("examNext").addEventListener("click",nextGeneralQuestion);
-$("cancelExamBtn").addEventListener("click",cancelGeneralExam);
-
-$("languages").addEventListener("click",event=>{
- const button=event.target.closest("[data-lang]");
- if(button)selectLang(button.dataset.lang);
-});
-
-$("levels").addEventListener("click",event=>{
- const button=event.target.closest("[data-level]");
- if(button)selectLevel(button.dataset.level);
-});
-
-$("topics").addEventListener("click",event=>{
- const button=event.target.closest("[data-topic][data-type]");
- if(!button)return;
-
- startLesson(
-  Number(button.dataset.topic),
-  Number(button.dataset.type)
- );
-});
-
-$("examInformation").addEventListener("click",event=>{
- if(event.target.closest("#startExamBtn")){
-  startGeneralExam();
+async function register(){
+ if(!cloud)return cloudMessage("❌ Supabase дастрас нест.");
+ const email=$("email").value.trim();
+ const password=$("password").value;
+ if(!email||password.length<6){
+  return cloudMessage("Email ва пароли на камтар аз 6 аломат ворид кунед.");
  }
-});
-
-/* ===== Санҷиши маълумот ===== */
-
-for(const lang of Object.keys(A2)){
- if(A2[lang].length!==20){
-  console.error("A2: шумораи мавзӯъҳо нодуруст аст:",lang);
- }
-
- A2[lang].forEach((topic,i)=>{
-  if(topic.words.length!==3||
-     topic.sentences.length!==2||
-     topic.grammar.length!==4){
-   console.error("A2: маълумоти нопурра:",lang,i);
-  }
+ cloudMessage("⏳ Сабти ном...");
+ const {data,error}=await cloud.auth.signUp({
+  email,password,
+  options:{emailRedirectTo:location.href.split("?")[0].split("#")[0]}
  });
+ if(error)return cloudMessage("❌ "+error.message);
+ if(data.session){
+  cloudUser=data.user;
+  updateAccountUI();
+ }else{
+  cloudMessage("📧 Сабти ном қабул шуд. Email-ро тасдиқ кунед.");
+ }
 }
+
+async function resetPassword(){
+ if(!cloud)return cloudMessage("❌ Supabase дастрас нест.");
+ const email=$("email").value.trim();
+ if(!email)return cloudMessage("Email-ро ворид кунед.");
+ const {error}=await cloud.auth.resetPasswordForEmail(email,{
+  redirectTo:location.href.split("?")[0].split("#")[0]
+ });
+ cloudMessage(error?"❌ "+error.message:"📧 Агар ҳисоб вуҷуд дошта бошад, дастури барқароркунӣ фиристода мешавад.");
+}
+
+async function logout(){
+ if(!cloud)return;
+ const {error}=await cloud.auth.signOut();
+ if(error)return cloudMessage("❌ "+error.message);
+ cloudUser=null;
+ updateAccountUI();
+}
+
+async function syncProgress(){
+ if(!cloud||!cloudUser)return;
+ const {error}=await cloud.from("vayo_language_progress").upsert({
+  user_id:cloudUser.id,
+  xp:state.xp,
+  language:state.lang,
+  updated_at:new Date().toISOString()
+ },{onConflict:"user_id"});
+ if(error){
+  cloudMessage("❌ Нигоҳдорӣ: "+error.message);
+  return;
+ }
+ cloudMessage("✅ XP дар Supabase нигоҳ дошта шуд.");
+}
+
+async function loadProgress(){
+ if(!cloud||!cloudUser)return;
+ const {data,error}=await cloud.from("vayo_language_progress")
+  .select("xp,language")
+  .eq("user_id",cloudUser.id)
+  .maybeSingle();
+ if(error){
+  cloudMessage("⚠️ Хондани пешрафт: "+error.message);
+  return;
+ }
+ if(data){
+  state.xp=Math.max(state.xp,Number(data.xp)||0);
+  if(LANGUAGES.some(l=>l[0]===data.language)){
+   state.lang=data.language;
+  }
+  save();
+  render();
+ }
+}
+
+async function initializeSupabase(){
+ if(!window.supabase||typeof window.supabase.createClient!=="function"){
+  cloudMessage("❌ Китобхонаи Supabase бор нашуд. CDN ё интернетро санҷед.");
+  return;
+ }
+ try{
+  cloud=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  const {data,error}=await cloud.auth.getUser();
+  if(error)console.warn(error.message);
+  cloudUser=data?.user||null;
+  updateAccountUI();
+  if(cloudUser)await loadProgress();
+  cloud.auth.onAuthStateChange((event,session)=>{
+   cloudUser=session?.user||null;
+   updateAccountUI();
+  });
+ }catch(e){
+  cloudMessage("❌ "+e.message);
+ }
+}
+
+$("loginBtn").onclick=()=>login().catch(e=>cloudMessage("❌ "+e.message));
+$("registerBtn").onclick=()=>register().catch(e=>cloudMessage("❌ "+e.message));
+$("resetBtn").onclick=()=>resetPassword().catch(e=>cloudMessage("❌ "+e.message));
+$("logoutBtn").onclick=()=>logout().catch(e=>cloudMessage("❌ "+e.message));
+$("syncBtn").onclick=()=>syncProgress().catch(e=>cloudMessage("❌ "+e.message));
 
 /* ===== Оғози барнома ===== */
 
 render();
 
 setInterval(()=>{
- if(!session&&!generalExam){
-  renderStats();
- }
+ if(!session)renderStats();
 },60000);
 
 console.log("VAYO Language омода аст.");
 
-</script
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="vayo-cloud.js"></script>
+</script>
+
+<!-- Supabase UMD: боркунии асосӣ ва эҳтиётӣ -->
+<script>
+(function(){
+ const sources=[
+  "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js",
+  "https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"
+ ];
+ let index=0;
+ function load(){
+  if(index>=sources.length){
+   initializeSupabase();
+   return;
+  }
+  const script=document.createElement("script");
+  script.src=sources[index++];
+  script.onload=()=>{
+   if(window.supabase?.createClient)initializeSupabase();
+   else load();
+  };
+  script.onerror=load;
+  document.head.appendChild(script);
+ }
+ load();
+})();
+</script>
 
 </body>
 </html>
