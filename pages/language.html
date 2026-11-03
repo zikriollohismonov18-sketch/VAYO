@@ -5,81 +5,214 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#7255f5">
-<title>VAYO Language — Забономӯзии шавқовар</title>
+<title>VAYO Language — Забономӯзӣ</title>
 <style>
 :root{
- --purple:#7255f5;--dark:#202044;--muted:#74788e;
- --bg:#f5f5ff;--white:#fff;--line:#e7e7f4;
- --green:#27b879;--red:#f45b70;--gold:#ffbc3d;
+ --purple:#7255f5;
+ --dark:#202044;
+ --muted:#74788e;
+ --bg:#f5f5ff;
+ --line:#e7e7f4;
+ --green:#27b879;
+ --red:#f45b70;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--dark)}
-button,input,select{font:inherit}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:var(--bg);
+ color:var(--dark);
+}
+button,select{font:inherit}
 button{cursor:pointer;border:0}
 button:disabled{opacity:.45;cursor:not-allowed}
 .wrap{max-width:1050px;margin:auto;padding:0 15px}
-header{background:linear-gradient(120deg,#7255f5,#ad66ff);color:white;padding:18px 0 25px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+header{
+ background:linear-gradient(120deg,#7255f5,#ad66ff);
+ color:white;
+ padding:20px 0 25px;
+}
+.top,.row,.lessonHeader{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:10px;
+ flex-wrap:wrap;
+}
 .logo{font-size:25px;font-weight:900}
-.back{color:white;text-decoration:none;background:#ffffff28;padding:10px 14px;border-radius:13px}
-.hero{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px}
-.hero h1{font-size:29px;margin:0 0 8px}
-.hero p{margin:0;line-height:1.7}
-.mascot{font-size:72px;filter:drop-shadow(0 8px 8px #4224a744)}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:17px 0}
-.stat{background:white;border:1px solid var(--line);border-radius:17px;padding:14px;text-align:center}
+.back{
+ color:white;
+ text-decoration:none;
+ background:#ffffff28;
+ padding:10px 14px;
+ border-radius:13px;
+}
+.hero{display:flex;justify-content:space-between;align-items:center}
+.hero h1{font-size:27px}
+.hero p{line-height:1.6}
+.mascot{font-size:65px}
+.stats{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:10px;
+ margin:17px 0;
+}
+.stat{
+ background:white;
+ border:1px solid var(--line);
+ border-radius:17px;
+ padding:14px;
+ text-align:center;
+}
 .stat b{display:block;font-size:21px}
-.stat small{color:var(--muted)}
-.card{background:white;border:1px solid var(--line);border-radius:20px;padding:19px;margin:15px 0;box-shadow:0 5px 20px #35347708}
+.stat small,.muted{color:var(--muted)}
+.card{
+ background:white;
+ border:1px solid var(--line);
+ border-radius:20px;
+ padding:19px;
+ margin:15px 0;
+ box-shadow:0 5px 20px #35347708;
+}
 h2{font-size:21px;margin:0 0 13px}
-h3{margin:16px 0 10px}
-.muted{color:var(--muted)}
-.langs{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
-.lang{border:2px solid var(--line);background:#fafaff;border-radius:16px;padding:16px 10px;font-weight:bold}
-.lang.active{border-color:var(--purple);background:#f0edff}
-.lang .flag{font-size:35px;display:block;margin-bottom:9px}
+h3{margin:15px 0 10px}
+.langs{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(145px,1fr));
+ gap:10px;
+}
+.lang{
+ border:2px solid var(--line);
+ background:#fafaff;
+ border-radius:16px;
+ padding:16px 10px;
+ font-weight:bold;
+}
+.lang.active{
+ border-color:var(--purple);
+ background:#f0edff;
+}
+.flag{display:block;font-size:35px;margin-bottom:9px}
 .lang small{display:block;color:var(--muted);margin-top:6px}
-.progress{height:13px;background:#e8e8f6;border-radius:30px;overflow:hidden}
-.fill{height:100%;background:linear-gradient(90deg,#29bf82,#83df73);width:0;transition:width .3s}
-.units{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:13px}
-.unit{border:1px solid var(--line);border-radius:17px;padding:15px;background:#fbfbff}
-.unit h3{margin:5px 0 7px}
-.unit p{color:var(--muted);font-size:13px;line-height:1.5;min-height:38px}
+.progress{
+ height:13px;
+ background:#e8e8f6;
+ border-radius:30px;
+ overflow:hidden;
+}
+.fill{
+ height:100%;
+ width:0;
+ background:linear-gradient(90deg,#29bf82,#83df73);
+ transition:width .3s;
+}
+.units{
+ display:grid;
+ grid-template-columns:repeat(auto-fit,minmax(235px,1fr));
+ gap:13px;
+}
+.unit{
+ border:1px solid var(--line);
+ border-radius:17px;
+ padding:15px;
+ background:#fbfbff;
+}
 .unitIcon{font-size:32px}
+.unit p{
+ color:var(--muted);
+ font-size:13px;
+ line-height:1.5;
+ min-height:38px;
+}
 .unitBtns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .btn{padding:12px 14px;border-radius:13px;font-weight:bold}
 .primary{background:var(--purple);color:white}
 .green{background:var(--green);color:white}
 .light{background:#eeedfc;color:var(--dark)}
 .orange{background:#fff0cf;color:#9b6000}
-.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .hidden{display:none!important}
-.lessonHeader{display:flex;justify-content:space-between;align-items:center;gap:10px}
-.lessonBox{background:#f7f5ff;border-radius:16px;padding:17px;line-height:1.85;white-space:pre-line}
-.wordCard{border:2px solid #e9e4ff;border-radius:19px;text-align:center;padding:24px 12px;background:#faf9ff}
-.wordMain{font-size:clamp(26px,5vw,40px);font-weight:900;overflow-wrap:anywhere}
-.wordMeaning{font-size:20px;color:var(--purple);margin-top:14px}
+.lessonBox{
+ background:#f7f5ff;
+ border-radius:16px;
+ padding:17px;
+ line-height:1.85;
+ white-space:pre-line;
+}
+.wordCard{
+ border:2px solid #e9e4ff;
+ border-radius:19px;
+ text-align:center;
+ padding:24px 12px;
+ background:#faf9ff;
+}
+.wordMain{
+ font-size:clamp(26px,5vw,40px);
+ font-weight:900;
+ overflow-wrap:anywhere;
+}
+.wordMeaning{
+ font-size:20px;
+ color:var(--purple);
+ margin-top:14px;
+}
 .wordHint{font-size:13px;color:var(--muted);margin:12px}
-.quizOption{display:block;width:100%;text-align:left;background:#f8f8ff;border:2px solid var(--line);border-radius:14px;padding:15px;margin:9px 0;font-weight:bold}
-.quizOption.correct{background:#e5faee;border-color:var(--green)}
-.quizOption.wrong{background:#ffe9ec;border-color:var(--red)}
+.voiceButtons{
+ display:flex;
+ gap:9px;
+ flex-wrap:wrap;
+ justify-content:center;
+ margin-top:14px;
+}
+.voicePanel{
+ background:#f5f2ff;
+ border:2px solid #ddd5ff;
+ border-radius:17px;
+ padding:16px;
+}
+.voiceSelect{
+ width:100%;
+ padding:12px;
+ border:1px solid var(--line);
+ border-radius:12px;
+ margin:10px 0;
+ background:white;
+}
+.quizOption{
+ display:block;
+ width:100%;
+ text-align:left;
+ background:#f8f8ff;
+ border:2px solid var(--line);
+ border-radius:14px;
+ padding:15px;
+ margin:9px 0;
+ font-weight:bold;
+}
+.quizOption.correct{
+ background:#e5faee;
+ border-color:var(--green);
+}
+.quizOption.wrong{
+ background:#ffe9ec;
+ border-color:var(--red);
+}
 .feedback{font-weight:bold;min-height:26px;margin:14px 0}
-.chips{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}
-.chip{padding:12px;border:2px solid var(--line);border-radius:13px;background:white}
-.sentence{min-height:58px;border:2px dashed #c9c3f9;border-radius:13px;padding:12px;display:flex;gap:8px;flex-wrap:wrap}
-.achievement{background:#fff8e7;border-radius:15px;padding:14px;margin:10px 0}
-.voicePanel{background:linear-gradient(135deg,#f0edff,#fff);border:2px solid #dcd5ff;border-radius:18px;padding:17px;margin:15px 0}
-.voiceSelect{width:100%;padding:13px;margin:10px 0;border:2px solid var(--line);border-radius:12px;background:white;color:var(--dark)}
-.voiceStatus{font-size:13px;line-height:1.6}
-.voiceButtons{display:flex;gap:9px;flex-wrap:wrap;justify-content:center;margin-top:14px}
-.voiceButtons button{flex:1;min-width:125px}
-.voiceTag{display:inline-block;background:#e8e1ff;color:#5035b6;padding:6px 11px;border-radius:20px;font-size:12px;font-weight:bold;margin:6px 0}
-table{width:100%;border-collapse:collapse}
-td,th{border-bottom:1px solid var(--line);padding:11px;text-align:left}
-footer{text-align:center;color:var(--muted);padding:28px 12px;font-size:13px}
+.achievement{
+ background:#fff8e7;
+ border-radius:15px;
+ padding:14px;
+ margin:10px 0;
+}
+footer{
+ text-align:center;
+ color:var(--muted);
+ padding:28px 12px;
+ font-size:13px;
+}
 @media(max-width:600px){
  .stats{grid-template-columns:repeat(2,1fr)}
- .hero h1{font-size:23px}.mascot{font-size:52px}
+ .hero h1{font-size:23px}
+ .mascot{font-size:48px}
  .card{padding:14px}
  .units{grid-template-columns:1fr}
 }
@@ -96,7 +229,8 @@ footer{text-align:center;color:var(--muted);padding:28px 12px;font-size:13px}
   <div class="hero">
    <div>
     <h1>Забон омӯз, ҷаҳонро кушо!</h1>
-    <p>Ҳар рӯз 10 дақиқа омӯзиш.<br>Бо бозӣ, овоз ва мукофот.</p>
+    <p>Ҳар рӯз 10 дақиқа омӯзиш.<br>
+    Бо бозӣ, овоз ва мукофот.</p>
    </div>
    <div class="mascot">🦊</div>
   </div>
@@ -118,55 +252,65 @@ footer{text-align:center;color:var(--muted);padding:28px 12px;font-size:13px}
 </section>
 
 <section class="card" id="voicePanel">
- <h2>🎙️ Танзими овози олмонӣ</h2>
- <span class="voiceTag">🇩🇪 Hochdeutsch</span>
- <p class="muted">
-  Овози мардонаро интихоб кун. Овозҳои дастгоҳи
-  ту дар рӯйхат нишон дода мешаванд.
+ <h2>🎙️ Талаффузи олмонӣ</h2>
+ <p>
+  Аввал сабти овози воқеии инсон истифода мешавад.
+  Агар сабт набошад, овози олмонии дастгоҳ
+  ҳамчун варианти эҳтиётӣ истифода мешавад.
  </p>
-
- <label for="germanVoiceSelect">
-  <b>Овози олмонӣ</b>
- </label>
-
- <select id="germanVoiceSelect" class="voiceSelect"
-  onchange="setGermanVoice(this.value)">
-  <option value="">Ҷустуҷӯи овозҳо...</option>
- </select>
-
- <div class="row">
-  <button class="btn primary" onclick="testGermanVoice(false)">
-   🔊 Санҷидани овоз
-  </button>
-  <button class="btn light" onclick="testGermanVoice(true)">
-   🐢 Оҳиста
-  </button>
-  <button class="btn orange" onclick="refreshVoices()">
-   🔄 Навсозии рӯйхат
-  </button>
+ <div class="voicePanel">
+  <label for="germanVoiceSelect">
+   <b>Овози эҳтиётии олмонӣ</b>
+  </label>
+  <select class="voiceSelect" id="germanVoiceSelect"
+   onchange="setGermanVoice(this.value)">
+  </select>
+  <div class="row">
+   <button class="btn primary"
+    onclick="speak('Guten Morgen!',false,'de-DE')">
+    🔊 Санҷиш
+   </button>
+   <button class="btn light"
+    onclick="speak('Guten Morgen!',true,'de-DE')">
+    🐢 Оҳиста
+   </button>
+   <button class="btn orange"
+    onclick="refreshVoices()">
+    🔄 Навсозӣ
+   </button>
+  </div>
+  <p id="voiceStatus" class="muted"></p>
+  <p id="audioStatus" class="muted" aria-live="polite"></p>
  </div>
-
- <p id="voiceStatus" class="muted voiceStatus"></p>
 </section>
 
 <section class="card" id="course">
  <h2 id="courseTitle">Роҳи омӯзиш</h2>
  <p id="progressText" class="muted"></p>
- <div class="progress"><div id="progressFill" class="fill"></div></div>
+ <div class="progress">
+  <div id="progressFill" class="fill"></div>
+ </div>
  <h3>🗺️ Харитаи дарсҳо</h3>
  <div class="units" id="units"></div>
 </section>
 
 <section class="card hidden" id="lesson">
  <div class="lessonHeader">
-  <button class="btn light" onclick="closeLesson()">← Баргаштан</button>
+  <button class="btn light" onclick="closeLesson()">
+   ← Баргаштан
+  </button>
   <span id="lessonCounter" class="muted"></span>
  </div>
  <h2 id="lessonTitle" style="margin-top:18px"></h2>
- <div class="progress"><div class="fill" id="lessonProgress"></div></div>
+ <div class="progress">
+  <div class="fill" id="lessonProgress"></div>
+ </div>
  <div id="lessonBody" style="margin-top:18px"></div>
  <p id="feedback" class="feedback" aria-live="polite"></p>
- <button id="continueBtn" class="btn primary" onclick="continueLesson()">Давом додан →</button>
+ <button id="continueBtn" class="btn primary"
+  onclick="continueLesson()">
+  Давом додан →
+ </button>
 </section>
 
 <section class="card">
@@ -181,7 +325,7 @@ footer{text-align:center;color:var(--muted);padding:28px 12px;font-size:13px}
 
 </main>
 
-<footer>VAYO Language • Омӯзиш барои ҳама • Бе AI ва бе API</footer>
+<footer>VAYO Language • Бе AI • Бе API-и пулакӣ</footer>
 
 <script>
 "use strict";
@@ -210,19 +354,18 @@ const topics=[
 ];
 
 const explanations=[
- "Дар шиносоӣ аввал салом медиҳем, баъд номи ҳамсуҳбатро мепурсем. Ибораҳои ин дарсро бо овоз такрор кун.",
- "Дар ин дарс номи аъзои оиларо меомӯзӣ. Кӯшиш кун ҳар калимаро ба оилаи худат пайваст кунӣ.",
- "Рақамҳо барои шуморидан, нарх ва синну сол заруранд. Рақамҳоро пайдарпай бо овоз такрор кун.",
- "Калимаҳои вақт дар гуфтугӯи ҳаррӯза бисёр истифода мешаванд. Имрӯз ва пагоҳро фарқ кун.",
- "Дар тарабхона ва мағоза номи хӯрокҳо муҳим аст. Бо ибораҳои ин дарс нӯшокӣ фармоиш доданро машқ кун.",
- "Ҳангоми харид нархро мепурсем ва хоҳиши харидани молро баён мекунем.",
- "Дар ҷои кор бояд кор, роҳбар, танаффус ва ҷумлаҳои одиро фаҳмем.",
- "Барои ёфтани ҷойҳо самтҳои чап, рост ва рост ба пешро истифода мебарем.",
- "Ҳангоми беморӣ бояд ҳолати худро фаҳмонда тавонем ва кӯмак пурсем.",
- "Муоширати хуб бо ташаккур, лутфан, узрхоҳӣ ва хайрухуш оғоз мешавад."
+ "Дар шиносоӣ аввал салом медиҳем, баъд номи ҳамсуҳбатро мепурсем. Ибораҳоро бо овоз такрор кун.",
+ "Номи аъзои оиларо меомӯзӣ. Ҳар калимаро бо оилаи худат пайваст кун.",
+ "Рақамҳо барои шуморидан, нарх ва синну сол заруранд.",
+ "Калимаҳои вақт дар гуфтугӯи ҳаррӯза истифода мешаванд.",
+ "Номи хӯрок ва нӯшокиҳоро меомӯзем.",
+ "Ҳангоми харид нархро мепурсем ва хоҳиши хариданро баён мекунем.",
+ "Дар ҷои кор бояд ҷумлаҳои одиро фаҳмем.",
+ "Барои ёфтани ҷойҳо самтҳоро истифода мебарем.",
+ "Ҳангоми беморӣ ҳолати худро фаҳмонда метавонем.",
+ "Муошират бо ташаккур, лутфан ва узрхоҳӣ осон мешавад."
 ];
 
-// Ҳар сатр: ибораи хориҷӣ = маънои тоҷикӣ
 const raw={
 de:[
  "Hallo=Салом|Guten Morgen=Субҳ ба хайр|Wie heißt du?=Номат чист?|Ich heiße Ali.=Номи ман Алӣ аст.|Wie geht es dir?=Аҳволат чӣ хел?",
@@ -296,14 +439,20 @@ for(const id of Object.keys(raw)){
  );
 }
 
+// Нигоҳ доштани пешрафти версияҳои пешина
 const STORAGE="vayo_language_v2";
+
 function load(){
  try{
   const x=JSON.parse(localStorage.getItem(STORAGE)||"null");
   if(x&&typeof x==="object")return x;
  }catch(e){}
- return {lang:"de",xp:0,hearts:5,streak:0,lastDay:"",done:{}};
+ return {
+  lang:"de",xp:0,hearts:5,
+  streak:0,lastDay:"",done:{}
+ };
 }
+
 let state=load();
 if(!languages.some(l=>l[0]===state.lang))state.lang="de";
 if(!state.done||typeof state.done!=="object")state.done={};
@@ -314,14 +463,20 @@ let session=null;
 let lessonFinished=false;
 
 function save(){
- try{localStorage.setItem(STORAGE,JSON.stringify(state))}
- catch(e){console.warn("Нигоҳдорӣ дастрас нест",e)}
+ try{
+  localStorage.setItem(STORAGE,JSON.stringify(state));
+ }catch(e){
+  console.warn("Нигоҳдорӣ дастрас нест",e);
+ }
 }
+
 function esc(s){
  return String(s).replace(/[&<>"']/g,c=>({
- "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  "&":"&amp;","<":"&lt;",">":"&gt;",
+  '"':"&quot;","'":"&#39;"
  })[c]);
 }
+
 function shuffle(a){
  const b=[...a];
  for(let i=b.length-1;i>0;i--){
@@ -330,25 +485,42 @@ function shuffle(a){
  }
  return b;
 }
+
 function locale(){
  return languages.find(l=>l[0]===state.lang)[3];
 }
 
-// ===== ОВОЗИ НАВИ VAYO =====
+// ======================================
+// VAYO — ОВОЗИ ВОҚЕИИ ОЛМОНӢ
+// ======================================
+
+// Файлҳои овозӣ дар ин папка нигоҳ дошта мешаванд:
+const AUDIO_ROOT="../assets/audio/de/";
+
+// Файлҳои 50 калима:
+// de-01-01.mp3 то de-10-05.mp3
 
 const VOICE_STORAGE="vayo_german_voice";
-const maleVoiceNames=[
- "conrad","markus","stefan","daniel",
- "thomas","florian","male"
+
+const maleNames=[
+ "conrad","markus","stefan",
+ "daniel","thomas","florian","male"
 ];
 
 let preferredGermanVoice="";
 let selectedGermanVoice=null;
+let activeAudio=null;
+let audioRequestId=0;
 
 try{
  preferredGermanVoice=
   localStorage.getItem(VOICE_STORAGE)||"";
 }catch(e){}
+
+function setAudioStatus(message){
+ const el=$("audioStatus");
+ if(el)el.textContent=message;
+}
 
 function germanVoices(){
  if(!("speechSynthesis" in window))return [];
@@ -364,7 +536,7 @@ function voiceScore(v){
 
  if(lang==="de-de")score+=30;
 
- if(maleVoiceNames.some(n=>name.includes(n))){
+ if(maleNames.some(n=>name.includes(n))){
   score+=100;
  }
 
@@ -373,7 +545,6 @@ function voiceScore(v){
  }
 
  if(v.default)score+=5;
-
  return score;
 }
 
@@ -399,78 +570,85 @@ function chooseGermanVoice(){
 }
 
 function refreshVoices(){
+ const select=$("germanVoiceSelect");
+ if(!select)return;
+
+ select.innerHTML="";
+
  if(!("speechSynthesis" in window)){
   $("voiceStatus").textContent=
-   "Ин браузер овозро дастгирӣ намекунад.";
+   "Браузер овози синтетикиро дастгирӣ намекунад.";
   return;
  }
 
  chooseGermanVoice();
 
- const select=$("germanVoiceSelect");
  const voices=germanVoices();
-
- select.innerHTML="";
+ voices.sort((a,b)=>voiceScore(b)-voiceScore(a));
 
  if(!voices.length){
-  const option=document.createElement("option");
-  option.value="";
-  option.textContent="Овози олмонӣ ёфт нашуд";
-  select.appendChild(option);
-
+  const o=document.createElement("option");
+  o.value="";
+  o.textContent="Овози олмонӣ ёфт нашуд";
+  select.appendChild(o);
   $("voiceStatus").textContent=
-   "Дар дастгоҳ овози олмонӣ ёфт нашуд. " +
-   "Дар танзимоти телефон ё компютер овози олмониро насб кун.";
+   "Овози олмониро дар дастгоҳ насб кун.";
   return;
  }
 
- voices.sort((a,b)=>voiceScore(b)-voiceScore(a));
-
  voices.forEach(v=>{
-  const option=document.createElement("option");
-  option.value=v.name;
-  option.textContent=v.name+" ("+v.lang+")";
-
+  const o=document.createElement("option");
+  o.value=v.name;
+  o.textContent=v.name+" ("+v.lang+")";
   if(selectedGermanVoice&&
      selectedGermanVoice.name===v.name){
-   option.selected=true;
+   o.selected=true;
   }
-
-  select.appendChild(option);
+  select.appendChild(o);
  });
 
  $("voiceStatus").textContent=
-  "Овозҳои дастрас: "+voices.length+
-  ". Овози дилхоҳро шунида интихоб кун. " +
-  "Номи овоз на ҳамеша мардона ё занона будани онро муайян мекунад.";
+  "Ин овоз танҳо ҳангоми набудани сабти воқеӣ истифода мешавад.";
 }
 
 function setGermanVoice(name){
  preferredGermanVoice=name;
-
  try{
   localStorage.setItem(VOICE_STORAGE,name);
  }catch(e){}
-
  chooseGermanVoice();
- testGermanVoice(false);
 }
 
-function speak(text,slow=false,forcedLang=null){
+function stopAudio(){
+ audioRequestId++;
+
+ if(activeAudio){
+  activeAudio.pause();
+  activeAudio.removeAttribute("src");
+  activeAudio.load();
+  activeAudio=null;
+ }
+
+ if("speechSynthesis" in window){
+  speechSynthesis.cancel();
+ }
+}
+
+function speakFallback(text,slow=false,lang="de-DE"){
  if(!("speechSynthesis" in window)){
-  alert("Браузер овозро дастгирӣ намекунад.");
+  setAudioStatus(
+   "Сабти овозӣ мавҷуд нест ва браузер овоз надорад."
+  );
   return;
  }
 
  speechSynthesis.cancel();
 
- const lang=forcedLang||locale();
  const u=new SpeechSynthesisUtterance(text);
-
  u.lang=lang;
  u.volume=1;
  u.pitch=1;
- u.rate=slow?0.76:0.94;
+ u.rate=slow?0.8:0.96;
 
  const voices=speechSynthesis.getVoices();
 
@@ -485,44 +663,139 @@ function speak(text,slow=false,forcedLang=null){
   const match=voices.find(v=>
    v.lang.toLowerCase()===lang.toLowerCase()
   );
-
   if(match)u.voice=match;
  }
+
+ setAudioStatus(
+  "Овози эҳтиётии браузер истифода мешавад."
+ );
 
  speechSynthesis.speak(u);
 }
 
-function testGermanVoice(slow=false){
- speak(
-  "Guten Morgen! Wie geht es dir?",
-  slow,
-  "de-DE"
- );
+function getAudioFilename(unit,index){
+ const a=String(unit+1).padStart(2,"0");
+ const b=String(index+1).padStart(2,"0");
+ return `de-${a}-${b}.mp3`;
 }
 
-// ===== АНҶОМИ ҚИСМИ ОВОЗ =====
+function findGermanWord(text){
+ const target=String(text).trim();
+
+ for(let unit=0;unit<DATA.de.length;unit++){
+  for(let index=0;index<DATA.de[unit].length;index++){
+   if(DATA.de[unit][index][0]===target){
+    return {unit,index};
+   }
+  }
+ }
+
+ return null;
+}
+
+async function speak(text,slow=false,forcedLang=null){
+ const lang=forcedLang||locale();
+
+ stopAudio();
+ const requestId=audioRequestId;
+
+ // Забонҳои ғайриолмонӣ тағйир намеёбанд
+ if(!lang.toLowerCase().startsWith("de")){
+  speakFallback(text,slow,lang);
+  return;
+ }
+
+ const word=findGermanWord(text);
+
+ // Барои ибораҳои берун аз дарс
+ if(!word){
+  speakFallback(text,slow,lang);
+  return;
+ }
+
+ const filename=getAudioFilename(
+  word.unit,word.index
+ );
+
+ const url=AUDIO_ROOT+filename;
+
+ const audio=new Audio();
+ activeAudio=audio;
+ audio.preload="auto";
+ audio.src=url;
+ audio.playbackRate=slow?0.8:1;
+
+ audio.onended=()=>{
+  if(requestId===audioRequestId){
+   setAudioStatus("Сабти овозӣ анҷом ёфт.");
+  }
+ };
+
+ audio.onerror=()=>{
+  if(requestId!==audioRequestId)return;
+  activeAudio=null;
+  speakFallback(text,slow,lang);
+ };
+
+ try{
+  setAudioStatus("Ҷустуҷӯи сабти воқеии олмонӣ...");
+  await audio.play();
+
+  if(requestId!==audioRequestId){
+   audio.pause();
+   return;
+  }
+
+  setAudioStatus(
+   "🔊 Сабти воқеии талаффузи олмонӣ"
+  );
+ }catch(e){
+  if(requestId!==audioRequestId)return;
+
+  activeAudio=null;
+  speakFallback(text,slow,lang);
+ }
+}
+
+// ======================================
+// АНҶОМИ СИСТЕМАИ ОВОЗ
+// ======================================
 
 function today(){
  const d=new Date();
  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 }
+
 function updateStreak(){
  const now=today();
  if(state.lastDay===now)return;
+
  if(state.lastDay){
   const previous=new Date(now+"T12:00:00");
   previous.setDate(previous.getDate()-1);
+
   const y=`${previous.getFullYear()}-${String(previous.getMonth()+1).padStart(2,"0")}-${String(previous.getDate()).padStart(2,"0")}`;
-  state.streak=state.lastDay===y?(state.streak||0)+1:1;
- }else state.streak=1;
+
+  state.streak=state.lastDay===y?
+   (state.streak||0)+1:1;
+ }else{
+  state.streak=1;
+ }
+
  state.lastDay=now;
 }
+
 function completed(id,n){
  return !!state.done[id+"_"+n];
 }
+
 function completedCount(id){
- return Array.from({length:20},(_,i)=>completed(id,i)).filter(Boolean).length;
+ return Array.from(
+  {length:20},
+  (_,i)=>completed(id,i)
+ ).filter(Boolean).length;
 }
+
 function render(){
  $("xp").textContent=state.xp;
  $("hearts").textContent="❤️".repeat(state.hearts)||"♡";
@@ -531,15 +804,19 @@ function render(){
 
  $("languages").innerHTML=languages.map(l=>`
   <button class="lang ${state.lang===l[0]?"active":""}"
-  onclick="selectLang('${l[0]}')">
-   <span class="flag">${l[1]}</span>${l[2]}
+   onclick="selectLang('${l[0]}')">
+   <span class="flag">${l[1]}</span>
+   ${l[2]}
    <small>${completedCount(l[0])}/20 дарс</small>
-  </button>`).join("");
+  </button>
+ `).join("");
 
  const name=languages.find(l=>l[0]===state.lang)[2];
  const done=completedCount(state.lang);
+
  $("courseTitle").textContent="📚 Забони "+name;
- $("progressText").textContent=done+" аз 20 дарс анҷом ёфт";
+ $("progressText").textContent=
+  done+" аз 20 дарс анҷом ёфт";
  $("progressFill").style.width=(done/20*100)+"%";
 
  $("voicePanel").classList.toggle(
@@ -547,48 +824,63 @@ function render(){
  );
 
  $("units").innerHTML=topics.map((t,i)=>{
-  const a=i*2,b=a+1;
-  return `<div class="unit">
-   <div class="unitIcon">${t[0]}</div>
-   <h3>Бахши ${i+1}: ${t[1]}</h3>
-   <p>${t[2]}</p>
-   <div class="unitBtns">
-    <button class="btn ${completed(state.lang,a)?"green":"primary"}"
-     onclick="startLesson(${a})">
-     ${completed(state.lang,a)?"✓ ":""}Дарси ${a+1}
-    </button>
-    <button class="btn ${completed(state.lang,b)?"green":"orange"}"
-     onclick="startLesson(${b})">
-     ${completed(state.lang,b)?"✓ ":""}Машқи ${b+1}
-    </button>
-   </div>
-  </div>`;
+  const a=i*2;
+  const b=a+1;
+
+  return `
+   <div class="unit">
+    <div class="unitIcon">${t[0]}</div>
+    <h3>Бахши ${i+1}: ${t[1]}</h3>
+    <p>${t[2]}</p>
+    <div class="unitBtns">
+     <button
+      class="btn ${completed(state.lang,a)?"green":"primary"}"
+      onclick="startLesson(${a})">
+      ${completed(state.lang,a)?"✓ ":""}Дарси ${a+1}
+     </button>
+     <button
+      class="btn ${completed(state.lang,b)?"green":"orange"}"
+      onclick="startLesson(${b})">
+      ${completed(state.lang,b)?"✓ ":""}Машқи ${b+1}
+     </button>
+    </div>
+   </div>`;
  }).join("");
 
- const total=Object.keys(state.done).filter(k=>state.done[k]).length;
+ const total=Object.keys(state.done).filter(
+  k=>state.done[k]
+ ).length;
+
  $("summary").innerHTML=`
- <p>📖 Дарсҳои анҷомёфта дар ҳамаи забонҳо: <b>${total}</b> аз 100</p>
- <p>⚡ XP-и ҷамъшуда: <b>${state.xp}</b></p>
- <p>🏆 Сатҳи ҳозира: <b>${Math.floor(state.xp/200)+1}</b></p>
- <p class="muted">Пешрафт дар ҳамин браузер нигоҳ дошта мешавад.</p>`;
+  <p>📖 Дарсҳои анҷомёфта:
+   <b>${total}</b> аз 100</p>
+  <p>⚡ XP: <b>${state.xp}</b></p>
+  <p>🏆 Сатҳ:
+   <b>${Math.floor(state.xp/200)+1}</b></p>
+  <p class="muted">
+   Пешрафт дар ҳамин браузер нигоҳ дошта мешавад.
+  </p>
+ `;
 
  const badges=[
-  [total>=1,"🌟 Қадами аввал","Аввалин дарс анҷом ёфт"],
-  [total>=10,"🥉 Омӯзандаи фаъол","10 дарс анҷом ёфт"],
-  [total>=30,"🥈 Донишҷӯи пешқадам","30 дарс анҷом ёфт"],
-  [total>=100,"🥇 Устоди панҷ забон","100 дарс анҷом ёфт"],
-  [(state.streak||0)>=7,"🔥 Ҳафт рӯз","7 рӯз пайдарпай омӯзиш"]
+  [total>=1,"🌟 Қадами аввал","Аввалин дарс"],
+  [total>=10,"🥉 Омӯзандаи фаъол","10 дарс"],
+  [total>=30,"🥈 Донишҷӯи пешқадам","30 дарс"],
+  [total>=100,"🥇 Устоди панҷ забон","100 дарс"],
+  [(state.streak||0)>=7,"🔥 Ҳафт рӯз","7 рӯз пайдарпай"]
  ];
- $("achievements").innerHTML=badges.map(b=>
-  `<div class="achievement" style="opacity:${b[0]?1:.48}">
-   <b>${b[1]}</b><div class="muted">${b[2]}</div>
-   </div>`
- ).join("");
+
+ $("achievements").innerHTML=badges.map(b=>`
+  <div class="achievement" style="opacity:${b[0]?1:.48}">
+   <b>${b[1]}</b>
+   <div class="muted">${b[2]}</div>
+  </div>
+ `).join("");
 }
 
 function selectLang(id){
  if(!DATA[id])return;
- if("speechSynthesis" in window)speechSynthesis.cancel();
+ stopAudio();
  state.lang=id;
  save();
  closeLesson();
@@ -596,26 +888,22 @@ function selectLang(id){
 }
 
 function closeLesson(){
+ stopAudio();
  $("lesson").classList.add("hidden");
  $("home").classList.remove("hidden");
  $("course").classList.remove("hidden");
- $("voicePanel").classList.toggle(
-  "hidden",state.lang!=="de"
- );
  session=null;
  lessonFinished=false;
  $("continueBtn").onclick=continueLesson;
-
- if("speechSynthesis" in window){
-  speechSynthesis.cancel();
- }
+ $("continueBtn").disabled=false;
+ render();
 }
 
 function startLesson(n){
  if(n<0||n>=20)return;
 
  if(state.hearts===0){
-  alert("❤️ Дилҳо тамом шуданд. Барои барқарор кардани онҳо бояд дилҳоро аз нав пур кунем.");
+  alert("❤️ Дилҳо тамом шуданд.");
   return;
  }
 
@@ -624,8 +912,9 @@ function startLesson(n){
  const words=DATA[state.lang][unit];
 
  session={
-  n,unit,practice,words,step:0,score:0,
-  answered:false,selected:[],question:null,
+  n,unit,practice,words,
+  step:0,score:0,answered:false,
+  question:null,
   questions:practice?makeQuestions(words):[]
  };
 
@@ -640,39 +929,53 @@ function startLesson(n){
  $("lessonTitle").textContent=
   `${topics[unit][0]} ${practice?"Машқ":"Дарс"} ${n+1}: ${topics[unit][1]}`;
 
- $("feedback").textContent="";
  showStep();
  $("lesson").scrollIntoView({behavior:"smooth"});
 }
 
 function makeQuestions(words){
  const q=[];
+
  words.forEach((w,i)=>{
   q.push({type:"translate",index:i});
  });
- q.push({type:"listen",index:Math.floor(Math.random()*words.length)});
- q.push({type:"reverse",index:Math.floor(Math.random()*words.length)});
+
+ q.push({
+  type:"listen",
+  index:Math.floor(Math.random()*words.length)
+ });
+
+ q.push({
+  type:"reverse",
+  index:Math.floor(Math.random()*words.length)
+ });
+
  return shuffle(q);
 }
 
 function showStep(){
  if(!session||lessonFinished)return;
 
+ stopAudio();
+
  const s=session;
  $("feedback").textContent="";
  $("continueBtn").disabled=false;
  $("continueBtn").textContent="Давом додан →";
 
- const total=s.practice?s.questions.length:s.words.length+2;
+ const total=s.practice?
+  s.questions.length:s.words.length+2;
+
  $("lessonCounter").textContent=
   `${Math.min(s.step+1,total)} / ${total}`;
+
  $("lessonProgress").style.width=
   (Math.min(s.step,total)/total*100)+"%";
 
- if(!s.practice){
-  showStudyStep();
- }else{
+ if(s.practice){
   showQuestion();
+ }else{
+  showStudyStep();
  }
 }
 
@@ -682,18 +985,17 @@ function showStudyStep(){
 
  if(s.step===0){
   body.innerHTML=`
-  <div class="lessonBox">
-   <b>👩‍🏫 Шарҳи дарс</b>
+   <div class="lessonBox">
+    <b>👩‍🏫 Шарҳи дарс</b>
 
-   ${esc(explanations[s.unit])}
+    ${esc(explanations[s.unit])}
 
-   🎯 Мақсад:
-   ${esc(topics[s.unit][2])}
+    🎯 Мақсад:
+    ${esc(topics[s.unit][2])}
 
-   Дар ин дарс панҷ калима ё ибора меомӯзӣ.
-   Тугмаи 🔊-ро пахш карда талаффузро гӯш кун.
-   Баъд ҳар ибораро се бор такрор намо.
-  </div>`;
+    Дар ин дарс панҷ ибора меомӯзӣ.
+    Аввал овозро гӯш кун, баъд такрор намо.
+   </div>`;
   return;
  }
 
@@ -702,51 +1004,46 @@ function showStudyStep(){
   const w=s.words[i];
 
   body.innerHTML=`
-  <div class="wordCard">
-   <div class="muted">
-    Калимаи ${i+1} аз ${s.words.length}
-   </div>
-
-   <div class="wordMain" style="margin-top:20px">
-    ${esc(w[0])}
-   </div>
-
-   <div class="wordMeaning">${esc(w[1])}</div>
-
-   <div class="wordHint">
-    Гӯш кун, такрор намо ва дар хотир нигоҳ дор.
-   </div>
-
-   <div class="voiceButtons">
-    <button class="btn primary" onclick="speakCurrent(false)">
-     🔊 Гӯш кардан
-    </button>
-
-    <button class="btn light" onclick="speakCurrent(true)">
-     🐢 Оҳиста
-    </button>
-   </div>
-  </div>`;
+   <div class="wordCard">
+    <div class="muted">
+     Калимаи ${i+1} аз ${s.words.length}
+    </div>
+    <div class="wordMain" style="margin-top:20px">
+     ${esc(w[0])}
+    </div>
+    <div class="wordMeaning">
+     ${esc(w[1])}
+    </div>
+    <div class="wordHint">
+     Гӯш кун ва се бор такрор намо.
+    </div>
+    <div class="voiceButtons">
+     <button class="btn primary"
+      onclick="speakCurrent(false)">
+      🔊 Гӯш кардан
+     </button>
+     <button class="btn light"
+      onclick="speakCurrent(true)">
+      🐢 Оҳиста
+     </button>
+    </div>
+   </div>`;
   return;
  }
 
  body.innerHTML=`
- <div class="lessonBox">
-  <b>🎉 Дарсро омӯхтӣ!</b>
+  <div class="lessonBox">
+   <b>🎉 Дарсро омӯхтӣ!</b>
 
-  Акнун вақти санҷиши дониш аст.
-  Ба бахши машқ гузар ва маънои калимаҳои
-  ҳамин дарсро санҷ.
-
-  Барои беҳтар ёд гирифтан, калимаҳои навро
-  дар давоми рӯз чанд бор такрор кун.
- </div>`;
+   Акнун ба машқ гузар ва донишатро санҷ.
+  </div>`;
 
  $("continueBtn").textContent="Анҷом додани дарс ✓";
 }
 
 function speakCurrent(slow=false){
  if(!session)return;
+
  const i=session.step-1;
  if(session.words[i]){
   speak(session.words[i][0],slow);
@@ -777,7 +1074,7 @@ function showQuestion(){
   title=`«${w[0]}» чӣ маъно дорад?`;
   hint="Ҷавоби дурустро интихоб кун.";
  }else if(q.type==="reverse"){
-  title=`«${w[1]}» бо забони омӯхташаванда чӣ мешавад?`;
+  title=`«${w[1]}» чӣ мешавад?`;
   hint="Тарҷумаи мувофиқро ёб.";
  }else{
   title="🔊 Ибораро гӯш кун. Маънояш чист?";
@@ -789,19 +1086,20 @@ function showQuestion(){
    <b>🧩 Саволи ${s.step+1} аз ${s.questions.length}</b>
    <h3>${esc(title)}</h3>
    <p class="muted">${hint}</p>
-
    ${q.type==="listen"?`
     <div class="row">
-     <button class="btn primary" onclick="speakQuestion(false)">
+     <button class="btn primary"
+      onclick="speakQuestion(false)">
       🔊 Гӯш кардан
      </button>
-     <button class="btn light" onclick="speakQuestion(true)">
+     <button class="btn light"
+      onclick="speakQuestion(true)">
       🐢 Оҳиста
      </button>
     </div>`:""}
   </div>
-
-  <div id="options"></div>`;
+  <div id="options"></div>
+ `;
 
  const correct=q.type==="reverse"?w[0]:w[1];
  const container=$("options");
@@ -831,7 +1129,6 @@ function answerQuestion(button,value,correct){
 
  s.answered=true;
  const right=value===correct;
-
  const buttons=$("options").querySelectorAll("button");
 
  buttons.forEach(b=>{
@@ -856,9 +1153,8 @@ function answerQuestion(button,value,correct){
 
  $("continueBtn").disabled=false;
  $("continueBtn").textContent=
-  s.step===s.questions.length-1
-  ?"Натиҷаро дидан →"
-  :"Саволи навбатӣ →";
+  s.step===s.questions.length-1?
+  "Натиҷаро дидан →":"Саволи навбатӣ →";
 }
 
 function continueLesson(){
@@ -870,7 +1166,6 @@ function continueLesson(){
   if(!s.answered)return;
 
   s.step++;
-
   if(s.step>=s.questions.length){
    finishLesson();
    return;
@@ -880,7 +1175,6 @@ function continueLesson(){
    finishLesson();
    return;
   }
-
   s.step++;
  }
 
@@ -892,6 +1186,7 @@ function finishLesson(){
  if(!s||lessonFinished)return;
 
  lessonFinished=true;
+ stopAudio();
 
  const total=s.practice?s.questions.length:0;
  const passed=!s.practice||
@@ -918,34 +1213,25 @@ function finishLesson(){
  $("lessonCounter").textContent="Анҷом";
 
  $("lessonBody").innerHTML=`
- <div class="wordCard">
-  <div style="font-size:65px">
-   ${passed?"🏆":"💪"}
-  </div>
-
-  <h2>
-   ${passed?"Табрик!":"Боз як бор кӯшиш кун!"}
-  </h2>
-
-  <p>
-   ${s.practice?
+  <div class="wordCard">
+   <div style="font-size:65px">
+    ${passed?"🏆":"💪"}
+   </div>
+   <h2>${passed?"Табрик!":"Боз як бор кӯшиш кун!"}</h2>
+   <p>${s.practice?
     `Ҷавобҳои дуруст: ${s.score} аз ${total}`:
     "Панҷ калима ва шарҳи дарсро омӯхтӣ."}
-  </p>
+   </p>
+   <h2>${passed?"+"+reward+" XP":
+    "Барои гузаштан 70% лозим аст"}</h2>
+   <p class="muted">
+    ${already?"Ин дарс пештар анҷом ёфта буд.":""}
+   </p>
+  </div>`;
 
-  <h2>
-   ${passed?"+"+reward+" XP":
-    "Барои гузаштан 70% лозим аст"}
-  </h2>
-
-  <p class="muted">
-   ${already?"Ин дарс пештар анҷом ёфта буд.":""}
-  </p>
- </div>`;
-
- $("feedback").textContent=passed
-  ?"🌟 Офарин! Омӯзишро давом деҳ."
-  :"Ҷавобҳоро такрор карда, аз нав санҷ.";
+ $("feedback").textContent=passed?
+  "🌟 Офарин! Омӯзишро давом деҳ.":
+  "Ҷавобҳоро такрор карда, аз нав санҷ.";
 
  $("continueBtn").disabled=false;
  $("continueBtn").textContent="Ба харитаи дарсҳо →";
@@ -954,7 +1240,7 @@ function finishLesson(){
  session=null;
 }
 
-// Оғози барнома
+// Оғози VAYO Language
 render();
 refreshVoices();
 
