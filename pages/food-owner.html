@@ -1,0 +1,731 @@
+
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VAYO Food — Панели тарабхона</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+ --orange:#ff6500;
+ --bg:#f5f6fa;
+ --ink:#202533;
+ --line:#e3e6ed;
+ --muted:#697386;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+ font-family:Arial,sans-serif}
+header{background:linear-gradient(90deg,#f43a10,#ff7900);
+ color:white;padding:20px}
+header h1{margin:0;font-size:24px}
+header p{margin:7px 0 0}
+main{max-width:1050px;margin:auto;padding:16px}
+.panel{background:white;border:1px solid var(--line);
+ border-radius:15px;padding:18px;margin-bottom:16px}
+h2{font-size:20px;margin:0 0 15px}
+h3{margin:14px 0}
+label{display:block;margin:12px 0 5px;font-weight:bold}
+input,textarea,select{
+ width:100%;padding:12px;border:1px solid #d9dce5;
+ border-radius:9px;background:white;font:inherit
+}
+textarea{min-height:75px}
+button{font:inherit;cursor:pointer}
+.btn{background:var(--orange);color:white;border:0;
+ border-radius:9px;padding:11px 15px;font-weight:bold}
+.secondary{background:#e9edf3;color:#202533}
+.danger{background:#b42318}
+button:disabled{opacity:.55;cursor:not-allowed}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:12px;
+ padding:12px;background:#fff}
+.card img{width:100%;height:150px;object-fit:cover;
+ border-radius:9px;background:#eee}
+.muted{color:var(--muted);font-size:13px}
+.hidden{display:none!important}
+.status{padding:12px;background:#fff2e8;border-radius:9px;
+ margin:12px 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.price{color:var(--orange);font-weight:bold}
+.preview{max-width:220px;max-height:150px;
+ object-fit:cover;border-radius:10px;margin:10px 0}
+a{color:var(--orange)}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🍔 VAYO Food</h1>
+<p>Панели соҳибони тарабхонаҳо ва Super Admin</p>
+</header>
+
+<main>
+<div id="message" class="status">Омодасозии система...</div>
+
+<section id="authPanel" class="panel hidden">
+<h2>🔐 Воридшавӣ</h2>
+<p>Бо ҳисоби VAYO-и худ ворид шавед.</p>
+<form id="loginForm">
+<label>Email</label>
+<input id="email" type="email" required autocomplete="email">
+<label>Парол</label>
+<input id="password" type="password" required
+ autocomplete="current-password">
+<div class="row" style="margin-top:15px">
+<button class="btn" type="submit">Ворид шудан</button>
+<button class="btn secondary" type="button" id="signupBtn">
+Сабти ном
+</button>
+</div>
+</form>
+<p class="muted">Барои Super Admin аз ҳисоби мавҷуда истифода баред.</p>
+</section>
+
+<section id="dashboard" class="hidden">
+<div class="panel">
+<div class="row" style="justify-content:space-between">
+<div>
+<h2>🏪 Панели идоракунӣ</h2>
+<div id="accountInfo" class="muted"></div>
+</div>
+<button id="logoutBtn" class="btn secondary">Баромадан</button>
+</div>
+</div>
+
+<div class="panel">
+<h2>Тарабхонаҳои ман</h2>
+<div id="restaurantList" class="grid"></div>
+</div>
+
+<div class="panel">
+<h2 id="restaurantFormTitle">➕ Илова кардани тарабхона</h2>
+<form id="restaurantForm">
+<label>Номи тарабхона</label>
+<input id="rName" required maxlength="150">
+
+<label>Шаҳр</label>
+<input id="rCity" value="Душанбе" required>
+
+<label>Суроға</label>
+<input id="rAddress">
+
+<label>Телефон</label>
+<input id="rPhone" type="tel">
+
+<label>Тавсиф</label>
+<textarea id="rDescription"></textarea>
+
+<label>Логотип (JPG, PNG, WebP, то 5 MB)</label>
+<input id="rLogo" type="file" accept="image/jpeg,image/png,image/webp">
+
+<label>Акси муқова (то 5 MB)</label>
+<input id="rCover" type="file" accept="image/jpeg,image/png,image/webp">
+
+<div id="restaurantImages"></div>
+
+<label class="row">
+<input id="rOpen" type="checkbox" style="width:auto">
+Тарабхона кушода аст
+</label>
+
+<div class="row" style="margin-top:16px">
+<button id="saveRestaurantBtn" class="btn" type="submit">
+Сабти тарабхона
+</button>
+<button id="clearRestaurantBtn" class="btn secondary" type="button">
+Тарабхонаи нав
+</button>
+</div>
+</form>
+<p class="muted">
+Тарабхонаи нав аввал ҳолати pending мегирад.
+Танҳо Super Admin онро тасдиқ мекунад.
+</p>
+</div>
+
+<div id="adminPanel" class="panel hidden">
+<h2>🛡️ Тасдиқи Super Admin</h2>
+<p class="muted">Ҳолати тарабхонаҳоро танҳо Super Admin тағйир медиҳад.</p>
+<div id="adminRestaurants"></div>
+</div>
+
+<div class="panel">
+<h2>🍽️ Идоракунии меню</h2>
+<label>Тарабхонаро интихоб кун</label>
+<select id="menuRestaurant"></select>
+
+<form id="menuForm">
+<label>Номи таом</label>
+<input id="mName" required maxlength="150">
+
+<label>Тавсифи таом</label>
+<textarea id="mDescription"></textarea>
+
+<label>Нархи фурӯш (сомонӣ)</label>
+<input id="mPrice" type="number" min="0" step="0.01" required>
+
+<label>Нархи пешина барои тахфиф (ихтиёрӣ)</label>
+<input id="mOldPrice" type="number" min="0" step="0.01">
+
+<label>Акси таом</label>
+<input id="mImage" type="file" accept="image/jpeg,image/png,image/webp">
+
+<div id="menuImagePreview"></div>
+
+<label class="row">
+<input id="mAvailable" type="checkbox" style="width:auto" checked>
+Таом мавҷуд аст
+</label>
+
+<div class="row" style="margin-top:16px">
+<button id="saveMenuBtn" class="btn" type="submit">
+Сабти таом
+</button>
+<button id="clearMenuBtn" class="btn secondary" type="button">
+Таоми нав
+</button>
+</div>
+</form>
+
+<h3>📋 Таомҳои сабтшуда</h3>
+<div id="menuList" class="grid"></div>
+</div>
+</section>
+</main>
+
+<script>
+"use strict";
+
+const SUPABASE_URL="https://rgminzzmlktkliliiupt.supabase.co";
+const SUPABASE_KEY="sb_publishable_UHJzsYIpimmjtDtHEnacQA_BJVKE2pD";
+
+const db=window.supabase.createClient(
+ SUPABASE_URL,SUPABASE_KEY
+);
+
+const $=id=>document.getElementById(id);
+
+let currentUser=null;
+let isAdmin=false;
+let restaurants=[];
+let selectedRestaurantId=null;
+let selectedMenuId=null;
+let menuItems=[];
+
+function showMessage(text,error=false){
+ $("message").textContent=text;
+ $("message").style.background=error?"#ffe7e7":"#e8f7eb";
+}
+
+function setBusy(button,busy){
+ button.disabled=busy;
+}
+
+function errorText(error){
+ return error?.message||"Хатои номаълум";
+}
+
+function imageElement(url){
+ const img=document.createElement("img");
+ img.src=url;
+ img.alt="Акси тарабхона ё таом";
+ img.loading="lazy";
+ return img;
+}
+
+function makeButton(label,action,style="secondary"){
+ const btn=document.createElement("button");
+ btn.type="button";
+ btn.className="btn "+style;
+ btn.textContent=label;
+ btn.onclick=action;
+ return btn;
+}
+
+async function initialize(){
+ const {data,error}=await db.auth.getUser();
+ if(error && !data?.user){
+  showMessage("Барои идома ворид шавед.");
+ }
+ currentUser=data?.user||null;
+ await updateSessionUI();
+}
+
+async function updateSessionUI(){
+ $("authPanel").classList.toggle("hidden",!!currentUser);
+ $("dashboard").classList.toggle("hidden",!currentUser);
+
+ if(!currentUser)return;
+
+ const {data,error}=await db.rpc("vayo_food_is_admin");
+ isAdmin=!error && data===true;
+
+ $("accountInfo").textContent=
+  currentUser.email+
+  (isAdmin?" — Super Admin":" — Соҳиби тарабхона");
+
+ $("adminPanel").classList.toggle("hidden",!isAdmin);
+
+ await loadRestaurants();
+}
+
+$("loginForm").onsubmit=async e=>{
+ e.preventDefault();
+ const {data,error}=await db.auth.signInWithPassword({
+  email:$("email").value.trim(),
+  password:$("password").value
+ });
+ if(error){
+  showMessage(errorText(error),true);
+  return;
+ }
+ currentUser=data.user;
+ showMessage("Воридшавӣ муваффақ шуд.");
+ await updateSessionUI();
+};
+
+$("signupBtn").onclick=async()=>{
+ const email=$("email").value.trim();
+ const password=$("password").value;
+ if(!email||password.length<6){
+  showMessage("Email ва пароли ҳадди ақал 6-рамзаро ворид кун.",true);
+  return;
+ }
+ const {data,error}=await db.auth.signUp({email,password});
+ if(error){
+  showMessage(errorText(error),true);
+  return;
+ }
+ if(!data.session){
+  showMessage("Сабти ном қабул шуд. Email-ро тасдиқ кунед.");
+ }else{
+  currentUser=data.user;
+  await updateSessionUI();
+ }
+};
+
+$("logoutBtn").onclick=async()=>{
+ await db.auth.signOut();
+ currentUser=null;
+ isAdmin=false;
+ restaurants=[];
+ await updateSessionUI();
+ showMessage("Аз ҳисоб баромадед.");
+};
+
+async function loadRestaurants(){
+ const {data,error}=await db
+  .from("vayo_food_restaurants")
+  .select("*")
+  .order("created_at",{ascending:false});
+
+ if(error){
+  showMessage(errorText(error),true);
+  return;
+ }
+
+ restaurants=data||[];
+ renderRestaurants();
+ renderRestaurantSelect();
+
+ if(isAdmin)renderAdminRestaurants();
+}
+
+function renderRestaurants(){
+ const root=$("restaurantList");
+ root.replaceChildren();
+
+ if(!restaurants.length){
+  root.textContent="Ҳоло тарабхона нест.";
+  return;
+ }
+
+ restaurants.forEach(r=>{
+  const card=document.createElement("div");
+  card.className="card";
+
+  if(r.cover_url)card.append(imageElement(r.cover_url));
+
+  const title=document.createElement("h3");
+  title.textContent=r.name;
+
+  const info=document.createElement("p");
+  info.className="muted";
+  info.textContent=r.city+" • "+r.status;
+
+  const btn=makeButton("Таҳрир",()=>editRestaurant(r.id));
+
+  card.append(title,info,btn);
+  root.append(card);
+ });
+}
+
+function renderRestaurantSelect(){
+ const select=$("menuRestaurant");
+ const previous=select.value;
+ select.replaceChildren();
+
+ restaurants.forEach(r=>{
+  const option=document.createElement("option");
+  option.value=r.id;
+  option.textContent=r.name;
+  select.append(option);
+ });
+
+ if(restaurants.some(r=>r.id===previous)){
+  select.value=previous;
+ }
+ loadMenu();
+}
+
+function clearRestaurant(){
+ selectedRestaurantId=null;
+ $("restaurantForm").reset();
+ $("rCity").value="Душанбе";
+ $("restaurantImages").replaceChildren();
+ $("restaurantFormTitle").textContent="➕ Илова кардани тарабхона";
+ $("saveRestaurantBtn").textContent="Сабти тарабхона";
+}
+
+function editRestaurant(id){
+ const r=restaurants.find(x=>x.id===id);
+ if(!r)return;
+
+ selectedRestaurantId=id;
+ $("rName").value=r.name||"";
+ $("rCity").value=r.city||"";
+ $("rAddress").value=r.address||"";
+ $("rPhone").value=r.phone||"";
+ $("rDescription").value=r.description||"";
+ $("rOpen").checked=!!r.is_open;
+ $("rLogo").value="";
+ $("rCover").value="";
+
+ const preview=$("restaurantImages");
+ preview.replaceChildren();
+
+ if(r.logo_url)preview.append(imageElement(r.logo_url));
+ if(r.cover_url)preview.append(imageElement(r.cover_url));
+
+ $("restaurantFormTitle").textContent="✏️ Таҳрири тарабхона";
+ $("saveRestaurantBtn").textContent="Нигоҳ доштани тағйирот";
+ $("restaurantForm").scrollIntoView({behavior:"smooth"});
+}
+
+$("clearRestaurantBtn").onclick=clearRestaurant;
+
+async function uploadImage(file,restaurantId){
+ if(!file)return null;
+
+ const allowed=["image/jpeg","image/png","image/webp"];
+ if(!allowed.includes(file.type)){
+  throw new Error("Танҳо JPG, PNG ё WebP иҷозат аст.");
+ }
+ if(file.size>5*1024*1024){
+  throw new Error("Акс бояд то 5 MB бошад.");
+ }
+
+ const ext={
+  "image/jpeg":"jpg",
+  "image/png":"png",
+  "image/webp":"webp"
+ }[file.type];
+
+ const path=restaurantId+"/"+crypto.randomUUID()+"."+ext;
+
+ const {error}=await db.storage
+  .from("vayo-food-images")
+  .upload(path,file,{
+   contentType:file.type,
+   upsert:false
+  });
+
+ if(error)throw error;
+
+ const {data}=db.storage
+  .from("vayo-food-images")
+  .getPublicUrl(path);
+
+ return data.publicUrl;
+}
+
+$("restaurantForm").onsubmit=async e=>{
+ e.preventDefault();
+ if(!currentUser)return;
+
+ const button=$("saveRestaurantBtn");
+ setBusy(button,true);
+
+ try{
+  const values={
+   name:$("rName").value.trim(),
+   city:$("rCity").value.trim(),
+   address:$("rAddress").value.trim(),
+   phone:$("rPhone").value.trim(),
+   description:$("rDescription").value.trim(),
+   is_open:$("rOpen").checked
+  };
+
+  let id=selectedRestaurantId;
+  let existing=restaurants.find(r=>r.id===id);
+
+  if(!id){
+   const {data,error}=await db
+    .from("vayo_food_restaurants")
+    .insert({
+     ...values,
+     owner_id:currentUser.id,
+     status:"pending",
+     is_open:false
+    })
+    .select("id")
+    .single();
+
+   if(error)throw error;
+   id=data.id;
+  }
+
+  const logo=await uploadImage($("rLogo").files[0],id);
+  const cover=await uploadImage($("rCover").files[0],id);
+
+  if(logo)values.logo_url=logo;
+  if(cover)values.cover_url=cover;
+
+  // Барои тарабхонаи нав is_open ҳангоми сохтан false аст.
+  // Дар ҳамин қадам онро ба true намегузаронем.
+  if(!existing)values.is_open=false;
+
+  const {error}=await db
+   .from("vayo_food_restaurants")
+   .update(values)
+   .eq("id",id);
+
+  if(error)throw error;
+
+  showMessage("Тарабхона нигоҳ дошта шуд.");
+  clearRestaurant();
+  await loadRestaurants();
+
+ }catch(error){
+  showMessage(errorText(error),true);
+ }finally{
+  setBusy(button,false);
+ }
+};
+
+function renderAdminRestaurants(){
+ const root=$("adminRestaurants");
+ root.replaceChildren();
+
+ restaurants.forEach(r=>{
+  const card=document.createElement("div");
+  card.className="card";
+  card.style.marginBottom="10px";
+
+  const title=document.createElement("strong");
+  title.textContent=r.name+" — "+r.status;
+
+  const select=document.createElement("select");
+  ["pending","approved","rejected","suspended"].forEach(status=>{
+   const opt=document.createElement("option");
+   opt.value=status;
+   opt.textContent=status;
+   select.append(opt);
+  });
+  select.value=r.status;
+
+  const button=makeButton("Нигоҳ доштан",async()=>{
+   button.disabled=true;
+   const {error}=await db
+    .from("vayo_food_restaurants")
+    .update({status:select.value})
+    .eq("id",r.id);
+
+   if(error)showMessage(errorText(error),true);
+   else showMessage("Ҳолати тарабхона нав шуд.");
+
+   button.disabled=false;
+   await loadRestaurants();
+  });
+
+  card.append(title,select,button);
+  root.append(card);
+ });
+}
+
+$("menuRestaurant").onchange=()=>{
+ clearMenu();
+ loadMenu();
+};
+
+async function loadMenu(){
+ const id=$("menuRestaurant").value;
+ const root=$("menuList");
+ root.replaceChildren();
+ menuItems=[];
+
+ if(!id){
+  root.textContent="Аввал тарабхона илова кунед.";
+  return;
+ }
+
+ const {data,error}=await db
+  .from("vayo_food_menu_items")
+  .select("*")
+  .eq("restaurant_id",id)
+  .order("created_at",{ascending:false});
+
+ if(error){
+  showMessage(errorText(error),true);
+  return;
+ }
+
+ menuItems=data||[];
+
+ menuItems.forEach(item=>{
+  const card=document.createElement("div");
+  card.className="card";
+
+  if(item.image_url)card.append(imageElement(item.image_url));
+
+  const name=document.createElement("h3");
+  name.textContent=item.name;
+
+  const price=document.createElement("p");
+  price.className="price";
+  price.textContent=Number(item.price).toFixed(2)+" сомонӣ";
+
+  const state=document.createElement("p");
+  state.className="muted";
+  state.textContent=item.available?"Мавҷуд":"Номавҷуд";
+
+  const edit=makeButton("Таҳрир",()=>editMenu(item.id));
+  const del=makeButton("Нест кардан",()=>deleteMenu(item.id),"danger");
+
+  card.append(name,price,state,edit,del);
+  root.append(card);
+ });
+
+ if(!menuItems.length){
+  root.textContent="Ҳоло таом нест.";
+ }
+}
+
+function clearMenu(){
+ selectedMenuId=null;
+ $("menuForm").reset();
+ $("mAvailable").checked=true;
+ $("menuImagePreview").replaceChildren();
+ $("saveMenuBtn").textContent="Сабти таом";
+}
+
+$("clearMenuBtn").onclick=clearMenu;
+
+function editMenu(id){
+ const item=menuItems.find(x=>x.id===id);
+ if(!item)return;
+
+ selectedMenuId=id;
+ $("mName").value=item.name;
+ $("mDescription").value=item.description||"";
+ $("mPrice").value=item.price;
+ $("mOldPrice").value=item.old_price??"";
+ $("mAvailable").checked=item.available;
+ $("mImage").value="";
+
+ const preview=$("menuImagePreview");
+ preview.replaceChildren();
+
+ if(item.image_url)preview.append(imageElement(item.image_url));
+
+ $("saveMenuBtn").textContent="Нигоҳ доштани тағйирот";
+ $("menuForm").scrollIntoView({behavior:"smooth"});
+}
+
+$("menuForm").onsubmit=async e=>{
+ e.preventDefault();
+
+ const restaurantId=$("menuRestaurant").value;
+ if(!restaurantId){
+  showMessage("Аввал тарабхона интихоб кун.",true);
+  return;
+ }
+
+ const button=$("saveMenuBtn");
+ setBusy(button,true);
+
+ try{
+  const price=Number($("mPrice").value);
+  const oldValue=$("mOldPrice").value.trim();
+  const oldPrice=oldValue===""?null:Number(oldValue);
+
+  if(!Number.isFinite(price)||price<0){
+   throw new Error("Нархи нодуруст.");
+  }
+  if(oldPrice!==null && (!Number.isFinite(oldPrice)||oldPrice<price)){
+   throw new Error("Нархи пешина бояд аз нархи нав кам набошад.");
+  }
+
+  const values={
+   restaurant_id:restaurantId,
+   name:$("mName").value.trim(),
+   description:$("mDescription").value.trim(),
+   price,
+   old_price:oldPrice,
+   available:$("mAvailable").checked
+  };
+
+  const file=$("mImage").files[0];
+  if(file){
+   values.image_url=await uploadImage(file,restaurantId);
+  }
+
+  let result;
+
+  if(selectedMenuId){
+   result=await db
+    .from("vayo_food_menu_items")
+    .update(values)
+    .eq("id",selectedMenuId);
+  }else{
+   result=await db
+    .from("vayo_food_menu_items")
+    .insert(values);
+  }
+
+  if(result.error)throw result.error;
+
+  showMessage("Таом нигоҳ дошта шуд.");
+  clearMenu();
+  await loadMenu();
+
+ }catch(error){
+  showMessage(errorText(error),true);
+ }finally{
+  setBusy(button,false);
+ }
+};
+
+async function deleteMenu(id){
+ if(!confirm("Ин таомро нест мекунед?"))return;
+
+ const {error}=await db
+  .from("vayo_food_menu_items")
+  .delete()
+  .eq("id",id);
+
+ if(error)showMessage(errorText(error),true);
+ else{
+  showMessage("Таом нест карда шуд.");
+  clearMenu();
+  await loadMenu();
+ }
+}
+
+initialize();
+</script>
+</body>
+</html>
