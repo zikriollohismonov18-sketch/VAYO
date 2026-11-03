@@ -117,6 +117,7 @@ button:disabled{
   display:block;
   font-size:23px;
   margin-top:6px;
+  overflow-wrap:anywhere;
 }
 .notice{
   padding:12px;
@@ -141,7 +142,7 @@ button:disabled{
   flex-wrap:wrap;
   margin:8px 0;
 }
-.row small,.row b{
+.row b,.row small{
   overflow-wrap:anywhere;
 }
 .formbox{
@@ -152,9 +153,9 @@ button:disabled{
 }
 .admin-actions{
   display:flex;
-  flex-wrap:wrap;
   gap:8px;
-  margin-top:14px;
+  flex-wrap:wrap;
+  margin-top:12px;
 }
 .admin-actions button{
   flex:1;
@@ -163,10 +164,13 @@ button:disabled{
 .warning{
   background:#fff4e6;
   border:1px solid #ffd39b;
-  padding:12px;
   border-radius:10px;
+  padding:12px;
   margin:12px 0;
-  font-size:14px;
+}
+.section-title{
+  margin:0 0 16px;
+  font-size:21px;
 }
 </style>
 </head>
@@ -188,6 +192,8 @@ button:disabled{
 
 <main class="wrap">
 
+<!-- ВОРИДШАВӢ -->
+
 <section class="panel" id="loginPanel">
   <h2>Воридшавӣ</h2>
 
@@ -207,6 +213,8 @@ button:disabled{
 
   <button id="loginBtn">Ворид шудан</button>
 </section>
+
+<!-- ҲИСОБ -->
 
 <section class="panel hidden" id="accountPanel">
   <div class="row">
@@ -263,6 +271,57 @@ button:disabled{
 
 <section id="adminPanel" class="hidden">
 
+  <!-- ҲИСОБОТИ УМУМӢ — НАВ -->
+
+  <div class="panel">
+
+    <h2 class="section-title">
+      📊 Ҳисоботи умумии комиссияҳои VAYO
+    </h2>
+
+    <div class="grid">
+
+      <div class="stat">
+        💰 Қарзи умумӣ
+        <strong id="adminPendingTotal">0 сомонӣ</strong>
+      </div>
+
+      <div class="stat">
+        ✅ Пардохтшуда
+        <strong id="adminPaidTotal">0 сомонӣ</strong>
+      </div>
+
+      <div class="stat">
+        ⏰ Қарзи муҳлатгузашта
+        <strong id="adminOverdueTotal">0 сомонӣ</strong>
+      </div>
+
+      <div class="stat">
+        👥 Хизматрасонҳои муҳлатгузашта
+        <strong id="adminBlockedProviders">0</strong>
+      </div>
+
+      <div class="stat">
+        ⏳ Интизори тасдиқ
+        <strong id="adminReportedCount">0</strong>
+      </div>
+
+      <div class="stat">
+        📋 Комиссияҳои пардохтнашуда
+        <strong id="adminPendingCount">0</strong>
+      </div>
+
+      <div class="stat">
+        🧾 Комиссияҳои пардохтшуда
+        <strong id="adminPaidCount">0</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ИДОРАКУНИИ КОМИССИЯҲО -->
+
   <div class="panel">
 
     <h2>🛡️ Панели суперадмин</h2>
@@ -275,8 +334,8 @@ button:disabled{
     <div class="warning">
       ⚠️ Пеш аз тасдиқи комиссия ҳатман санҷед,
       ки маблағ воқеан ба ҳисоби VAYO ворид шудааст.
-      Агар рақами амалиёт нодуруст бошад ё маблағ
-      ворид нашуда бошад, пардохтро рад кунед.
+      Агар маблағ нарасида бошад ё рақами амалиёт
+      нодуруст бошад, гузориши пардохтро рад кунед.
     </div>
 
     <button id="adminRefreshBtn">
@@ -293,6 +352,8 @@ button:disabled{
 
 <script>
 "use strict";
+
+/* ПАЙВАСТШАВӢ БА SUPABASE */
 
 const SUPABASE_URL =
   "https://rgminzzmlktkliliiupt.supabase.co";
@@ -320,9 +381,9 @@ function money(value){
 }
 
 function dateText(value){
-  if(!value) return "—";
+  if(!value)return "—";
 
-  const date = new Date(value);
+  const date=new Date(value);
 
   if(Number.isNaN(date.getTime())){
     return "—";
@@ -384,7 +445,7 @@ function isOverdue(c){
     new Date(c.due_at)<=new Date();
 }
 
-/* РАД КАРДАНИ ПАРДОХТ — НАВ */
+/* РАД КАРДАНИ ПАРДОХТ */
 
 async function rejectCommission(commissionId,button){
 
@@ -396,13 +457,13 @@ async function rejectCommission(commissionId,button){
     return;
   }
 
-  const confirmed=confirm(
+  if(!confirm(
     "❌ Оё мехоҳед ин пардохти комиссияро рад кунед?\n\n"+
     "Қарзи фурӯшанда боқӣ мемонад.\n"+
     "Фурӯшанда метавонад пардохтро дубора гузориш диҳад."
-  );
-
-  if(!confirmed)return;
+  )){
+    return;
+  }
 
   button.disabled=true;
 
@@ -790,6 +851,43 @@ async function loadSeller(){
 
 }
 
+/* ҲИСОБОТИ УМУМИИ СУПЕРАДМИН — НАВ */
+
+async function loadAdminSummary(){
+
+  if(!isAdmin)return;
+
+  const {data,error}=await db.rpc(
+    "vayo_admin_commission_summary"
+  );
+
+  if(error)throw error;
+
+  const summary=data||{};
+
+  $("adminPendingTotal").textContent=
+    money(summary.total_pending);
+
+  $("adminPaidTotal").textContent=
+    money(summary.total_paid);
+
+  $("adminOverdueTotal").textContent=
+    money(summary.total_overdue);
+
+  $("adminBlockedProviders").textContent=
+    Number(summary.blocked_providers||0);
+
+  $("adminReportedCount").textContent=
+    Number(summary.reported_count||0);
+
+  $("adminPendingCount").textContent=
+    Number(summary.pending_count||0);
+
+  $("adminPaidCount").textContent=
+    Number(summary.paid_count||0);
+
+}
+
 /* КОМИССИЯҲОИ СУПЕРАДМИН */
 
 async function loadAdmin(){
@@ -826,12 +924,17 @@ async function loadData(){
     await loadSeller();
 
     if(isAdmin){
+      await loadAdminSummary();
       await loadAdmin();
     }
 
   }catch(err){
 
-    notify(err.message,"error");
+    notify(
+      "Хатогӣ ҳангоми гирифтани маълумот: "+
+      err.message,
+      "error"
+    );
 
   }
 }
