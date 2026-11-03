@@ -55,15 +55,22 @@ h3{margin:10px 0}
 .option{display:block;width:100%;background:#faf9ff;border:2px solid var(--line);border-radius:13px;padding:14px;text-align:left;margin:9px 0;overflow-wrap:anywhere}
 .option.correct{background:#e4f9ed;border-color:var(--green)}
 .option.wrong{background:#ffe8ed;border-color:var(--red)}
+.option.selected{background:#eae4ff;border-color:var(--main)}
 .notice{padding:13px;border-radius:12px;background:#fff7e6;color:#785a23;line-height:1.6;margin:10px 0}
 .badgeLine{padding:12px;background:#fff8e9;border-radius:12px;margin:8px 0}
 .lessonTop{display:flex;justify-content:space-between;gap:10px;align-items:center}
 #feedback{font-weight:bold;line-height:1.6}
+.examGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.examStat{background:#f7f5ff;padding:15px;border-radius:12px;text-align:center}
+.examStat b{display:block;font-size:22px;color:var(--main)}
+.certificate{border:3px solid var(--gold);border-radius:16px;padding:20px;text-align:center;background:#fffaf0;margin:15px 0}
+#examTimer{font-weight:bold;color:var(--main)}
 footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
 @media(max-width:600px){
  .stats{grid-template-columns:repeat(2,1fr)}
  .topics{grid-template-columns:1fr}
  .card{padding:13px}
+ .examGrid{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -119,29 +126,50 @@ footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
  <button id="nextBtn" class="btn primary" onclick="nextStep()">Давом додан →</button>
 </section>
 
-<section class="card">
+<section class="card" id="generalExams">
+ <h2>🎓 Имтиҳони умумии сатҳ</h2>
+ <div id="examInformation"></div>
+</section>
+
+<section class="card hidden" id="examScreen">
+ <div class="lessonTop">
+  <button class="btn light" onclick="cancelGeneralExam()">← Баргаштан</button>
+  <span id="examTimer">30:00</span>
+ </div>
+ <h2 id="examTitle" style="margin-top:18px">Имтиҳони умумӣ</h2>
+ <p id="examCounter" class="muted"></p>
+ <div class="progress"><div class="fill" id="examFill"></div></div>
+ <div id="examBody"></div>
+ <div class="actions" id="examActions">
+  <button id="examPrevious" class="btn light" onclick="previousGeneralQuestion()">← Қаблӣ</button>
+  <button id="examNext" class="btn primary" onclick="nextGeneralQuestion()">Саволи навбатӣ →</button>
+ </div>
+</section>
+
+<section class="card" id="reviewSection">
  <h2>🔁 Калимаҳои душвор</h2>
  <p id="mistakeCount" class="muted"></p>
  <button class="btn primary" onclick="startReview()">Такрор кардан</button>
 </section>
 
-<section class="card">
+<section class="card" id="heartSection">
  <h2>❤️ Барқарор кардани дилҳо</h2>
  <p id="heartInfo" class="muted"></p>
  <button class="btn light" onclick="startHeartPractice()">Машқи барқароркунӣ</button>
 </section>
 
-<section class="card">
+<section class="card" id="awardsSection">
  <h2>🏅 Мукофотҳо</h2>
  <div id="achievements"></div>
 </section>
 
-<section class="card">
+<section class="card" id="summarySection">
  <h2>📊 Омори омӯзиш</h2>
  <div id="summary"></div>
 </section>
 
 </main>
+
 <footer>VAYO Language • Омӯзиши интерактивӣ • A1 ва A2</footer>
 
 <script>
@@ -187,7 +215,7 @@ const LEVEL_TOPICS={
  C2:["Матнҳои мураккаб","Адабиёт","Ифодаҳои маҷозӣ","Ибораҳои устувор","Зарофатҳои забонӣ","Услуби илмӣ","Услуби ҳуқуқӣ","Услуби адабӣ","Рӯзноманигорӣ","Фалсафа","Ҷомеашиносӣ","Мубоҳиса","Нутқи касбӣ","Мақола","Таҳрир","Тарҷума","Маъноҳои нозук","Муоширати олӣ","Таҳлил","Омодагӣ ба C2"]
 };
 
-/* A1: Маълумоти мавҷуда */
+/* ===== A1: 5 забон, 10 мавзӯъ ===== */
 
 const A1_RAW={
 de:[
@@ -264,99 +292,32 @@ for(const lang in A1_RAW){
  A1[lang]=A1_RAW[lang].map(parsePairs);
 }
 
-/*
- A2 — 20 мавзӯъ × 5 забон.
- Ҳар мавзӯъ 3 калима, 2 ҷумла ва як қоидаи грамматикӣ дорад.
- Сатрҳо бо ~ ҷудо мешаванд.
- Калимаҳо бо | ҷудо мешаванд.
-*/
-
-/* Тарҷумаҳои умумии тоҷикӣ */
+/* ===== A2: Тарҷумаҳои тоҷикӣ ===== */
 
 const A2_TJ=[
-[
-"барвақт хестан","наҳорӣ кардан","ба кор рафтан",
-"Ман ҳар рӯз барвақт мехезам.","Баъди наҳорӣ ба кор меравам."
-],
-[
-"нақша","ҳафтаи оянда","омода шудан",
-"Ман барои ҳафтаи оянда нақша дорам.","Ман мехоҳам ба сафар омода шавам."
-],
-[
-"дирӯз","таҷриба","ба ёд овардан",
-"Ман дирӯз бисёр кор кардам.","Ин барои ман таҷрибаи хуб буд."
-],
-[
-"сафар","чипта","истироҳат",
-"Ман мехоҳам ба сафар равам.","Ман чиптаро пешакӣ мехарам."
-],
-[
-"меҳмонхона","ҳуҷра","банд кардан",
-"Ман мехоҳам ҳуҷра банд кунам.","Оё ҳуҷраи холӣ доред?"
-],
-[
-"фармоиш додан","ҳисобнома","хӯрок",
-"Ман мехоҳам хӯрок фармоиш диҳам.","Метавонед ҳисобномаро биёред?"
-],
-[
-"духтур","вақти қабул","дард",
-"Ман назди духтур вақти қабул дорам.","Сарам дард мекунад."
-],
-[
-"дорухона","дору","дорухат",
-"Дорухонаи наздиктарин дар куҷост?","Ман ба ин дору ниёз дорам."
-],
-[
-"вазифа","ҳамкор","вақти кор",
-"Ман бояд имрӯз бештар кор кунам.","Ҳамкорам ба ман ёрӣ медиҳад."
-],
-[
-"аризаи корӣ","мусоҳиба","таҷрибаи корӣ",
-"Ман пагоҳ мусоҳибаи корӣ дорам.","Ман дар ин соҳа таҷриба дорам."
-],
-[
-"манзил","иҷорапулӣ","шартнома",
-"Ман манзили нав меҷӯям.","Иҷораи моҳона чанд пул аст?"
-],
-[
-"суратҳисоб","интиқоли пул","корти бонкӣ",
-"Ман мехоҳам суратҳисоби бонкӣ кушоям.","Ман бояд пул интиқол диҳам."
-],
-[
-"баста","варақа","суроға",
-"Ман бояд ин варақаро пур кунам.","Ин бастаро ба суроға мефиристам."
-],
-[
-"паём","рамз","пайвастшавӣ",
-"Ман паём гирифтам.","Пайвастшавии интернет суст аст."
-],
-[
-"саломатӣ","машқ кардан","ғизои солим",
-"Варзиш барои саломатӣ хуб аст.","Ман ҳафтае се бор машқ мекунам."
-],
-[
-"дӯст","даъват","вохӯрӣ",
-"Ман дӯстамро даъват мекунам.","Мо рӯзи шанбе вомехӯрем."
-],
-[
-"курс","имтиҳон","вазифаи хонагӣ",
-"Ман ба курси забон меравам.","Ман бояд ба имтиҳон тайёр шавам."
-],
-[
-"шаҳрдорӣ","истгоҳ","хизматрасонӣ",
-"Истгоҳи наздиктарин дар куҷост?","Ман бояд ба шаҳрдорӣ равам."
-],
-[
-"иҷозат","қоида","ҳуҷҷат",
-"Оё ба ман иҷозат лозим аст?","Ман бояд ин қоидаҳоро риоя кунам."
-],
-[
-"фаҳмондан","узр пурсидан","такрор кардан",
-"Метавонед инро фаҳмонед?","Лутфан, як бори дигар такрор кунед."
-]
+["барвақт хестан","наҳорӣ кардан","ба кор рафтан","Ман ҳар рӯз барвақт мехезам.","Баъди наҳорӣ ба кор меравам."],
+["нақша","ҳафтаи оянда","омода шудан","Ман барои ҳафтаи оянда нақша дорам.","Ман мехоҳам ба сафар омода шавам."],
+["дирӯз","таҷриба","ба ёд овардан","Ман дирӯз бисёр кор кардам.","Ин барои ман таҷрибаи хуб буд."],
+["сафар","чипта","истироҳат","Ман мехоҳам ба сафар равам.","Ман чиптаро пешакӣ мехарам."],
+["меҳмонхона","ҳуҷра","банд кардан","Ман мехоҳам ҳуҷра банд кунам.","Оё ҳуҷраи холӣ доред?"],
+["фармоиш додан","ҳисобнома","хӯрок","Ман мехоҳам хӯрок фармоиш диҳам.","Метавонед ҳисобномаро биёред?"],
+["духтур","вақти қабул","дард","Ман назди духтур вақти қабул дорам.","Сарам дард мекунад."],
+["дорухона","дору","дорухат","Дорухонаи наздиктарин дар куҷост?","Ман ба ин дору ниёз дорам."],
+["вазифа","ҳамкор","вақти кор","Ман бояд имрӯз бештар кор кунам.","Ҳамкорам ба ман ёрӣ медиҳад."],
+["аризаи корӣ","мусоҳиба","таҷрибаи корӣ","Ман пагоҳ мусоҳибаи корӣ дорам.","Ман дар ин соҳа таҷриба дорам."],
+["манзил","иҷорапулӣ","шартнома","Ман манзили нав меҷӯям.","Иҷораи моҳона чанд пул аст?"],
+["суратҳисоб","интиқоли пул","корти бонкӣ","Ман мехоҳам суратҳисоби бонкӣ кушоям.","Ман бояд пул интиқол диҳам."],
+["баста","варақа","суроға","Ман бояд ин варақаро пур кунам.","Ин бастаро ба суроға мефиристам."],
+["паём","рамз","пайвастшавӣ","Ман паём гирифтам.","Пайвастшавии интернет суст аст."],
+["саломатӣ","машқ кардан","ғизои солим","Варзиш барои саломатӣ хуб аст.","Ман ҳафтае се бор машқ мекунам."],
+["дӯст","даъват","вохӯрӣ","Ман дӯстамро даъват мекунам.","Мо рӯзи шанбе вомехӯрем."],
+["курс","имтиҳон","вазифаи хонагӣ","Ман ба курси забон меравам.","Ман бояд ба имтиҳон тайёр шавам."],
+["шаҳрдорӣ","истгоҳ","хизматрасонӣ","Истгоҳи наздиктарин дар куҷост?","Ман бояд ба шаҳрдорӣ равам."],
+["иҷозат","қоида","ҳуҷҷат","Оё ба ман иҷозат лозим аст?","Ман бояд ин қоидаҳоро риоя кунам."],
+["фаҳмондан","узр пурсидан","такрор кардан","Метавонед инро фаҳмонед?","Лутфан, як бори дигар такрор кунед."]
 ];
 
-/* Калимаҳои A2 дар панҷ забон */
+/* ===== A2: Калимаҳо ===== */
 
 const A2_WORDS={
 de:[
@@ -471,7 +432,7 @@ ko:[
 ]
 };
 
-/* Ду ҷумла барои ҳар мавзӯъ */
+/* ===== A2: Ҷумлаҳо ===== */
 
 const A2_SENTENCES={
 de:[
@@ -586,7 +547,7 @@ ko:[
 ]
 };
 
-/* Қоидаҳои грамматикаи A2 */
+/* ===== A2: Грамматика ===== */
 
 const GRAMMAR={
 de:[
@@ -641,11 +602,12 @@ for(const lang of Object.keys(A2_WORDS)){
  });
 }
 
-/* Нигоҳдории пешрафти пешина */
+/* ===== Нигоҳдории пешрафт ===== */
 
 const OLD_KEY="vayo_language_v2";
 const EXTRA_KEY="vayo_language_extended_v1";
 const HEART_KEY="vayo_language_hearts_v1";
+const EXAM_KEY="vayo_language_exams_v1";
 
 function readJSON(key,fallback){
  try{
@@ -664,12 +626,20 @@ const extra=readJSON(EXTRA_KEY,{
  done:{},level:"A1",mistakes:{}
 });
 
-const heartState=readJSON(HEART_KEY,{lastRefill:Date.now()});
+const heartState=readJSON(HEART_KEY,{
+ lastRefill:Date.now()
+});
+
+const examResults=readJSON(EXAM_KEY,{
+ passed:{},history:[]
+});
 
 if(!LANGUAGES.some(l=>l[0]===state.lang))state.lang="de";
 if(!state.done||typeof state.done!=="object")state.done={};
 if(!extra.done||typeof extra.done!=="object")extra.done={};
 if(!extra.mistakes||typeof extra.mistakes!=="object")extra.mistakes={};
+if(!examResults.passed||typeof examResults.passed!=="object")examResults.passed={};
+if(!Array.isArray(examResults.history))examResults.history=[];
 
 state.xp=Math.max(0,Number(state.xp)||0);
 state.hearts=Number.isFinite(Number(state.hearts))?
@@ -690,6 +660,14 @@ function save(){
   localStorage.setItem(HEART_KEY,JSON.stringify(heartState));
  }catch(e){
   console.warn("Нигоҳдорӣ дастрас нест",e);
+ }
+}
+
+function saveExamResults(){
+ try{
+  localStorage.setItem(EXAM_KEY,JSON.stringify(examResults));
+ }catch(e){
+  console.warn("Натиҷаи имтиҳон нигоҳ дошта нашуд",e);
  }
 }
 
@@ -865,6 +843,7 @@ function render(){
 
  renderTopics();
  renderSummary();
+ renderGeneralExams();
 }
 
 function renderTopics(){
@@ -909,9 +888,12 @@ function renderSummary(){
  const mistakes=Object.values(extra.mistakes)
   .filter(x=>x&&x.lang===state.lang).length;
 
+ const examsPassed=Object.keys(examResults.passed).length;
+
  $("summary").innerHTML=`
   <p>📗 A1: <b>${a1}/100</b> дарс</p>
   <p>📘 A2: <b>${a2}/500</b> зердарс</p>
+  <p>🎓 Имтиҳонҳои умумии гузашта: <b>${examsPassed}</b></p>
   <p>⚡ XP: <b>${state.xp}</b></p>
   <p>🔥 Рӯзҳои пайдарпай: <b>${state.streak}</b></p>
   <p class="muted">Пешрафт дар ҳамин браузер нигоҳ дошта мешавад.</p>
@@ -925,7 +907,9 @@ function renderSummary(){
   [a1+a2>=10,"🥉 Даҳ дарс"],
   [a1+a2>=50,"🥈 Панҷоҳ дарс"],
   [a1+a2>=100,"🥇 Сад дарс"],
-  [state.streak>=7,"🔥 Ҳафт рӯзи пайдарпай"]
+  [state.streak>=7,"🔥 Ҳафт рӯзи пайдарпай"],
+  [examsPassed>=1,"🎓 Аввалин имтиҳони умумӣ"],
+  [examsPassed>=2,"🏆 Ду имтиҳони умумӣ"]
  ];
 
  $("achievements").innerHTML=awards.map(a=>`
@@ -935,17 +919,31 @@ function renderSummary(){
  `).join("");
 }
 
+/* ===== Дарсҳои A1 ва A2 ===== */
+
+function showMainSections(show){
+ const ids=[
+  "home","levelSection","course","generalExams",
+  "reviewSection","heartSection","awardsSection",
+  "summarySection"
+ ];
+
+ ids.forEach(id=>{
+  $(id).classList.toggle("hidden",!show);
+ });
+}
+
 function closeLesson(){
  session=null;
  finished=false;
 
  $("lesson").classList.add("hidden");
- $("home").classList.remove("hidden");
- $("levelSection").classList.remove("hidden");
- $("course").classList.remove("hidden");
+ showMainSections(true);
 
  $("nextBtn").disabled=false;
- $("nextBtn").onclick=null;
+ $("nextBtn").textContent="Давом додан →";
+
+ /* Муҳим: onclick-и nextBtn пок карда намешавад */
 
  render();
 }
@@ -986,9 +984,8 @@ function startLesson(topic,type){
 }
 
 function openLessonScreen(){
- $("home").classList.add("hidden");
- $("levelSection").classList.add("hidden");
- $("course").classList.add("hidden");
+ showMainSections(false);
+ $("examScreen").classList.add("hidden");
  $("lesson").classList.remove("hidden");
 
  $("lessonTitle").textContent=session.heartPractice?
@@ -997,7 +994,6 @@ function openLessonScreen(){
   "🔁 Такрори калимаҳои душвор":
   session.level+" — "+LEVEL_TOPICS[session.level][session.topic];
 
- $("nextBtn").onclick=null;
  showStep();
  $("lesson").scrollIntoView({behavior:"smooth"});
 }
@@ -1210,7 +1206,6 @@ function answerQuestion(button,value,q){
 }
 
 function nextStep(){
- /* Ислоҳ: тугма баъди анҷом дарсро дуруст мебандад */
  if(finished){
   closeLesson();
   return;
@@ -1313,7 +1308,6 @@ function finishLesson(){
  $("nextBtn").disabled=false;
  $("nextBtn").textContent="Ба мавзӯъҳо →";
 
- /* session-ро то пахши тугма нигоҳ медорем */
  renderStats();
  renderSummary();
 }
@@ -1371,7 +1365,546 @@ function startHeartPractice(){
  openLessonScreen();
 }
 
-/* Санҷиши сохтори маълумоти A2 */
+/* ===== ИМТИҲОНҲОИ УМУМИИ A1 ВА A2 ===== */
+
+const EXAM_CONFIG={
+ A1:{count:30,minutes:30,pass:70,reward:150},
+ A2:{count:50,minutes:45,pass:75,reward:300}
+};
+
+let generalExam=null;
+let generalExamTimer=null;
+let generalExamFinished=false;
+
+function examKey(lang,level){
+ return lang+"_"+level;
+}
+
+function examUnlocked(lang,level){
+ const total=totalLessons(level);
+ return total>0&&doneCount(lang,level)===total;
+}
+
+function createExamQuestion(text,correct,pool,category){
+ const others=shuffle(
+  [...new Set(pool)].filter(x=>x&&x!==correct)
+ ).slice(0,3);
+
+ return {
+  text,
+  correct,
+  options:shuffle([correct,...others]),
+  category
+ };
+}
+
+function buildGeneralA1(lang){
+ const all=A1[lang].flat();
+ const pool=all.map(w=>w[1]);
+
+ const vocabulary=shuffle(all.map(w=>
+  createExamQuestion(
+   "«"+w[0]+"» чӣ маъно дорад?",
+   w[1],pool,"Луғат"
+  )
+ )).slice(0,10);
+
+ const sentenceItems=all.filter(w=>
+  /[.!?？。]/.test(w[0])||
+  w[0].trim().split(/\s+/).length>=3
+ );
+
+ const sentencePool=sentenceItems.map(w=>w[1]);
+
+ const sentences=shuffle(sentenceItems.map(w=>
+  createExamQuestion(
+   "Ҷумларо тарҷума кун: "+w[0],
+   w[1],sentencePool,"Ҷумлаҳо"
+  )
+ )).slice(0,10);
+
+ const comprehension=shuffle(all.map(w=>
+  createExamQuestion(
+   "Тарҷумаи дурустро интихоб кун: "+w[0],
+   w[1],pool,"Фаҳмиши ибора"
+  )
+ )).slice(0,10);
+
+ return shuffle([
+  ...vocabulary,
+  ...sentences,
+  ...comprehension
+ ]);
+}
+
+function buildGeneralA2(lang){
+ const topics=A2[lang];
+
+ const words=topics.flatMap(t=>t.words);
+ const sentences=topics.flatMap(t=>t.sentences);
+
+ const wordPool=words.map(w=>w[1]);
+ const sentencePool=sentences.map(s=>s[1]);
+ const grammarPool=GRAMMAR[lang].map(g=>g[3]);
+
+ const vocabulary=shuffle(words.map(w=>
+  createExamQuestion(
+   "«"+w[0]+"» чӣ маъно дорад?",
+   w[1],wordPool,"Луғат"
+  )
+ )).slice(0,15);
+
+ const sentenceQuestions=shuffle(sentences.map(s=>
+  createExamQuestion(
+   "Ҷумларо тарҷума кун: "+s[0],
+   s[1],sentencePool,"Ҷумлаҳо"
+  )
+ )).slice(0,15);
+
+ const grammarQuestions=topics.map(t=>{
+  const g=t.grammar;
+  return createExamQuestion(
+   "Маънои мисоли грамматикӣ: "+g[2],
+   g[3],grammarPool,"Грамматика"
+  );
+ });
+
+ return shuffle([
+  ...vocabulary,
+  ...sentenceQuestions,
+  ...grammarQuestions
+ ]);
+}
+
+function renderGeneralExams(){
+ const box=$("examInformation");
+ const level=selectedLevel;
+ const lang=state.lang;
+ const config=EXAM_CONFIG[level];
+
+ if(!config){
+  box.innerHTML=`
+   <div class="notice">
+    Имтиҳонҳои умумӣ ҳоло барои A1 ва A2 фаъоланд.
+    Сатҳҳои B1–C2 дар ҳоли омодасозӣ мебошанд.
+   </div>
+  `;
+  return;
+ }
+
+ const done=doneCount(lang,level);
+ const total=totalLessons(level);
+ const unlocked=examUnlocked(lang,level);
+ const passed=examResults.passed[examKey(lang,level)];
+
+ box.innerHTML=`
+  <p>📚 Дарсҳои анҷомёфта:
+   <b>${done}/${total}</b>
+  </p>
+
+  <div class="progress">
+   <div class="fill"
+    style="width:${total?done/total*100:0}%"></div>
+  </div>
+
+  <div class="examGrid">
+   <div class="examStat">
+    <b>${config.count}</b>
+    <small>Савол</small>
+   </div>
+   <div class="examStat">
+    <b>${config.minutes} дақ.</b>
+    <small>Вақт</small>
+   </div>
+   <div class="examStat">
+    <b>${config.pass}%</b>
+    <small>Ҳадди гузариш</small>
+   </div>
+   <div class="examStat">
+    <b>+${config.reward}</b>
+    <small>XP барои бори аввал</small>
+   </div>
+  </div>
+
+  ${passed?`
+   <div class="notice">
+    🏆 Имтиҳон гузашта шудааст!
+    Натиҷаи беҳтарин:
+    <b>${passed.percent}%</b>
+   </div>
+  `:""}
+
+  ${unlocked?`
+   <button class="btn primary"
+    style="width:100%;margin-top:14px"
+    onclick="startGeneralExam()">
+    🏆 Оғози имтиҳони умумии ${level}
+   </button>
+  `:`
+   <div class="notice">
+    🔒 Имтиҳони умумии ${level} баста аст.
+    Аввал ҳамаи ${total} дарсро анҷом деҳ.
+    <br>
+    Боқимонда: <b>${total-done}</b> дарс.
+   </div>
+  `}
+ `;
+}
+
+function examClock(seconds){
+ const m=Math.floor(seconds/60);
+ const s=seconds%60;
+ return String(m).padStart(2,"0")+":"+
+  String(s).padStart(2,"0");
+}
+
+function stopGeneralTimer(){
+ if(generalExamTimer!==null){
+  clearInterval(generalExamTimer);
+  generalExamTimer=null;
+ }
+}
+
+function startGeneralExam(){
+ const level=selectedLevel;
+ const lang=state.lang;
+ const config=EXAM_CONFIG[level];
+
+ if(!config)return;
+
+ if(!examUnlocked(lang,level)){
+  alert("🔒 Аввал ҳамаи дарсҳои "+level+"-ро анҷом деҳ.");
+  return;
+ }
+
+ const questions=level==="A1"?
+  buildGeneralA1(lang):buildGeneralA2(lang);
+
+ if(questions.length!==config.count){
+  alert("Маълумоти саволҳои имтиҳон нопурра аст.");
+  return;
+ }
+
+ stopGeneralTimer();
+
+ generalExam={
+  level,
+  lang,
+  questions,
+  index:0,
+  answers:{},
+  deadline:Date.now()+config.minutes*60000,
+  remaining:config.minutes*60
+ };
+
+ generalExamFinished=false;
+
+ showMainSections(false);
+ $("lesson").classList.add("hidden");
+ $("examScreen").classList.remove("hidden");
+
+ $("examPrevious").classList.remove("hidden");
+ $("examNext").textContent="Саволи навбатӣ →";
+
+ renderGeneralQuestion();
+
+ generalExamTimer=setInterval(()=>{
+  if(!generalExam){
+   stopGeneralTimer();
+   return;
+  }
+
+  generalExam.remaining=Math.max(
+   0,
+   Math.ceil((generalExam.deadline-Date.now())/1000)
+  );
+
+  $("examTimer").textContent=
+   examClock(generalExam.remaining);
+
+  if(generalExam.remaining<=0){
+   finishGeneralExam(true);
+  }
+ },1000);
+
+ $("examScreen").scrollIntoView({behavior:"smooth"});
+}
+
+function renderGeneralQuestion(){
+ if(!generalExam||generalExamFinished)return;
+
+ const e=generalExam;
+ const q=e.questions[e.index];
+ const selected=e.answers[e.index];
+
+ $("examTitle").textContent=
+  "🎓 Имтиҳони умумии "+e.level;
+
+ $("examCounter").textContent=
+  "Саволи "+(e.index+1)+" аз "+e.questions.length;
+
+ $("examTimer").textContent=examClock(e.remaining);
+
+ $("examFill").style.width=
+  ((e.index+1)/e.questions.length*100)+"%";
+
+ $("examBody").innerHTML=`
+  <div class="study">
+   <small>${esc(q.category)}</small>
+   <h3>${esc(q.text)}</h3>
+  </div>
+  <div id="generalExamOptions"></div>
+ `;
+
+ const options=$("generalExamOptions");
+
+ q.options.forEach(value=>{
+  const button=document.createElement("button");
+  button.className="option";
+  button.textContent=value;
+
+  if(selected===value){
+   button.classList.add("selected");
+  }
+
+  button.onclick=()=>{
+   if(!generalExam||generalExamFinished)return;
+   generalExam.answers[generalExam.index]=value;
+   renderGeneralQuestion();
+  };
+
+  options.appendChild(button);
+ });
+
+ $("examPrevious").disabled=e.index===0;
+
+ $("examNext").textContent=
+  e.index===e.questions.length-1?
+  "Имтиҳонро анҷом додан ✓":
+  "Саволи навбатӣ →";
+}
+
+function previousGeneralQuestion(){
+ if(!generalExam||generalExamFinished)return;
+ if(generalExam.index===0)return;
+
+ generalExam.index--;
+ renderGeneralQuestion();
+}
+
+function nextGeneralQuestion(){
+ if(generalExamFinished){
+  closeGeneralExam();
+  return;
+ }
+
+ if(!generalExam)return;
+
+ if(generalExam.index<generalExam.questions.length-1){
+  generalExam.index++;
+  renderGeneralQuestion();
+  return;
+ }
+
+ const answered=Object.keys(generalExam.answers).length;
+
+ if(answered<generalExam.questions.length){
+  if(!confirm(
+   "Шумо ба "+answered+" аз "+
+   generalExam.questions.length+
+   " савол ҷавоб додед. Имтиҳонро анҷом медиҳед?"
+  ))return;
+ }
+
+ finishGeneralExam(false);
+}
+
+function finishGeneralExam(timedOut=false){
+ if(!generalExam||generalExamFinished)return;
+
+ stopGeneralTimer();
+ generalExamFinished=true;
+
+ const e=generalExam;
+ const config=EXAM_CONFIG[e.level];
+
+ let correct=0;
+ const errors=[];
+ const categories={};
+
+ e.questions.forEach((q,i)=>{
+  const answer=e.answers[i];
+
+  if(!categories[q.category]){
+   categories[q.category]={correct:0,total:0};
+  }
+
+  categories[q.category].total++;
+
+  if(answer===q.correct){
+   correct++;
+   categories[q.category].correct++;
+  }else{
+   errors.push({
+    text:q.text,
+    answer:answer===undefined?
+     "Ҷавоб дода нашуд":answer,
+    correct:q.correct
+   });
+  }
+ });
+
+ const percent=Math.round(
+  correct/e.questions.length*100
+ );
+
+ const passed=percent>=config.pass;
+ const id=examKey(e.lang,e.level);
+ const previous=examResults.passed[id];
+
+ let reward=0;
+
+ if(passed){
+  if(!previous){
+   reward=config.reward;
+   state.xp+=reward;
+  }
+
+  if(!previous||percent>previous.percent){
+   examResults.passed[id]={
+    percent,
+    correct,
+    total:e.questions.length,
+    date:new Date().toISOString()
+   };
+  }
+
+  updateStreak();
+ }
+
+ examResults.history.push({
+  lang:e.lang,
+  level:e.level,
+  percent,
+  correct,
+  total:e.questions.length,
+  passed,
+  timedOut,
+  date:new Date().toISOString()
+ });
+
+ examResults.history=examResults.history.slice(-100);
+
+ saveExamResults();
+ save();
+
+ const categoryHTML=Object.entries(categories)
+  .map(([name,data])=>`
+   <p>${esc(name)}:
+    <b>${data.correct}/${data.total}</b>
+   </p>
+  `).join("");
+
+ const errorHTML=errors.map((error,i)=>`
+  <div class="study">
+   <b>${i+1}. ${esc(error.text)}</b>
+   <p>Ҷавоби ту: ${esc(error.answer)}</p>
+   <p>Ҷавоби дуруст:
+    <b>${esc(error.correct)}</b>
+   </p>
+  </div>
+ `).join("");
+
+ $("examTitle").textContent=passed?
+  "🏆 Имтиҳон гузашта шуд!":
+  "📚 Боз омодагӣ бин";
+
+ $("examCounter").textContent="Натиҷаи имтиҳон";
+ $("examTimer").textContent=timedOut?
+  "Вақт тамом":"Анҷом";
+
+ $("examFill").style.width="100%";
+
+ const langName=LANGUAGES.find(l=>l[0]===e.lang)[2];
+
+ $("examBody").innerHTML=`
+  <div class="study" style="text-align:center">
+   <div style="font-size:50px">
+    ${passed?"🏆":"📖"}
+   </div>
+
+   <h2>${percent}%</h2>
+
+   <p>Ҷавобҳои дуруст:
+    <b>${correct}/${e.questions.length}</b>
+   </p>
+
+   <p>${passed?
+    "Табрик! Имтиҳонро гузаштед.":
+    "Барои гузаштан "+config.pass+"% лозим аст."}
+   </p>
+
+   <h3>+${reward} XP</h3>
+  </div>
+
+  <h3>📊 Натиҷа аз рӯйи қисмҳо</h3>
+  ${categoryHTML}
+
+  ${passed?`
+   <div class="certificate">
+    <div style="font-size:45px">🎓</div>
+    <h2>VAYO LANGUAGE</h2>
+    <h3>Шаҳодатномаи дохилӣ</h3>
+    <p>Имтиҳони умумии
+     <b>${esc(langName)} — ${e.level}</b>
+     бомуваффақият гузашта шуд.
+    </p>
+    <h2>${percent}%</h2>
+    <small>
+     Ин шаҳодатномаи омӯзишии VAYO аст,
+     на сертификати расмии CEFR.
+    </small>
+   </div>
+  `:""}
+
+  <h3>📝 Ҷавобҳои нодуруст</h3>
+  ${errors.length?errorHTML:
+   "<p>Ҳамаи ҷавобҳо дурустанд!</p>"}
+ `;
+
+ $("examPrevious").classList.add("hidden");
+ $("examNext").textContent="Ба дарсҳо баргаштан →";
+
+ renderStats();
+ renderSummary();
+}
+
+function closeGeneralExam(){
+ stopGeneralTimer();
+
+ generalExam=null;
+ generalExamFinished=false;
+
+ $("examScreen").classList.add("hidden");
+ $("lesson").classList.add("hidden");
+
+ showMainSections(true);
+ $("examPrevious").classList.remove("hidden");
+
+ render();
+}
+
+function cancelGeneralExam(){
+ if(generalExam&&!generalExamFinished){
+  if(!confirm(
+   "Имтиҳонро қатъ мекунед? Ҷавобҳои ин кӯшиш нигоҳ дошта намешаванд."
+  ))return;
+ }
+
+ closeGeneralExam();
+}
+
+/* ===== Санҷиши маълумот ===== */
 
 for(const lang of Object.keys(A2)){
  if(A2[lang].length!==20){
@@ -1387,7 +1920,15 @@ for(const lang of Object.keys(A2)){
  });
 }
 
+/* ===== Оғози барнома ===== */
+
 render();
+
+setInterval(()=>{
+ if(!session&&!generalExam){
+  renderStats();
+ }
+},60000);
 
 </script>
 </body>
