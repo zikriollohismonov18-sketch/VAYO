@@ -4,78 +4,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#7255f5">
+<meta name="theme-color" content="#7355ef">
 <title>VAYO Language — Забономӯзӣ</title>
 <style>
 :root{
- --main:#7255f5;--bg:#f5f5ff;--ink:#252344;
- --muted:#77788d;--line:#e7e5f4;--green:#25b67a;
- --red:#ed5268
+ --main:#7355ef;--dark:#24213e;--muted:#77758b;
+ --bg:#f5f5fd;--line:#e7e4f3;--green:#21ae73;
+ --red:#ed5369;--gold:#f7b63c
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,sans-serif}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--dark)}
 button{font:inherit;cursor:pointer;border:0}
-button:disabled{opacity:.5;cursor:not-allowed}
-header{background:linear-gradient(120deg,#6650e9,#a968f5);color:white;padding:22px 15px}
+button:disabled{opacity:.55;cursor:not-allowed}
+header{background:linear-gradient(120deg,#5e4bdc,#a36af5);color:white;padding:24px 15px}
 .wrap{max-width:1050px;margin:auto;padding:0 14px}
-header h1{margin:12px 0 5px}
-header p{opacity:.9}
-a{color:inherit}
-.top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .logo{font-size:24px;font-weight:900}
-.back{padding:10px;background:#ffffff25;border-radius:12px;text-decoration:none}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:17px 0}
+.back{color:white;text-decoration:none;background:#ffffff26;padding:11px;border-radius:12px}
+header h1{margin:19px 0 8px}
+header p{opacity:.9}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:16px 0}
 .stat,.card{background:white;border:1px solid var(--line);border-radius:18px;padding:16px}
 .stat{text-align:center}
-.stat b{display:block;font-size:21px}
+.stat b{font-size:23px;display:block}
 small,.muted{color:var(--muted)}
 .card{margin:14px 0}
-h2{margin:0 0 13px;font-size:21px}
-h3{margin:12px 0}
+h2{font-size:21px;margin:0 0 15px}
+h3{margin:10px 0}
 .langs,.levels,.topics{display:grid;gap:10px}
-.langs{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
+.langs{grid-template-columns:repeat(auto-fit,minmax(145px,1fr))}
 .levels{grid-template-columns:repeat(3,1fr)}
-.topics{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
-.choice{
- background:#faf9ff;border:2px solid var(--line);
- border-radius:14px;padding:13px;text-align:center
-}
-.choice.active{border-color:var(--main);background:#efebff}
-.flag{display:block;font-size:31px;margin-bottom:8px}
+.topics{grid-template-columns:repeat(auto-fit,minmax(255px,1fr))}
+.choice{padding:14px;background:#faf9ff;border:2px solid var(--line);border-radius:14px;text-align:center}
+.choice.active{border-color:var(--main);background:#eeebff}
+.flag{font-size:30px;display:block;margin-bottom:8px}
 .choice b{display:block}
-.topic{border:1px solid var(--line);border-radius:16px;padding:15px;background:#fdfcff}
-.topic p{font-size:13px;color:var(--muted);line-height:1.5}
-.topicButtons{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.topic{border:1px solid var(--line);border-radius:15px;padding:15px;background:#fdfcff}
+.topic p{color:var(--muted);font-size:13px;line-height:1.5}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .btn{border-radius:12px;padding:12px;font-weight:bold}
 .primary{background:var(--main);color:white}
 .green{background:var(--green);color:white}
-.light{background:#eeebfa;color:var(--ink)}
-.progress{height:12px;background:#eae9f5;border-radius:20px;overflow:hidden;margin:10px 0}
-.fill{height:100%;width:0;background:var(--green);transition:width .25s}
+.light{background:#eeebfa;color:var(--dark)}
+.progress{height:12px;background:#e9e7f5;border-radius:20px;overflow:hidden;margin:12px 0}
+.fill{height:100%;background:var(--green);width:0%;transition:width .2s}
 .hidden{display:none!important}
-.study{
- background:#f7f5ff;border:1px solid #e7e1ff;
- padding:20px;border-radius:16px;line-height:1.8;
- margin:15px 0;overflow-wrap:anywhere
-}
-.study strong{font-size:23px}
-.translation{color:#6550d7;font-size:18px}
-.option{
- display:block;width:100%;padding:14px;margin:9px 0;
- border:2px solid var(--line);border-radius:13px;
- background:#faf9ff;text-align:left;overflow-wrap:anywhere
-}
+.study{background:#f8f6ff;border:1px solid #e7e1ff;border-radius:16px;padding:19px;margin:13px 0;line-height:1.7;overflow-wrap:anywhere}
+.study strong{font-size:22px}
+.translation{font-size:18px;color:#654bcd;margin-top:8px}
+.option{display:block;width:100%;background:#faf9ff;border:2px solid var(--line);border-radius:13px;padding:14px;text-align:left;margin:9px 0;overflow-wrap:anywhere}
 .option.correct{background:#e4f9ed;border-color:var(--green)}
 .option.wrong{background:#ffe8ed;border-color:var(--red)}
-.notice{padding:13px;background:#fff7e7;border-radius:12px;color:#805b1b;line-height:1.6}
+.notice{padding:13px;border-radius:12px;background:#fff7e6;color:#785a23;line-height:1.6;margin:10px 0}
 .badgeLine{padding:12px;background:#fff8e9;border-radius:12px;margin:8px 0}
-.lessonActions{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.lessonTop{display:flex;justify-content:space-between;gap:10px;align-items:center}
+#feedback{font-weight:bold;line-height:1.6}
 footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
 @media(max-width:600px){
  .stats{grid-template-columns:repeat(2,1fr)}
- .levels{grid-template-columns:repeat(3,1fr)}
  .topics{grid-template-columns:1fr}
- .stat{padding:12px 6px}
  .card{padding:13px}
 }
 </style>
@@ -89,7 +76,7 @@ footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
    <a href="../index.html" class="back">← VAYO</a>
   </div>
   <h1>Забон омӯз, ҷаҳонро кушо!</h1>
-  <p>🇹🇯 Бо забони тоҷикӣ панҷ забони ҷаҳонро омӯз.</p>
+  <p>Олмонӣ • Англисӣ • Русӣ • Чинӣ • Кореягӣ</p>
  </div>
 </header>
 
@@ -121,15 +108,27 @@ footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
 </section>
 
 <section class="card hidden" id="lesson">
- <div class="lessonActions">
+ <div class="lessonTop">
   <button class="btn light" onclick="closeLesson()">← Баргаштан</button>
-  <span class="muted" id="counter"></span>
+  <span id="counter" class="muted"></span>
  </div>
- <h2 id="lessonTitle" style="margin-top:17px"></h2>
+ <h2 id="lessonTitle" style="margin-top:18px"></h2>
  <div class="progress"><div class="fill" id="lessonFill"></div></div>
  <div id="lessonBody"></div>
  <p id="feedback" aria-live="polite"></p>
- <button class="btn primary" id="nextBtn" onclick="nextStep()">Давом додан →</button>
+ <button id="nextBtn" class="btn primary" onclick="nextStep()">Давом додан →</button>
+</section>
+
+<section class="card">
+ <h2>🔁 Калимаҳои душвор</h2>
+ <p id="mistakeCount" class="muted"></p>
+ <button class="btn primary" onclick="startReview()">Такрор кардан</button>
+</section>
+
+<section class="card">
+ <h2>❤️ Барқарор кардани дилҳо</h2>
+ <p id="heartInfo" class="muted"></p>
+ <button class="btn light" onclick="startHeartPractice()">Машқи барқароркунӣ</button>
 </section>
 
 <section class="card">
@@ -143,7 +142,7 @@ footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
 </section>
 
 </main>
-<footer>VAYO Language • Бе овоз • Бе API-и пулакӣ</footer>
+<footer>VAYO Language • Омӯзиши интерактивӣ • A1 ва A2</footer>
 
 <script>
 "use strict";
@@ -165,70 +164,30 @@ const LEVELS=[
 ];
 
 const LEVEL_TOPICS={
-A1:[
-"Салом ва шиносоӣ","Оила","Рақамҳо","Вақт",
-"Хӯрок","Харид","Кор","Роҳ","Саломатӣ",
-"Суҳбати ҳаррӯза"
-],
-A2:[
-"Реҷаи ҳаррӯза","Нақшаҳои оянда",
-"Таҷрибаҳои гузашта","Сафар ва истироҳат",
-"Меҳмонхона","Фармоиши хӯрок",
-"Духтур ва саломатӣ","Дорухона",
-"Кор ва вазифаҳо","Мусоҳибаи корӣ",
-"Иҷораи хона","Бонк ва пул",
-"Почта ва ҳуҷҷатҳо","Телефон ва интернет",
-"Варзиш ва саломатӣ","Дӯстон ва муносибатҳо",
-"Таълим ва курсҳо","Шаҳр ва хизматрасониҳо",
-"Қоидаҳо ва иҷозатҳо","Муоширати ҳаррӯза"
-],
-B1:[
-"Баёни фикр","Сабаб ва натиҷа","Муқоиса",
-"Таҷрибаи шахсӣ","Нақшаҳои касбӣ",
-"Мактуби расмӣ","Мактуби ғайрирасмӣ",
-"Мусоҳибаи корӣ","Муҳити кор","Донишгоҳ",
-"Сафар ва фарҳанг","Муҳити зист",
-"Саломатӣ ва ҷомеа","Технология",
-"Хабарҳо","Қонунҳои рӯзмарра",
-"Ҳалли мушкилот","Баҳс","Презентатсия",
-"Омодагӣ ба B1"
-],
-B2:[
-"Далеловарӣ","Афзалиятҳо","Камбудиҳо",
-"Иқтисод","Бозори меҳнат","AI",
-"Иқлим","Маориф","Фарҳанг","Ҷомеа",
-"Тандурустӣ","Хабарҳои мураккаб",
-"Матнҳои илмӣ","Муоширати касбӣ",
-"Мактубҳои расмӣ","Музокирот",
-"Презентатсия","Ҳалли баҳсҳо",
-"Ифодаҳои мураккаб","Омодагӣ ба B2"
-],
-C1:[
-"Забони академӣ","Матнҳои илмӣ",
-"Эссе","Аргументатсия","Иқтисоди байналмилалӣ",
-"Инноватсия","Ҷомеа","Қонун","Психология",
-"Фалсафа","Расонаҳо","Мубоҳиса",
-"Музокирот","Забони расмӣ","Презентатсияи илмӣ",
-"Хулосабарорӣ","Маъноҳои пинҳонӣ",
-"Услубҳои навиштан","Ислоҳи хатогиҳо",
-"Омодагӣ ба C1"
-],
-C2:[
-"Фаҳмиши амиқи матн","Адабиёти классикӣ",
-"Адабиёти муосир","Ифодаҳои маҷозӣ",
-"Ибораҳои устувор","Зарофатҳои забонӣ",
-"Услуби илмӣ","Услуби ҳуқуқӣ",
-"Услуби адабӣ","Рӯзноманигорӣ",
-"Фалсафа","Ҷомеашиносӣ","Баҳси сатҳи баланд",
-"Нутқи касбӣ","Навиштани мақола",
-"Таҳрири матн","Тарҷумаи мураккаб",
-"Маъноҳои нозук","Муоширати олӣ",
-"Омодагӣ ба C2"
-]
+ A1:[
+ "Салом ва шиносоӣ","Оила","Рақамҳо","Вақт",
+ "Хӯрок","Харид","Кор","Роҳ","Саломатӣ",
+ "Суҳбати ҳаррӯза"
+ ],
+ A2:[
+ "Реҷаи ҳаррӯза","Нақшаҳои оянда",
+ "Таҷрибаҳои гузашта","Сафар ва истироҳат",
+ "Меҳмонхона","Фармоиши хӯрок",
+ "Духтур ва саломатӣ","Дорухона",
+ "Кор ва вазифаҳо","Мусоҳибаи корӣ",
+ "Иҷораи хона","Бонк ва пул",
+ "Почта ва ҳуҷҷатҳо","Телефон ва интернет",
+ "Варзиш ва саломатӣ","Дӯстон ва муносибатҳо",
+ "Таълим ва курсҳо","Шаҳр ва хизматрасониҳо",
+ "Қоидаҳо ва иҷозатҳо","Муоширати ҳаррӯза"
+ ],
+ B1:["Баёни фикр","Сабаб ва натиҷа","Муқоиса","Таҷрибаи шахсӣ","Нақшаҳои касбӣ","Мактуби расмӣ","Муҳити кор","Маориф","Сафар","Муҳити зист","Технология","Хабарҳо","Ҷомеа","Саломатӣ","Қонун","Ҳалли мушкилот","Баҳс","Презентатсия","Матнҳои мураккаб","Омодагӣ ба B1"],
+ B2:["Далеловарӣ","Иқтисод","Бозори меҳнат","AI","Иқлим","Маориф","Фарҳанг","Ҷомеа","Тандурустӣ","Хабарҳои мураккаб","Матнҳои илмӣ","Муоширати касбӣ","Мактубҳои расмӣ","Музокирот","Презентатсия","Баҳсҳо","Ифодаҳои мураккаб","Таҳлили матн","Навиштан","Омодагӣ ба B2"],
+ C1:["Забони академӣ","Матнҳои илмӣ","Эссе","Аргументатсия","Иқтисод","Инноватсия","Ҷомеа","Қонун","Психология","Фалсафа","Расонаҳо","Мубоҳиса","Музокирот","Забони расмӣ","Презентатсияи илмӣ","Хулосабарорӣ","Маъноҳои пинҳонӣ","Услуби навиштан","Таҳрир","Омодагӣ ба C1"],
+ C2:["Матнҳои мураккаб","Адабиёт","Ифодаҳои маҷозӣ","Ибораҳои устувор","Зарофатҳои забонӣ","Услуби илмӣ","Услуби ҳуқуқӣ","Услуби адабӣ","Рӯзноманигорӣ","Фалсафа","Ҷомеашиносӣ","Мубоҳиса","Нутқи касбӣ","Мақола","Таҳрир","Тарҷума","Маъноҳои нозук","Муоширати олӣ","Таҳлил","Омодагӣ ба C2"]
 };
 
-// Ҳар сатр: калима=тарҷума.
-// Маълумоти A1-и пешина.
+/* A1: Маълумоти мавҷуда */
 
 const A1_RAW={
 de:[
@@ -244,7 +203,7 @@ de:[
 "Danke=Ташаккур|Bitte=Марҳамат|Entschuldigung=Бубахшед|Kein Problem=Мушкил нест|Bis morgen!=То пагоҳ!"
 ],
 en:[
-"Goodbye=Хайр|Good morning=Субҳ ба хайр|What is your name?=Номат чист?|My name is Ali.=Номи ман Алӣ аст.|How are you?=Аҳволат чӣ хел?",
+"Hello=Салом|Good morning=Субҳ ба хайр|What is your name?=Номат чист?|My name is Ali.=Номи ман Алӣ аст.|How are you?=Аҳволат чӣ хел?",
 "father=падар|mother=модар|brother=бародар|sister=хоҳар|This is my mother.=Ин модари ман аст.",
 "one=як|two=ду|three=се|ten=даҳ|I am twenty years old.=Ман бистсола ҳастам.",
 "clock=соат|today=имрӯз|tomorrow=пагоҳ|now=ҳозир|What time is it?=Соат чанд аст?",
@@ -293,10 +252,10 @@ ko:[
 ]
 };
 
-function parsePairs(s){
- return s.split("|").map(p=>{
-  const i=p.indexOf("=");
-  return [p.slice(0,i),p.slice(i+1)];
+function parsePairs(raw){
+ return raw.split("|").map(s=>{
+  const p=s.indexOf("=");
+  return [s.slice(0,p),s.slice(p+1)];
  });
 }
 
@@ -306,259 +265,328 @@ for(const lang in A1_RAW){
 }
 
 /*
- A2: 20 мавзӯъ барои ҳар забон.
- Ҳар мавзӯъ дорои ду калима ва як ҷумла аст.
- Маълумотро баъд бе тағйири муҳаррик зиёд кардан мумкин.
+ A2 — 20 мавзӯъ × 5 забон.
+ Ҳар мавзӯъ 3 калима, 2 ҷумла ва як қоидаи грамматикӣ дорад.
+ Сатрҳо бо ~ ҷудо мешаванд.
+ Калимаҳо бо | ҷудо мешаванд.
 */
+
+/* Тарҷумаҳои умумии тоҷикӣ */
+
+const A2_TJ=[
+[
+"барвақт хестан","наҳорӣ кардан","ба кор рафтан",
+"Ман ҳар рӯз барвақт мехезам.","Баъди наҳорӣ ба кор меравам."
+],
+[
+"нақша","ҳафтаи оянда","омода шудан",
+"Ман барои ҳафтаи оянда нақша дорам.","Ман мехоҳам ба сафар омода шавам."
+],
+[
+"дирӯз","таҷриба","ба ёд овардан",
+"Ман дирӯз бисёр кор кардам.","Ин барои ман таҷрибаи хуб буд."
+],
+[
+"сафар","чипта","истироҳат",
+"Ман мехоҳам ба сафар равам.","Ман чиптаро пешакӣ мехарам."
+],
+[
+"меҳмонхона","ҳуҷра","банд кардан",
+"Ман мехоҳам ҳуҷра банд кунам.","Оё ҳуҷраи холӣ доред?"
+],
+[
+"фармоиш додан","ҳисобнома","хӯрок",
+"Ман мехоҳам хӯрок фармоиш диҳам.","Метавонед ҳисобномаро биёред?"
+],
+[
+"духтур","вақти қабул","дард",
+"Ман назди духтур вақти қабул дорам.","Сарам дард мекунад."
+],
+[
+"дорухона","дору","дорухат",
+"Дорухонаи наздиктарин дар куҷост?","Ман ба ин дору ниёз дорам."
+],
+[
+"вазифа","ҳамкор","вақти кор",
+"Ман бояд имрӯз бештар кор кунам.","Ҳамкорам ба ман ёрӣ медиҳад."
+],
+[
+"аризаи корӣ","мусоҳиба","таҷрибаи корӣ",
+"Ман пагоҳ мусоҳибаи корӣ дорам.","Ман дар ин соҳа таҷриба дорам."
+],
+[
+"манзил","иҷорапулӣ","шартнома",
+"Ман манзили нав меҷӯям.","Иҷораи моҳона чанд пул аст?"
+],
+[
+"суратҳисоб","интиқоли пул","корти бонкӣ",
+"Ман мехоҳам суратҳисоби бонкӣ кушоям.","Ман бояд пул интиқол диҳам."
+],
+[
+"баста","варақа","суроға",
+"Ман бояд ин варақаро пур кунам.","Ин бастаро ба суроға мефиристам."
+],
+[
+"паём","рамз","пайвастшавӣ",
+"Ман паём гирифтам.","Пайвастшавии интернет суст аст."
+],
+[
+"саломатӣ","машқ кардан","ғизои солим",
+"Варзиш барои саломатӣ хуб аст.","Ман ҳафтае се бор машқ мекунам."
+],
+[
+"дӯст","даъват","вохӯрӣ",
+"Ман дӯстамро даъват мекунам.","Мо рӯзи шанбе вомехӯрем."
+],
+[
+"курс","имтиҳон","вазифаи хонагӣ",
+"Ман ба курси забон меравам.","Ман бояд ба имтиҳон тайёр шавам."
+],
+[
+"шаҳрдорӣ","истгоҳ","хизматрасонӣ",
+"Истгоҳи наздиктарин дар куҷост?","Ман бояд ба шаҳрдорӣ равам."
+],
+[
+"иҷозат","қоида","ҳуҷҷат",
+"Оё ба ман иҷозат лозим аст?","Ман бояд ин қоидаҳоро риоя кунам."
+],
+[
+"фаҳмондан","узр пурсидан","такрор кардан",
+"Метавонед инро фаҳмонед?","Лутфан, як бори дигар такрор кунед."
+]
+];
+
+/* Калимаҳои A2 дар панҷ забон */
 
 const A2_WORDS={
 de:[
-"aufstehen=аз хоб хестан|frühstücken=наҳорӣ кардан",
-"morgen=пагоҳ|nächste Woche=ҳафтаи оянда",
-"gestern=дирӯз|die Erfahrung=таҷриба",
-"die Reise=сафар|der Urlaub=рухсатӣ",
-"das Hotel=меҳмонхона|reservieren=банд кардан",
-"bestellen=фармоиш додан|die Rechnung=ҳисобнома",
-"der Arzt=духтур|der Termin=вақти қабул",
-"die Apotheke=дорухона|das Medikament=дору",
-"die Arbeit=кор|die Aufgabe=вазифа",
-"die Bewerbung=аризаи корӣ|das Vorstellungsgespräch=мусоҳибаи корӣ",
-"die Wohnung=манзил|die Miete=иҷорапулӣ",
-"das Konto=суратҳисоб|überweisen=интиқол додани пул",
-"das Paket=баста|das Formular=варақа",
-"die Nachricht=паём|das Internet=интернет",
-"die Gesundheit=саломатӣ|trainieren=машқ кардан",
-"der Freund=дӯст|die Einladung=даъват",
-"der Kurs=курс|die Prüfung=имтиҳон",
-"das Rathaus=шаҳрдорӣ|die Haltestelle=истгоҳ",
-"die Erlaubnis=иҷозат|die Regel=қоида",
-"entschuldigen=узр пурсидан|erklären=фаҳмондан"
+"früh aufstehen|frühstücken|zur Arbeit gehen",
+"der Plan|nächste Woche|sich vorbereiten",
+"gestern|die Erfahrung|sich erinnern",
+"die Reise|die Fahrkarte|der Urlaub",
+"das Hotel|das Zimmer|reservieren",
+"bestellen|die Rechnung|das Essen",
+"der Arzt|der Termin|der Schmerz",
+"die Apotheke|das Medikament|das Rezept",
+"die Aufgabe|der Kollege|die Arbeitszeit",
+"die Bewerbung|das Vorstellungsgespräch|die Berufserfahrung",
+"die Wohnung|die Miete|der Vertrag",
+"das Konto|die Überweisung|die Bankkarte",
+"das Paket|das Formular|die Adresse",
+"die Nachricht|das Passwort|die Verbindung",
+"die Gesundheit|trainieren|gesunde Ernährung",
+"der Freund|die Einladung|das Treffen",
+"der Kurs|die Prüfung|die Hausaufgabe",
+"das Rathaus|die Haltestelle|die Dienstleistung",
+"die Erlaubnis|die Regel|das Dokument",
+"erklären|sich entschuldigen|wiederholen"
 ],
 en:[
-"wake up=бедор шудан|breakfast=наҳорӣ",
-"tomorrow=пагоҳ|next week=ҳафтаи оянда",
-"yesterday=дирӯз|experience=таҷриба",
-"journey=сафар|holiday=рухсатӣ",
-"hotel=меҳмонхона|book=банд кардан",
-"order=фармоиш додан|bill=ҳисобнома",
-"doctor=духтур|appointment=вақти қабул",
-"pharmacy=дорухона|medicine=дору",
-"work=кор|task=вазифа",
-"application=ариза|job interview=мусоҳибаи корӣ",
-"apartment=манзил|rent=иҷорапулӣ",
-"account=суратҳисоб|transfer=интиқол додан",
-"package=баста|form=варақа",
-"message=паём|internet=интернет",
-"health=саломатӣ|exercise=машқ кардан",
-"friend=дӯст|invitation=даъват",
-"course=курс|exam=имтиҳон",
-"town hall=шаҳрдорӣ|bus stop=истгоҳ",
-"permission=иҷозат|rule=қоида",
-"apologize=узр пурсидан|explain=фаҳмондан"
+"get up early|have breakfast|go to work",
+"the plan|next week|prepare",
+"yesterday|experience|remember",
+"journey|ticket|holiday",
+"hotel|room|book",
+"order|bill|food",
+"doctor|appointment|pain",
+"pharmacy|medicine|prescription",
+"task|colleague|working hours",
+"job application|job interview|work experience",
+"apartment|rent|contract",
+"bank account|money transfer|bank card",
+"package|form|address",
+"message|password|connection",
+"health|exercise|healthy food",
+"friend|invitation|meeting",
+"course|exam|homework",
+"town hall|bus stop|service",
+"permission|rule|document",
+"explain|apologize|repeat"
 ],
 ru:[
-"просыпаться=бедор шудан|завтрак=наҳорӣ",
-"завтра=пагоҳ|на следующей неделе=ҳафтаи оянда",
-"вчера=дирӯз|опыт=таҷриба",
-"путешествие=сафар|отпуск=рухсатӣ",
-"гостиница=меҳмонхона|бронировать=банд кардан",
-"заказывать=фармоиш додан|счёт=ҳисобнома",
-"врач=духтур|запись на приём=вақти қабул",
-"аптека=дорухона|лекарство=дору",
-"работа=кор|задание=вазифа",
-"заявление=ариза|собеседование=мусоҳибаи корӣ",
-"квартира=манзил|аренда=иҷора",
-"банковский счёт=суратҳисоб|переводить деньги=интиқол додани пул",
-"посылка=баста|анкета=варақа",
-"сообщение=паём|интернет=интернет",
-"здоровье=саломатӣ|тренироваться=машқ кардан",
-"друг=дӯст|приглашение=даъват",
-"курс=курс|экзамен=имтиҳон",
-"мэрия=шаҳрдорӣ|остановка=истгоҳ",
-"разрешение=иҷозат|правило=қоида",
-"извиняться=узр пурсидан|объяснять=фаҳмондан"
+"рано вставать|завтракать|идти на работу",
+"план|на следующей неделе|готовиться",
+"вчера|опыт|вспоминать",
+"путешествие|билет|отпуск",
+"гостиница|номер|бронировать",
+"заказывать|счёт|еда",
+"врач|запись на приём|боль",
+"аптека|лекарство|рецепт",
+"задание|коллега|рабочее время",
+"заявление о приёме на работу|собеседование|опыт работы",
+"квартира|арендная плата|договор",
+"банковский счёт|денежный перевод|банковская карта",
+"посылка|анкета|адрес",
+"сообщение|пароль|соединение",
+"здоровье|тренироваться|здоровое питание",
+"друг|приглашение|встреча",
+"курс|экзамен|домашнее задание",
+"мэрия|остановка|услуга",
+"разрешение|правило|документ",
+"объяснять|извиняться|повторять"
 ],
 zh:[
-"起床=аз хоб хестан|早餐=наҳорӣ",
-"明天=пагоҳ|下个星期=ҳафтаи оянда",
-"昨天=дирӯз|经验=таҷриба",
-"旅行=сафар|假期=рухсатӣ",
-"酒店=меҳмонхона|预订=банд кардан",
-"点餐=хӯрок фармоиш додан|账单=ҳисобнома",
-"医生=духтур|预约=вақти қабул гирифтан",
-"药店=дорухона|药=дору",
-"工作=кор|任务=вазифа",
-"申请=ариза|面试=мусоҳибаи корӣ",
-"公寓=манзил|房租=иҷорапулӣ",
-"账户=суратҳисоб|转账=интиқол додани пул",
-"包裹=баста|表格=варақа",
-"消息=паём|互联网=интернет",
-"健康=саломатӣ|锻炼=машқ кардан",
-"朋友=дӯст|邀请=даъват",
-"课程=курс|考试=имтиҳон",
-"市政府=шаҳрдорӣ|公交车站=истгоҳ",
-"许可=иҷозат|规则=қоида",
-"道歉=узр пурсидан|解释=фаҳмондан"
+"早起|吃早饭|去上班",
+"计划|下个星期|准备",
+"昨天|经验|回忆",
+"旅行|车票|假期",
+"酒店|房间|预订",
+"点餐|账单|食物",
+"医生|预约|疼痛",
+"药店|药|处方",
+"任务|同事|工作时间",
+"求职申请|面试|工作经验",
+"公寓|房租|合同",
+"银行账户|转账|银行卡",
+"包裹|表格|地址",
+"消息|密码|连接",
+"健康|锻炼|健康饮食",
+"朋友|邀请|见面",
+"课程|考试|作业",
+"市政府|公交车站|服务",
+"许可|规则|文件",
+"解释|道歉|重复"
 ],
 ko:[
-"일어나다=аз хоб хестан|아침 식사=наҳорӣ",
-"내일=пагоҳ|다음 주=ҳафтаи оянда",
-"어제=дирӯз|경험=таҷриба",
-"여행=сафар|휴가=рухсатӣ",
-"호텔=меҳмонхона|예약하다=банд кардан",
-"주문하다=фармоиш додан|계산서=ҳисобнома",
-"의사=духтур|진료 예약=вақти қабули духтур",
-"약국=дорухона|약=дору",
-"일=кор|업무=вазифа",
-"지원서=аризаи корӣ|면접=мусоҳибаи корӣ",
-"아파트=манзил|월세=иҷораи моҳона",
-"계좌=суратҳисоб|송금하다=интиқол додани пул",
-"소포=баста|양식=варақа",
-"메시지=паём|인터넷=интернет",
-"건강=саломатӣ|운동하다=машқ кардан",
-"친구=дӯст|초대=даъват",
-"강좌=курс|시험=имтиҳон",
-"시청=шаҳрдорӣ|정류장=истгоҳ",
-"허가=иҷозат|규칙=қоида",
-"사과하다=узр пурсидан|설명하다=фаҳмондан"
+"일찍 일어나다|아침을 먹다|출근하다",
+"계획|다음 주|준비하다",
+"어제|경험|기억하다",
+"여행|표|휴가",
+"호텔|방|예약하다",
+"주문하다|계산서|음식",
+"의사|진료 예약|통증",
+"약국|약|처방전",
+"업무|동료|근무 시간",
+"입사 지원서|면접|직장 경험",
+"아파트|월세|계약서",
+"은행 계좌|송금|은행 카드",
+"소포|양식|주소",
+"메시지|비밀번호|연결",
+"건강|운동하다|건강한 음식",
+"친구|초대|만남",
+"강좌|시험|숙제",
+"시청|정류장|서비스",
+"허가|규칙|서류",
+"설명하다|사과하다|반복하다"
 ]
 };
+
+/* Ду ҷумла барои ҳар мавзӯъ */
 
 const A2_SENTENCES={
 de:[
-"Ich stehe jeden Tag früh auf.",
-"Nächste Woche besuche ich meine Familie.",
-"Gestern habe ich viel gearbeitet.",
-"Ich möchte eine Reise planen.",
-"Ich möchte ein Zimmer reservieren.",
-"Ich möchte das Essen bestellen.",
-"Ich habe einen Termin beim Arzt.",
-"Wo ist die nächste Apotheke?",
-"Ich muss heute länger arbeiten.",
-"Ich habe morgen ein Vorstellungsgespräch.",
-"Ich suche eine neue Wohnung.",
-"Ich möchte ein Konto eröffnen.",
-"Ich muss dieses Formular ausfüllen.",
-"Ich habe eine Nachricht bekommen.",
-"Sport ist gut für die Gesundheit.",
-"Ich lade meinen Freund ein.",
-"Ich besuche einen Deutschkurs.",
-"Wo ist die nächste Haltestelle?",
-"Brauche ich eine Erlaubnis?",
-"Können Sie das bitte erklären?"
+"Ich stehe jeden Tag früh auf.|Nach dem Frühstück gehe ich zur Arbeit.",
+"Ich habe einen Plan für nächste Woche.|Ich möchte mich auf die Reise vorbereiten.",
+"Gestern habe ich viel gearbeitet.|Das war eine gute Erfahrung für mich.",
+"Ich möchte eine Reise machen.|Ich kaufe die Fahrkarte im Voraus.",
+"Ich möchte ein Zimmer reservieren.|Haben Sie ein freies Zimmer?",
+"Ich möchte Essen bestellen.|Können Sie bitte die Rechnung bringen?",
+"Ich habe einen Termin beim Arzt.|Ich habe Kopfschmerzen.",
+"Wo ist die nächste Apotheke?|Ich brauche dieses Medikament.",
+"Ich muss heute länger arbeiten.|Mein Kollege hilft mir.",
+"Ich habe morgen ein Vorstellungsgespräch.|Ich habe Erfahrung in diesem Bereich.",
+"Ich suche eine neue Wohnung.|Wie hoch ist die monatliche Miete?",
+"Ich möchte ein Bankkonto eröffnen.|Ich muss Geld überweisen.",
+"Ich muss dieses Formular ausfüllen.|Ich schicke das Paket an diese Adresse.",
+"Ich habe eine Nachricht bekommen.|Die Internetverbindung ist langsam.",
+"Sport ist gut für die Gesundheit.|Ich trainiere dreimal pro Woche.",
+"Ich lade meinen Freund ein.|Wir treffen uns am Samstag.",
+"Ich besuche einen Sprachkurs.|Ich muss mich auf die Prüfung vorbereiten.",
+"Wo ist die nächste Haltestelle?|Ich muss zum Rathaus gehen.",
+"Brauche ich eine Erlaubnis?|Ich muss diese Regeln beachten.",
+"Können Sie das bitte erklären?|Bitte wiederholen Sie das noch einmal."
 ],
 en:[
-"I wake up early every day.",
-"I will visit my family next week.",
-"I worked a lot yesterday.",
-"I want to plan a journey.",
-"I would like to book a room.",
-"I would like to order food.",
-"I have a doctor's appointment.",
-"Where is the nearest pharmacy?",
-"I have to work longer today.",
-"I have a job interview tomorrow.",
-"I am looking for a new apartment.",
-"I want to open a bank account.",
-"I have to fill out this form.",
-"I received a message.",
-"Exercise is good for your health.",
-"I am inviting my friend.",
-"I am taking an English course.",
-"Where is the nearest bus stop?",
-"Do I need permission?",
-"Could you please explain that?"
+"I get up early every day.|After breakfast, I go to work.",
+"I have a plan for next week.|I want to prepare for the trip.",
+"I worked a lot yesterday.|It was a good experience for me.",
+"I want to go on a trip.|I buy the ticket in advance.",
+"I would like to book a room.|Do you have a free room?",
+"I would like to order food.|Could you bring the bill, please?",
+"I have a doctor's appointment.|I have a headache.",
+"Where is the nearest pharmacy?|I need this medicine.",
+"I have to work longer today.|My colleague helps me.",
+"I have a job interview tomorrow.|I have experience in this field.",
+"I am looking for a new apartment.|How much is the monthly rent?",
+"I want to open a bank account.|I need to transfer money.",
+"I have to fill out this form.|I am sending the package to this address.",
+"I received a message.|The internet connection is slow.",
+"Exercise is good for your health.|I exercise three times a week.",
+"I am inviting my friend.|We are meeting on Saturday.",
+"I am taking a language course.|I have to prepare for the exam.",
+"Where is the nearest bus stop?|I have to go to the town hall.",
+"Do I need permission?|I have to follow these rules.",
+"Could you please explain that?|Please repeat that one more time."
 ],
 ru:[
-"Я каждый день рано встаю.",
-"На следующей неделе я навещу семью.",
-"Вчера я много работал.",
-"Я хочу спланировать поездку.",
-"Я хочу забронировать номер.",
-"Я хочу заказать еду.",
-"У меня запись к врачу.",
-"Где ближайшая аптека?",
-"Сегодня мне нужно работать дольше.",
-"Завтра у меня собеседование.",
-"Я ищу новую квартиру.",
-"Я хочу открыть банковский счёт.",
-"Мне нужно заполнить эту анкету.",
-"Я получил сообщение.",
-"Спорт полезен для здоровья.",
-"Я приглашаю друга.",
-"Я хожу на курсы русского языка.",
-"Где ближайшая остановка?",
-"Мне нужно разрешение?",
-"Можете это объяснить?"
+"Я каждый день рано встаю.|После завтрака я иду на работу.",
+"У меня есть план на следующую неделю.|Я хочу подготовиться к поездке.",
+"Вчера я много работал.|Для меня это был хороший опыт.",
+"Я хочу отправиться в путешествие.|Я покупаю билет заранее.",
+"Я хочу забронировать номер.|У вас есть свободный номер?",
+"Я хочу заказать еду.|Принесите, пожалуйста, счёт.",
+"У меня запись к врачу.|У меня болит голова.",
+"Где ближайшая аптека?|Мне нужно это лекарство.",
+"Сегодня мне нужно работать дольше.|Мой коллега помогает мне.",
+"Завтра у меня собеседование.|У меня есть опыт в этой области.",
+"Я ищу новую квартиру.|Сколько стоит аренда в месяц?",
+"Я хочу открыть банковский счёт.|Мне нужно перевести деньги.",
+"Мне нужно заполнить эту анкету.|Я отправляю посылку по этому адресу.",
+"Я получил сообщение.|Интернет-соединение медленное.",
+"Спорт полезен для здоровья.|Я тренируюсь три раза в неделю.",
+"Я приглашаю друга.|Мы встречаемся в субботу.",
+"Я хожу на языковые курсы.|Мне нужно подготовиться к экзамену.",
+"Где ближайшая остановка?|Мне нужно пойти в мэрию.",
+"Мне нужно разрешение?|Я должен соблюдать эти правила.",
+"Можете это объяснить?|Пожалуйста, повторите ещё раз."
 ],
 zh:[
-"我每天早起。",
-"下周我要去看家人。",
-"我昨天工作了很长时间。",
-"我想计划一次旅行。",
-"我想预订一个房间。",
-"我想点餐。",
-"我预约了医生。",
-"最近的药店在哪里？",
-"我今天需要工作更长时间。",
-"我明天有面试。",
-"我在找新公寓。",
-"我想开一个银行账户。",
-"我需要填写这张表格。",
-"我收到了一条消息。",
-"运动对健康有好处。",
-"我邀请我的朋友。",
-"我正在上中文课。",
-"最近的公交车站在哪里？",
-"我需要许可吗？",
-"您能解释一下吗？"
+"我每天早起。|吃完早饭后，我去上班。",
+"我有下周的计划。|我想为旅行做准备。",
+"我昨天工作了很长时间。|这对我来说是一次很好的经历。",
+"我想去旅行。|我提前买车票。",
+"我想预订一个房间。|你们有空房间吗？",
+"我想点餐。|请把账单拿来，好吗？",
+"我预约了医生。|我头疼。",
+"最近的药店在哪里？|我需要这种药。",
+"我今天需要工作更长时间。|我的同事帮助我。",
+"我明天有面试。|我有这方面的经验。",
+"我在找新公寓。|每个月的房租是多少？",
+"我想开一个银行账户。|我需要转账。",
+"我需要填写这张表格。|我把包裹寄到这个地址。",
+"我收到了一条消息。|网络连接很慢。",
+"运动对健康有好处。|我每周锻炼三次。",
+"我邀请我的朋友。|我们星期六见面。",
+"我正在上语言课。|我需要准备考试。",
+"最近的公交车站在哪里？|我需要去市政府。",
+"我需要许可吗？|我必须遵守这些规则。",
+"您能解释一下吗？|请再重复一遍。"
 ],
 ko:[
-"저는 매일 일찍 일어나요.",
-"다음 주에 가족을 만나러 갈 거예요.",
-"어제 일을 많이 했어요.",
-"여행을 계획하고 싶어요.",
-"방을 예약하고 싶어요.",
-"음식을 주문하고 싶어요.",
-"병원 진료 예약이 있어요.",
-"가장 가까운 약국이 어디예요?",
-"오늘은 더 오래 일해야 해요.",
-"내일 면접이 있어요.",
-"새 아파트를 찾고 있어요.",
-"은행 계좌를 만들고 싶어요.",
-"이 양식을 작성해야 해요.",
-"메시지를 받았어요.",
-"운동은 건강에 좋아요.",
-"친구를 초대해요.",
-"한국어 강좌를 듣고 있어요.",
-"가장 가까운 정류장이 어디예요?",
-"허가가 필요한가요?",
-"설명해 주실 수 있나요?"
+"저는 매일 일찍 일어나요.|아침을 먹고 출근해요.",
+"다음 주 계획이 있어요.|여행을 준비하고 싶어요.",
+"어제 일을 많이 했어요.|저에게 좋은 경험이었어요.",
+"여행을 가고 싶어요.|표를 미리 사요.",
+"방을 예약하고 싶어요.|빈방이 있나요?",
+"음식을 주문하고 싶어요.|계산서를 가져다주시겠어요?",
+"병원 진료 예약이 있어요.|머리가 아파요.",
+"가장 가까운 약국이 어디예요?|이 약이 필요해요.",
+"오늘은 더 오래 일해야 해요.|제 동료가 저를 도와줘요.",
+"내일 면접이 있어요.|저는 이 분야에서 경험이 있어요.",
+"새 아파트를 찾고 있어요.|한 달 월세가 얼마예요?",
+"은행 계좌를 만들고 싶어요.|돈을 송금해야 해요.",
+"이 양식을 작성해야 해요.|이 주소로 소포를 보내요.",
+"메시지를 받았어요.|인터넷 연결이 느려요.",
+"운동은 건강에 좋아요.|저는 일주일에 세 번 운동해요.",
+"친구를 초대해요.|우리는 토요일에 만나요.",
+"언어 강좌를 듣고 있어요.|시험을 준비해야 해요.",
+"가장 가까운 정류장이 어디예요?|시청에 가야 해요.",
+"허가가 필요한가요?|이 규칙을 지켜야 해요.",
+"설명해 주실 수 있나요?|한 번 더 말씀해 주세요."
 ]
 };
 
-const A2_MEANINGS=[
-"Ман ҳар рӯз барвақт мехезам.",
-"Ҳафтаи оянда оилаамро хабар мегирам.",
-"Ман дирӯз бисёр кор кардам.",
-"Ман мехоҳам сафарро ба нақша гирам.",
-"Ман мехоҳам ҳуҷра банд кунам.",
-"Ман мехоҳам хӯрок фармоиш диҳам.",
-"Ман назди духтур вақти қабул дорам.",
-"Дорухонаи наздиктарин дар куҷост?",
-"Ман бояд имрӯз бештар кор кунам.",
-"Ман пагоҳ мусоҳибаи корӣ дорам.",
-"Ман манзили нав меҷӯям.",
-"Ман мехоҳам суратҳисоби бонкӣ кушоям.",
-"Ман бояд ин варақаро пур кунам.",
-"Ман паём гирифтам.",
-"Варзиш барои саломатӣ хуб аст.",
-"Ман дӯстамро даъват мекунам.",
-"Ман ба курси забон меравам.",
-"Истгоҳи наздиктарин дар куҷост?",
-"Оё ба ман иҷозат лозим аст?",
-"Метавонед инро фаҳмонед?"
-];
+/* Қоидаҳои грамматикаи A2 */
 
 const GRAMMAR={
 de:[
@@ -601,53 +629,68 @@ ko:[
 const A2={};
 
 for(const lang of Object.keys(A2_WORDS)){
- A2[lang]=A2_WORDS[lang].map((s,i)=>({
-  words:parsePairs(s),
-  sentence:[A2_SENTENCES[lang][i],A2_MEANINGS[i]],
-  grammar:GRAMMAR[lang][i%GRAMMAR[lang].length]
- }));
+ A2[lang]=A2_WORDS[lang].map((raw,i)=>{
+  const foreignWords=raw.split("|");
+  const foreignSentences=A2_SENTENCES[lang][i].split("|");
+  const meanings=A2_TJ[i];
+  return {
+   words:foreignWords.map((w,j)=>[w,meanings[j]]),
+   sentences:foreignSentences.map((s,j)=>[s,meanings[j+3]]),
+   grammar:GRAMMAR[lang][i%GRAMMAR[lang].length]
+  };
+ });
 }
 
-/*
- Нигоҳдории пешрафт.
- Калиди пешинаи A1 тағйир намеёбад.
-*/
+/* Нигоҳдории пешрафти пешина */
 
 const OLD_KEY="vayo_language_v2";
-const NEW_KEY="vayo_language_extended_v1";
+const EXTRA_KEY="vayo_language_extended_v1";
+const HEART_KEY="vayo_language_hearts_v1";
 
 function readJSON(key,fallback){
  try{
   const v=JSON.parse(localStorage.getItem(key)||"null");
-  return v&&typeof v==="object"?v:fallback;
- }catch(e){return fallback}
+  return v&&typeof v==="object"&&!Array.isArray(v)?v:fallback;
+ }catch(e){
+  return fallback;
+ }
 }
 
 const state=readJSON(OLD_KEY,{
  lang:"de",xp:0,hearts:5,streak:0,lastDay:"",done:{}
 });
 
-state.lang=LANGUAGES.some(x=>x[0]===state.lang)?state.lang:"de";
-state.xp=Number(state.xp)||0;
+const extra=readJSON(EXTRA_KEY,{
+ done:{},level:"A1",mistakes:{}
+});
+
+const heartState=readJSON(HEART_KEY,{lastRefill:Date.now()});
+
+if(!LANGUAGES.some(l=>l[0]===state.lang))state.lang="de";
+if(!state.done||typeof state.done!=="object")state.done={};
+if(!extra.done||typeof extra.done!=="object")extra.done={};
+if(!extra.mistakes||typeof extra.mistakes!=="object")extra.mistakes={};
+
+state.xp=Math.max(0,Number(state.xp)||0);
 state.hearts=Number.isFinite(Number(state.hearts))?
  Math.max(0,Math.min(5,Number(state.hearts))):5;
-state.streak=Number(state.streak)||0;
-if(!state.done||typeof state.done!=="object")state.done={};
+state.streak=Math.max(0,Number(state.streak)||0);
 
-const extended=readJSON(NEW_KEY,{done:{},level:"A1"});
-if(!extended.done||typeof extended.done!=="object")extended.done={};
-if(!LEVELS.some(x=>x[0]===extended.level))extended.level="A1";
+let selectedLevel=LEVELS.some(l=>l[0]===extra.level)?
+ extra.level:"A1";
 
-let selectedLevel=extended.level;
 let session=null;
 let finished=false;
 
 function save(){
  try{
   localStorage.setItem(OLD_KEY,JSON.stringify(state));
-  extended.level=selectedLevel;
-  localStorage.setItem(NEW_KEY,JSON.stringify(extended));
- }catch(e){console.warn("Нигоҳдорӣ дастрас нест",e)}
+  extra.level=selectedLevel;
+  localStorage.setItem(EXTRA_KEY,JSON.stringify(extra));
+  localStorage.setItem(HEART_KEY,JSON.stringify(heartState));
+ }catch(e){
+  console.warn("Нигоҳдорӣ дастрас нест",e);
+ }
 }
 
 function esc(v){
@@ -666,51 +709,88 @@ function shuffle(items){
  return a;
 }
 
-function localDay(date){
- return date.getFullYear()+"-"+
- String(date.getMonth()+1).padStart(2,"0")+"-"+
- String(date.getDate()).padStart(2,"0");
+function dayKey(d){
+ return d.getFullYear()+"-"+
+ String(d.getMonth()+1).padStart(2,"0")+"-"+
+ String(d.getDate()).padStart(2,"0");
 }
 
 function updateStreak(){
- const today=localDay(new Date());
+ const today=dayKey(new Date());
  if(state.lastDay===today)return;
+
  const yesterday=new Date();
  yesterday.setDate(yesterday.getDate()-1);
- state.streak=state.lastDay===localDay(yesterday)?
+
+ state.streak=state.lastDay===dayKey(yesterday)?
   state.streak+1:1;
+
  state.lastDay=today;
 }
 
-function doneKey(lang,level,topic,type){
+function refillHearts(){
+ const now=Date.now();
+ const hour=60*60*1000;
+ const previous=Number(heartState.lastRefill)||now;
+
+ if(state.hearts>=5){
+  heartState.lastRefill=now;
+  return;
+ }
+
+ const elapsed=Math.max(0,now-previous);
+ const gained=Math.floor(elapsed/hour);
+
+ if(gained>0){
+  state.hearts=Math.min(5,state.hearts+gained);
+  heartState.lastRefill=previous+gained*hour;
+  if(state.hearts>=5)heartState.lastRefill=now;
+  save();
+ }
+}
+
+function loseHeart(){
+ refillHearts();
+ if(state.hearts===5)heartState.lastRefill=Date.now();
+ state.hearts=Math.max(0,state.hearts-1);
+ save();
+}
+
+function gainHeart(){
+ state.hearts=Math.min(5,state.hearts+1);
+ if(state.hearts>=5)heartState.lastRefill=Date.now();
+ save();
+}
+
+function keyFor(lang,level,topic,type){
  return lang+"_"+level+"_"+topic+"_"+type;
 }
 
 function isDone(lang,level,topic,type){
  if(level==="A1"){
-  const oldIndex=topic*2+type;
-  return !!state.done[lang+"_"+oldIndex]||
-   !!extended.done[doneKey(lang,level,topic,type)];
+  return !!state.done[lang+"_"+(topic*2+type)]||
+   !!extra.done[keyFor(lang,level,topic,type)];
  }
- return !!extended.done[doneKey(lang,level,topic,type)];
+ return !!extra.done[keyFor(lang,level,topic,type)];
 }
 
-function totalLessons(level){
- if(level==="A1")return 20;
- if(level==="A2")return 20*4;
- return 0;
+function lessonTypes(level){
+ return level==="A1"?2:level==="A2"?5:0;
 }
 
 function doneCount(lang,level){
  let n=0;
- const count=LEVEL_TOPICS[level].length;
- const types=level==="A1"?2:level==="A2"?4:0;
- for(let i=0;i<count;i++){
-  for(let j=0;j<types;j++){
+ const topics=LEVEL_TOPICS[level]||[];
+ for(let i=0;i<topics.length;i++){
+  for(let j=0;j<lessonTypes(level);j++){
    if(isDone(lang,level,i,j))n++;
   }
  }
  return n;
+}
+
+function totalLessons(level){
+ return (LEVEL_TOPICS[level]||[]).length*lessonTypes(level);
 }
 
 function selectLang(lang){
@@ -727,11 +807,22 @@ function selectLevel(level){
  closeLesson();
 }
 
-function render(){
+function renderStats(){
+ refillHearts();
+
  $("xp").textContent=state.xp;
  $("hearts").textContent="❤️ "+state.hearts;
  $("streak").textContent="🔥 "+state.streak;
  $("xpLevel").textContent=Math.floor(state.xp/200)+1;
+
+ $("heartInfo").textContent=
+  state.hearts===5?
+  "Ҳамаи 5 дил омодаанд.":
+  "Ҳар соат 1 дил барқарор мешавад. Бо машқи такрорӣ ҳам дил гирифтан мумкин аст.";
+}
+
+function render(){
+ renderStats();
 
  $("languages").innerHTML=LANGUAGES.map(l=>`
   <button class="choice ${state.lang===l[0]?"active":""}"
@@ -749,95 +840,97 @@ function render(){
   </button>
  `).join("");
 
- const name=LANGUAGES.find(x=>x[0]===state.lang)[2];
+ const name=LANGUAGES.find(l=>l[0]===state.lang)[2];
  const done=doneCount(state.lang,selectedLevel);
  const total=totalLessons(selectedLevel);
 
  $("courseTitle").textContent="📚 "+name+" — "+selectedLevel;
  $("progressText").textContent=total?
   "Анҷомёфта: "+done+" аз "+total:
-  "Нақшаи омӯзиш: "+LEVEL_TOPICS[selectedLevel].length+" мавзӯъ";
+  "Нақшаи мавзӯъҳо";
 
- $("progressFill").style.width=total?done/total*100+"%":"0%";
+ $("progressFill").style.width=total?
+  (done/total*100)+"%":"0%";
 
- $("notice").innerHTML=selectedLevel==="A1"?
-  '<div class="notice">Дарсҳои аслии A1 бо луғат ва машқҳо фаъоланд.</div>':
-  selectedLevel==="A2"?
-  '<div class="notice">A2: 20 мавзӯъ барои ҳар забон. Ҳар мавзӯъ луғат, ҷумла, грамматика ва тест дорад. Ин муҳтавои ибтидоии курс аст.</div>':
-  '<div class="notice">Мавзӯъҳои '+selectedLevel+
-  ' ҳоло нақша мебошанд. Дарсҳои воқеии ин сатҳ ҳанӯз илова нашудаанд.</div>';
+ if(selectedLevel==="A1"){
+  $("notice").innerHTML=
+   '<div class="notice">📗 A1: 10 мавзӯъ, 20 дарс барои ҳар забон. Пешрафти пешина нигоҳ дошта мешавад.</div>';
+ }else if(selectedLevel==="A2"){
+  $("notice").innerHTML=
+   '<div class="notice">📘 A2: 20 мавзӯъ барои ҳар забон. Ҳар мавзӯъ 5 қисм дорад: луғат, ҷумлаҳо, грамматика, машқ ва имтиҳон. Ҳамаи маълумот дар ҳамин саҳифа аст.</div>';
+ }else{
+  $("notice").innerHTML=
+   '<div class="notice">🔒 Мавзӯъҳои ин сатҳ ҳоло нақша мебошанд. Дарсҳои фаъол ҳанӯз илова нашудаанд.</div>';
+ }
 
  renderTopics();
  renderSummary();
 }
 
 function renderTopics(){
- const list=LEVEL_TOPICS[selectedLevel];
- $("topics").innerHTML=list.map((name,i)=>{
-  let buttons="";
+ const names=LEVEL_TOPICS[selectedLevel]||[];
+ const types=selectedLevel==="A1"?
+  ["📖 Омӯзиш","🧩 Тест"]:
+  ["📖 Луғат","💬 Ҷумлаҳо","📚 Грамматика","🔄 Машқ","🏆 Имтиҳон"];
 
-  if(selectedLevel==="A1"){
-   buttons=`
-    <button class="btn ${isDone(state.lang,"A1",i,0)?"green":"primary"}"
-     onclick="startLesson(${i},0)">
-     📖 Дарси ${i*2+1}
-    </button>
-    <button class="btn ${isDone(state.lang,"A1",i,1)?"green":"primary"}"
-     onclick="startLesson(${i},1)">
-     🧩 Машқи ${i*2+2}
-    </button>
-   `;
-  }else if(selectedLevel==="A2"){
-   const labels=["📖 Луғат","💬 Ҷумла","📚 Грамматика","🧩 Тест"];
-   buttons=labels.map((label,j)=>`
-    <button class="btn ${isDone(state.lang,"A2",i,j)?"green":"primary"}"
+ $("topics").innerHTML=names.map((name,i)=>{
+  const available=["A1","A2"].includes(selectedLevel);
+
+  const buttons=available?
+   types.map((label,j)=>`
+    <button class="btn ${isDone(state.lang,selectedLevel,i,j)?"green":"primary"}"
      onclick="startLesson(${i},${j})">
-     ${label}
+     ${isDone(state.lang,selectedLevel,i,j)?"✓ ":""}${label}
     </button>
-   `).join("");
-  }else{
-   buttons='<span class="muted">🔒 Дар ҳоли омодасозӣ</span>';
-  }
+   `).join(""):
+   '<span class="muted">🔒 Дар ҳоли омодасозӣ</span>';
+
+  const complete=Array.from(
+   {length:lessonTypes(selectedLevel)},
+   (_,j)=>isDone(state.lang,selectedLevel,i,j)
+  ).filter(Boolean).length;
 
   return `
    <div class="topic">
     <h3>${i+1}. ${esc(name)}</h3>
-    <p>${selectedLevel==="A2"?
-      "Луғат, ҷумла, грамматика ва санҷиш":
-      selectedLevel==="A1"?
-      "Омӯзиш ва машқ":
-      "Нақшаи мавзӯъ"}</p>
-    <div class="topicButtons">${buttons}</div>
+    <p>${available?
+      complete+"/"+lessonTypes(selectedLevel)+" дарс анҷом ёфтааст":
+      "Мавзӯи нақшавӣ"}</p>
+    <div class="actions">${buttons}</div>
    </div>
   `;
  }).join("");
 }
 
 function renderSummary(){
- const allA1=LANGUAGES.reduce((n,l)=>
-  n+doneCount(l[0],"A1"),0);
- const allA2=LANGUAGES.reduce((n,l)=>
-  n+doneCount(l[0],"A2"),0);
+ const a1=LANGUAGES.reduce((n,l)=>n+doneCount(l[0],"A1"),0);
+ const a2=LANGUAGES.reduce((n,l)=>n+doneCount(l[0],"A2"),0);
+
+ const mistakes=Object.values(extra.mistakes)
+  .filter(x=>x&&x.lang===state.lang).length;
 
  $("summary").innerHTML=`
-  <p>📗 A1: <b>${allA1}/100</b> дарс</p>
-  <p>📘 A2: <b>${allA2}/400</b> зердарс</p>
+  <p>📗 A1: <b>${a1}/100</b> дарс</p>
+  <p>📘 A2: <b>${a2}/500</b> зердарс</p>
   <p>⚡ XP: <b>${state.xp}</b></p>
   <p>🔥 Рӯзҳои пайдарпай: <b>${state.streak}</b></p>
   <p class="muted">Пешрафт дар ҳамин браузер нигоҳ дошта мешавад.</p>
  `;
 
+ $("mistakeCount").textContent=
+  mistakes+" савол барои такрор дар забони интихобшуда.";
+
  const awards=[
-  [allA1+allA2>=1,"🌟 Қадами аввал"],
-  [allA1+allA2>=10,"🥉 Омӯзандаи фаъол"],
-  [allA1+allA2>=50,"🥈 Донишҷӯи пешқадам"],
-  [allA1+allA2>=100,"🥇 Сад дарс"],
+  [a1+a2>=1,"🌟 Қадами аввал"],
+  [a1+a2>=10,"🥉 Даҳ дарс"],
+  [a1+a2>=50,"🥈 Панҷоҳ дарс"],
+  [a1+a2>=100,"🥇 Сад дарс"],
   [state.streak>=7,"🔥 Ҳафт рӯзи пайдарпай"]
  ];
 
- $("achievements").innerHTML=awards.map(x=>`
-  <div class="badgeLine" style="opacity:${x[0]?1:.45}">
-   ${x[1]} ${x[0]?"✓":"🔒"}
+ $("achievements").innerHTML=awards.map(a=>`
+  <div class="badgeLine" style="opacity:${a[0]?1:.45}">
+   ${a[1]} ${a[0]?"✓":"🔒"}
   </div>
  `).join("");
 }
@@ -845,179 +938,201 @@ function renderSummary(){
 function closeLesson(){
  session=null;
  finished=false;
+
  $("lesson").classList.add("hidden");
  $("home").classList.remove("hidden");
  $("levelSection").classList.remove("hidden");
  $("course").classList.remove("hidden");
+
+ $("nextBtn").disabled=false;
+ $("nextBtn").onclick=null;
+
  render();
 }
 
 function startLesson(topic,type){
- if(!["A1","A2"].includes(selectedLevel))return;
- if(state.hearts<=0){
-  alert("❤️ Дилҳо тамом шудаанд.");
-  return;
- }
-
  const level=selectedLevel;
  const lang=state.lang;
+
+ if(!["A1","A2"].includes(level))return;
+ if(!Number.isInteger(topic)||topic<0||
+    topic>=LEVEL_TOPICS[level].length)return;
+ if(type<0||type>=lessonTypes(level))return;
+
+ refillHearts();
+
+ if(state.hearts<=0){
+  alert("❤️ Дилҳо тамом шудаанд. Машқи барқароркуниро истифода бар.");
+  return;
+ }
 
  session={
   lang,level,topic,type,
   step:0,score:0,answered:false,
-  questions:[]
+  questions:[],review:false,heartPractice:false
  };
 
  finished=false;
 
- if(level==="A1"){
-  const words=A1[lang][topic];
-  if(type===1){
-   session.questions=buildWordQuestions(words,5);
-  }
- }else{
-  const data=A2[lang][topic];
-  if(type===3){
-   session.questions=buildA2Questions(lang,topic);
-  }
+ if(level==="A1"&&type===1){
+  session.questions=buildA1Quiz(lang,topic);
  }
 
+ if(level==="A2"&&type>=3){
+  session.questions=buildA2Quiz(lang,topic,type);
+ }
+
+ openLessonScreen();
+}
+
+function openLessonScreen(){
  $("home").classList.add("hidden");
  $("levelSection").classList.add("hidden");
  $("course").classList.add("hidden");
  $("lesson").classList.remove("hidden");
 
- $("lessonTitle").textContent=
-  level+" — "+LEVEL_TOPICS[level][topic];
+ $("lessonTitle").textContent=session.heartPractice?
+  "❤️ Машқи барқароркунии дил":
+  session.review?
+  "🔁 Такрори калимаҳои душвор":
+  session.level+" — "+LEVEL_TOPICS[session.level][session.topic];
 
+ $("nextBtn").onclick=null;
  showStep();
  $("lesson").scrollIntoView({behavior:"smooth"});
 }
 
-function buildWordQuestions(words,count){
- return shuffle(words).slice(0,count).map(w=>({
+function buildA1Quiz(lang,topic){
+ const words=A1[lang][topic];
+ const all=A1[lang].flat();
+
+ return shuffle(words).map(w=>({
   question:"«"+w[0]+"» чӣ маъно дорад?",
   correct:w[1],
-  pool:words.map(x=>x[1])
+  pool:all.map(x=>x[1]),
+  id:lang+"|"+w[0]
  }));
 }
 
-function buildA2Questions(lang,topic){
+function buildA2Quiz(lang,topic,type){
  const data=A2[lang][topic];
- const wordPool=A2[lang].flatMap(x=>x.words.map(w=>w[1]));
- const sentencePool=A2[lang].map(x=>x.sentence[1]);
- const grammarPool=GRAMMAR[lang].map(x=>x[3]);
+ const all=A2[lang];
 
- return [
-  ...data.words.map(w=>({
-   question:"«"+w[0]+"» чӣ маъно дорад?",
-   correct:w[1],
-   pool:wordPool
-  })),
-  {
-   question:"«"+data.sentence[0]+"» чӣ маъно дорад?",
-   correct:data.sentence[1],
-   pool:sentencePool
-  },
-  {
-   question:"«"+data.grammar[2]+"» чӣ маъно дорад?",
-   correct:data.grammar[3],
-   pool:grammarPool
-  }
+ const wordPool=all.flatMap(x=>x.words.map(w=>w[1]));
+ const sentencePool=all.flatMap(x=>x.sentences.map(s=>s[1]));
+ const grammarPool=GRAMMAR[lang].map(g=>g[3]);
+
+ const wordQuestions=data.words.map(w=>({
+  question:"«"+w[0]+"» чӣ маъно дорад?",
+  correct:w[1],
+  pool:wordPool,
+  id:lang+"|"+w[0]
+ }));
+
+ const sentenceQuestions=data.sentences.map(s=>({
+  question:"Ин ҷумла чӣ маъно дорад? "+s[0],
+  correct:s[1],
+  pool:sentencePool,
+  id:lang+"|"+s[0]
+ }));
+
+ const g=data.grammar;
+ const grammarQuestion={
+  question:"Маънои мисоли грамматикӣ: "+g[2],
+  correct:g[3],
+  pool:grammarPool,
+  id:lang+"|"+g[2]
+ };
+
+ const questions=[
+  ...wordQuestions,
+  ...sentenceQuestions,
+  grammarQuestion
  ];
+
+ return type===3?
+  shuffle(questions).slice(0,5):
+  shuffle(questions);
 }
 
 function choicesFor(q){
- const unique=[...new Set(q.pool)].filter(x=>x!==q.correct);
- const alternatives=shuffle(unique).slice(0,3);
- return shuffle([q.correct,...alternatives]);
+ const others=[...new Set(q.pool||[])]
+  .filter(x=>x!==q.correct);
+
+ return shuffle([
+  q.correct,
+  ...shuffle(others).slice(0,3)
+ ]);
 }
 
 function showStep(){
  if(!session||finished)return;
+
  const s=session;
 
  $("feedback").textContent="";
  $("nextBtn").disabled=false;
  $("nextBtn").textContent="Давом додан →";
 
- if(s.level==="A1"&&s.type===0){
-  showA1Study();
-  return;
+ if(s.review||s.heartPractice||
+    (s.level==="A1"&&s.type===1)||
+    (s.level==="A2"&&s.type>=3)){
+  showQuiz();
+ }else{
+  showStudy();
  }
-
- if(s.level==="A2"&&s.type!==3){
-  showA2Study();
-  return;
- }
-
- showQuiz();
 }
 
-function showA1Study(){
+function studyCards(s){
+ if(s.level==="A1"){
+  return A1[s.lang][s.topic].map(w=>({
+   front:w[0],back:w[1]
+  }));
+ }
+
+ const data=A2[s.lang][s.topic];
+
+ if(s.type===0){
+  return data.words.map(w=>({front:w[0],back:w[1]}));
+ }
+
+ if(s.type===1){
+  return data.sentences.map(w=>({front:w[0],back:w[1]}));
+ }
+
+ return [
+  {front:data.grammar[0],back:data.grammar[1]},
+  {front:data.grammar[2],back:data.grammar[3]}
+ ];
+}
+
+function showStudy(){
  const s=session;
- const words=A1[s.lang][s.topic];
- const total=words.length;
+ const cards=studyCards(s);
 
- $("counter").textContent=
-  Math.min(s.step+1,total)+" / "+total;
- $("lessonFill").style.width=(s.step/total*100)+"%";
+ if(!cards.length){
+  finishLesson();
+  return;
+ }
 
- const w=words[Math.min(s.step,total-1)];
+ const index=Math.min(s.step,cards.length-1);
+ const card=cards[index];
+
+ $("counter").textContent=(index+1)+" / "+cards.length;
+ $("lessonFill").style.width=
+  (s.step/cards.length*100)+"%";
 
  $("lessonBody").innerHTML=`
   <div class="study" style="text-align:center">
-   <strong>${esc(w[0])}</strong>
-   <div class="translation">${esc(w[1])}</div>
-   <p class="muted">Калима ва тарҷумаашро дар хотир нигоҳ дор.</p>
+   <strong>${esc(card.front)}</strong>
+   <div class="translation">${esc(card.back)}</div>
+   <p class="muted">Хон ва дар хотир нигоҳ дор.</p>
   </div>
  `;
 
- if(s.step===total-1){
+ if(s.step===cards.length-1){
   $("nextBtn").textContent="Анҷом додан ✓";
  }
-}
-
-function showA2Study(){
- const s=session;
- const data=A2[s.lang][s.topic];
-
- $("counter").textContent="Омӯзиш";
- $("lessonFill").style.width="50%";
-
- let html="";
-
- if(s.type===0){
-  html=`
-   <h3>📖 Луғати асосӣ</h3>
-   ${data.words.map(w=>`
-    <div class="study">
-     <strong>${esc(w[0])}</strong>
-     <div class="translation">${esc(w[1])}</div>
-    </div>
-   `).join("")}
-  `;
- }else if(s.type===1){
-  html=`
-   <h3>💬 Ҷумлаи муҳим</h3>
-   <div class="study">
-    <strong>${esc(data.sentence[0])}</strong>
-    <div class="translation">${esc(data.sentence[1])}</div>
-   </div>
-  `;
- }else{
-  html=`
-   <h3>📚 ${esc(data.grammar[0])}</h3>
-   <div class="study">
-    <p>${esc(data.grammar[1])}</p>
-    <strong>${esc(data.grammar[2])}</strong>
-    <div class="translation">${esc(data.grammar[3])}</div>
-   </div>
-  `;
- }
-
- $("lessonBody").innerHTML=html;
- $("nextBtn").textContent="Анҷом додан ✓";
 }
 
 function showQuiz(){
@@ -1028,12 +1143,14 @@ function showQuiz(){
   return;
  }
 
- s.answered=false;
  const q=s.questions[s.step];
- const total=s.questions.length;
+ s.answered=false;
 
- $("counter").textContent=(s.step+1)+" / "+total;
- $("lessonFill").style.width=(s.step/total*100)+"%";
+ $("counter").textContent=
+  (s.step+1)+" / "+s.questions.length;
+
+ $("lessonFill").style.width=
+  (s.step/s.questions.length*100)+"%";
 
  $("lessonBody").innerHTML=`
   <div class="study">
@@ -1046,52 +1163,72 @@ function showQuiz(){
  const box=$("options");
 
  choicesFor(q).forEach(value=>{
-  const btn=document.createElement("button");
-  btn.className="option";
-  btn.textContent=value;
-  btn.onclick=()=>answerQuestion(btn,value,q.correct);
-  box.appendChild(btn);
+  const button=document.createElement("button");
+  button.className="option";
+  button.textContent=value;
+  button.onclick=()=>answerQuestion(button,value,q);
+  box.appendChild(button);
  });
 
  $("nextBtn").disabled=true;
 }
 
-function answerQuestion(button,value,correct){
- if(!session||session.answered)return;
- session.answered=true;
+function answerQuestion(button,value,q){
+ if(!session||session.answered||finished)return;
 
- const right=value===correct;
+ session.answered=true;
+ const right=value===q.correct;
 
  if(right){
   session.score++;
+  delete extra.mistakes[q.id];
   $("feedback").textContent="✅ Офарин!";
  }else{
-  state.hearts=Math.max(0,state.hearts-1);
-  $("feedback").textContent="❌ Ҷавоби дуруст: "+correct;
-  save();
-  $("hearts").textContent="❤️ "+state.hearts;
+  if(!session.heartPractice)loseHeart();
+
+  extra.mistakes[q.id]={
+   lang:session.lang,
+   question:q.question,
+   correct:q.correct,
+   pool:q.pool
+  };
+
+  $("feedback").textContent=
+   "❌ Ҷавоби дуруст: "+q.correct;
  }
 
- $("options").querySelectorAll("button").forEach(btn=>{
-  btn.disabled=true;
-  if(btn.textContent===correct)btn.classList.add("correct");
+ $("options").querySelectorAll("button").forEach(b=>{
+  b.disabled=true;
+  if(b.textContent===q.correct)b.classList.add("correct");
  });
 
  if(!right)button.classList.add("wrong");
+
  $("nextBtn").disabled=false;
- $("nextBtn").textContent="Саволи навбатӣ →";
+ save();
+ renderStats();
 }
 
 function nextStep(){
- if(!session||finished)return;
+ /* Ислоҳ: тугма баъди анҷом дарсро дуруст мебандад */
+ if(finished){
+  closeLesson();
+  return;
+ }
+
+ if(!session)return;
+
  const s=session;
 
- const isQuiz=(s.level==="A1"&&s.type===1)||
-  (s.level==="A2"&&s.type===3);
+ const quiz=s.review||s.heartPractice||
+  (s.level==="A1"&&s.type===1)||
+  (s.level==="A2"&&s.type>=3);
 
- if(isQuiz){
+ if(quiz){
   if(!s.answered)return;
+
   s.step++;
+
   if(s.step>=s.questions.length){
    finishLesson();
   }else{
@@ -1100,17 +1237,14 @@ function nextStep(){
   return;
  }
 
- if(s.level==="A1"){
-  s.step++;
-  if(s.step>=A1[s.lang][s.topic].length){
-   finishLesson();
-  }else{
-   showStep();
-  }
-  return;
- }
+ const cards=studyCards(s);
+ s.step++;
 
- finishLesson();
+ if(s.step>=cards.length){
+  finishLesson();
+ }else{
+  showStep();
+ }
 }
 
 function finishLesson(){
@@ -1119,33 +1253,39 @@ function finishLesson(){
  finished=true;
  const s=session;
 
- const isQuiz=(s.level==="A1"&&s.type===1)||
-  (s.level==="A2"&&s.type===3);
+ const quiz=s.review||s.heartPractice||
+  (s.level==="A1"&&s.type===1)||
+  (s.level==="A2"&&s.type>=3);
 
  const total=s.questions.length;
- const passed=!isQuiz||
+ const passed=!quiz||
   s.score>=Math.ceil(total*.7);
 
- const already=isDone(s.lang,s.level,s.topic,s.type);
  let reward=0;
 
- if(passed&&!already){
-  reward=isQuiz?40:20;
-  state.xp+=reward;
+ if(passed&&!s.review&&!s.heartPractice){
+  const already=isDone(s.lang,s.level,s.topic,s.type);
 
-  if(s.level==="A1"){
-   state.done[s.lang+"_"+(s.topic*2+s.type)]=true;
-  }else{
-   extended.done[doneKey(
-    s.lang,s.level,s.topic,s.type
-   )]=true;
+  if(!already){
+   reward=quiz?40:20;
+   state.xp+=reward;
+
+   if(s.level==="A1"){
+    state.done[s.lang+"_"+(s.topic*2+s.type)]=true;
+   }else{
+    extra.done[keyFor(s.lang,s.level,s.topic,s.type)]=true;
+   }
   }
 
   updateStreak();
  }
 
- if(passed&&isQuiz){
-  state.hearts=Math.min(5,state.hearts+1);
+ if(passed&&s.heartPractice){
+  gainHeart();
+ }
+
+ if(passed&&quiz&&!s.heartPractice){
+  gainHeart();
  }
 
  save();
@@ -1155,37 +1295,100 @@ function finishLesson(){
 
  $("lessonBody").innerHTML=`
   <div class="study" style="text-align:center">
-   <div style="font-size:55px">${passed?"🏆":"💪"}</div>
+   <div style="font-size:50px">${passed?"🏆":"💪"}</div>
    <h2>${passed?"Табрик!":"Боз кӯшиш кун!"}</h2>
-   <p>${isQuiz?
+   <p>${quiz?
     "Ҷавобҳои дуруст: "+s.score+" аз "+total:
-    "Дарси омӯзиширо анҷом додӣ."}</p>
-   <h2>${passed?"+"+reward+" XP":"70% ҷавоби дуруст лозим аст"}</h2>
-   ${already?"<p>Ин дарс пештар анҷом ёфта буд.</p>":""}
+    "Дарс анҷом ёфт."}</p>
+   <h2>${passed?
+    s.heartPractice?"+1 ❤️":"+"+reward+" XP":
+    "Барои гузаштан 70% лозим аст"}</h2>
   </div>
  `;
 
  $("feedback").textContent=passed?
   "🌟 Омӯзишро давом деҳ.":
-  "Машқро такрор кун.";
+  "Машқро дубора супор.";
 
  $("nextBtn").disabled=false;
  $("nextBtn").textContent="Ба мавзӯъҳо →";
- $("nextBtn").onclick=closeLesson;
 
- session=null;
- renderStatsOnly();
-}
-
-function renderStatsOnly(){
- $("xp").textContent=state.xp;
- $("hearts").textContent="❤️ "+state.hearts;
- $("streak").textContent="🔥 "+state.streak;
- $("xpLevel").textContent=Math.floor(state.xp/200)+1;
+ /* session-ро то пахши тугма нигоҳ медорем */
+ renderStats();
  renderSummary();
 }
 
+function startReview(){
+ const items=Object.entries(extra.mistakes)
+  .filter(([id,v])=>v&&v.lang===state.lang)
+  .map(([id,v])=>({...v,id}))
+  .filter(q=>q.question&&q.correct&&Array.isArray(q.pool));
+
+ if(!items.length){
+  alert("Ҳоло саволи душвор барои такрор нест.");
+  return;
+ }
+
+ session={
+  lang:state.lang,
+  level:selectedLevel,
+  topic:0,type:0,
+  step:0,score:0,answered:false,
+  review:true,heartPractice:false,
+  questions:shuffle(items).slice(0,15)
+ };
+
+ finished=false;
+ openLessonScreen();
+}
+
+function startHeartPractice(){
+ refillHearts();
+
+ if(state.hearts>=5){
+  alert("❤️ Ҳамаи дилҳо пур ҳастанд.");
+  return;
+ }
+
+ const lang=state.lang;
+ const all=A1[lang].flat();
+
+ const questions=shuffle(all).slice(0,5).map(w=>({
+  question:"«"+w[0]+"» чӣ маъно дорад?",
+  correct:w[1],
+  pool:all.map(x=>x[1]),
+  id:lang+"|"+w[0]
+ }));
+
+ session={
+  lang,level:"A1",topic:0,type:1,
+  step:0,score:0,answered:false,
+  review:false,heartPractice:true,
+  questions
+ };
+
+ finished=false;
+ openLessonScreen();
+}
+
+/* Санҷиши сохтори маълумоти A2 */
+
+for(const lang of Object.keys(A2)){
+ if(A2[lang].length!==20){
+  console.error("A2: шумораи мавзӯъҳо нодуруст аст:",lang);
+ }
+
+ A2[lang].forEach((topic,i)=>{
+  if(topic.words.length!==3||
+     topic.sentences.length!==2||
+     topic.grammar.length!==4){
+   console.error("A2: маълумоти нопурра:",lang,i);
+  }
+ });
+}
+
 render();
+
 </script>
 </body>
 </html>
